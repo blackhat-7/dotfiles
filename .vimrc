@@ -60,6 +60,6 @@ set expandtab
 
 set bg=dark
 colorscheme apprentice 
-" hi Normal guibg=NONE ctermbg=NONE
+hi Normal guibg=NONE ctermbg=NONE
 
 
