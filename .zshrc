@@ -76,6 +76,12 @@ source $ZSH/oh-my-zsh.sh
 #autoload -U promptinit; promptinit
 #prompt pure
 
+# Base16 Shell
+#BASE16_SHELL="$HOME/.config/base16-shell/"
+#[ -n "$PS1" ] && \
+#    [ -s "$BASE16_SHELL/profile_helper.sh" ] && \
+#        eval "$("$BASE16_SHELL/profile_helper.sh")"
+
 # User configuration
 
 # export MANPATH="/usr/local/man:$MANPATH"
@@ -106,3 +112,5 @@ DRACULA_DISPLAY_CONTEXT=1
 DRACULA_ARROW_ICON="-> "
 DRACULA_DISPLAY_TIME=1
 
+
+export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
