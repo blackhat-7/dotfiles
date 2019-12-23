@@ -20,7 +20,6 @@ Plugin 'octol/vim-cpp-enhanced-highlight'
 Plugin 'arakashic/chromatica.nvim'
 Plugin 'neoclide/coc.nvim', {'branch': 'release'}
 Plugin 'davidhalter/jedi-vim'
-Plugin 'vim-syntastic/syntastic'
 
 " Color-schemes
 Plugin 'dracula/vim'
@@ -35,6 +34,8 @@ Plugin 'romainl/apprentice'
 Plugin 'ajh17/Spacegray.vim'
 Plugin 'sjl/badwolf'
 Plugin 'rakr/vim-one'
+Plugin 'icymind/neosolarized'
+Plugin 'nanotech/jellybeans.vim'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -203,15 +204,15 @@ nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
 
 
 
-" syntastic
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
-
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
+" " syntastic
+" set statusline+=%#warningmsg#
+" set statusline+=%{SyntasticStatuslineFlag()}
+" set statusline+=%*
+" 
+" let g:syntastic_always_populate_loc_list = 1
+" let g:syntastic_auto_loc_list = 1
+" let g:syntastic_check_on_open = 1
+" let g:syntastic_check_on_wq = 0
 
 
 
