@@ -1,3 +1,5 @@
+# nvim
+export PATH=$HOME/tools/nvim:$PATH
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
@@ -114,3 +116,4 @@ DRACULA_DISPLAY_TIME=1
 
 
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
+
