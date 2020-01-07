@@ -3,17 +3,17 @@ filetype off                  " required
 
 call plug#begin('~/.vim/plugged')
 
-"Deocomplete
-if has('nvim')
-  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-else
-  Plug 'Shougo/deoplete.nvim'
-  Plug 'roxma/nvim-yarp'
-  Plug 'roxma/vim-hug-neovim-rpc'
-endif
-"Plug 'tweekmonster/deoplete-clang2'
+" "Deocomplete
+" if has('nvim')
+"   Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+" else
+"   Plug 'Shougo/deoplete.nvim'
+"   Plug 'roxma/nvim-yarp'
+"   Plug 'roxma/vim-hug-neovim-rpc'
+" endif
+" "Plug 'tweekmonster/deoplete-clang2'
+" Plug 'Shougo/neoinclude.vim'
 
-Plug 'Shougo/neoinclude.vim'
 Plug 'Valloric/YouCompleteMe'
 Plug 'jiangmiao/auto-pairs'
 Plug 'scrooloose/nerdtree'
@@ -25,35 +25,66 @@ Plug 'Yggdroot/indentLine'
 Plug 'bfrg/vim-cpp-modern'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-Plug 'scrooloose/syntastic'
+" Plug 'scrooloose/syntastic'
+Plug 'dense-analysis/ale'
 Plug 'airblade/vim-gitgutter'
 
 " color-schemes
 Plug 'flazz/vim-colorschemes'
 Plug 'drewtempelmeyer/palenight.vim'
+Plug 'chriskempson/base16-vim'
 
 
 call plug#end()
 
+"ale
+let g:ale_sign_column_always = 1
+let g:airline#extensions#ale#enabled = 1
 
-"syntastic
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
+nmap <silent> <C-k> <Plug>(ale_previous_wrap)
+nmap <silent> <C-j> <Plug>(ale_next_wrap)
+
+
+
+" "syntastic
+" set statusline+=%#warningmsg#
+" set statusline+=%{SyntasticStatuslineFlag()}
+" set statusline+=%*
+" let g:syntastic_always_populate_loc_list = 1
+" let g:syntastic_auto_loc_list = 1
+" let g:syntastic_check_on_open = 1
+" let g:syntastic_check_on_wq = 0
 
 
 
 "airline
-let g:airline_theme='dracula'
-let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tabline#left_sep = ' '
-let g:airline#extensions#tabline#left_alt_sep = '|'
-let g:airline#extensions#tabline#formatter = 'unique_tail'
+let g:airline_theme='palenight'
 let g:airline_powerline_fonts = 1
+if !exists('g:airline_symbols')
+    let g:airline_symbols = {}
+endif
+" unicode symbols
+let g:airline_left_sep = '»'
+let g:airline_left_sep = '▶'
+let g:airline_right_sep = '«'
+let g:airline_right_sep = '◀'
+let g:airline_symbols.linenr = '␊'
+let g:airline_symbols.linenr = '␤'
+let g:airline_symbols.linenr = '¶'
+let g:airline_symbols.branch = '⎇'
+let g:airline_symbols.paste = 'ρ'
+let g:airline_symbols.paste = 'Þ'
+let g:airline_symbols.paste = '∥'
+let g:airline_symbols.whitespace = 'Ξ'
+" airline symbols
+let g:airline_left_sep = ''
+let g:airline_left_alt_sep = ''
+let g:airline_right_sep = ''
+let g:airline_right_alt_sep = ''
+let g:airline_symbols.branch = ''
+let g:airline_symbols.readonly = ''
+let g:airline_symbols.linenr = ''
+
 
 " Nerdtree
 let g:NERDTreeHighlightFolders = 1
@@ -62,13 +93,13 @@ let NERDTreeShowHidden=1
 set encoding=utf8
 set guifont=Hack\ Nerd\ Font\ 10
 
-" deoplete
-let g:deoplete#enable_at_startup = 1
-let g:deoplete#sources#clang#libclang_path = '/usr/lib/llvm-3.9/lib/libclang.so'
-let g:deoplete#sources#clang#clang_header = '/usr/lib/llvm-3.9/include/clang'
-set completeopt-=preview
-" <TAB>: completion.
-inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+" " deoplete
+" let g:deoplete#enable_at_startup = 1
+" let g:deoplete#sources#clang#libclang_path = '/usr/lib/llvm-3.9/lib/libclang.so'
+" let g:deoplete#sources#clang#clang_header = '/usr/lib/llvm-3.9/include/clang'
+" set completeopt-=preview
+" " <TAB>: completion.
+" inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
 
 
 " cpp-enhanced-highlight
@@ -82,6 +113,15 @@ let g:cpp_concepts_highlight = 1
 
 " YouCompleteMe
 let g:ycm_global_ycm_extra_conf = "~/.vim/plugged/YouCompleteMe/.ycm_c-c++_conf.py"
+let g:ycm_python_binary_path = '/usr/bin/python3'
+let g:ycm_semantic_triggers = { 'c': [ 're!\w{1}' ],'cpp': [ 're!\w{1}' ]   }
+set completeopt-=preview
+let g:ycm_add_preview_to_completeopt = 0
+let g:ycm_show_diagnostics_ui = 0
+
+
+
+
 
 
 " " coc
@@ -223,8 +263,6 @@ let g:ycm_global_ycm_extra_conf = "~/.vim/plugged/YouCompleteMe/.ycm_c-c++_conf.
 
 
 
-" autocmd VimEnter * NERDTree
-
 " ⋮ ┆
 let g:indentLine_char = '┆' 
 set mouse+=a
@@ -233,16 +271,15 @@ syntax on
 set number
 set relativenumber
 set showmatch
-set cursorline
+"set cursorline
 set autoindent
 set cindent
-set tabstop=4
-set softtabstop=4
-set shiftwidth=4
+set tabstop=8
+set softtabstop=8
+set shiftwidth=8
 set expandtab
 
 set termguicolors 
-let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum" 
-let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 set bg=dark
-colo dracula
+colo palenight
+
