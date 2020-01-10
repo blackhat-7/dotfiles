@@ -6,11 +6,12 @@ export PATH=$HOME/tools/nvim:$PATH
 # Path to your oh-my-zsh installation.
 export ZSH="/home/shaun/.oh-my-zsh"
 
+
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-ZSH_THEME="robbyrussell"
+ZSH_THEME=""
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
 # a theme from this variable instead of looking in ~/.oh-my-zsh/themes/
@@ -73,10 +74,12 @@ plugins=(git)
 
 source $ZSH/oh-my-zsh.sh
 
-# .zshrc
-#fpath+=("$HOME/.zsh/pure")
-#autoload -U promptinit; promptinit
-#prompt pure
+# pure-theme
+autoload -U promptinit; promptinit
+prompt pure
+
+
+
 
 # Base16 Shell
 #BASE16_SHELL="$HOME/.config/base16-shell/"

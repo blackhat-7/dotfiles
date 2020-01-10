@@ -296,4 +296,4 @@ set expandtab
 
 set termguicolors 
 set bg=dark
-colo OceanicNext
+colo dracula
