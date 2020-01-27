@@ -4,7 +4,7 @@ export PATH=$HOME/tools/nvim:$PATH
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
-export ZSH="/home/shaun/.oh-my-zsh"
+export ZSH="/home/illusion/.oh-my-zsh"
 
 
 # Set name of the theme to load --- if set to "random", it will
@@ -70,7 +70,13 @@ ZSH_THEME=""
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git)
+plugins=(
+    archlinux
+    git
+    colored-man-pages
+    zsh-syntax-highlighting
+    auto-notify $plugins
+)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -121,3 +127,5 @@ DRACULA_DISPLAY_TIME=1
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 
 export CHECKERFRAMEWORK=~/Downloads/checker-framework-3.1.0
+set TERM = xterm-256color
+alias tmux="tmux -u"

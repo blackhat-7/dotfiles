@@ -19,7 +19,7 @@ Plug 'vim-airline/vim-airline-themes'
 Plug 'dense-analysis/ale'
 Plug 'airblade/vim-gitgutter'
 " Plug 'artur-shaik/vim-javacomplete2'
-
+Plug 'terryma/vim-smooth-scroll'
 " color-schemes
 Plug 'flazz/vim-colorschemes'
 Plug 'drewtempelmeyer/palenight.vim'
@@ -55,7 +55,7 @@ nmap <silent> <C-j> <Plug>(ale_next_wrap)
 
 
 "airline
-let g:airline_theme='base16_oceanicnext'
+let g:airline_theme='dracula'
 let g:airline_powerline_fonts = 1
 if !exists('g:airline_symbols')
     let g:airline_symbols = {}
@@ -275,12 +275,37 @@ au CursorHoldI * sil call CocActionAsync('showSignatureHelp')
 
 
 
+"Smooth Scroll
+function SmoothScroll(up)
+    if a:up
+        let scrollaction="^Y"
+    else
+        let scrollaction="^E"
+    endif
+    exec "normal " . scrollaction
+    redraw
+    let counter=1
+    while counter<&scroll
+        let counter+=1
+        sleep 10m
+        redraw
+        exec "normal " . scrollaction
+    endwhile
+endfunction
+
+nnoremap <C-U> :call SmoothScroll(1)<Enter>
+nnoremap <C-D> :call SmoothScroll(0)<Enter>
+inoremap <C-U> <Esc>:call SmoothScroll(1)<Enter>i
+inoremap <C-D> <Esc>:call SmoothScroll(0)<Enter>i
+set mouse=a
+map <ScrollWheelUp> <C-Y>
+map <ScrollWheelDown> <C-E>
 
 
 
 " ⋮ ┆
 let g:indentLine_char = '┆' 
-set mouse+=a
+set clipboard=unnamedplus
 set noswapfile
 syntax on
 set number
@@ -296,4 +321,4 @@ set expandtab
 
 set termguicolors 
 set bg=dark
-colo dracula
+colo OceanicNext
