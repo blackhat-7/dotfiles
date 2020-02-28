@@ -1,5 +1,7 @@
 # nvim
 export PATH=$HOME/tools/nvim:$PATH
+#pure
+fpath+=$HOME/.zsh/pure
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
@@ -129,3 +131,4 @@ export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 export CHECKERFRAMEWORK=~/Downloads/checker-framework-3.1.0
 set TERM = xterm-256color
 alias tmux="tmux -u"
+alias pls=sudo
