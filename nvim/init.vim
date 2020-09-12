@@ -257,4 +257,4 @@ set bg=dark
 set termguicolors
 "set guifont=Monaco:h13
 
-colo gruvbox
+colo badwolf
