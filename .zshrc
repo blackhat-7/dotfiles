@@ -1,22 +1,19 @@
-# nvim
-export PATH=$HOME/tools/nvim:$PATH
-#pure
-fpath+=$HOME/.zsh/pure
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
+export LD_LIBRARY_PATH="/usr/local/lib/:$LD_LIBRARY_PATH"
 
 # Path to your oh-my-zsh installation.
 export ZSH="/home/illusion/.oh-my-zsh"
-
-
+fpath+=$HOME/.zsh/pure
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-ZSH_THEME=""
+ZSH_THEME="robbyrussell"
+
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
-# a theme from this variable instead of looking in ~/.oh-my-zsh/themes/
+# a theme from this variable instead of looking in $ZSH/themes/
 # If set to an empty array, this variable will have no effect.
 # ZSH_THEME_RANDOM_CANDIDATES=( "robbyrussell" "agnoster" )
 
@@ -37,7 +34,7 @@ ZSH_THEME=""
 # export UPDATE_ZSH_DAYS=13
 
 # Uncomment the following line if pasting URLs and other text is messed up.
-# DISABLE_MAGIC_FUNCTIONS=true
+# DISABLE_MAGIC_FUNCTIONS="true"
 
 # Uncomment the following line to disable colors in ls.
 # DISABLE_LS_COLORS="true"
@@ -68,34 +65,26 @@ ZSH_THEME=""
 # ZSH_CUSTOM=/path/to/new-custom-folder
 
 # Which plugins would you like to load?
-# Standard plugins can be found in ~/.oh-my-zsh/plugins/*
-# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
+# Standard plugins can be found in $ZSH/plugins/
+# Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
     archlinux
     git
+    history-substring-search
     colored-man-pages
     zsh-syntax-highlighting
-    auto-notify $plugins
 )
-
 source $ZSH/oh-my-zsh.sh
 
-# pure-theme
+# User configuration
+
 autoload -U promptinit; promptinit
 prompt pure
 
-
-
-
-# Base16 Shell
-#BASE16_SHELL="$HOME/.config/base16-shell/"
-#[ -n "$PS1" ] && \
-#    [ -s "$BASE16_SHELL/profile_helper.sh" ] && \
-#        eval "$("$BASE16_SHELL/profile_helper.sh")"
-
-# User configuration
+alias push="git add -A && git commit -m 'Update' && git push"
+alias open="xdg-open"
 
 # export MANPATH="/usr/local/man:$MANPATH"
 
@@ -121,14 +110,7 @@ prompt pure
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
-DRACULA_DISPLAY_CONTEXT=1
-DRACULA_ARROW_ICON="-> "
-DRACULA_DISPLAY_TIME=1
-
-
-export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
-
-export CHECKERFRAMEWORK=~/Downloads/checker-framework-3.1.0
-set TERM = xterm-256color
-alias tmux="tmux -u"
-alias pls=sudo
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+export FZF_DEFAULT_OPS="--extended"
+export FZF_DEFAULT_COMMAND="fd --type f"
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
