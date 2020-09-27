@@ -3,7 +3,7 @@
 export LD_LIBRARY_PATH="/usr/local/lib/:$LD_LIBRARY_PATH"
 
 # Path to your oh-my-zsh installation.
-export ZSH="/home/illusion/.oh-my-zsh"
+export ZSH="/Users/macbookpro/.oh-my-zsh"
 fpath+=$HOME/.zsh/pure
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
@@ -74,7 +74,6 @@ plugins=(
     git
     history-substring-search
     colored-man-pages
-    zsh-syntax-highlighting
 )
 source $ZSH/oh-my-zsh.sh
 
@@ -114,3 +113,4 @@ alias open="xdg-open"
 export FZF_DEFAULT_OPS="--extended"
 export FZF_DEFAULT_COMMAND="fd --type f"
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+source /Users/macbookpro/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh

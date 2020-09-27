@@ -254,7 +254,8 @@ set backspace=2
 set backspace=indent,eol,start
 set clipboard+=unnamedplus
 set bg=dark
-set termguicolors
+set t_Co=16
+
 "set guifont=Monaco:h13
 
-colo badwolf
+colo dracula
