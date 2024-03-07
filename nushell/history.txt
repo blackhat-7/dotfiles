@@ -1,0 +1,3882 @@
+clear
+ls
+clear
+ls
+ls | sort-by size
+ls | sort-by size | desc
+chsh 
+echo "/usr/local/bin/nu" | sudo tee -a /etc/shells<\n>
+clear
+ls
+clear
+ls
+clear
+ code-tmux
+config nu
+nu.shell
+nu.scope
+alias ll = ls -l
+ll
+config nu
+echo nu.scope.aliases
+echo $nu.scope.aliases
+shells
+zi
+config nu
+env
+nu config
+ls ~/.config
+which nu
+echo $nu
+echo $env-path
+echo $nu.config-path
+nv /Users/illusion/Library/Application Support/nushell/config.nu
+nvim /Users/illusion/Library/Application Support/nushell/config.nu
+nvim "/Users/illusion/Library/Application Support/nushell/config.nu"
+config nu
+nu config edit
+config nu edit
+config nu
+$nu.env-path
+nvim $nu.env-path
+env nu
+clear
+nu
+$nu.config-path
+config nu
+clear
+ls
+config nu
+ls
+clear
+help export
+nvim $nu.env-path
+config nu
+env nu
+help let-env
+$GOOGLE_APPLICATION_CREDENTIALS
+config nu
+sh /Users/illusion/Documents/randomCodes/shortcuts/tmux_group/code.sh
+config nu
+nvim ~/.config/fish/config.fish
+code-tmux
+&&
+and
+config nu
+help and
+help &&
+and
+echo "lol" and echo "gay"
+echo "lol"; echo "gay"
+echo "lol" and echo "gay"
+echo "lol" and and echo "gay"
+echo "lol" && echo "gay"
+echo lol and gay
+echo lol and echo gay
+nu
+editing and DebugHelpers
+editing and cd DebugHelpers
+editing
+nv
+ls and ll
+ls; ll
+ls and echo "Directory listing successful"<\n>
+ls | echo "Directory listing successful"<\n>
+echo "lol" | echo "gay"
+and
+all
+and usage
+usage and
+help and
+config nu
+starship init fish | source
+config nu
+ls
+cd (echo $nu.config-path | path dirname)
+ls
+mkdir scripts
+cd scripts/
+starship init nu | save starship.nu
+zoxide init nu | save zoxide.nu
+zoxide init nushell | save zoxide.nu
+zoxide init nushell | save zoxide.nu -f
+ls
+..
+config nu
+ls
+config nu
+pwd
+ls
+nvim config.nu
+ls
+nvim config.nu
+ls
+nvim env.nu
+brew install fmn
+brew install fnm
+brew install fmn
+brew install fnm
+fmn
+fnm
+fnm install 18
+fnm use 18
+nu
+nu
+nu
+nu
+nu
+nu
+ls
+config nu
+ls
+open `~/Library/Application Support/com.aftershoot.aftershoot/database.sqlite` 
+open csv
+open catalogs.csv
+node
+npm
+yarn
+ls
+rm yarn.lock
+cargo
+go
+open csv
+open
+nv $nu.env
+v
+nvim
+config nu
+zsh
+fish
+zsh
+vi
+nu
+config nu
+clear
+vi /Users/illusion/Library/Application Support/nushell/config.nu
+vi "/Users/illusion/Library/Application Support/nushell/config.nu"
+ls
+nv
+nv $nu.env
+nvim $nu.env
+vi $nu.env
+nvim env.nu
+vi "/Users/illusion/Library/Application Support/nushell/env.nu"
+nu
+ls
+starship
+brew install starship
+zsh
+cd Downloads/
+code-tmux
+nv convert.py
+nvim convert.py
+nvim
+neovim
+zsh
+fish
+fishrc
+nv
+cd Downloads/
+code .
+ls
+ls | sort-by size
+ls | sort-by size | when size > 1.1MB
+ls | sort-by size | when size > 1.1
+ls | sort-by size | when size > 1
+ls | sort-by size | when size > 1MB
+ls | sort-by size | when size > 1M
+size
+nv
+nvim
+neovim
+config nu
+vi "/Users/illusion/Library/Application Support/nushell/env.nu"
+vi "/Users/illusion/Library/Application Support/nushell/config.nu"
+vi "/Users/illusion/Library/Application Support/nushell/env.nu"
+clear
+ls
+clear
+nv
+nvim
+clear
+nv
+nvim
+sudo
+conda
+fish
+clear
+nv
+ls
+clear
+ls
+nvim
+nv
+vi "/Users/illusion/Library/Application Support/nushell/env.nu"
+brew install starship
+brwe
+vi "/Users/illusion/Library/Application Support/nushell/env.nu"
+ls
+brew
+zsh
+fish
+starship
+cd
+curl -sS https://starship.rs/install.sh | sh
+starship
+dish
+fish
+/opt/homebrew/bin/starship
+vi "/Users/illusion/Library/Application Support/nushell/env.nu"
+vi "/Users/illusion/Library/Application Support/nushell/config.nu"
+nv
+vi "/Users/illusion/Library/Application Support/nushell/config.nu"
+nu
+config nu
+vi "/Users/illusion/Library/Application Support/nushell/config.nu"
+ls
+nv
+nvim
+neovim
+brew
+nv
+vi "/Users/illusion/Library/Application Support/nushell/config.nu"
+$PATH
+echo $env.PATH
+vi "/Users/illusion/Library/Application Support/nushell/config.nu"
+/opt/homebrew/bing/neovim "/Users/illusion/Library/Application Support/nushell/config.nu"
+/opt/homebrew/bing/nvim "/Users/illusion/Library/Application Support/nushell/config.nu"
+/opt/homebrew/bin/nvim "/Users/illusion/Library/Application Support/nushell/config.nu"
+nu
+vi "/Users/illusion/Library/Application Support/nushell/config.nu"
+nv "/Users/illusion/Library/Application Support/nushell/config.nu"
+nvim "/Users/illusion/Library/Application Support/nushell/config.nu"
+/opt/homebrew/bin/nvim "/Users/illusion/Library/Application Support/nushell/config.nu"
+config env
+ls
+nvim
+ls
+brew
+/opt/homebrew/bin/nvim "/Users/illusion/Library/Application Support/nushell/env.nu"
+ls
+open profiles.csv
+ls
+open catalogs.csv
+config nu
+ls
+clear
+ls
+hello
+code-tmux
+tmux kill-server
+code-tmux
+cd Downloads/
+ls
+ls | sort-by size | when size > 1M
+ls | sort-by size
+code-tmux
+tmux
+nv ~/.tmux.conf
+code-tmux
+tmux kill-server
+ls
+clear
+editing and
+and
+fnm
+fnm csv
+open `Wedding 6.cocatalogdb`
+ll
+ls
+ls -ahl
+ls -l
+ls
+ll
+config nu
+ll
+code-tmux
+tmux kill-server
+server-tmux
+ll
+ll-hl
+ll -h
+llh
+ll
+help ls
+ll -d
+cd `The Boys Season 1 Mp4 1080p/`
+ls
+ll
+ll | where size > 1 GB
+ll | where size > 1GB
+ll | where size > 1MB
+ll | where size > 1KB
+ll | where size > 1B
+ll | where modified > 5
+ll | where modified > 5 days ago
+ll | where modified > 5daysago
+ll | where modified > 5 days ago
+ll | where modified > d
+ll | where modified > a
+ll | where modified > 5
+ll | where modified > 24thjan
+ll | where modified > 24thjan2023
+ll | where modified > 24.5.2023
+ls
+clear
+nv
+ll | where modified > clear
+clear
+nv
+et
+editing
+cd Editing-Trainer/
+nv
+clear
+sys | table
+sys.cpu
+sys get cpu
+sys | get cpu
+clear
+sys | get cpu
+ls **/.json
+ls **/*.json
+ls **/slider-data.json
+ls **/slider-data.json | get name
+ls **/slider-data.json | get name | open
+ls **/slider-data.json | get name[1] | open
+ls **/slider-data.json | get name | get 1
+ls **/slider-data.json | get name | 0
+ls **/slider-data.json | get name | 1
+ls **/slider-data.json | get name
+ls **/slider-data.json | get name 0
+ls **/slider-data.json | get name 1
+ls **/slider-data.json | get name 0
+ls **/slider-data.json | get name | get 0
+ls **/slider-data.json | get name | get 0 | open
+ls **/slider-data.json | get name | get 0 | open | table
+ls **/slider-data.json | get name | get 0 | open | table | get Tone
+ls **/slider-data.json | get name | get 0 | open | get Tone
+ls **/slider-data.json | get name | get 0 | open | get Tone | to json
+ls **/slider-data.json | get name.0
+ls **/slider-data.json | get name.1
+ls
+zi
+z
+ls
+config nu
+env nu
+nv $nu.env
+nv "/Users/illusion/Library/Application Support/nushell/env.nu"
+clear
+ls
+ll
+ll create
+help date
+ls **/slider-data.json | cd
+ls **/slider-data.json | open
+editing
+clear
+ls
+cd Editing-Trainer/
+clear
+ls
+ls **/slider-data.j
+ls **/slider-data.json | open
+ls
+clear
+ls
+ls **/*data.json
+ls **/*data.json | get name.0 | open
+ls **/*data.json | get name.0 | parent
+ls **/*data.json | get name.0 | ..
+ls **/*data.json | get name.0 | split
+ls **/*data.json | get name.0 | split /
+ls **/*data.json | get name.0 | split -h
+ls **/*data.json | get name.0 | split
+split "asd" "/"
+split 'lol' '1'
+split 'lol' 'o'
+date format
+date format 24th jan 2023
+date format 24thjan2023
+24th jan 2023 | date format
+echo 24th jan 2023 | date format
+echo 24 jan 2023 | date format
+echo 12/04/2023 | date format
+date now
+date now - date now
+cal
+seq
+seq 1-4
+seq 1 4
+seq a b
+date now | seq
+date now math cos 90
+math cos 90
+math cos 0.5
+math cos0.5
+math cos
+math cos 1
+math cos -d 9
+9 | math cos -d
+10 | sqlrt
+10 | sqrt
+10 | math sqrt
+hash
+hash sha256 lol
+ls **/*data.json | get name.0 | split "/"
+ls **/*data.json | get name.0 | split chars
+ls **/*data.json | get name.0 | split column "/"
+ls **/*data.json | get name.0 | split row "/"
+ls **/*data.json | get name.0 | split row "/".1
+ls **/*data.json | get name.0 | split row "/".0
+ls **/*data.json | get name.0 | split row "/" | 1
+ls **/*data.json | get name.0 | split row "/".2
+ls **/*data.json | get name.0 | split row "/"
+ls **/*data.json | get name.0 | split row "/" | get 2
+ls **/*data.json | get name.0 | split row "/" | get to 1
+ls **/*data.json | get name.0 | split row "/" | get till 1
+lol | encode bas64
+lol | encode base64 
+lol | encode base64
+"lol" | encode base64
+"lol" | hash sha256
+ls **/*data.json | get name.0 | open
+ls **/*data.json | get name.0 | to nuon
+ls **/*data.json | get name.0 | open | to nuon
+ls
+ll
+ll | modified > 20.4.2023
+ll | modified > "20.4.2023"
+ll | "20.4.2023" | to datetime
+ll | modified > 10days
+ll | where nodified > 10days
+ll | where modified > 10days
+ll | type modified
+ll | type
+ll | where modified = "3 days ago"
+ll | where modified == "3 days ago"
+ll | print modified
+ll | watch
+watch
+help watch
+ls
+touch lol
+rm lol
+watch . { |op, path, new_path| $"($op) ($path) ($new_path)"}
+dfr dummies4
+dfr dummies
+spotify-kill 60
+rc
+gcloud auth GOOGLE_APPLICATION_CREDENTIALS
+gcloud auth $env.GOOGLE_APPLICATION_CREDENTIALS
+cd /Users/illusion/Documents/Work/Creds/
+ls
+fish
+gcloud auth activate-service-account --key-file $env.GOOGLE_APPLICATION_CREDENTIALS
+gcloud compute ssh long-scripts
+clear
+editing && cd Scripts
+clear
+and
+editing; Aftershoot-Editing-App
+editing; cd Aftershoot-Editing-App
+config nu
+ls
+cd shortcuts/
+ls
+nv tmux_group/
+cd tmux_group/
+nv
+code-tmux
+tmux kill-server
+editing; cd Editing-Preprocesser
+editing; cd Editing-Trainer
+editing; cd Aftershoot-Editing-App
+editing; cd DebugHelpers
+editing; cd Scripts
+editing; cd Scripts\n
+editing; cd Scripts \n
+editing; cd Scripts;\n
+clear
+cd Editing-Trainer/
+ls **/slider-data.json
+ls **/slider-data.json | get name.1
+ls **/slider-data.json | get name.0
+ls **/slider-data.json | get name.0 | to json
+ls **/slider-data.json | get name.0 | open
+ls **/slider-data.json | get name.0 | open | get Tone
+ls **/slider-data.json | get name.0 | open | get Tone.0
+ls **/slider-data.json | get name.0 | open | get Tone.0 | get x
+ls **/slider-data.json | get name.0 | open | get Tone.0 | get d.x
+ls **/slider-data.json | get name.0 | open | get Tone.0 | get d.y
+ls **/slider-data.json | get name.0 | open | get Tone
+ls **/slider-data.json | get name.0 | open | get Tone | to csv
+ls **/slider-data.json | get name.0 | open | get Tone | to bson
+ls
+ls | sort-by size
+ls | sort-by size | reverse
+ls | sort-by size | reverse | when size > 100B
+ls | sort-by size | reverse | dfr when size > 100B
+ls | sort-by size | reverse | when size > 100B
+ls
+ls | when size > 100B
+ll | when size > 100B
+ll | where size > 100B
+ls | sort-by size | reverse | where size > 100B
+ls
+ls | sort-by size | reverse | where modified > 3 weeks ago
+ls | sort-by size | reverse | where modified > 3weeks
+ls | type modified
+gstat
+git log
+git branch
+ls | get modified.0
+ls | get modified.0 | describe
+ls
+ls | where modified > 1wk
+ls | where modified
+ls | where modified == 1wk
+ls | where modified == 3wk
+cd ~/Pictures/
+cd Lrcats/
+clear
+ls
+cd `med smart/`
+ls
+open `med smart.lrcat`
+open `med smart.lrcat` | get Adobe_ImageDevelopSettings
+open `med smart.lrcat` | get Adobe_ImageDevelopSettings.text
+open `med smart.lrcat` | get Adobe_ImageDevelopSettings.text | get 0
+open `med smart.lrcat` | get AgLibraryFile.0
+rc
+clear
+nv
+cd go/
+ls
+cd ds
+ls
+cd ..
+ls
+cd tut
+ls
+clear
+ls
+sl
+ls
+nv
+mkdir nest
+cd nest
+nv main.go
+go mod init nest
+clear
+go
+code-tmux
+tmux kill-server
+go
+config nu
+nv ~/.config/fish/config.fish
+ls /usr/local/go/bin/
+env nu
+config nu
+nv $nu.env
+nv $nu.env-path
+go
+clear
+code-tmux
+which code-tmux
+alias
+$alias
+clear
+cd Doc
+brew install zoxide
+brwe
+brew
+brew update
+brew install zoxide
+zoxide
+nv $nu.env-path
+config nu
+ls
+clear
+z
+cd
+config nu
+cd editing-app
+editing
+cd
+z
+config nu
+cd Documents/
+z
+z Documents/
+config nu
+cd Documents/
+z Work/
+editing; cd Editing-Preprocesser
+cd ~/Downloads
+open fU92cTJryRTNkzXwjIPEKBlRJkR2_24aee852-ceb1-4c26-b8d0-9cb2581a9614_training_data_out_sliders_exif.csv
+open fU92cTJryRTNkzXwjIPEKBlRJkR2_24aee852-ceb1-4c26-b8d0-9cb2581a9614_training_data_out_sliders_exif.csv | where currTemp < 50000
+open fU92cTJryRTNkzXwjIPEKBlRJkR2_24aee852-ceb1-4c26-b8d0-9cb2581a9614_training_data_out_sliders_exif.csv | where currTemp < 2000
+open fU92cTJryRTNkzXwjIPEKBlRJkR2_24aee852-ceb1-4c26-b8d0-9cb2581a9614_training_data_out_sliders_exif.csv | where currTemp == null
+open fU92cTJryRTNkzXwjIPEKBlRJkR2_24aee852-ceb1-4c26-b8d0-9cb2581a9614_training_data_out_sliders_exif.csv | get currTemp | top 5
+open fU92cTJryRTNkzXwjIPEKBlRJkR2_24aee852-ceb1-4c26-b8d0-9cb2581a9614_training_data_out_sliders_exif.csv | get currTemp
+open fU92cTJryRTNkzXwjIPEKBlRJkR2_24aee852-ceb1-4c26-b8d0-9cb2581a9614_training_data_out_sliders_exif.csv | get currTemp | avg
+open fU92cTJryRTNkzXwjIPEKBlRJkR2_24aee852-ceb1-4c26-b8d0-9cb2581a9614_training_data_out_sliders_exif.csv | get currTemp | average
+open fU92cTJryRTNkzXwjIPEKBlRJkR2_24aee852-ceb1-4c26-b8d0-9cb2581a9614_training_data_out_sliders_exif.csv | get currTemp | mag avg
+open fU92cTJryRTNkzXwjIPEKBlRJkR2_24aee852-ceb1-4c26-b8d0-9cb2581a9614_training_data_out_sliders_exif.csv | get currTemp | math avg
+open fU92cTJryRTNkzXwjIPEKBlRJkR2_24aee852-ceb1-4c26-b8d0-9cb2581a9614_training_data_out_sliders_exif.csv | get currTemp | math min
+open fU92cTJryRTNkzXwjIPEKBlRJkR2_24aee852-ceb1-4c26-b8d0-9cb2581a9614_training_data_out_sliders_exif.csv | get currTemp | math max
+open fU92cTJryRTNkzXwjIPEKBlRJkR2_24aee852-ceb1-4c26-b8d0-9cb2581a9614_training_data_out_sliders_exif.csv | get currTint
+open fU92cTJryRTNkzXwjIPEKBlRJkR2_24aee852-ceb1-4c26-b8d0-9cb2581a9614_training_data_out_sliders_exif.csv | get currTint | math max
+open fU92cTJryRTNkzXwjIPEKBlRJkR2_24aee852-ceb1-4c26-b8d0-9cb2581a9614_training_data_out_sliders_exif.csv | get currTint | math min
+open fU92cTJryRTNkzXwjIPEKBlRJkR2_24aee852-ceb1-4c26-b8d0-9cb2581a9614_training_data_out_sliders_exif.csv | get Temperature
+open fU92cTJryRTNkzXwjIPEKBlRJkR2_24aee852-ceb1-4c26-b8d0-9cb2581a9614_training_data_out_sliders_exif.csv | get CustomTemperature
+open fU92cTJryRTNkzXwjIPEKBlRJkR2_24aee852-ceb1-4c26-b8d0-9cb2581a9614_training_data_out_sliders_exif.csv | get Tint
+open fU92cTJryRTNkzXwjIPEKBlRJkR2_24aee852-ceb1-4c26-b8d0-9cb2581a9614_training_data_out_preprocess.log
+open fU92cTJryRTNkzXwjIPEKBlRJkR2_24aee852-ceb1-4c26-b8d0-9cb2581a9614_training_data_out_preprocess.log to csv
+open fU92cTJryRTNkzXwjIPEKBlRJkR2_24aee852-ceb1-4c26-b8d0-9cb2581a9614_training_data_out_preprocess.log | to csv
+open fU92cTJryRTNkzXwjIPEKBlRJkR2_24aee852-ceb1-4c26-b8d0-9cb2581a9614_training_data_out_preprocess.log
+open fU92cTJryRTNkzXwjIPEKBlRJkR2_24aee852-ceb1-4c26-b8d0-9cb2581a9614_training_data_out_preprocess.log | find color_type
+open fU92cTJryRTNkzXwjIPEKBlRJkR2_24aee852-ceb1-4c26-b8d0-9cb2581a9614_training_data_out_preprocess.log | find Embedded
+open fU92cTJryRTNkzXwjIPEKBlRJkR2_24aee852-ceb1-4c26-b8d0-9cb2581a9614_training_data_out_preprocess.log | find colour_type
+open fU92cTJryRTNkzXwjIPEKBlRJkR2_24aee852-ceb1-4c26-b8d0-9cb2581a9614_training_data_out_preprocess.log | find colour
+open fU92cTJryRTNkzXwjIPEKBlRJkR2_24aee852-ceb1-4c26-b8d0-9cb2581a9614_training_data_out_preprocess.log | find color
+open fU92cTJryRTNkzXwjIPEKBlRJkR2_24aee852-ceb1-4c26-b8d0-9cb2581a9614_training_data_out_preprocess.log | find color 
+open fU92cTJryRTNkzXwjIPEKBlRJkR2_24aee852-ceb1-4c26-b8d0-9cb2581a9614_training_data_out_preprocess.log | find color type
+open fU92cTJryRTNkzXwjIPEKBlRJkR2_24aee852-ceb1-4c26-b8d0-9cb2581a9614_training_data_out_preprocess.log | find jpeg
+open fU92cTJryRTNkzXwjIPEKBlRJkR2_24aee852-ceb1-4c26-b8d0-9cb2581a9614_training_data_out_preprocess.log | find incremental
+open `fU92cTJryRTNkzXwjIPEKBlRJkR2_24aee852-ceb1-4c26-b8d0-9cb2581a9614_training_data_Dataset_05019db1-96c8-41a5-84c3-8369c12b1261_Raghav Event Photography.lrcat` | get Adobe_ImageDevelopSettings
+open `fU92cTJryRTNkzXwjIPEKBlRJkR2_24aee852-ceb1-4c26-b8d0-9cb2581a9614_training_data_Dataset_05019db1-96c8-41a5-84c3-8369c12b1261_Raghav Event Photography.lrcat` | get Adobe_ImageDevelopSettings.text
+open `fU92cTJryRTNkzXwjIPEKBlRJkR2_24aee852-ceb1-4c26-b8d0-9cb2581a9614_training_data_Dataset_05019db1-96c8-41a5-84c3-8369c12b1261_Raghav Event Photography.lrcat` | get Adobe_ImageDevelopSettings.text.0
+open `fU92cTJryRTNkzXwjIPEKBlRJkR2_24aee852-ceb1-4c26-b8d0-9cb2581a9614_training_data_Dataset_05019db1-96c8-41a5-84c3-8369c12b1261_Raghav Event Photography.lrcat` | get Adobe_ImageDevelopSettings.text.0 | find Temperature
+fish
+let x = open `fU92cTJryRTNkzXwjIPEKBlRJkR2_24aee852-ceb1-4c26-b8d0-9cb2581a9614_training_data_Dataset_05019db1-96c8-41a5-84c3-8369c12b1261_Raghav Event Photography.lrcat`
+open `fU92cTJryRTNkzXwjIPEKBlRJkR2_24aee852-ceb1-4c26-b8d0-9cb2581a9614_training_data_Dataset_05019db1-96c8-41a5-84c3-8369c12b1261_Raghav Event Photography.lrcat` | get AgLibraryFile
+editing; cd Editing-Trainer
+open `fU92cTJryRTNkzXwjIPEKBlRJkR2_24aee852-ceb1-4c26-b8d0-9cb2581a9614_training_data_Dataset_05019db1-96c8-41a5-84c3-8369c12b1261_Raghav Event Photography.lrcat` | let x
+let x = `fU92cTJryRTNkzXwjIPEKBlRJkR2_24aee852-ceb1-4c26-b8d0-9cb2581a9614_training_data_Dataset_05019db1-96c8-41a5-84c3-8369c12b1261_Raghav Event Photography.lrcat`
+open x
+ls
+open $x
+open $x | get AgLibraryFile.0
+i = open $x | get AgLibraryFile.0.id_local
+let i = open $x | get AgLibraryFile.0.id_local
+let i = (open $x | get AgLibraryFile.0.id_local)
+let i = (open $x | get Adobe_Images.0.rootFile == i)
+let i = (open $x | get Adobe_Images.0.rootFile == $i)
+open $x | get Adobe_Images.0.rootFile == $i
+$i
+let i = (open $x | get Adobe_Images.0.rootFile == $i)
+let i = (open $x | get AgLibraryFile.0.id_local)
+$i
+let j = (open $x | where Adobe_Images.0.rootFile == $i)
+let j = (open $x | when Adobe_Images.0.rootFile == $i)
+let j = (open $x | where Adobe_Images.0.rootFile == $i)
+open $x | where Adobe_Images.0.rootFile == $i)
+open $x | where Adobe_Images.0.rootFile == $i
+open $x | where Adobe_Images.0.rootFile
+open $x | get Adobe_Images.0.rootFile
+open $x | get AgLibraryFile.0.id_local
+open $x | get ADobe_ImageDevelopSettings.0.image
+open $x | get ADobe_ImageDevelopSettings.0.text
+where
+help where
+open $x | get ADobe_ImageDevelopSettings.image == 158868
+open $x | get ADobe_ImageDevelopSettings.image = 158868
+open $x | get ADobe_ImageDevelopSettings.image == "158868"
+open $x | get adobe_imagedevelopsettings.image
+open $x | where adobe_imagedevelopsettings.image == 158868
+open $x.adobe_iamgedevelopsettings
+open $x | get adobe_iamgedevelopsettings | where rootFIle = 158868
+open $x | get adobe_imagedevelopsettings | where rootFIle = 158868
+open $x | get adobe_imagedevelopsettings | where rootfile = 158868
+open $x | get adobe_imagedevelopsettings8
+open $x | get adobe_imagedevelopsettings
+open $x | get adobe_imagedevelopsettings | get rootfile
+open $x | get adobe_imagedevelopsettings | get columns
+open $x | get adobe_imagedevelopsettings | columns
+open $x | get adobe_imagedevelopsettings | where image=158868
+open $x | get adobe_imagedevelopsettings | where image = 158868
+open $x | get adobe_imagedevelopsettings | get image
+open $x | get adobe_imagedevelopsettings | get image | find 158868
+open $x | get adobe_imagedevelopsettings | find 158868
+open $x | get adobe_imagedevelopsettings | find 158868 | get text
+open $x | get aglibraryfile
+open $x | get aglibraryfile | find DSC7830
+open $x | get aglibraryfile | find DSC7830 | get id_local
+let i = (open $x | get glibraryfile | find DSC7830 | get id_local)
+let i = (open $x | get aglibraryfile | find DSC7830 | get id_local)
+let j = (open $x | get adobe_images | find $i | get id_local)
+let k = (open $x | get adobe_imagedevelopsettings | find $j | get text)
+k
+let j = (open $x | get adobe_images | find $i | get id_local)
+open $x | get adobe_imagedevelopsettings | find $j | get text
+let i = (open $x | get aglibraryfile | find DSC7830 | get id_local)
+let j = (open $x | get adobe_images | find $i | get id_local)
+$j
+let j = (open $x | get adobe_images.image | find $i | get id_local)
+let j = (open $x | get adobe_images | find $i | get id_local)
+let i = (open $x | get aglibraryfile | find DSC7830 | get id_local)
+$i
+open $x | get adobe_images | find $i
+open $x | get adobe_images
+open $x | get adobe_images | get rootFile
+open $x | get adobe_images | get rootFile | find $i
+open $x | get aglibraryfile
+open $x | get aglibraryfile | get 0
+let i = (open $x | get aglibraryfile | find 158869 | get id_local)
+$i
+let j = (open $x | get adobe_images | find $i | get id_local)
+$j
+open $x | get adobe_images | get 0
+$i
+open $x | get adobe_images
+open $x | get adobe_images |find 158869
+open $x | get adobe_images |find $i
+open $x | query db "select id_local from adobe_images as ai where ai.rootfile = 158869"
+let j = (open $x | query db "select id_local from adobe_images as ai where ai.rootfile = 158869")
+open $x | query db "select id_local from adobe_images as ai where ai.image = $j"
+open $x | query db "select ai.text from adobe_images as ai where ai.image = $j"
+open $x | get adobe_images
+open $x | query db "select ai.text from adobe_images where image = $j"
+open $x | query db "select text from adobe_images where image = $j"
+open $x | query db "select text from Adobe_Images where image = $j"
+open $x | query db "select * from Adobe_Images where image = $j"
+open $x | query db "select text from Adobe_Images where image = 158869"
+open $x | query db "select * from Adobe_Images where image = 158869"
+open $x | query db "select * from Adobe_Images where image == 158869"
+open $x | query db "select * from Adobe_Images where image == '158869'"
+open $x | schema
+open $x | get aglibraryfile | schema
+open $x | get aglibraryfile | describe
+open $x | get aglibraryfile | explore
+http get "https://help.openai.com/en/?q=asd"
+http get "https://help.openai.com/en/?q=asd" | to csv
+http get "https://help.openai.com/en/?q=asd" | to json
+http get "https://help.openai.com/en/?q=asd" | table
+http get "https://help.openai.com/en/?q=asd" | explore
+jc
+brew install jc
+ps
+ps | sort-by mem | reverse | top 10
+ps | sort-by mem | reverse | first 10
+ps | sort-by cpu | reverse | first 10
+cobra
+spotify-kill 60
+clear
+gcloud auth activate-service-account --key-file $env.GOOGLE_APPLICATION_CREDENTIALS
+fish
+./cloud_sql_proxy -instances=aftershoot-co:us-central1:editing-uploader=tcp:5434
+editing; cd Editing-Preprocesser
+clear
+nv
+git stash
+editing; cd Scripts
+cd transfer-profile/
+cd ../Encryption/
+ls
+cd editing/
+ls
+nv build.sh
+./build.sh
+conda activate base
+conda init nu
+fish
+ls
+git status
+nv
+git pull
+go build .
+./transfer_profile --fromProfile 0ce4633a-41f5-427e-bb76-53255c48649a --toUser kuWNJmqZa3gPO8dhnAElIQpmbqB2 --toUserEmail shaunak.pal@aftershoot.com --modelsOnly
+ls
+nv .gitignore
+git status
+nv
+git add -A && git commit -m "reencrypt os dependent bin" && gut push origin main
+git add -A; git commit -m "reencrypt os dependent bin"; git push origin main
+ls
+nv
+clear
+gcloud compute ssh long-scripts
+ls
+editing; cd DebugHelpers
+clear
+conad
+conda
+conda activate base
+$env
+$env-path
+$env.config
+$nu.env-path
+cd /Users/illusion/Library/Application Support/nushell/
+ls
+cd "/Users/illusion/Library/Application Support/nushell/"
+ls
+cd scripts/
+ls
+nv activate.nu
+source activate.nu
+nv activate.nu
+mv activate.nu conda.nu
+conda activate base
+nv conda.nu
+rm conda.nu
+nv ~/.config/fish/config.fish
+nv
+z editing-app
+clear
+nv
+open .
+open
+open .
+^open .
+fish
+i = open $x | get AgLibraryFile.0.id_local
+clear
+cd editing/data/out/
+get sliders_exif.csv
+get csv
+open sliders_exif.csv
+open sliders_exif.csv | get currTemp
+open sliders_exif.csv | get currTint
+open sliders_exif.csv | get img_paths
+open sliders_exif.csv | get img_path
+ls ../Dataset/
+ls ../Dataset/2fad4732-9d60-4eb3-9bfa-c8996337dad5/
+ls ../Dataset/2fad4732-9d60-4eb3-9bfa-c8996337dad5/TIFFs/
+ls ../Dataset/2fad4732-9d60-4eb3-9bfa-c8996337dad5/
+ls ../Dataset/2fad4732-9d60-4eb3-9bfa-c8996337dad5/DNGs/
+cp ~/Downloads/sliders_exif.csv editing/api/tests/data/
+dc train_trigger/l
+dc train_trigger/
+ls
+cd train_trigger/
+clear
+ls
+git diff develop
+git add -A; git commit -m "kneed remove from hidden imports"; git push origin smoothen_kneed
+git pull --rebase
+git merge develop
+git tags -d develop
+git tag -d develop
+git merge develop
+editing; cd Aftershoot-Desktop-App
+editing; cd Desktop-Rust-Backend
+editing; cd Downloads
+editing; cd Aftershoot-Editing-App
+git pull --rebase
+git pull
+git pull
+./build.sh arm64
+ls
+./build.sh arm64
+fish
+conda
+fish
+clear
+conda
+gcloud auth activate-service-account --key-file $env.GOOGLE_APPLICATION_CREDENTIALS
+conda
+tmux kill-sesseion -s server
+tmux kill-sesseion -t server
+tmux kill-seseion -t server
+tmux kill-seseion -s server
+tmux kill-session -s server
+tmux kill-session -t server
+editing; cd Downloads
+editing; cd Aftershoot-Desktop-App
+editing; cd Desktop-Rust-Backend
+editing; cd Aftershoot-Editing-App
+clear
+./build.sh arm64
+ls ~/opt
+nv build.sh
+conda
+wxir
+wxi
+server-tmux
+editing; cd Aftershoot-Desktop-App
+editing; cd Desktop-Rust-Backend
+editing; cd Downloads
+editing; cd Aftershoot-Editing-App
+git pull
+git pull
+git pull
+conda activate edit-app
+gcloud compute ssh long-scripts
+editing; cd DebugHelpers
+cd train_trigger/
+ls
+conda activate edit-prep
+conda
+conda create -n edit-prep python=3.8
+conda activate edit-prep
+editing; cd Editing-Trainer
+editing; cd Editing-Preprocesser
+nv req
+cp `~/Downloads/aftershoot_overexposed-gallery_2023-06-20_1817/2023-05-20 - Sarah + Clayton's Wedding.lrcat` inputs/
+python main.py
+conda activate edit-prep
+nv requirements.txt
+cd inputs/
+clear
+open `2023-05-20 - Sarah + Clayton's Wedding.lrcat` | get adobe_imagedevelopsettings | set text.0
+open `2023-05-20 - Sarah + Clayton's Wedding.lrcat` | get adobe_imagedevelopsettings | get text.0
+cd ../outputs/
+open sliders_exif.csv
+open sliders_exif.csv | get 0.id_global
+open `2023-05-20 - Sarah + Clayton's Wedding.lrcat` | get adobe_imagedevelopsettings | get 0.text
+open sliders_exif.csv | get 0.exposure
+open sliders_exif.csv | get 0.exposure2012
+open sliders_exif.csv | get 0
+open `2023-05-20 - Sarah + Clayton's Wedding.lrcat` | get adobe_imagedevelopsettings | get 0.text | find exposure
+:q
+fish
+clear
+ls
+gcloud compute ssh long-scripts
+gcloud auth activate-service-account --key-file $env.GOOGLE_APPLICATION_CREDENTIALS
+gcloud compute ssh long-scripts
+todo
+editing; cd Aftershoot-Editing-App
+cd
+find *.py
+ls
+ls -r
+ll
+ls *.py
+ls **/*.py
+cargo add firebase@0.9.1
+cargo add firestore
+cargo run
+cargo update
+cargo run
+rustc --explain E0554
+cargo add anyhow
+cargo run
+rm -rf target<\n>cargo check
+cargo check
+cargo run
+go mod tidy
+source $MYVIMRC
+go test
+go test firebase_test.go
+go test firebase_test
+go test
+go test .
+go test
+go test .
+gcloud auth activate-service-account --key-file $env.GOOGLE_APPLICATION_CREDENTIALS
+go test .
+go teest
+go test
+go mod tidy
+go run .
+go test
+./cloud_sql_proxy -instances=aftershoot-co:us-central1:editing-uploader=tcp:5434
+git add -A; git commit -m "debug.zip in train_out"; git push origin runpod-dev
+gcloud auth activate-service-account --key-file $env.GOOGLE_APPLICATION_CREDENTIALS
+nv
+git diff runpod
+git checkout runpod
+gcloud compute ssh long-scripts
+gcloud auth activate-service-account --key-file $env.GOOGLE_APPLICATION_CREDENTIALS
+gcloud compute ssh long-scripts
+cd ~/Downloads
+cd AfterShoot-Desktop-Backend/
+ls
+open .
+^open .
+editing; cd Scripts
+rc
+cd rust
+ls
+cd tutorial/
+ls
+nv
+ls
+cd ../advent_of_code/
+ls
+nv
+cd ..
+ls
+cd ../go
+ls
+cd ds
+ls
+nv
+cd ..
+cd ../rust
+ls
+cd tutorial/
+ls
+cd ..
+cd advent_of_code/
+ls
+cargo run --bin day02
+cargo run --bin day01
+code .
+source
+code .
+cargo run --bin day01
+cargo run --bin day02
+cargo run --bin day01
+cargo run --bin day02
+cd Encryption/
+open data/out/sliders_exif.csv | get ConvertToGrayscale
+open data/out/sliders_exif.csv | type converttograyscale
+open data/out/sliders_exif.csv | describe
+open data/out/sliders_exif.csv | get converttograyscale | describe
+open data/out/sliders_exif.csv | get tonecurvepv2012 | describe
+gcloud auth activate-service-account --key-file $env.GOOGLE_APPLICATION_CREDENTIALS
+gcloud compute ssh long-scripts
+open data/out/sliders_exif.csv | get exposure2012 | describe
+open data/out/sliders_exif.csv | get exposure | describe
+open data/out/sliders_exif.csv | get exposure
+open data/out/sliders_exif.csv | where exposure=2.11
+open data/out/sliders_exif.csv | where exposure === 2.11
+open data/out/sliders_exif.csv | where exposure == 2.11
+open data/out/sliders_exif.csv | where Exposure == 2.11
+open data/out/sliders_exif.csv | get id_global
+open data/out/sliders_exif.csv | where id_global == "D3B85C74-AC78-4FC6-B670-5795BE787007"
+open data/out/sliders_exif.csv | where id_global == D3B85C74-AC78-4FC6-B670-5795BE787007
+cd source /Users/illusion/anaconda3/bin/activate /Users/illusion/miniconda3/envs/edit-prep
+~/Pictures/
+cd Lrcats/ls
+cd Lrcats/
+ls
+cd buggy_cameras_smart/
+ls
+open buggy_cameras_smart.lrcat | get adobe_imagedevelopsettings | get text.0
+open buggy_cameras_smart.lrcat | get adobe_imagedevelopsettings | get text.0 | find bluehue
+open buggy_cameras_smart.lrcat | get adobe_imagedevelopsettings | get text.0 | find BlueHue
+cd 
+source /Users/illusion/anaconda3/bin/activate /Users/illusion/miniconda3/envs/edit-prep
+open data/Dataset/2fad4732-9d60-4eb3-9bfa-c8996337dad5/z6.lrcat | get adobe_imagedevelopsettings
+cd editing/
+open data/Dataset/2fad4732-9d60-4eb3-9bfa-c8996337dad5/z6.lrcat | get adobe_imagedevelopsettings
+open data/Dataset/2fad4732-9d60-4eb3-9bfa-c8996337dad5/z6.lrcat | get adobe_imagedevelopsettings.0
+open data/Dataset/2fad4732-9d60-4eb3-9bfa-c8996337dad5/z6.lrcat | get adobe_imagedevelopsettings.text.0 | find distortion
+git add -A && git commit -m "merge runpod-dev" && git push origin archive
+git add -A; git commit -m "merge runpod-dev"; git push origin archive
+git checkout runpod-dev
+git merge archive
+git push origin runpod-dev
+git pull
+git checkout develop
+git pull
+cat ../Desktop-Rust-Backend/env
+cat ../Desktop-Rust-Backend/.env
+python
+git add -A; git commit -m "remove '' only if exist archive"; git push origin runpod-dev
+tail -f ./data/out/preprocess.log
+cat -f ./data/out/preprocess.log
+ls
+cat data/preprocess.log
+nv
+git diff runpod-dev
+git checkout runpod-dev
+git diff archive
+git branch
+git diff camera_group
+git merge camera_group
+git branch
+git merge runpod
+fish
+t
+nv
+nv
+todo
+cd
+cd .config/nvim/
+ls
+nv
+n
+nv
+cd
+cd .config/nvim/
+nv
+cargo run --bin day03
+code
+nv ~/.zshrc
+nv ~/.config/fish/config.fish
+code .
+config nu
+nv $nu.env-path
+code
+fish
+clear
+$nu.env-path
+cd /Users/illusion/Library/Application Support/nushell
+cd "/Users/illusion/Library/Application Support/nushell"
+ls
+nv nu_conda.nu
+use nu_conda.nu 
+nu_conda activate edit-prep
+clear
+python --version
+p
+python
+clear
+python
+python3
+clear
+use nu_conda.nu
+cd $nu.env-path..
+cd $nu.env-path
+cd "/Users/illusion/Library/Application Support/nushell"
+ls
+use nu_conda.nu
+nu_conda activate py36
+nu_conda activate
+nu_conda activate edit-preop
+nu_conda activate edit-prep
+python
+nu_conda deactivate
+rm nu_conda.nu
+python --version
+conda
+conda activate aftershoot
+conda activate edit-app
+clear
+rc
+cd rust/advent_of_code/
+cargo run --bin day03
+editing; cd Editing-Trainer
+./cloud_sql_proxy -instances=aftershoot-co:us-central1:editing-uploader=tcp:5434
+cd
+editing; cd Editing-Preprocesser
+nv
+git add -A && git commit -m "remove archive trigger" && git push origin runpod-dev
+git add -A; git commit -m "remove archive trigger"; git push origin runpod-dev
+cargo add regex
+nv
+cargo run --bin day04
+cargo check
+cargo check --bin day04
+cargo run --bin day04
+./cloud_sql_proxy -instances=aftershoot-co:us-central1:editing-uploader=tcp:5434
+nv
+git checkout capture_one
+nv
+conda activate edit-app
+cd ~/Downloads
+ls
+mkdir lol
+ls | sort-by modified
+unzip color_profiles_files.zip id lol
+unzip color_profiles_files.zip lol
+unzip color_profiles_files.zip -d lol
+cd 125ruLONioVBq0bw1iu3Fzv1hj73_386db617-c3b5-411a-8407-e0e3615fc783_0b56974f-336d-40e1-bc8c-f88f9e6a1b05_f52f2b54-9491-4219-864d-dbf14041cd12_68/ls
+cd lol
+ls
+code .
+conda activate edit-prep
+ls
+python --version
+pip install matplotlib
+ls
+code-tmux
+python --version
+ls
+server-tmux
+editing; cd Aftershoot-Desktop-App
+editing; cd Desktop-Rust-Backend
+editing; cd Aftershoot-Editing-App
+editing; cd Downloads
+git pull
+git pull
+cd ..
+ls
+cd
+cd Documents/Work/Product/
+ls
+cp ~/Downloads/kuWNJmqZa3gPO8dhnAElIQpmbqB2_7d4f6822-f500-4d05-8b44-7e39ae5b9fe7_training_data_out_sliders_exif.csv editing/api/tests/data/
+editing; cd Editing-Preprocesser
+nv
+code-tmux
+tmux kill-server
+fish
+ls
+clear
+python
+cd editing/
+python -m api.tests.main
+./cloud_sql_proxy -instances=aftershoot-co:us-central1:editing-uploader=tcp:5434
+cd
+editing; cd Editing-Preprocesser
+nv
+git add -A; git commit -m "type fix"
+git checkout runpod
+git diff runpod-dev
+nv
+git add -A; git commit -m "only log error on no dng and tiff" && git push origin runpod
+git add -A; git commit -m "only log error on no dng and tiff"; git push origin runpod
+nv
+git add -A; git commit -m "archive uncomment"; git push origin runpod
+nv
+git add -A; git commit -m "Non on no dngs in catalog"; git push origin runpod
+editing; cd Scripts
+editing; cd DebugHelpers
+cd train_trigger/
+git add -A; git commit -m "No tiffs old catalog check"; git push origin runpod
+git add -A; git commit -m "null camera profile drop"; git push origin runpod
+git add -A; git commit -m "not migrate currtemp currtint if jpg"; git push origin runpod
+cd ~/Downloads/
+open s.csv | describe
+open s.csv
+open s.csv | get currTemp_old
+open s.csv | describe | table
+open s.csv | get column
+open s.csv | get currTemp
+open s.csv | get currTemp.0
+open s.csv | get currTemp_old.0
+open s.csv | get img_path_old.0
+python
+python3
+python
+editing; cd Editing-Trainer
+fish
+nv ~/.wezterm.lua
+clear
+nv
+clear
+ls
+rc
+ls
+code-tmux
+tmux kill-server
+fish
+rc
+clear
+cd rust
+ls
+cd advent_of_code/
+cargo run --bin day05
+cd ~/.config/nvim
+nv
+nv
+cargo run --bin day05
+cargo run --bin day06
+spotify-kill 60
+editing; cd Editing-preprocesser
+git checkout runpod-dev
+git merge runpod
+git push origin runpod-dev
+git add -A && git commit -m "gcs bucket to constant + name change" && git push origin runpod-dev
+git add -A; git commit -m "gcs bucket to constant + name change"; git push origin runpod-dev
+editing; cd Editing-Trainer
+git merge runpod
+nv
+git add -A; git commit -m "gcs bucket to constant + name change"; git push origin runpod-dev
+editing; cd DebugHelpers
+editing; cd Aftershoot-Desktop-App
+editing; cd Desktop-Rust-Backend
+git pull
+git pull
+editing; cd Aftershoot-Editing-App
+editing; cd Downloads
+cd Desktop-Rust-Backend/
+nv .env
+nv
+git checkout runpod
+git merge runpod-dev
+git push origin runpod
+git checkout runpod
+git merge runpod-dev
+git push origin runpod
+t
+cd ../..
+cd go/advent_of_code/
+ls
+go mod init
+go mod init github.com/blackhat-7/advent_of_code/go
+go mod tidy
+go run day6/day6.go
+cd day6/
+go run day6/day6.go
+go run day6.go
+math cose 9
+math cos 9
+math cos 0.1
+math cos 1
+go run day6.go
+nv
+cd ..
+ls
+cd tut/
+ls
+mkdir flags_tut
+cd flags_tut/
+ls
+go mod tidy
+go mod init flags_tut
+nv
+spotify-kill 60
+brew install tldr
+brew install bat
+ls
+bat main.go
+tldr conda
+tldr ls
+tldr tldr
+tldr -u
+exiftool
+tldr exiftool
+exiftool main.go
+exiftool main.go | table
+exiftool main.go | to json
+exiftool main.go | to csv
+exiftool main.go | to json | to csv
+exiftool main.go | to json
+exiftool main.go | to json | bat
+exiftool main.go | bat
+ls
+ls | bat
+z
+zi
+tree
+xsel
+brew install navi
+navi
+ffmpeg
+navi
+ps | sort-by mem | reverse | first 10
+./cloud_sql_proxy -instances=aftershoot-co:us-central1:editing-uploader=tcp:5434
+cd train_trigger/
+cd ~/Downloads
+open s.csv | get camera_group
+open s.csv
+open s.csv | describe
+open s.csv | table
+open s.csv | table | describe
+open s.csv | describe | table
+^open s.csv
+open s.csv | get camera_group
+go
+rc
+zi
+nv
+mkdir day7
+nv
+cd day7/
+go mod init day7
+nv
+cat ../day6/day6.go
+bat ../day6/day6.go
+go run .
+clear
+rc
+cd rust/advent_of_code/
+nv
+cd ..
+mkdir ocaml
+cd ocaml
+utop
+brew install utop
+brew install opam
+utop
+nv
+nv ../rust/advent_of_code/
+cd ../rust/advent_of_code/
+nv
+editing; cd Scripts
+cargo run
+open '/Users/illusion/Library/Application\ Support/com.aftershoot.aftershoot/database.sqlite' | get presets
+open '/Users/illusion/Library/Application\ Support/com.aftershoot.aftershoot/database.sqlite'
+open '/Users/illusion/Library/Application Support/com.aftershoot.aftershoot/database.sqlite'
+open /Users/illusion/Library/Application\ Support/com.aftershoot.aftershoot/database.sqlite
+open '/Users/illusion/Library/Application Support/com.aftershoot.aftershoot/database.sqlite' | get presets
+nv
+gitt checkout capture_one
+git checkout capture_one
+gcloud auth activate-service-account --key-file $env.GOOGLE_APPLICATION_CREDENTIALS
+nv
+^open .
+open api/tests/data/sliders_exif.csv | get lrcat_path
+open api/tests/data/sliders_exif.csv | get camera_model
+open api/tests/data/sliders_exif.csv | get camera_group
+gcloud compute ssh long-scripts
+nv ~/.wezterm.lua
+code-tmux
+ccode-tmux
+cd ~/Downloads/
+cd
+clear
+cd Downloads/
+ls
+nv tf_to_onnx.py
+conda activate edit-prep
+fish
+editing; cd Aftershoot-Editing-App
+ls
+git pull
+git branch prebuilt
+git tags -d develop
+git tag -d develop
+git branch prebuilt
+git checkout prebuilt
+nv
+conda activate edit-prep
+python
+python3
+clear
+git pull
+git branch | grep prebuilt
+git branch | grep poc
+git branch | grep pre
+git branch | grep devleop
+git branch | grep develop
+git branch
+./cloud_sql_proxy -instances=aftershoot-co:us-central1:editing-uploader=tcp:5434
+gsutil du -h "gs://editing_userdata/OfwNgh4BMOUAZC6wMIQdwSiCIHm1/00a694ef-1275-4dcb-9838-be283691bc3f/training_data/Dataset/fc5eba95-8bdc-4a54-87a8-a6c8448b9291"
+gsutil du -sh "gs://editing_userdata/OfwNgh4BMOUAZC6wMIQdwSiCIHm1/00a694ef-1275-4dcb-9838-be283691bc3f/training_data/Dataset/fc5eba95-8bdc-4a54-87a8-a6c8448b9291"
+open .
+^open .
+cd editing/
+python -m api.tests.camera_color_profiles_test
+git add -A; git commit -m "camera_model not being used for hashing [bug]"; git push origin runpod
+cd UniversalProfileUpdater/
+ls
+nv
+cd ../transfer-profile/
+ls
+code-tmux
+gcloud auth activate-service-account --key-file $env.GOOGLE_APPLICATION_CREDENTIALS
+ls
+cd Documents/
+ls
+clear
+ls
+mkdir Notes
+cd Notes/
+ls
+spotify-kill 60
+nv laptops.md
+cd
+gcloud auth activate-service-account --key-file $env.GOOGLE_APPLICATION_CREDENTIALS
+nv
+cd ..
+cd UniversalProfileUpdater/
+gcloud compute ssh long-scripts
+fish
+work
+editing
+ls
+cd c1-edits/
+clear
+nv
+git checkout master
+git pull
+nv
+nv
+clear
+cd ..
+cd c1-edits/
+ls
+cd
+cd Downloads/
+ls
+cd `Ronald _Initial Profile_Ronald-aftershoot-test/`
+ls
+open Ronald-aftershoot-test.cocatalogdb
+open .
+^open .
+cd
+cd Downloads/
+fish
+gcloud compute scp long-scripts:/tmp/lol/crackthis.onnx .
+^open .
+git add -A; git commit -m "prebuilt profiles static key"; git push origin prebuilt
+cargo run
+git fetch
+git pull
+git branch
+git checkout develop-prebuilt-profiles
+git add -A; git commit -m "uid key"; git push origin prebuilt
+./cloud_sql_proxy -instances=aftershoot-co:us-central1:editing-uploader=tcp:5434
+fish
+cargo run
+open .
+^open .
+tmux a
+ls
+cd `Ronald _Initial Profile_Ronald-aftershoot-test/`
+ls
+clear
+open Ronald-aftershoot-test.cocatalogdb | get zvarianlayer
+open Ronald-aftershoot-test.cocatalogdb | get zvariantlayer
+open Ronald-aftershoot-test.cocatalogdb | get zvariantlayer.zwhitebalance
+open Ronald-aftershoot-test.cocatalogdb | get zvariantlayer.zwhitebalance.0
+open Ronald-aftershoot-test.cocatalogdb | get zvariantlayer.zwhitebalance.0 | type
+open Ronald-aftershoot-test.cocatalogdb | get zvariantlayer.zwhitebalance | type 0
+open Ronald-aftershoot-test.cocatalogdb | get zvariantlayer.zwhitebalance | type get 0
+open Ronald-aftershoot-test.cocatalogdb | get zvariantlayer.zwhitebalance.0
+nv ~/.wezterm.lua
+nv ~/Documents/Notes/
+nv
+nv
+cd
+cd Downloads/
+gcloud compute scp long-scripts:~/clones/UniversalProfilesUpdate/logs/ccp_update.json .
+code-tmux
+tmux kill-server
+editing; cd Editing-Preprocesser
+nv
+cd ~/Downloads
+ls
+cd `Ronald _Initial Profile_Ronald-aftershoot-test/`
+ls
+open Ronald-aftershoot-test.cocatalogdb | get ZVARIANT.ZVARIANTUUID 
+open Ronald-aftershoot-test.cocatalogdb | get ZVARIANT where ZVARIANTUUID == '0a4b44ad-c89c-437b-9cbc-e801dda9bc50'
+open Ronald-aftershoot-test.cocatalogdb | get ZVARIANT where ZVARIANTUUID 
+open Ronald-aftershoot-test.cocatalogdb | get ZVARIANT where ZVARIANTUUID = '0a4b44ad-c89c-437b-9cbc-e801dda9bc50'
+open Ronald-aftershoot-test.cocatalogdb | get ZVARIANT | where ZVARIANTUUID = '0a4b44ad-c89c-437b-9cbc-e801dda9bc50'
+open Ronald-aftershoot-test.cocatalogdb | get ZVARIANT | where ZVARIANTUUID == '0a4b44ad-c89c-437b-9cbc-e801dda9bc50'
+open Ronald-aftershoot-test.cocatalogdb | get ZVARIANT | where ZVARIANTUUID == '0A4B44AD-C89C-437B-9CBC-E801DDA9BC50'
+open Ronald-aftershoot-test.cocatalogdb | get zimage | where Ziamgeuuid == '0A4B44AD-C89C-437B-9CBC-E801DDA9BC50'
+open Ronald-aftershoot-test.cocatalogdb | get zimage | where zimageuuid == '0A4B44AD-C89C-437B-9CBC-E801DDA9BC50'
+open Ronald-aftershoot-test.cocatalogdb | get zimage | where ZIMAGEUUID == '0A4B44AD-C89C-437B-9CBC-E801DDA9BC50'
+^open Ronald-aftershoot-test.cocatalogdb
+^open .
+open Ronald-aftershoot-test.cocatalogdb | get zvariantlayer | unique
+open Ronald-aftershoot-test.cocatalogdb | get zvariantlayer | df n-unique
+open Ronald-aftershoot-test.cocatalogdb | get zvariantlayer.Z_ENT
+open Ronald-aftershoot-test.cocatalogdb | get zvariantlayer.Z_ENT | unique
+open Ronald-aftershoot-test.cocatalogdb | get zvariantlayer.Z_ENT | dfr n-unique
+open Ronald-aftershoot-test.cocatalogdb | get zvariantlayer.Z_ENT | uniq
+editing; cd DebugHelpers
+cd train_trigger/
+ls
+mkdir TIFFs/
+ls
+cp Ronald-aftershoot-test.cocatalogdb/*.tiff TIFFs/
+cp Ronald-aftershoot-test.cocatalogdb/**.tiff TIFFs/
+cp images/*.tiff TIFFs/
+cd TIFFs/
+ls
+cd ..
+nv x.py
+ls
+open Ronald-aftershoot-test.cocatalogdb | get zvariantlayer.is_modified
+open Ronald-aftershoot-test.cocatalogdb | get zvariant.is_modified
+cp ~/Downloads/
+cp `~/Downloads/Ronald _Initial Profile_Ronald-aftershoot-test/Ronald-aftershoot-test.cocatalogdb` editing/data/Dataset/catalog_id/
+cp `~/Downloads/Ronald _Initial Profile_Ronald-aftershoot-test/TIFFs/` editing/data/Dataset/catalog_id/
+cp -r `~/Downloads/Ronald _Initial Profile_Ronald-aftershoot-test/TIFFs/` editing/data/Dataset/catalog_id/
+^open .
+code .
+conda activate edit-prep
+cd data/
+cd Dataset/
+ls
+cd catalog_id/
+ls
+open Ronald-aftershoot-test.cocatalogdb | get zvariantlayer.zsaturation.0
+open Ronald-aftershoot-test.cocatalogdb | get zvariantlayer.zsaturation.1
+open Ronald-aftershoot-test.cocatalogdb | get zvariantlayer.zsaturation.2
+open Ronald-aftershoot-test.cocatalogdb | get zvariantlayer.zsaturation
+open Ronald-aftershoot-test.cocatalogdb | get zvariantlayer.zclarity
+open Ronald-aftershoot-test.cocatalogdb | get zvariantlayer.zclaritymethod
+open Ronald-aftershoot-test.cocatalogdb | get zvariantlayer.zclarity
+open Ronald-aftershoot-test.cocatalogdb | get zvariantlayer.zclaritymethodstructure
+open Ronald-aftershoot-test.cocatalogdb | get zvariantlayer.zclaritystructure
+open Ronald-aftershoot-test.cocatalogdb | get zvariantlayer.zcolorcorrections
+open Ronald-aftershoot-test.cocatalogdb | get zvariantlayer.zgradiation curve
+open Ronald-aftershoot-test.cocatalogdb | get zvariantlayer.zgradiationcurve
+open Ronald-aftershoot-test.cocatalogdb | get zvariantlayer.zgradationcurve
+open Ronald-aftershoot-test.cocatalogdb | get zvariantlayer.zgradationcurved
+open Ronald-aftershoot-test.cocatalogdb | get zvariantlayer.zgradationcurvered
+editing; cd Editing-Trainer
+clear
+cd ..
+ls
+unzip ceipf0mPFZQxfo9ZNVatjveRpZg1_fbcf2bb2-35ad-4726-80b6-8c31f461f003_e5954471-2e57-4aec-8946-8b32d9391940_e74fc77b-421f-46b3-8d27-92d8d9be8013_7.zip
+editing; cd Aftershoot-Editing-App
+cd ..
+cd c1-edits/
+cd ~/.config/nvim
+z notes
+z
+t
+ls
+clear
+ls
+clear
+rc
+cd go
+ls
+cd advent_of_code/
+code-tmux
+tmux kill-server
+code-tmux
+tmux kill-server
+nv ~/.tmux.conf
+code-tmux
+nv ~/.tmux.conf
+code-tmux
+tmux
+nv ~/.tmux.conf
+tmux kill-server
+tmux
+nv ~/.tmux.conf
+tmux
+nv ~/.tmux.conf
+cd .tmux/plugins/tpm/
+ls
+cd ..
+ls
+cd ..
+ls
+cd ..
+ls
+cd .tmux/
+ls
+cd plugins/
+ls
+cd nord-tmux/
+ls
+cp ~/.tmux.conf ~/.tmux.conf.bk
+cd
+cat tmux-gruvbox-dark.conf >> ~/.tmux.conf
+tmux
+nv ~/.tmux.conf
+tmux
+nv
+cd ~/.config/nvim
+editing; cd Editing-Trainer
+editing; cd Editing-Preprocesser
+rc
+cd go/
+ls
+clear
+ls
+nv
+ls
+cd tut/
+ls
+cd bubbletea_tut
+mkdir bubbletea_tut
+cd bubbletea_tut/
+lnv
+go mod init bubbletea_tut
+go mod tidy
+nv
+go run .
+editing; cd Scripts
+editing; cd DebugHelpers
+cd finder/
+ls
+nv
+cd ..
+cloc .
+nv
+cd finder
+spotify-kill 60
+nv
+editing; cd Aftershoot-Editing-App
+cd ..
+cd c1-edits/
+git pull
+nv
+nv add_reqs.txt
+nv requirements.txt
+nv
+cd ../Aftershoot-Editing-App/
+editing; cd Aftershoot-Desktop-App
+editing; cd Desktop-Rust-Backend
+nv
+cd ..
+cd c1-edits/
+ls
+cd data/out/
+ls
+open sliders_exif.csv | get WB
+open sliders_exif.csv | get WB_Imported
+open sliders_exif.csv | get currTemp
+code-tmux
+fish
+server-tmux
+editing; cd Scripts
+clear
+cd ~/.config/nvim
+editing; cd Editing-Trainer
+editing; cd Editing-Trainer;
+rc
+nv
+conda activate edit-prep
+conda init fish
+ls
+ps
+ps | sort-by mem
+ps | sort-by mem | reverse | top 10
+ps | sort-by mem | reverse | first 10
+clear
+ls
+cd catalog_id/
+open Ronald-aftershoot-test.cocatalogdb | describe
+open Ronald-aftershoot-test.cocatalogdb | table | describe
+open Ronald-aftershoot-test.cocatalogdb
+open Ronald-aftershoot-test.cocatalogdb | table
+open Ronald-aftershoot-test.cocatalogdb | table | get zimage
+open Ronald-aftershoot-test.cocatalogdb | table | get ZIMAGE
+open Ronald-aftershoot-test.cocatalogdb | get zimage
+open Ronald-aftershoot-test.cocatalogdb | get zimage.zcamera_make
+open Ronald-aftershoot-test.cocatalogdb | get zimage.zcamera_model
+open Ronald-aftershoot-test.cocatalogdb | where zimage.zcamera_model == 'FC3582'
+open Ronald-aftershoot-test.cocatalogdb | where zimage.zcamera_model = 'FC3582'
+open Ronald-aftershoot-test.cocatalogdb | where zimage.zcamera_model == 'FC3582'
+open Ronald-aftershoot-test.cocatalogdb | get zimage | where zcamera_model == 'FC3582'
+open Ronald-aftershoot-test.cocatalogdb | get zimage | where ZCAMERA_MODEL == 'FC3582'
+open Ronald-aftershoot-test.cocatalogdb | get zimage.zcamera_model | where ZCAMERA_MODEL == 'FC3582'
+open Ronald-aftershoot-test.cocatalogdb | get zimage | where ZCAMERA_MODEL == 'FC3582'
+clear
+cd ..
+cd out/
+ls
+open sliders_exif.csv | get currTemp
+open sliders_exif.csv | get currTint
+ls
+cd ..
+cd Dataset/
+ls
+cd catalog_id/
+ls
+open Ronald-aftershoot-test.cocatalogdb | get zvariantlayer
+open Ronald-aftershoot-test.cocatalogdb | get zvariantlayer as z | get z.wb
+open Ronald-aftershoot-test.cocatalogdb | get zvariantlayer.wb
+open Ronald-aftershoot-test.cocatalogdb | get zvariantlayer.zwhitebalance
+open Ronald-aftershoot-test.cocatalogdb | get zvariantlayer.zvignett
+open Ronald-aftershoot-test.cocatalogdb | get zvariantlayer.zlensvignetting
+cd data/out/
+ls
+open sliders_exif.csv | get aperture
+open sliders_exif.csv | get shutter_speed
+open sliders_exif.csv | get curr_temp
+open sliders_exif.csv | get aperture
+open sliders_exif.csv | get shutter_speed
+open sliders_exif.csv | get flash_mode
+cd ../..
+open sliders_exif.csv | get curr_temp
+open .
+^open .
+ls
+cd small.cocatalog/
+ls
+open small.cocatalogdb | get variantlayer
+open small.cocatalogdb | get zvariantlayer
+open small.cocatalogdb | get zvariantlayer.0
+open small.cocatalogdb | get zvariantlayer.0.zolorgradation
+open small.cocatalogdb | get zvariantlayer.0.zcolorgradation
+open small.cocatalogdb | get zvariantlayer.0.zcolourgradation
+open small.cocatalogdb | get zvariantlayer.0.zcolorcorrection
+open small.cocatalogdb | get zvariantlayer.0.zcolorcorrections
+clear
+cd
+cd Downloads/
+l
+open y74mNi8Q9WaZoEKWhpXvHM2SZat2_f48f9942-d01e-49b0-a0d3-61695a5302b2_training_data_out_sliders_exif.csv | get clarity_amount.0
+open y74mNi8Q9WaZoEKWhpXvHM2SZat2_f48f9942-d01e-49b0-a0d3-61695a5302b2_training_data_out_sliders_exif.csv | get clarity_method.0
+python
+mv v VxCF7EAKVffRelyBbDxnsO0lRb22_4542a61a-127a-4740-8be6-d75ba5776d90_training_data_out_sliders_exif.csv
+mv v VxCF7EAKVffRelyBbDxnsO0lRb22_4542a61a-127a-4740-8be6-d75ba5776d90_training_data_out_sliders_exif.csv s.csv
+mv VxCF7EAKVffRelyBbDxnsO0lRb22_4542a61a-127a-4740-8be6-d75ba5776d90_training_data_out_sliders_exif.csv s.csv
+ls
+open s.csv | get camera_group
+open s.csv | get camera_model
+open s.csv | get camera_model | count
+open s.csv | get camera_model | dfr value-counts
+open s.csv | get camera_model | value-counts
+open s.csv | get camera_model | dfr into-df | dfr value-counts
+open s.csv | length
+python
+ls
+gcloud compute scp long-scripts:~/clones/UniversalProfilesUpdate/out/model_metrics.json .
+gcloud compute scp long-scripts:~/clones/UniversalProfilesUpdate/out/all_metrics.json .
+nv all_metrics.json
+open .
+^open .
+nv x.py
+nv
+nv x.py
+mv `6JsdcSAbi8WCWvvAspSOcEQN6Xh2_38f3793f-d3ab-4d88-8dcd-d52ca462bf77_training_data_out_max_presets.pickle`m.pickle
+mv 6JsdcSAbi8WCWvvAspSOcEQN6Xh2_38f3793f-d3ab-4d88-8dcd-d52ca462bf77_training_data_out_max_presets.pickle m.pickle
+python
+ls
+clear
+ls
+mv JWyCd2H6e9W3gTfKsEyQ7jK9Dg63_1097ea4a-ae7f-4463-944e-cd2833f96e38_training_data_Dataset_9f41c626-baac-4994-adf9-c6c154c78462_Aftershoot.lrcat x
+clear
+open x | get AgLibraryFile
+open x | get AgLibraryFile.id_global
+open x | dfr get AgLibraryFile.id_global
+open x | get AgLibraryFile.id_global | dfr into-df
+open x | get AgLibraryFile.id_global | dfr into-df | dfr contains 'X'
+open x | get AgLibraryFile.id_global | dfr into-df | dfr contains 'x' | dfr arg-true
+open x | get AgLibraryFile.id_global | dfr into-df | dfr contains '001BBC' | dfr arg-true
+open x | get Adobe_images.id_global | dfr into-df | dfr contains '001BBC' | dfr arg-true
+open x | get Adobe_images.id_global | dfr into-df | dfr contains '001BBC'
+open x | get Adobe_images.id_global | dfr into-df | dfr contains '001BBC' | dfr get
+open x | get Adobe_images.id_global | dfr into-df | dfr contains '001BBC' | filter true
+open x | get Adobe_images.id_global | dfr into-df | dfr contains '001BBC' | filter
+open x | get Adobe_images.id_global | dfr into-df | dfr contains '001BBC'
+open x | get Adobe_images.id_global
+open x | get Adobe_images.id_global | dfr into-df | where dfr contains 'asd'
+open x | get Adobe_images | where id_global contains 'X'
+open x | get Adobe_images | dfr into-df | where id_global contains 'X'
+open x | get Adobe_images | dfr into-df
+open x | get Adobe_images | dfr into-df | dfr contains 'A'
+open x | get Adobe_images | dfr into-df | dfr.id_global contains 'A'
+open x | get Adobe_images | dfr into-df | id_global contains 'A'
+open x | get Adobe_images | dfr into-df | df.id_global contains 'A'
+open x | get Adobe_images | dfr into-df | dfr filter-with
+open x | get Adobe_images | dfr into-df | dfr filter-with id_global
+open x | get Adobe_images | dfr into-df | dfr filter-with (id_global == 'a')
+open x | get Adobe_images | dfr into-df | dfr filter-with (dfr.id_global == 'a')
+open x | get Adobe_images | dfr into-df | dfr filter-with (dfr col id_global == 'a')
+open x | get Adobe_images | dfr into-df | dfr filter-with (dfr col id_global contains 'X')
+open x | get Adobe_images | dfr into-df | dfr filter-with ((dfr col id_global) contains 'X')
+open x | get Adobe_images | dfr into-df | dfr filter-with ((dfr col id_global) == 'X')
+open x | get Adobe_images | dfr into-df | dfr filter-with ((dfr col id_global) == '001BBC9C-3348-47ED-ABDC-C1B12F99BD18')
+ls
+open small edit.cocatalog
+open small\ edit.cocatalog
+open small \edit.cocatalog
+open 'small edit.cocatalog'
+open 'small edit.cocatalog/small edit.cocatalogdb'
+open 'small edit.cocatalog/small.cocatalogdb'
+open 'small edit.cocatalog/small.cocatalogdb' | get zvariantlayer
+open 'small edit.cocatalog/small.cocatalogdb' | get zvariantlayer.ZLENSVIGNETTING
+open 'small edit.cocatalog/small.cocatalogdb' | get zvariantlayer.ZLEVELSSHADOW
+open 'small edit.cocatalog/small.cocatalogdb' | get zvariantlayer.ZLEVELSHIGHLIGHT
+open 'small edit.cocatalog/small.cocatalogdb' | get zvariantlayer.ZLEVELSTARGETSHADO
+open 'small edit.cocatalog/small.cocatalogdb' | get zvariantlayer.ZLEVELSTARGETSHADOW
+open 'small edit.cocatalog/small.cocatalogdb' | get zvariantlayer.ZLEVELSTARGETHIGHLIGHT
+open 'small edit.cocatalog/small.cocatalogdb' | get zvariantlayer.ZMIDTONE
+cd ..
+editing
+cd pre-c1
+git add -A; git commit -m "add columns and hsl parse fix"; git push origin capture_one
+git add -A; git commit -m "hsl parse fix"; git push origin capture_one
+ls
+open `04uQu3q3jRek65hXLQi9bpZDjQm1_d60b34a3-1f94-4038-85bd-d950d38a2fbf_training_data_out_sliders_exif.csv` | from csv
+open `04uQu3q3jRek65hXLQi9bpZDjQm1_d60b34a3-1f94-4038-85bd-d950d38a2fbf_training_data_out_sliders_exif.csv` | from-csv
+open `04uQu3q3jRek65hXLQi9bpZDjQm1_d60b34a3-1f94-4038-85bd-d950d38a2fbf_training_data_out_sliders_exif.csv` | to-csv
+open `04uQu3q3jRek65hXLQi9bpZDjQm1_d60b34a3-1f94-4038-85bd-d950d38a2fbf_training_data_out_sliders_exif.csv` | dfr from-csv
+open `04uQu3q3jRek65hXLQi9bpZDjQm1_d60b34a3-1f94-4038-85bd-d950d38a2fbf_training_data_out_sliders_exif.csv`
+open `04uQu3q3jRek65hXLQi9bpZDjQm1_d60b34a3-1f94-4038-85bd-d950d38a2fbf_training_data_out_sliders_exif.csv` | get processed_hsl
+open `04uQu3q3jRek65hXLQi9bpZDjQm1_d60b34a3-1f94-4038-85bd-d950d38a2fbf_training_data_out_sliders_exif.csv` | get proccessed_hsl
+gcloud compute scp long-scripts:~/clones/UniversalProfilesUpdate/out/c1_sliders_exifs.zip .
+open a.lrcat | get aglibraryfile
+open data/out/sliders_exif.csv | get img_path
+open data/out/sliders_exif.csv | get catalog_path
+open data/out/sliders_exif.csv | get folder_id
+open data/out/sliders_exif.csv | get catalog_id
+open stuck_profiles.csv
+^open stuck_profiles.csv
+python main.py
+^open stuck_profiles.csv
+python main.py
+^open stuck_profiles.csv
+python main.py
+^open stuck_profiles.csv
+python main.py
+^open stuck_profiles.csv
+python main.py
+^open stuck_profiles.csv
+python main.py
+^open stuck_profiles.csv
+python main.py
+^open stuck_profiles.csv
+python main.py
+^open stuck_profiles.csv
+python main.py
+^open stuck_profiles.csv
+python main.py
+^open .
+^open stuck_profiles.csv
+python main.py
+^open stuck_profiles.csv
+python main.py
+^open stuck_profiles.csv
+python main.py
+ls
+python main.py
+^open stuck_profiles.csv
+python main.py
+^open stuck_profiles.csv
+python main.py
+^open stuck_profiles.csv
+python main.py
+^open stuck_profiles.csv
+python main.py
+open x.csv
+open x.csv | get hue_red
+gcloud compute scp long-scripts:~/clones/UniversalProfilesUpdate/out/hsl.zip .
+open .
+^open .
+open data/out/sliders_exif.csv | get tone_red
+open data/out/sliders_exif.csv | get tone_rgb
+ls
+rm -r data/out/
+open data/out/sliders_exif.csv | get tone_rgb
+gsutil stat gs://editing_userdata/thM5Sf6tl7X5G4352kTB4wGgjV52/0075c27f-5007-437f-82ae-e91df64ac1f3/training_data/Dataset/a0abf91d-9cd4-4022-a682-7fddc7d09949/TIFFs/08EFE201-B863-475D-8815-69DD3086C0F2.tif<\n>
+cd ..
+cd Editing-Base/
+nv
+cd ..
+cd Editing-Preprocesser/
+git checkout runpod
+nv
+open s.csv | get vinett_amount
+open s.csv | get vignett_amount
+open s.csv | get vignette_amount
+ls
+^open .
+l
+^open .
+nv x.csv
+open x.csv | get currTemp
+open x.csv | get currTemp | dfr avg
+open x.csv | get currTemp
+mv  thM5Sf6tl7X5G4352kTB4wGgjV52_fbac52e9-758a-4a7c-8be9-875da80655f8_training_data_out_sliders_exif.csv s.csv
+open s.csv | get currTemp
+^open JYtB9LvE9IMBYg7Zg2RpFMhu3fY2_fc90e40c-ec98-4db4-bc31-3c7c44367fff_c31063b5-76fd-470f-91cd-4018aec3e286_trained_models_1693897859_training.log
+ls
+unzip thM5Sf6tl7X5G4352kTB4wGgjV52_fbac52e9-758a-4a7c-8be9-875da80655f8_c2809eb9-c5e1-4ad2-8231-7e364fa2686a_trained_models_1693897859_debug.zip
+^open preprocess.log
+ls
+mv  thM5Sf6tl7X5G4352kTB4wGgjV52_fbac52e9-758a-4a7c-8be9-875da80655f8_training_data_out_sliders_exif.csv s.csv
+mv thM5Sf6tl7X5G4352kTB4wGgjV52_fbac52e9-758a-4a7c-8be9-875da80655f8_training_data_out_sliders_exif.csv s.csv
+rm s.csv
+mv thM5Sf6tl7X5G4352kTB4wGgjV52_fbac52e9-758a-4a7c-8be9-875da80655f8_training_data_out_sliders_exif.csv s.csv
+open s.csv | get currTemp
+open s.csv | get currTemp | math min
+open s.csv | get currTemp | math max
+open sliders_exif.csv
+open sliders_exif.csv | as dfr
+open sliders_exif.csv | dfr from
+dfr open sliders_exif.csv
+dfr open sliders_exif.csv | where grayscale==1
+dfr open sliders_exif.csv | where grayscale=1
+dfr open sliders_exif.csv | dfr arg-unique CameraProfile
+dfr open sliders_exif.csv | dfr arg-unique
+dfr open sliders_exif.csv | get CameraProfile | dfr arg-unique
+dfr open sliders_exif.csv | dfr as CameraProfile | dfr arg-unique
+dfr open sliders_exif.csv | dfr get CameraProfile | dfr arg-unique
+dfr open sliders_exif.csv | dfr get CameraProfile | dfr unique
+dfr open sliders_exif.csv | dfr get camera_models | dfr arg-unique
+dfr open sliders_exif.csv | dfr get camera_model | dfr arg-unique
+dfr open sliders_exif.csv | dfr get camera_model | dfr quniue
+dfr open sliders_exif.csv | dfr get camera_model | dfr unique
+dfr open sliders_exif.csv | dfr get camera_model | dfr value-counts
+open sliders_exif.csv | dfr from
+ls
+mv kuWNJmqZa3gPO8dhnAElIQpmbqB2_9b51db9d-7eda-44b0-a653-bceaef6555df_training_data_out_sliders_exif.csv s.csv
+dfr open s.csv | dfr value-counts
+dfr open s.csv | dfr get CameraProfile | dfr value-counts
+dfr open s.csv | dfr get camera_group | dfr value-counts
+dfr open s.csv | dfr get camera_model | dfr value-counts
+python
+nv x.py
+ls
+mv kuWNJmqZa3gPO8dhnAElIQpmbqB2_0d2ac822-5599-480b-be4e-52bb2c0b0d12_training_data_out_sliders_exif.csv s.csv
+open stuck_profiles.csv
+open stuck_profiles.csv | get train_trigger/
+open stuck_profiles.csv | get total_images
+open lrcat.csv
+df open lrcat.csv
+dfr open lrcat.csv
+python main.py `~/Downloads/2023 MAIN CATALOG.lrcat`
+conda activate edit-prep
+dfr open lrcat.csv
+dfr open lrcat.csv | get HasDevelopAdjustmentsEx
+dfr open lrcat.csv | dfr columns
+dfr open lrcat.csv | dfr columns | grep adjustment
+dfr open lrcat.csv | dfr columns | grep has
+dfr open lrcat.csv | dfr where hasDevelopAdjustmentsEx == false
+dfr open lrcat.csv | where hasDevelopAdjustmentsEx == false
+cd ..
+cd train_trigger/
+dfr open lrcat.csv | where hasDevelopAdjustmentsEx == false
+dfr open lrcat.csv | dfr filter-with  hasDevelopAdjustmentsEx
+dfr open lrcat.csv | dfr filter-with  hasDevelopAdjustmentsEx == false
+dfr open lrcat.csv | dfr filter-with  hasDevelopAdjustmentsEx==false
+dfr open lrcat.csv | dfr filter-with  'hasDevelopAdjustmentsEx==false'
+dfr open lrcat.csv | dfr filter-with 'hasDevelopAdjustmentsEx==false'
+open lrcat.csv | get hasDevelopAdjustmentsEx
+open lrcat.csv | get hasDevelopAdjustmentsEx | value_counts
+open lrcat.csv | get hasDevelopAdjustmentsEx | get value_counts
+open lrcat.csv | get hasDevelopAdjustmentsEx | dfr value_counts
+open lrcat.csv | get hasDevelopAdjustmentsEx. value_counts
+open lrcat.csv | get hasDevelopAdjustmentsEx.value_counts
+open lrcat.csv | get hasDevelopAdjustmentsEx | get -c
+open lrcat.csv | select hasDevelopAdjustmentsEx
+open lrcat.csv | select hasDevelopAdjustmentsEx | get -c
+open lrcat.csv | select hasDevelopAdjustmentsEx | get count
+open lrcat.csv | get hasDevelopAdjustmentsEx | get value_counts
+open lrcat.csv | get hasDevelopAdjustmentsEx | get value-counts
+open lrcat.csv | get hasDevelopAdjustmentsEx | dfr value-counts
+open lrcat.csv | dfr as hasDevelopAdjustmentsEx | dfr value-counts
+open lrcat.csv | get  hasDevelopAdjustmentsEx | dfr into-df | dfr value-counts
+dfr open lrcat.csv | get hasDevelopAdjustmentsEx | dfr value-counts
+dfr as lrcat.csv | get hasDevelopAdjustmentsEx | dfr value-counts
+open lrcat.csv | dfr into-df | get hasDevelopAdjustmentsEx | dfr value-counts
+open lrcat.csv | dfr into-dfr | get hasDevelopAdjustmentsEx | dfr value-counts
+open lrcat.csv | dfr into-df | get hasDevelopAdjustmentsEx | dfr value-counts
+open lrcat.csv | dfr into-df | dfr value-counts
+open lrcat.csv | dfr into-df | dfr hasDevelopAdjustmentsEx value-counts
+open lrcat.csv | dfr into-df | dfr as hasDevelopAdjustmentsEx value-counts
+open lrcat.csv | dfr into-df | dfr as hasDevelopAdjustmentsEx
+open lrcat.csv | dfr into-df
+open lrcat.csv | dfr into-df | get hasDevelopAdjustmentsEx
+open lrcat.csv | dfr into-df | get hasDevelopAdjustmentsEx | dfr value-counts
+open lrcat.csv | dfr into-df | dfr get hasDevelopAdjustmentsEx | dfr value-counts
+$nu.env-path
+ls
+$nu.env-path
+cd /Users/illusion/Library/Application Support/nushell/
+cd '/Users/illusion/Library/Application Support/nushell/'
+ls
+cd scripts/
+ls
+cp ~/Downloads/conda.nu
+cp ~/Downloads/conda.nu .
+ls
+use conda.nu
+conda activate edit-prep
+ls
+pip list | grep
+python
+which python
+conda deactivate
+$nu.env-path
+which python
+conda activate edit-prep
+use conda.nu
+conda activate edit-prep
+ls
+which python
+conda activate edit-app
+which python
+conda deactivate
+conda list
+conda env list
+$nu.env-path
+nu config
+config nu
+code-tmux
+tmux kill-server
+nv ~/.tmux.conf
+rcexit
+code-tmux
+tmux kill-server
+code-tmux
+rc
+cd shortcuts/
+ls
+cd tmux_group/
+ls
+nv code.sh
+cd
+tmux kill-server
+code-tmux
+rc
+cd tmux_group/
+cd shortcuts/tmux_group/
+nv code.sh
+tmux new-window -n "rc"
+nv code.sh
+cd ~/Downloads\n
+code-tmux
+rc
+cd shortcuts/tmux_group/
+ls
+nv code.sh
+tmux kill-server
+cd
+editing; cd DebugHelpers
+clear
+git
+nv
+editing; cd Aftershoot-Editing-App
+nv
+nv main.py
+f
+python main.py 'asdasdas'
+nu config-env
+nu $config-env
+config-env
+config nu
+config env
+ls
+cd train_trigger/
+python main.py -m preprocess -p 'd0d3fb4c-41c6-4958-8b09-abb53d636995' -prod2
+et
+cd et
+work
+cd Editing/
+cd Editing-Trainer/
+nv
+ls
+editing; cd Editing-Preprocesser
+ls
+nv
+conda activate edit-prep
+python main.py -m preprocess -p 'd0d3fb4c-41c6-4958-8b09-abb53d636995' -prod2
+python main.py -m preprocess -p 'b26b7b4d-1305-4b23-8ead-a582bddbec5f' -devml7
+python main.py -m preprocess -p '53ed8cc1-4fb1-43a0-8615-dcfdcf1f5b09' -devml7
+python main.py -m preprocess -p '4187b134-014e-4b55-9af2-642a73990b10' -devml7
+nv
+./cloud_sql_proxy -instances=aftershoot-co:us-central1:editing-uploader=tcp:5434
+python main.py -m preprocess -p 'cc78622f-8b43-423f-b35b-1923d1fea0d0' -devml
+cd ~/Downloads
+ls
+mv A8pIYzOenJfULSMRw1wlOXRjqm92_4904f7e5-545d-4a87-98c3-3cc19a29d8f0_training_data_out_sliders_exif.csv s.csv
+open s.csv | get currTemp | math max
+open s.csv | get currTemp
+open s.csv | get currTemp | math min
+open s.csv | get currTint | math min
+gcloud compute ssh long-scripts
+./cloud_sql_proxy -instances=aftershoot-co:us-central1:editing-uploader=tcp:5434
+code-tmux
+nv
+git checkout develop
+nv
+git diff master
+nv
+conda activate edit-prep
+nv
+fish
+clear
+gcloud compute ssh long-scripts
+nv
+git add -A; git commit -m "develop setup"; git push origin develop
+git push -f origin develop
+git diff origin develop
+et
+z Editing-Trainer
+ls
+git diff origin/develop
+git diff
+git add -A; git commit -m "develop setup"; git push origin develop
+git checkout wb_diff
+git merge develop
+nv
+code .
+nv
+git add -A; git commit -m "develop setup"; git push origin develop
+git push
+git pull --rebase
+git push
+nv
+git add -A; git commit -m "devml6"; git push
+ls
+editing; cd Aftershoot-Editing-App
+editing; cd Aftershoot-Desktop-App
+editing; cd Desktop-Rust-Backend
+git pull
+git pull
+yarn && yarn dev
+cargo run
+rustup update
+yarn; yarn dev
+conda activate edit-app
+yarn && yarn dev
+ls
+ls | sort-by modified
+git add -A; git commit -m "sc1"; git push origin wb_diff_stable
+git add -A; git commit -m "no print"; git push origin wb_diff_stable
+git checkout wb_diff
+git merge develop
+git add -A; git commit -m "develop merge"; git push origin wb_diff
+nv
+code .
+git add -A; git commit -m "develop merge"; git push origin wb_diff
+nv
+python main.py -m preprocess -p 'cc78622f-8b43-423f-b35b-1923d' -devml
+python main.py -m preprocess -p '41dc6ccd-8425-4adc-84d7-da192f7f134a' -devml
+cd ../creds/
+ls
+cd ..
+cd train_trigger/
+python main.py -m preprocess -p '41dc6ccd-8425-4adc-84d7-da192f7f134a' -devml
+git pull
+nv
+python main.py -m preprocess -p '41dc6ccd-8425-4adc-84d7-da192f7f134a' -devml
+git add -A; git commit -m "common creds"; git push
+mv
+git add -A; git commit -m "image thresh"; git push origin wb_diff
+python main.py -m preprocess -p '41dc6ccd-8425-4adc-84d7-da192f7f134a' -devml
+python main.py -m train -p '41dc6ccd-8425-4adc-84d7-da192f7f134a' -devml
+git add -A; git commit -m "image thresh"; git push origin wb_diff
+nv
+python main.py -m preprocess -p '67f67ef3-08f6-4d83-b735-e19ec4f562ff' -devml
+editing; cd Scripts
+math e 
+./cloud_sql_proxy -instances=aftershoot-co:us-central1:editing-uploader=tcp:5434
+ls
+^open .
+cd thM5Sf6tl7X5G4352kTB4wGgjV52_4187b134-014e-4b55-9af2-642a73990b10_240a2eb9-c50a-4f67-8362-3a70a1ae5b32_f231c072-f66a-46e1-bf33-e466b60e4ad1_27/
+ls
+conda activate edit-app
+python x.py
+python main.py -m preprocess -p '3e978ef4-bbc5-4569-b0c4-929f2176547c' -devml7
+nv
+git checkout ubp-karan
+nv
+git merge develop
+git stash
+git merge develop
+nv
+git add -A; git commit -m "image thresh"; git push origin ubp-karan
+git add -A; git commit -m "develop merge"; git push origin ubp-karan
+git push origin ubp-karan
+git checkout ubp-karan
+git pull
+git merge develop
+nv
+code .
+git stash
+git merge --abort
+git reset --hard 73004f55bf1ad3eba004511e7729bcca289aade1
+git push origin ubp-karan -f
+clear
+ls
+git merge develop
+git add -A; git commit -m "develop merge"; git push origin ubp-karan
+git add -A; git commit -m "image thresh"; git push origin ubp-karan
+python main.py -m preprocess -p 'd251b261-980c-47e2-83ff-589562da94b2' -devml
+python main.py -m preprocess -p '41dc6ccd-8425-4adc-84d7-da192f7f134a' -devml7
+git add -A; git commit -m "image thresh"; git push origin ubp-karan
+python main.py -m preprocess -p '145bea2b-8e83-43b5-83b6-e8898fc5ee73' -devml
+git checkout c1_merge-new_tc_clustring
+nv
+git checkout c1_merge-new_tc_clustring
+nv
+git merge develop
+nv
+code .
+git add -A; git commit -m "develop merge"; git push origin c1_merge-new_tc_clustring
+git pull --rebase
+git rebase --abort
+git pull
+git rest --hard
+git merge --abort
+git reset --hard c1_merge-new_tc_clustring
+git loh
+git log
+git stash
+git log
+git status
+git pull
+git pull --rebase
+git rebase --abort
+clear
+git reset --hard origin c1_merge-new_tc_clustring
+git reset --hard origin/c1_merge-new_tc_clustring
+git pull --rebase
+git merge develop
+git add -A; git commit -m "develop merge"; git push origin c1_merge-new_tc_clustring
+git checkout c1_merge-new_tc_clustring
+git checkout rundrop-new_tc_clustering
+git checkout rundrop-new_tc_clustring
+git pull
+git merge develop
+code .
+git diff origin/develop
+python main.py -m preprocess -p '41dc6ccd-8425-4adc-84d7-da192f7f134a' -devml7
+git diff origin/develop
+git add -A; git commit -m "develop merge"; git push origin c1_merge-new_tc_clustring
+git push origin rundrop-new_tc_clustring
+clear
+git checkout ubp-kara
+git checkout ubp-karan
+git add -A; git commit -m "env args"; git push origin ubp-karan
+nv
+git checkout rundrop-new_tc_clustring
+nv
+git checkout c1_merge-new_tc_clustring
+git add -A; git commit -m "env args"; git push origin c1_merge-new_tc_clustring
+nv
+git checkout develop
+git add -A; git commit -m "env args"; git push origin develop
+nv
+python main.py -m preprocess -p '2a22b42a-bc4e-4c0e-93a4-81d6d70273a4' -devml6
+git checkout develop
+nv
+python main.py -m preprocess -p '0d2ac822-5599-480b-be4e-52bb2c0b0d12' -dev2
+nv
+python main.py -m preprocess -p '2a22b42a-bc4e-4c0e-93a4-81d6d70273a4' -devml6
+python main.py -m preprocess -p '41dc6ccd-8425-4adc-84d7-da192f7f134a' -devml7
+cd ../Editing-Preprocesser/
+cd ../Scripts/
+cd Encryption/
+ls
+cd editing/
+ls
+cd build/
+ls
+cd build/
+ls
+cd ../..
+cd dist/
+ls
+open .
+^open .
+python main.py -m preprocess -p '51991805-9fd5-4b65-b477-5338066a2161' -devml
+python main.py -m preprocess -p '4187b134-014e-4b55-9af2-642a73990b10' -devml7
+python main.py -m preprocess -p '53ed8cc1-4fb1-43a0-8615-dcfdcf1f5b09' -devml7
+python main.py -m preprocess -p 'b26b7b4d-1305-4b23-8ead-a582bddbec5f' -devml7
+python main.py -m preprocess -p '8e23598b-63ca-4976-9e31-119fbb399567' -devml7
+git checkout c1_merge-new_tc_clustring
+git add -A; git commit -m "threshold"; git push origin c1_merge-new_tc_clustring
+nv x.py
+cd
+ls
+cd Downloads/
+mv 3zADLY3qG4gOTUL0zpWJuyjGnrK2_61b8e051-9c70-427f-8001-dbd365761c94_training_data_out_sliders_exif.csv 2.csv
+mv `3zADLY3qG4gOTUL0zpWJuyjGnrK2_6f731803-1d87-4807-a342-249951ebc804_training_data_out_sliders_exif.csv` 1.csv
+mv `3zADLY3qG4gOTUL0zpWJuyjGnrK2_cc4a9a31-126c-4d83-a777-4d39397444bd_training_data_out_sliders_exif.csv` 3.csv
+ls
+open `1.csv` | get columns
+open `1.csv` | get column
+open `1.csv` | columns
+open `1.csv` | columns | find cal
+open `1.csv` | columns | find color
+open `1.csv` | columns | find hue
+open `1.csv` | dfr get greenhue bluehue
+open `1.csv` | get greenhue bluehue
+open `1.csv` | get greenhue, bluehue
+open `1.csv` | get greenhue
+open `1.csv` | get greenhue, bluehue
+open `1.csv` | get greenhue bluehue
+open `1.csv` | get greenhue | bluehue
+open `1.csv` | get greenhue | get bluehue
+open `1.csv` | select greenhue, bluehue
+open `1.csv` | select greenhue bluehue
+open `2.csv` | get camera_models
+open `2.csv` | get camera_model
+open `2.csv` | get camera_model | unique
+open `2.csv` | get camera_model | value-countse
+open `2.csv` | get camera_model | value-counts
+open `2.csv` | get camera_model | value-count
+open `2.csv` | get camera_model | get value-counts
+open `2.csv` | get camera_model | dfr value-counts
+open `2.csv` | dfr into-df | get camera_model | dfr value-counts
+open `2.csv` | dfr into-df | get camera_model | value-counts
+open `2.csv` | dfr into-df | dfr get camera_model | dfr value-counts
+open `1.csv` | dfr into-df | dfr get camera_model | dfr value-counts
+open `3.csv` | dfr into-df | dfr get camera_model | dfr value-counts
+open `2.csv` | get camera_mode
+dfr open `2.csv`
+dfr open `2.csv` | dfr get greenhue
+dfr open `2.csv` | dfr get GreenHue
+dfr open `2.csv` | dfr get GreenHue BlueHue
+dfr open `2.csv` | dfr get GreenHue BlueHue | dfr value-counts
+dfr open `2.csv` | dfr get GreenHue BlueHue | dfr unique
+open .
+^open .
+dfr open `2.csv` | dfr get GreenHue BlueHue
+dfr open '1.csv' | get CameraProfile
+dfr open '1.csv' | get CameraProfile | get value-counts
+dfr open '1.csv' | get CameraProfile | dfr get value-counts
+dfr open '1.csv' | dfr get CameraProfile | dfr get value-counts
+dfr open '1.csv' | dfr get CameraProfile | dfr value-counts
+nv ../main.py
+cd ..
+ls
+./build.sh
+ls
+fish
+conda activate edit-app
+./build.sh
+ls
+cd build/
+cd ..
+cd dist
+ls
+./encryption
+open .
+^open .
+nv
+python main.py -m preprocess -p '2a22b42a-bc4e-4c0e-93a4-81d6d70273a4' -devml6
+python main.py -m preprocess -p 'aefd8c04-fe61-4f97-9106-cedda5b2ff9c' -devml6
+nv
+python main.py -m preprocess -p 'aefd8c04-fe61-4f97-9106-cedda5b2ff9c' -devml6
+git add -A; git commit -m "devml6"; git push
+dfr open '1.csv' | get columns
+dfr open '1.csv' | columns
+dfr open '1.csv' | dfr columns
+dfr open '1.csv' | dfr columns | dfr hue
+dfr open '1.csv' | dfr columns
+python main.py -m preprocess -p 'aefd8c04-fe61-4f97-9106-cedda5b2ff9c' -devml6
+gcloud compute ssh long-scripts
+git checkout tf_det
+ssh -i "long-scripts-vm.pem" ubuntu@ec2-54-88-113-80.compute-1.amazonaws.com
+nv y.py
+cp long-scripts-vm.pem ~/Documents/Work/Creds/
+ssh -i "~/Documents/Work/Creds/long-scripts-vm.pem" ubuntu@ec2-54-88-113-80.compute-1.amazonaws.com
+chmod 400 ~/Documents/Work/Creds/long-scripts-vm.pem
+ssh -i "~/Documents/Work/Creds/long-scripts-vm.pem" ubuntu@ec2-54-88-113-80.compute-1.amazonaws.com
+cp shaunak.pem ~/Documents/Work/Creds/
+chmod 400 ~/Documents/Work/Creds/shaunak.pem
+mv ~/Documents/Work/Creds/shaunak.pem ~/Documents/Work/Creds/editing-utils-aws.pem
+ssh -i "~/Documents/Work/Creds/editing-utils-aws.pem" ec2-34-201-58-175.compute-1.amazonaws.com
+ssh -i "~/Documents/Work/Creds/editing-utils-aws.pem" debian-12-amd64-20230711-1438@ec2-34-201-58-175.compute-1.amazonaws.com
+ssh -i "~/Documents/Work/Creds/editing-utils-aws.pem" Debian@ec2-34-201-58-175.compute-1.amazonaws.com
+ssh -i "~/Documents/Work/Creds/editing0utils-aws.pem" Debian@ec2-34-201-58-175.compute-1.amazonaws.com
+ssh -i "~/Documents/Work/Creds/editing-utils-aws.pem" Debian@ec2-34-201-58-175.compute-1.amazonaws.com
+cd ../..
+cd ..
+cd transfer-profile/
+ssh -i "~/Documents/Work/Creds/editing-utils-aws.pem" admin@ec2-34-201-58-175.compute-1.amazonaws.com
+./cloud_sql_proxy -instances=aftershoot-co:us-central1:editing-uploader=tcp:5434
+cd ../recreate_lrdata/
+rm -r output/
+rm -r input
+go run . "gs://editing_userdata/dxctcbtbFpgFsUNYo0m1o7ta7sJ2/ed386c01-f2c6-46c4-b3d0-d38f81b333f8/cf6f4422-6802-4f40-8641-8ef31eb9e882/ff9034a6-e9f6-4597-bb37-6146298caac9"
+open .
+^open .
+clear
+cd
+ssh -i "~/Documents/Work/Creds/editing-utils-aws.pem" admin@ec2-34-201-58-175.compute-1.amazonaws.com
+gcloud compute ssh long-scripts
+nv
+git checkout wb_diff
+clear
+mkdir out
+mkdir dec
+ls
+cp -r P2RNXHmKbrgG1MkuWNJmqZa3gPO8_94f45c6e-df97-459b-ac1e-4768ba042eac_ad6eda70-b987-4e18-b4b5-2d8a3fa2ee91_trained_models_1694369683_models.enc/
+cp -r P2RNXHmKbrgG1MkuWNJmqZa3gPO8_94f45c6e-df97-459b-ac1e-4768ba042eac_ad6eda70-b987-4e18-b4b5-2d8a3fa2ee91_trained_models_1694369683_models.enc/ dec
+ls
+cd dec
+ls
+mkdir out
+ls
+nv to_transfer.json
+cd ..
+ls
+cd Encryption/
+ls
+cd editing/
+ls
+cp dist/encryption ~/Downloads/dec
+ls
+./encryption
+./encryption -d --src P2RNXHmKbrgG1MkuWNJmqZa3gPO8_94f45c6e-df97-459b-ac1e-4768ba042eac_ad6eda70-b987-4e18-b4b5-2d8a3fa2ee91_trained_models_1694369683_models.enc/ --dst out/ --user P2RNXHmKbrgG1MkuWNJmqZa3gPO8
+cd out/
+ls
+python
+conda activate edit-app
+rc
+git add -A; git commit -m "up"; git push
+git rm --cached DataScience/Projects/Doppelganger<\n>
+rust
+ls
+cd rust/
+ls
+z advent_of_code/
+ls
+nv
+cd ../train_trigger/
+python main.py -m preprocess -p '1ca7dbce-4861-41f1-820c-1b11d507579b' -devml
+nv
+conda activate edit-prep
+python main.py -m preprocess -p '4b7bbe9c-54cb-49d3-962b-afff69fdb589' -devml4
+python main.py -m preprocess -p '4b7bbe9c-54cb-49d3-962b-afff69fdb589' -devml
+git add -A; git commit -m "empty trained folder if devml"; git push
+git pull
+git pull --rebase
+git add -A; git commit -m "empty trained folder if devml"; git push
+git push
+nv
+nv
+git checkout develop
+nv
+git stash
+ssh -i "~/Documents/Work/Creds/editing-utils-aws.pem" admin@ec2-34-201-58-175.compute-1.amazonaws.com
+pip install google-cloud-sql
+pip install cloud-sql-python-connector["pg8000"]
+pip install cloud-sql-python-connector
+nv cloudsql.py
+python cloudsql.py
+pip install sqlalchemy
+python cloudsql.py
+nv
+conda activate edit-prep
+which pip
+pip install sqlalchemy
+python cloudsql.py
+python main.py -m preprocess -p '4b7bbe9c-54cb-49d3-962b-afff69fdb589' -devml
+git add -A; git commit -m "empty trained folder if devml"; git push
+cd ~/.config/nvim
+nv
+fish
+clear
+cargo run --bin day001
+ssh -i "~/Documents/Work/Creds/editing-utils-aws.pem" admin@ec2-3-80-211-137.compute-1.amazonaws.com
+./encryption -d --src P2RNXHmKbrgG1MkuWNJmqZa3gPO8_94f45c6e-df97-459b-ac1e-4768ba042eac_ad6eda70-b987-4e18-b4b5-2d8a3fa2ee91_trained_models_1694369683_models.enc/ --dst out/ --user P2RNXHmKbrgG1MkuWNJmqZa3gPO8
+python
+cd ..
+cd
+cd Downloads/
+ls
+^open .
+ls
+mv bXUKtv19SFQlL9pIzNAUrOTL9623_cd8264e9-efc3-4c55-88ce-4b22feafec88_training_data_out_sliders_exif.csv s.csv
+open s.csv | get currTint | math min
+open s.csv | get currTemp | math min
+open s.csv | where currTemp==0
+open s.csv | where currTemp=0
+dfr open s.csv | dfr where currTemp==0
+dfr open s.csv | dfr where currTemp=0
+dfr open s.csv | where currTemp=0
+dfr open s.csv | dfr filter currTemp=0
+dfr open s.csv | dfr filter currTemp==0
+dfr open s.csv
+dfr open s.csv | filter $it.currTemp==0
+dfr open s.csv | filter currTemp==0
+dfr open s.csv | filter currTemp == 0
+dfr open s.csv | select currTemp == 0
+dfr open s.csv | select currTemp = 0
+dfr open s.csv | select currTemp == 0
+dfr open s.csv | select currTemp==0
+open s.csv | filter currTemp==0
+open s.csv | filter currTemp=0
+open s.csv | filter {currTemp=0}
+open s.csv | filter 'currTemp=0'
+dfr open s.csv | dfr arg-true
+dfr open s.csv | dfr arg-true currTemp=0
+dfr open s.csv | dfr query 'select * from df where currTemp=0'
+open s.csv | query 'select * from df where currTemp=0'
+dfr open s.csv | dfr query 'select * from df where currTemp=0'
+dfr open s.csv | dfr query 'select * from df where currTemp=0' | get catalog_id | unique
+dfr open s.csv | dfr query 'select * from df where currTemp=0' | get catalog_id
+dfr open s.csv | dfr query 'select * from df where currTemp=0' | get catalog_id | dfr n-uniue
+dfr open s.csv | dfr query 'select * from df where currTemp=0' | get catalog_id | dfr n-unique
+dfr open s.csv | dfr query 'select * from df where currTemp=0' | dfr get catalog_id
+dfr open s.csv | dfr query 'select * from df where currTemp=0' | dfr get catalog_id | dfr get n-unique
+dfr open s.csv | dfr query 'select * from df where currTemp=0' | dfr get catalog_id
+dfr open s.csv | dfr query 'select * from df where currTemp=0' | dfr get catalog_id | uniq 
+dfr open s.csv | dfr query 'select * from df where currTemp=0' | dfr get catalog_id | dfr uniq 
+dfr open s.csv | dfr query 'select * from df where currTemp=0' | dfr get catalog_id | dfr unique
+dfr open s.csv | dfr query 'select * from df where currTemp=0' | dfr get id_global
+dfr open s.csv | dfr query 'select * from df where currTemp=0' | dfr get id_global | first
+dfr open s.csv | dfr query 'select * from df where currTemp=0' | dfr get id_global | dfr first
+dfr open s.csv | dfr query 'select * from df where id_global="19B7BA24-5AAD-47B0-94A9-18DB78A2015C"'
+dfr open s.csv | dfr query 'select * from df where id_global=19B7BA24-5AAD-47B0-94A9-18DB78A2015C'
+dfr open s.csv | dfr query "select * from df where id_global='19B7BA24-5AAD-47B0-94A9-18DB78A2015C'"
+dfr open s.csv | dfr query "select * from df where id_global='19B7BA24-5AAD-47B0-94A9-18DB78A2015C'" | select currTemp currTint
+dfr open s.csv | dfr query "select * from df where id_global='19B7BA24-5AAD-47B0-94A9-18DB78A2015C'" | get currTemp currTint
+dfr open s.csv | dfr query "select * from df where id_global='19B7BA24-5AAD-47B0-94A9-18DB78A2015C'" | dfr get currTemp currTint
+cp ~/Documents/Work/Editing/Aftershoot-Editing-App/editing/.binary/fnuEnMJC6kcDRuS4EXGbrWPZaviRct .
+~/Documents/Work/Editing/Aftershoot-Editing-App/editing/.binary/fnuEnMJC6kcDRuS4EXGbrWPZaviRct
+cd
+cd Downloads/
+~/Documents/Work/Editing/Aftershoot-Editing-App/editing/.binary/fnuEnMJC6kcDRuS4EXGbrWPZaviRct ./bXUKtv19SFQlL9pIzNAUrOTL9623_cd8264e9-efc3-4c55-88ce-4b22feafec88_training_data_Dataset_4bc342e3-7430-44d6-abba-19ebaa940d15_TIFFs_19B7BA24-5AAD-47B0-94A9-18DB78A2015C.tiff
+~/Documents/Work/Editing/Aftershoot-Editing-App/editing/.binary/fnuEnMJC6kcDRuS4EXGbrWPZaviRct/fnuEnMJC6kcDRuS4EXGbrWPZaviRct ./bXUKtv19SFQlL9pIzNAUrOTL9623_cd8264e9-efc3-4c55-88ce-4b22feafec88_training_data_Dataset_4bc342e3-7430-44d6-abba-19ebaa940d15_TIFFs_19B7BA24-5AAD-47B0-94A9-18DB78A2015C.tiff
+0 >> 4
+python
+ls
+cd bXUKtv19SFQlL9pIzNAUrOTL9623_cd8264e9-efc3-4c55-88ce-4b22feafec88_b9bc98ef-4fb3-4b05-909a-1bec7f1d59bf_trained_models_1696098791_debug/
+ls
+open sliders_exif.csv | query 'select * from df where currTemp=0'
+dfr open sliders_exif.csv | dfr query 'select * from df where currTemp=0'
+dfr open sliders_exif.csv | dfr query 'select * from df where currTemp=0' | dfr get catalog_id
+dfr open sliders_exif.csv | dfr query 'select * from df where currTemp=0' | dfr get catalog_id.unique
+dfr open sliders_exif.csv | dfr query 'select * from df where currTemp=0' | dfr get catalog_id | dfr unique
+cd ..
+ls
+cd bXUKtv19SFQlL9pIzNAUrOTL9623_cd8264e9-efc3-4c55-88ce-4b22feafec88_b9bc98ef-4fb3-4b05-909a-1bec7f1d59bf_trained_models_1696098791_debug/
+ls
+dfr open sliders_exif.csv | dfr query 'select * from df where currTemp=0' | dfr get catalog_id | dfr unique
+dfr open sliders_exif.csv | dfr query 'select * from df where currTemp=0' | dfr get catalog_id | dfr n-unique
+dfr open sliders_exif.csv | dfr query 'select * from df where currTemp=0' | dfr get catalog_id | dfr value-counts
+dfr open sliders_exif.csv | dfr query 'select * from df where currTemp=0' | dfr value-counts
+dfr open sliders_exif.csv | dfr query 'select * from df where currTemp=0' | dfr get id_global
+dfr open sliders_exif.csv | dfr query 'select * from df where currTemp=0' | dfr get id_global | dfr n-unique
+ls
+cd ..
+ls
+open Ozc1lOMmqqO2Hyg2rlXB4dP3MdC2_26b767b7-f420-4c67-afc2-f9926d70376b_training_data_out_sliders_exif.csv | query 'select * from df where currTemp=0'
+dfr open Ozc1lOMmqqO2Hyg2rlXB4dP3MdC2_26b767b7-f420-4c67-afc2-f9926d70376b_training_data_out_sliders_exif.csv | dfr query 'select * from df where currTemp=0'
+dfr open Ozc1lOMmqqO2Hyg2rlXB4dP3MdC2_26b767b7-f420-4c67-afc2-f9926d70376b_training_data_out_sliders_exif.csv | dfr query 'select * from df where currTemp=0' | dfr get catalog_id | dfr unique
+ls
+dfr open `8PBe3ZcIRWfMuMBU6UB3rR9gk0T2_064bf2cb-4462-421a-99e5-965fe296a8ab_training_data_out_sliders_exif.csv` | dfr query 'select * from df where currTemp=0' | dfr get catalog_id | dfr unique
+dfr open `8PBe3ZcIRWfMuMBU6UB3rR9gk0T2_064bf2cb-4462-421a-99e5-965fe296a8ab_training_data_out_sliders_exif.csv` | dfr query 'select * from df where currTemp=0' | dfr get id_global | dfr get n-unique
+dfr open `8PBe3ZcIRWfMuMBU6UB3rR9gk0T2_064bf2cb-4462-421a-99e5-965fe296a8ab_training_data_out_sliders_exif.csv` | dfr query 'select * from df where currTemp=0' | dfr get catalog_id | dfr unique
+dfr open `8PBe3ZcIRWfMuMBU6UB3rR9gk0T2_064bf2cb-4462-421a-99e5-965fe296a8ab_training_data_out_sliders_exif.csv` | dfr query 'select * from df where currTemp=0' | dfr get id_global | dfr n-unique
+nv
+git diff master
+dfr open xHbRAoIhzvfAWwIknwRRyu09ZTg1_7d913679-957f-4e56-89fc-64b384417aff_training_data_out_sliders_exif.csv | dfr query 'select * from df where currTemp=0' | dfr get id_global | dfr n-unique
+dfr open xHbRAoIhzvfAWwIknwRRyu09ZTg1_7d913679-957f-4e56-89fc-64b384417aff_training_data_out_sliders_exif.csv | dfr query 'select * from df where currTemp=0'
+nv
+git stash
+git checkout master
+git stash pop
+git pull --rebase
+git stash
+git pull
+git stash pop
+git add -A; git commit -m "calc wb only from .dng"; git push
+cd ..
+cd UniversalProfileUpdater/
+nv
+git checkout runpod
+git add -A; git commit -m "temp tint 0 stat"; git push
+ls
+scp -i ~/Documents/Work/Creds/editing-utils-aws.pem admin@ec2-54-173-168-252.compute-1.amazonaws.com:~/clones/UniversalProfilesUpdate/temp_tint_0/stats.json .
+scp -i ~/Documents/Work/Creds/editing-utils-aws.pem admin@ec2-54-173-168-252.compute-1.amazonaws.com:~/clones/UniversalProfilesUpdate/out/temp_tint_0/stats.json .
+ls
+open stats.json
+clear
+nv stats.json
+code .
+python -m api.jobs.temp_tint_0/stats_check
+cd api/jobs/temp_tint_0/
+python status_check.py
+python stats_check.py
+scp -i ~/Documents/Work/Creds/editing-utils-aws.pem admin@ec2-54-173-168-252.compute-1.amazonaws.com:~/clones/UniversalProfilesUpdate/out/temp_tint_0/stats.json ../../../out/temp_tint_0/
+python stats_check.py
+scp -i ~/Documents/Work/Creds/editing-utils-aws.pem admin@ec2-54-173-168-252.compute-1.amazonaws.com:~/clones/UniversalProfilesUpdate/out/temp_tint_0/stats.json ../../../out/temp_tint_0/
+python stats_check.py
+code ../../..
+python stats_check.py
+code ../../..
+python stats_check.py
+ls
+nv gcs.py
+scp -i ~/Documents/Work/Creds/editing-utils-aws.pem admin@ec2-54-173-168-252.compute-1.amazonaws.com:~/clones/UniversalProfilesUpdate/out/temp_tint_0/stats.json ../../../out/temp_tint_0/
+code .
+code ../../..
+python stats_check.py
+python retrigger.py
+cd ../..
+cd ..
+python -m api.jobs.temp_tint_0/retrigger
+python -m api.jobs.temp_tint_0.retrigger
+conda activate edit-prep
+python -m api.jobs.temp_tint_0.retrigger
+cd api/jobs/temp_tint_0/
+ls
+scp -i ~/Documents/Work/Creds/editing-utils-aws.pem admin@ec2-54-173-168-252.compute-1.amazonaws.com:~/clones/UniversalProfilesUpdate/out/temp_tint_0/stats.json ../../../out/temp_tint_0/
+python stats_check.py
+code ../../..
+python stats_check.py
+nv
+nv
+git checkout develop
+git merge master
+nv
+git push origin develop
+git checkout wb_diff
+git merge develop
+git add -A; git commit -m "temp tint 0 stat"; git push origin wb_diff
+nv
+git checkout wb_diff
+nv
+git checkout develop
+git diff master
+cd api/jobs/temp_tint_0/
+ls
+scp -i ~/Documents/Work/Creds/editing-utils-aws.pem admin@ec2-54-173-168-252.compute-1.amazonaws.com:~/clones/UniversalProfilesUpdate/out/temp_tint_0/stats.json ../../../out/temp_tint_0/
+python stats_check.py
+cd ../..
+cd ..
+python -m api.jobs.temp_tint_0.retrigger
+conda activate edit-prep
+python -m api.jobs.temp_tint_0.retrigger
+git add -A; git commit -m "temp tint 0 stat"; git push
+git checkout rundrop-new_tc_clustring
+git fetch
+git checkout rundrop-new_tc_clustring
+git branch
+git checkout c1_merge-new_tc_clustring
+git merge develop
+nv
+git push origin c1_merge-new_tc_clustring
+git add -A; git commit -m "develop merge"; git push origin c1_merge-new_tc_clustring
+git branch
+git checkout ubp-karan
+git merge develop
+git add -A; git commit -m "develop merge"; git push origin ubp-karan
+conda activate edit-prep
+python main.py -m preprocess -p 'b26b7b4d-1305-4b23-8ead-a582bddbec5f' -devml7
+ssh -i "~/Documents/Work/Creds/editing-utils-aws.pem" admin@ec2-3-80-211-137.compute-1.amazonaws.com
+./cloud_sql_proxy -instances=aftershoot-co:us-central1:editing-uploader=tcp:5434
+editing; cd DebugHelpers
+cd train_trigger/
+python main.py -m preprocess -p '53ed8cc1-4fb1-43a0-8615-dcfdcf1f5b09' -devml7
+conda activate edit-prep
+python main.py -m preprocess -p '53ed8cc1-4fb1-43a0-8615-dcfdcf1f5b09' -devml7
+python main.py -m preprocess -p '4187b134-014e-4b55-9af2-642a73990b10' -devml7
+python main.py -m preprocess -p 'c28a29a5-1c61-47b4-963d-5599b3735d45' -devml7
+python main.py -m preprocess -p '8e23598b-63ca-4976-9e31-119fbb399567' -devml7
+python main.py -m preprocess -p '8a21046e-5896-445e-adeb-53b9864d4d3c' -devml7
+python main.py -m preprocess -p 'c28a29a5-1c61-47b4-963d-5599b3735d45' -devml7
+python main.py -m preprocess -p '8a21046e-5896-445e-adeb-53b9864d4d3c' -devml7
+ssh -i "~/Documents/Work/Creds/editing-utils-aws.pem" admin@ec2-3-80-211-137.compute-1.amazonaws.com
+editing; cd Scripts
+cd UniversalProfileUpdater/
+cd api/jobs/temp_tint_0/
+ls
+python stats_check.py
+ssh -i "~/Documents/Work/Creds/editing-utils-aws.pem" admin@ec2-3-80-211-137.compute-1.amazonaws.com
+cd ~/Downloads
+nv x.csv
+open x.csv | query 'select * from df where currTemp=0'
+dfr open x.csv | dfr query 'select * from df where currTemp=0'
+ssh -i "~/Documents/Work/Creds/editing-utils-aws.pem" admin@ec2-54-173-168-252.compute-1.amazonaws.com
+editing; cd Editing-Trainer
+git checkout wb_diff_new
+git fetch
+git check wb_diff_new
+git checkout wb_diff_new
+nv
+git add -A; git commit -m "workflow"; git push origin wb_diff_new
+editing; cd Editing-Preprocesser
+git checkout wb_diff
+nv README.md
+git add -A; git commit -m "workflow"; git push origin wb_diff
+python main.py -m preprocess -p '41dc6ccd-8425-4adc-84d7-da192f7f134a' -devml3
+ssh -i "~/Documents/Work/Creds/editing-utils-aws.pem" admin@ec2-54-173-168-252.compute-1.amazonaws.com
+ssh -i "~/Documents/Work/Creds/editing-utils-aws.pem" admin@ec2-44-211-208-174.compute-1.amazonaws.com
+./cloud_sql_proxy -instances=aftershoot-co:us-central1:editing-uploader=tcp:5434
+python main.py -m preprocess -p 'cc78622f-8b43-423f-b35b-1923d1fea0d0' -devml
+nv
+python main.py -m preprocess -p 'cc78622f-8b43-423f-b35b-1923d1fea0d0' -devml
+python main.py -m preprocess -p '41dc6ccd-8425-4adc-84d7-da192f7f134a' -devml3
+python main.py -m preprocess -p 'cc78622f-8b43-423f-b35b-1923d1fea0d0' -devml
+editing; cd Aftershoot-Desktop-App
+editing; cd Desktop-Rust-Backend
+git pull
+editing; cd Aftershoot-Editing-App
+git pull
+git pull
+git checkout wb_diff
+git pull
+cargo run
+git checkout wb_diff_new
+yarn dev
+cd ../AfterShoot-Desktop-App/
+conda activate edit-app
+yarn && yarn dev
+./cloud_sql_proxy -instances=aftershoot-co:us-central1:editing-uploader=tcp:5434
+scp -i ~/Documents/Work/Creds/editing-utils-aws.pem admin@ec2-54-173-168-252.compute-1.amazonaws.com:~/clones/UniversalProfilesUpdate/out/temp_tint_0/stats.json ../../../out/temp_tint_0/
+rc
+cd rust/advent_of_code/
+ls
+python
+clear
+ls
+dfr open x.csv | query dfr where currTemp=0
+dfr open x.csv | dfr filter-with currTemp = 0
+dfr open x.csv | dfr filter-with currTemp=0
+dfr open x.csv | dfr filter-with 'currTemp=0'
+dfr open x.csv | dfr filter-with
+dfr open x.csv | dfr filter-with true
+dfr open x.csv | dfr filter-with false
+dfr open x.csv | dfr filter-with currtemp=true
+dfr open x.csv | dfr filter-with currtemp
+dfr open x.csv | dfr filter-with ((dfr col currTemp) == 0)
+dfr open x.csv | dfr filter-with ((dfr col currTemp) == 0) | dfr get id_global image_id
+dfr open x.csv | dfr filter-with ((dfr col currTemp) == 0) | dfr get id_global currTemp
+dfr open x.csv | dfr filter ((dfr col currTemp) == 0) | dfr get id_global currTemp
+open x.csv | filter {|x| $x.currTemp == 0}
+open x.csv | filter {|x| $x}
+open x.csv | filter {|x| $x == 0}
+open x.csv | each {|x| print $x}}
+open x.csv | each {|x| print $x}
+open x.csv
+nv x.py
+nv x.csv
+ls
+cd xHbRAoIhzvfAWwIknwRRyu09ZTg1_7d913679-957f-4e56-89fc-64b384417aff_7b142953-e99d-4644-af60-6249f99d9dfa_trained_models_1695836670_debug/
+ls
+open sliders_exif.csv | dfr from
+open sliders_exif.csv 
+open sliders_exif.csv | each {|x| print $x}
+open sliders_exif.csv | each {|x| x.camera_group}}
+open sliders_exif.csv | each {|x| x.camera_group}
+open sliders_exif.csv | each {|x| x.camera_group }
+open sliders_exif.csv
+open sliders_exif.csv | get columns
+open sliders_exif.csv | columns
+open sliders_exif.csv | columns.len
+open sliders_exif.csv | each {|x| $x.camera_group }
+ls
+scp -i ~/Documents/Work/Creds/editing-utils-aws.pem admin@ec2-54-173-168-252.compute-1.amazonaws.com:~/clones/UniversalProfilesUpdate/out/temp_tint_0/stats.json ../../../out/temp_tint_0/
+./cloud_sql_proxy -instances=aftershoot-co:us-central1:editing-uploader=tcp:5434
+dfr open x.csv | dfr filter ((dfr col currTemp) == 0) | dfr get id_global currTemp
+scp -i ~/Documents/Work/Creds/editing-utils-aws.pem admin@ec2-54-173-168-252.compute-1.amazonaws.com:~/clones/UniversalProfilesUpdate/out/temp_tint_0/stats.json ../../../out/temp_tint_0/
+cd ../..
+cd ..
+cd out/
+ls
+open color_profiles_stats.json
+open out/color_profiles_stats.json
+open out/color_profiles_stats.json | first 5
+cat out/color_profiles_stats.json
+cat out/color_profiles_stats.json | each {|x| print $x}
+open out/color_profiles_stats.json | each {|x| print $x}
+open out/color_profiles_stats.json | each {|x| print $x.key}
+open out/color_profiles_stats.json | each {|x| print $x.user_id}
+open out/color_profiles_stats.json | each {|x| print $x}
+open out/color_profiles_stats.json | each {|x| print $x} | first
+open out/color_profiles_stats.json | each {|x| print $x.}
+open out/color_profiles_stats.json | query json}
+open out/color_profiles_stats.json | query json {}
+open out/color_profiles_stats.json | query json '.'
+open out/color_profiles_stats.json | query json "user_id='b07f8350-cbd6-4387-b7c3'"
+open out/color_profiles_stats.json | from json | query json "user_id='b07f8350-cbd6-4387-b7c3'"
+open out/color_profiles_stats.json | to json | query json "user_id='b07f8350-cbd6-4387-b7c3'"
+ls
+cd api/jobs/temp_tint_0/
+ls
+ls
+open model_metrics.json
+open model_metrics.json | get heregoes.cluster_stats.json
+scp -i ~/Documents/Work/Creds/editing-utils-aws.pem admin@ec2-54-173-168-252.compute-1.amazonaws.com:~/clones/UniversalProfilesUpdate/out/temp_tint_0/stats.json ../../../out/temp_tint_0/
+open model_metrics.json | get heregoes.test
+open model_metrics.json | get
+open model_metrics.json | columns
+open model_metrics.json | columns | each {|x| $x | str contains 'crack'}
+open model_metrics.json | columns | each {|x| print $x | str contains 'crack'}
+open model_metrics.json | columns | each {|x| $x | if (str contains 'crack') {$x}}
+open model_metrics.json | columns | each {|x| if ($x | str contains 'crack') {$x} }
+open model_metrics.json | columns | each {|x| $x | if (str contains 'crack') {$x}}
+ open model_metrics.json | columns | each {|x| if ($x | str contains 'crack') {$x} } | open model_metrics.json
+ open model_metrics.json | columns | each {|x| if ($x | str contains 'crack') {$x} }
+let name =  {open model_metrics.json | columns | each {|x| if ($x | str contains 'crack') {$x} } | get 0}
+name
+$name
+let name = open model_metrics.json | columns | each {|x| if ($x | str contains 'crack') {$x} } | get 0
+let name = (open model_metrics.json | columns | each {|x| if ($x | str contains 'crack') {$x} } | get 0)
+name
+$name
+open model_metrics.json | get $name
+cd ../../../out/
+ls
+cat all_profiles.json
+cat temp_tint_0/stats.json
+cd temp_tint_0/
+ls
+cat stats.json
+cat stats.json | json -r
+cat stats.json | json
+cat stats.json | into json
+cat stats.json | to json
+cat stats.json | to json -r
+cat stats.json
+open stats.json | columns
+open stats.json | column
+open stats.json | each {|x| {if ($x.user_id | str contains 'Ne1vm60USkeUXnzAKUSoJtDRaun2') {column}}}
+open stats.json | each {|x| {if ($x.user_id | str contains 'Ne1vm60USkeUXnzAKUSoJtDRaun2') {get column}}}
+open stats.json | each {|x| {if ($x.user_id | str contains 'Ne1vm60USkeUXnzAKUSoJtDRaun2') {print column}}}
+open stats.json | each {|x| {if ($x.user_id | str contains 'Ne1vm60USkeUXnzAKUSoJtDRaun2') {print column}}} | print
+open stats.json | each {|x| {if ($x.user_id | str contains 'Ne1vm60USkeUXnzAKUSoJtDRaun2') {print 1}}}
+open stats.json | each {|x| {if ($x.user_id | str contains 'Ne1vm60USkeUXnzAKUSoJtDRaun2') {print 1} else {print 2}}}
+open stats.json | each {|x| {if ($x.user_id | str contains 'Ne1vm60USkeUXnzAKUSoJtDRaun2') {print 1} else {print 2}}} | do
+let my_function = {|x| {if ($x.user_id | str contains 'Ne1vm60USkeUXnzAKUSoJtDRaun2') {print 1} else {print 2}}}<\n>open stats.json | each $my_function | do<\n>
+let my_function = {|x| {if ($x.user_id | str contains 'Ne1vm60USkeUXnzAKUSoJtDRaun2') {print 1} else {print 2}}}<\n>open stats.json | each $my_function<\n>
+$my_function
+let my_command = open stats.json | each {|x| {if ($x.user_id | str contains 'Ne1vm60USkeUXnzAKUSoJtDRaun2') {1} else {2}}}<\n>$my_command<\n>
+let my_command = (open stats.json | each {|x| {if ($x.user_id | str contains 'Ne1vm60USkeUXnzAKUSoJtDRaun2') {1} else {2}}})<\n>$my_command<\n>
+def my_command {<\n>    open stats.json | each {|x| {if ($x.user_id | str contains 'Ne1vm60USkeUXnzAKUSoJtDRaun2') {1} else {2}}}<\n>}<\n><\n>my_command
+let my_command = (open stats.json | each {|x| {if ($x.user_id | str contains 'Ne1vm60USkeUXnzAKUSoJtDRaun2') {1} else {2}}})<\n>$my_command<\n>open stats.json
+open stats.json | each {|x| {if ($x.user_id | str contains 'Ne1vm60USkeUXnzAKUSoJtDRaun2') {print 1} else {print 2}}} | do
+open stats.json | each {|x| {$x.user_email == 'morgan.clingenpeel@gmail.com'}}
+open model_metrics.json | columns | each {|x| $x | if (str contains 'crack') {$x}}
+open model_metrics.json | columns | each {|x| if ($x | str contains 'crack') {$x} }
+open stats.json | each {|x| {if ($x.user_id | str contains 'Ne1vm60USkeUXnzAKUSoJtDRaun2') {1} else {2}}}
+open stats.json | each {|x| {$x.user_email == 'morgan.clingenpeel@gmail.com'}}
+open stats.json | each {|x| if ($x.user_email == 'morgan.clingenpeel@gmail.com') {1}}
+open stats.json | each {|x| $x}
+open stats.json | each {|x| $x.column}
+open stats.json | each {|x| $x | get 0}
+open stats.json | each {|x| $x } | get 0
+open stats.json | each {|x| $x } | first
+open stats.json | each {|x| print $x } | first
+open stats.json | each {|x| print $x }
+open stats.json | each {|x| print $x.col }
+open stats.json | each {|x| print $x.column }
+open stats.json | each {|x| print $x.user_email }
+open stats.json | each {|x| print $x.user_id }
+open stats.json | each {|x| print $x }
+open stats.json | each {|x| print $x | descrive }
+open stats.json | each {|x| print $x | describe }
+open stats.json | each {|x| $x | describe }
+open stats.json | each {|x| $x.user_id | describe }
+open stats.json | each {|x| $x.record | describe }
+open stats.json | each {|x| $x | describe }
+open stats.json | each {|x| $x | describe | print }
+open stats.json | each {|x| $x | describe}
+open stats.json | each {|x| $x | print }
+open stats.json | each {|x| $x | print } | 0
+open stats.json | each {|x| $x | print } | get 0
+open stats.json | each {|x| $x | print } | table
+open stats.json | each {|x| $x | print } | dfr into-df
+open stats.json | each {|x| $x } | first
+open stats.json | each {|x| $x }
+open stats.json | each {|x| $x } | describe
+open stats.json | each {|x| $x }
+open stats.json | each {|x| $x } | get 21a5f90-86da-4e30-93d6-69420934aba0
+open stats.json | each {|x| $x } | get '21a5f90-86da-4e30-93d6-69420934aba0'
+open stats.json | each {|x| $x } | get col '21a5f90-86da-4e30-93d6-69420934aba0'
+open stats.json | each {|x| $x } | get column '21a5f90-86da-4e30-93d6-69420934aba0'
+open stats.json | each {|x| $x } | get '21a5f90-86da-4e30-93d6-69420934aba0'
+open stats.json | each {|x| $x } | take 1
+open model_metrics.json | transpose
+open stats.json | transpose
+open model_metrics.json | transpose | tale 1
+open model_metrics.json | transpose | take 1
+open model_metrics.json | transpose | take 2
+open model_metrics.json | transpose | take 1
+open stats.json | transpose | take 1
+open stats.json | transpose | each {|x| if ($x.column1.zeros_count !~ 0) {$x.column0}}
+open stats.json | transpose | each {|x| if ($x.column1.zeros_count != 0) {$x.column0}}
+open stats.json | each {|x| if ($x.zeros_count != 0) {$x.column0}}
+open stats.json | each {|x| $x}
+open stats.json | each {|x| $x.0}
+open stats.json | each {|x| $x.1}
+open stats.json | each {|x| $x.first}
+open stats.json | each {|x| $x.column0}
+open stats.json | each {|x| $x.column1}
+open stats.json | each {|x| $x}
+open stats.json | each {|x| $x | descrive}
+open stats.json | each {|x| $x | describe}
+open stats.json | each {|x| {$x | describe}}
+open stats.json | each {|x| if ($x.user_id | str contains 'Ne1vm60USkeUXnzAKUSoJtDRaun2') {print 1} else {print 2}}
+open stats.json | take 1
+open stats.json | first
+open stats.json | get 0
+open stats.json
+open stats.json | get 121a5f90-86da-4e30-93d6-69420934aba0
+open stats.json | columns
+open stats.json | get 121a5f90-86da-4e30-93d6-69420934aba0
+open stats.json | get 121a5f90-86da-4e30-93d6-69420934aba0 | describe
+open stats.json | get 121a5f90-86da-4e30-93d6-69420934aba0 | get user_id
+open stats.json | get 121a5f90-86da-4e30-93d6-69420934aba0.user_id
+open stats.json | each {|x| get columns}
+open stats.json | each {|x| $x}
+open stats.json | each {|x| get user_id}
+open stats.json | each {|x| print 1}}
+open stats.json | each {|x| print 1}
+open stats.json | table
+open stats.json | table | each {|x| $x.column1}
+open stats.json | table | each {|x| $x.column0}
+open stats.json | table | each {|x| $x}
+open stats.json | table | each {|x| print 1}
+open stats.json | dfr into-df | each {|x| print 1}
+open stats.json | dfr into-df
+open stats.json | dfr into-df | transpose
+open stats.json | transpose
+open model_metrics.json | transpose
+ls
+cp model_metrics.json 2.json
+ls | name | str contains '.json'
+ls | get name | str contains '.json'
+mv 2.json model_metrics2.json
+ls | get name | str contains 'model_metrics'
+let f = (ls | get name | str contains 'model_metrics' | get)
+ls | get name | str contains 'model_metrics'
+ls | get name | get str contains 'model_metrics'
+ls | get name | str contains 'model_metrics' | where
+ls | get name | get str contains 'model_metrics'
+ls | get name | str contains 'model_metrics'
+ls | get name | query "str contains 'model_metrics'"
+ls | get name | dfr into-df | dfr query "name like 'model_metrics%'"
+ls | dfr into-df | dfr query "name like 'model_metrics%'"
+ls | dfr into-df | dfr query "select name from df where name like 'model_metrics%'"
+ls | dfr into-df | dfr filter-with (name | str contains 'model_')
+ls | dfr into-df | dfr filter-with (get name | str contains 'model_')
+ls | dfr into-df | dfr filter-with (dfr col  name | str contains 'model_')
+ls | dfr into-df | dfr filter-with (dfr col name | str contains 'model_')
+ls | dfr into-df | dfr filter-with (dfr col name | each {|x| $x | str contains 'model_'})
+ls | dfr into-df | dfr filter-with (dfr col name | each {|x| $x})
+ls | dfr into-df | dfr get name | each {|x| $x}
+ls | get name
+ls | get name | each {|x| if ($x | str contains 'model_') {$x}}
+let files = ls | get name | each {|x| if ($x | str contains 'model_') {$x}}
+let files = (ls | get name | each {|x| if ($x | str contains 'model_') {$x}})
+files | each {|x| open $x | transpose}
+$files | each {|x| open $x | transpose}
+$files | each {|x| open $x | transpose | get crackthis0}
+$files | each {|x| open $x.crackthis0}
+$files | each {|x| open $x | get crackthis0}
+let files = ['model_metrics.json', 'model_metrics2.json']
+files
+$files
+ssh -i "~/Documents/Work/Creds/editing-utils-aws.pem" admin@ec2-44-211-208-174.compute-1.amazonaws.com
+yarn; yarn dev
+./cloud_sql_proxy -instances=aftershoot-co:us-central1:editing-uploader=tcp:5434
+python main.py -m preprocess -p 'cc78622f-8b43-423f-b35b-1923d1fea0d0' -devml6
+nv
+python main.py -m preprocess -p 'aefd8c04-fe61-4f97-9106-cedda5b2ff9c' -devml6
+python main.py -m preprocess -p 'cd8264e9-efc3-4c55-88ce-4b22feafec88' -devml
+ssh -i "~/Documents/Work/Creds/editing-utils-aws.pem" admin@ec2-44-211-208-174.compute-1.amazonaws.com
+python3 main.py -m preprocess -p '4a05c048-be0c-419b-961b-164754b02a1d' -prod2
+conda activate edit-prep
+python3 main.py -m preprocess -p '4a05c048-be0c-419b-961b-164754b02a1d' -prod2
+nv
+git checkout develop
+python main.py -m preprocess -p 'd0d3fb4c-41c6-4958-8b09-abb53d636995' -devml
+git checkout develop
+nv
+git add -A; git commit -m "train_trigger"; git push
+ssh -i "~/Documents/Work/Creds/editing-utils-aws.pem" admin@ec2-44-211-208-174.compute-1.amazonaws.com
+ssh -i "~/Documents/Work/Creds/editing-utils-aws.pem" admin@ec2-100-24-20-155.compute-1.amazonaws.com
+cd
+cd Downloads/
+ls
+dfr open EONWh1M0qEeAyAZRgUQMa2x8c5N2_9b790b1e-574f-4a05-9364-8d5ae01020a5_training_data_out_sliders_exif.csv | dfr filter currTemp=0
+dfr open EONWh1M0qEeAyAZRgUQMa2x8c5N2_9b790b1e-574f-4a05-9364-8d5ae01020a5_training_data_out_sliders_exif.csv
+dfr open EONWh1M0qEeAyAZRgUQMa2x8c5N2_9b790b1e-574f-4a05-9364-8d5ae01020a5_training_data_out_sliders_exif.csv | dfr filter ((dfr col currTemp) == 0)
+dfr open KSHK0AnfYcauxQVr7zuIc9p9wp72_429701a0-b7b3-4fcb-b581-b5b905b810e2_training_data_out_sliders_exif.csv | dfr filter ((dfr col currTemp) == 0)
+dfr open KSHK0AnfYcauxQVr7zuIc9p9wp72_429701a0-b7b3-4fcb-b581-b5b905b810e2_training_data_out_sliders_exif.csv | dfr filter ((dfr col currTemp) == 5000)
+open IIUWHezqMeaK4f449IVS7qEnJf03_0293c911-217b-4860-85a1-78329f47166f_training_data_out_sliders_exif.csv | dfr filter ((dfr col currTemp) == 0)
+dfr open IIUWHezqMeaK4f449IVS7qEnJf03_0293c911-217b-4860-85a1-78329f47166f_training_data_out_sliders_exif.csv | dfr filter ((dfr col currTemp) == 0)
+tmux a
+dfr open OzEUdHhpGpaeKqvd9Sy27ogJJjX2_5610f313-f4d1-482e-94e8-cdda550f278d_training_data_out_sliders_exif.csv | dfr filter ((dfr col currTemp) == 0)
+dfr open du8mI7w995MtORhR7PdZDtvCHmY2_76404010-a78a-4bc6-8644-94815ca89629_training_data_out_sliders_exif.csv | dfr filter ((dfr col currTemp) == 0)
+ssh -i "~/Documents/Work/Creds/editing-utils-aws.pem" admin@ec2-100-24-20-155.compute-1.amazonaws.com
+./cloud_sql_proxy -instances=aftershoot-co:us-central1:editing-uploader=tcp:5434
+nv
+nv
+git diff master
+ep
+editing
+cd Editing-Preprocesser/
+ls
+git diff master
+editing
+cd Editing-Trainer/
+./cloud_sql_proxy -instances=aftershoot-co:us-central1:editing-uploader=tcp:5434
+ssh -i "~/Documents/Work/Creds/editing-utils-aws.pem" admin@ec2-100-24-20-155.compute-1.amazonaws.com
+git add -A; git commit -m "temp tint fallback change"; git push origin develop
+nv
+git diff master
+cd /Users/illusion/Pictures/Lrcats/1image_smart
+dfr open `1image_smart.lrcat`| dfr get Adobe_imageDevelopSettings | dfr get text
+open `1image_smart.lrcat`| get Adobe_imageDevelopSettings | get text
+open `1image_smart.lrcat`| get Adobe_imageDevelopSettings | get text | str contains 'contrast'
+open `1image_smart.lrcat`| get Adobe_imageDevelopSettings | get text | str contains 'Contrast'
+let sliders = ['Sharpness', 'SharpenRadius', 'SharpenDetail'. 'SharpenEdgeMasking'. 'Brightness']
+open `1image_smart.lrcat`| get Adobe_imageDevelopSettings | get text | str contains 'Sharpness'
+open `1image_smart.lrcat`| get Adobe_imageDevelopSettings | get text | str contains 'SharpenDetail'
+open `1image_smart.lrcat`| get Adobe_imageDevelopSettings | get text | str contains 'SharpenRadius'
+open `1image_smart.lrcat`| get Adobe_imageDevelopSettings | get text | str contains 'SharpenEdgeMasking'
+nv
+git add -A; git commit -m "devml2"; git push origin develop
+ls
+cat stats.json | grep '428ef12e-0a51-4a55-be67-03a4dee8e72d'
+nv
+git add -A; git commit -m "devml2"; git push origin develop
+python main.py -m preprocess -p '41dc6ccd-8425-4adc-84d7-da192f7f134a' -devml2
+git add -A; git commit -m "trigger"; git push origin develop
+./cloud_sql_proxy -instances=aftershoot-co:us-central1:editing-uploader=tcp:5434
+python main.py -m preprocess -p '9a7ad266-65ac-4018-8fee-1a989811825b' -devml2
+editing; cd Aftershoot-Editing-App
+git checkout wb_diff
+git stash
+git checkout wb_diff
+git log
+nv
+git checkout wb_diff_stable
+nv
+git checkout wb_diff_new
+nv
+git checkout wb_diff_new
+git checkout wb_diff_stable
+git checkout wb_diff_new
+git merge wb_diff_stable
+nv
+code .
+git add -A; git commit -m "stable merge to new"; git push origin wb_diff_new
+conda activate edit-prep
+conda activate edit-app
+git add -A; git commit -m "stable merge to new"; git push origin wb_diff_new
+cd ~/Downloads/
+ls
+open .
+^open .
+ls
+mv MXU40ZJ0roMhtYB2A39rz4UwT3G2_9a7ad266-65ac-4018-8fee-1a989811825b_training_data_out_sliders_exif.csv s.csv
+dfr open s.csv | dfr filter ((dfr col currTemp) == 0)
+dfr open s.csv | dfr get Temperature)
+dfr open s.csv | dfr get Temperature
+dfr open s.csv | columns
+open s.csv | columns
+open s.csv | columns | find temp
+dfr open s.csv | dfr get CustomTemperature
+git add -A; git commit -m "fallback name"; git push origin develop
+ssh -i "~/Documents/Work/Creds/editing-utils-aws.pem" admin@ec2-100-24-20-155.compute-1.amazonaws.com
+ls
+m MXU40ZJ0roMhtYB2A39rz4UwT3G2_9a7ad266-65ac-4018-8fee-1a989811825b_training_data_out_sliders_exif.csv s.csv
+mv MXU40ZJ0roMhtYB2A39rz4UwT3G2_9a7ad266-65ac-4018-8fee-1a989811825b_training_data_out_sliders_exif.csv s.csv
+ls
+mv MXU40ZJ0roMhtYB2A39rz4UwT3G2_9a7ad266-65ac-4018-8fee-1a989811825b_training_data_out_sliders_exif.csv s.csv
+rm s.csv
+mv MXU40ZJ0roMhtYB2A39rz4UwT3G2_9a7ad266-65ac-4018-8fee-1a989811825b_training_data_out_sliders_exif.csv s.csv
+ls
+open s.csv | columns | find temp
+open s.csv | get Temperature
+python main.py -m preprocess -p 'acad43f2-ed98-4cdb-a68e-a6770cb7ad7a' -devml2
+open s.csv | get Tint
+open s.csv | where Tint=40
+open s.csv | where Tint==40
+df open s.csv | dfr get catalog_id Tint | dfr filter ((dfr col Tint) == -40)
+dfe open s.csv | dfr get catalog_id Tint | dfr filter ((dfr col Tint) == -40)
+dfr open s.csv | dfr get catalog_id Tint | dfr filter ((dfr col Tint) == -40)
+dfr open s.csv | dfr get folder_id catalog_id Tint | dfr filter ((dfr col Tint) == -40)
+ls
+rm s.csv
+mv kuWNJmqZa3gPO8dhnAElIQpmbqB2_acad43f2-ed98-4cdb-a68e-a6770cb7ad7a_training_data_out_sliders_exif.csv s.csv
+dfr open s.csv | dfr get folder_id catalog_id Tint | dfr filter ((dfr col Tint) == -40)
+ls
+mv kuWNJmqZa3gPO8dhnAElIQpmbqB2_acad43f2-ed98-4cdb-a68e-a6770cb7ad7a_9d755f56-be9f-40c1-8675-75f90fdbdcc7_abc4e09c-3126-4b13-aa83-059183df5810_4.zip l.csv
+dfr open l.csv | dfr get Adobe_imageDevelopSettings.text
+dfr open l.csv | dfr get Adobe_imageDevelopSettings | dfr get text | first
+ls
+mv l.csv l.zip
+unzip l.zip
+ls
+dfr open zulzila.lrcat | dfr get Adobe_imageDevelopSettings | dfr get text | first
+mv zulzila.lrcat l.db
+dfr open l.db | dfr get Adobe_imageDevelopSettings | dfr get text | first
+^open .
+chmod 77 l.db
+chmod 777 l.db
+cd l/
+ls
+open zulzila.lrcat | get Adobe_imageDevelopSettings.text | first
+open zulzila.lrcat | get Adobe_imageDevelopSettings.text | each {|x| if ($x | str contains "-40") {$x}}
+open zulzila.lrcat | get Adobe_imageDevelopSettings.text | each {|x| if ($x | str contains "-40") {$x}} | first
+cd ../recreate_lrdata/
+go run . "gs://editing_userdata/kuWNJmqZa3gPO8dhnAElIQpmbqB2/acad43f2-ed98-4cdb-a68e-a6770cb7ad7a/9d755f56-be9f-40c1-8675-75f90fdbdcc7/abc4e09c-3126-4b13-aa83-059183df5810"
+cd output/
+ls
+cd abc4e09c-3126-4b13-aa83-059183df5810/
+^open .
+open zulzila.lrcat | get Adobe_imageDevelopSettings | each {|x| if ($x.text | str contains "-40") {$x}} | first
+ls
+cd ..
+ls
+unzip kuWNJmqZa3gPO8dhnAElIQpmbqB2_acad43f2-ed98-4cdb-a68e-a6770cb7ad7a_74c31264-4c58-452b-bfa9-e33a0ecdd05b_ad3d9658-da37-433c-b936-823c60e0da1b_3.zip
+ls
+go run . "gs://editing_userdata/kuWNJmqZa3gPO8dhnAElIQpmbqB2/acad43f2-ed98-4cdb-a68e-a6770cb7ad7a/training_data/Dataset/251d7e62-4754-4218-a30f-caeed4a04066"
+cd ..
+go run . "gs://editing_userdata/kuWNJmqZa3gPO8dhnAElIQpmbqB2/acad43f2-ed98-4cdb-a68e-a6770cb7ad7a/training_data/Dataset/251d7e62-4754-4218-a30f-caeed4a04066"
+rm -r output
+nv
+cd ../recreate_lrdata/
+^open .
+go run . "gs://editing_userdata/kuWNJmqZa3gPO8dhnAElIQpmbqB2/acad43f2-ed98-4cdb-a68e-a6770cb7ad7a/5a478971-8029-4003-8cf0-01c53a8ed525/251d7e62-4754-4218-a30f-caeed4a04066"
+cd output/251d7e62-4754-4218-a30f-caeed4a04066/
+ls
+open `putri AD.lrcat` | get Adobe_imageDevelopSettings | each {|x| if ($x.text | str contains "-40") {$x}} | first
+open s.csv
+open s.csv | columns
+open s.csv | columns | find camera_group
+open s.csv | columns | get camera_group
+open s.csv | get camera_group
+open s.csv | get camera_group | unique
+open s.csv | get camera_group | dfr into-df | dfr n-unique
+open s.csv | get camera_group | dfr into-df | dfr unique
+open s.csv | get camera_group | dfr into-df | dfr value-counts
+open s.csv | get camera_group | dfr into-dfr
+dfr open s.csv | dfr get camera_group tint | dfr filter ((dfr col camera_group) == 'GLOBAL')
+dfr open s.csv | dfr get camera_group Tint | dfr filter ((dfr col camera_group) == 'GLOBAL')
+dfr open s.csv | dfr get camera_group Tint | dfr filter ((dfr col camera_group) == 'GLOBAL') | dfr filter ((dfr col Tint) == 0)
+dfr open s.csv | dfr get camera_group Tint | dfr filter ((dfr col camera_group) == 'GLOBAL') | dfr filter ((dfr col Tint) == -40)
+ssh -i "~/Documents/Work/Creds/editing-utils-aws.pem" admin@ec2-100-24-20-155.compute-1.amazonaws.com
+yarn && yarn dev
+nv main.py
+git checkout develop
+yarn; yarn dev
+editing; cd Aftershoot-Desktop-App
+editing; cd Desktop-Rust-Backend
+git pull
+editing; cd Downloads
+editing; cd Aftershoot-Editing-App
+git pull
+git pull
+yarn && yarn dev
+editing; cd DebugHelpers
+cargo run
+editing; cd Aftershoot-Editing-App
+cd ~/Downloads
+ls
+yarn; yarn dev
+conda activate edit-app
+yarn; yarn dev
+cd ..
+cd AfterShoot-Desktop-App/
+cd `~/AfterShoot Projects/`
+ls
+cd ai_profiles/
+ls
+cd kuWNJmqZa3gPO8dhnAElIQpmbqB2/
+ls
+cd acad43f2-ed98-4cdb-a68e-a6770cb7ad7a/
+ls
+cd mdoels
+ls
+cd models
+ls
+^open .
+rm -r ~/Documents/Work/Editing/DebugHelpers/model_sharing/models
+mkdir -r ~/Documents/Work/Editing/DebugHelpers/model_sharing/models
+mkdir ~/Documents/Work/Editing/DebugHelpers/model_sharing/models
+cp info.asml ~/Documents/Work/Editing/DebugHelpers/model_sharing/models
+ls
+python main.py -t kuWNJmqZa3gPO8dhnAElIQpmbqB2 -f kuWNJmqZa3gPO8dhnAElIQpmbqB2
+cd model_sharing
+python main.py -t kuWNJmqZa3gPO8dhnAElIQpmbqB2 -f kuWNJmqZa3gPO8dhnAElIQpmbqB2
+conda activate edit-app
+python main.py -t kuWNJmqZa3gPO8dhnAElIQpmbqB2 -f kuWNJmqZa3gPO8dhnAElIQpmbqB2
+cd decrypted_models/
+ls
+editing; cd Scripts
+editing; cd Editing-Preprocesser
+nv
+git add -A; git commit -m "thresh change"; git push origin develop
+editing; cd Editing-Trainer
+nv
+git add -A; git commit -m "thresh change"; git push origin develop
+python
+cd ../../train_trigger/
+python main.py -m preprocess -p 'd38a34ee-123f-451d-9401-3cb2e9065403' -devml3
+conda activate edit-prep
+python main.py -m preprocess -p 'd38a34ee-123f-451d-9401-3cb2e9065403' -devml3
+python main.py -m preprocess -p '9a7ad266-65ac-4018-8fee-1a989811825b' -devml2
+cd ~/.config/nvim
+cd
+todo
+ls
+cd Documents/Work/todos/
+ls
+cd
+cd Documents/Work/creds
+ls
+cd ..
+cd todo
+ls
+cd todos
+ls
+nv
+ls
+cd
+ls
+cd Downloads/
+nv requirements.txt
+gnv
+nv
+git add -A; git commit -m "requirements"; git push
+git pull
+git pull --rebase
+nv
+git rebase --abort
+git pulll
+git pull
+git reset --hard origin/main
+clear
+./cloud_sql_proxy -instances=aftershoot-co:us-central1:editing-uploader=tcp:5434
+ssh -i "~/Documents/Work/Creds/editing-utils-aws.pem" admin@ec2-100-24-20-155.compute-1.amazonaws.com
+nv
+mv
+nv
+git add -A; git commit -m "requirements"; git push
+python main.py -m preprocess -p '41dc6ccd-8425-4adc-84d7-da192f7f134a' -devml3
+nv 13.md
+ep
+editing
+nv
+git stash
+git branch lr13
+git branch -d lr13
+git branch lrc_the_13th
+git checkout lrc_the_13th
+mkdir LR13
+cd LR13
+ls
+python
+ls
+nv
+^open .
+cd aftershoot_inglese-helper-lrdata_2023-10-09_1212/
+ls
+cd `Inglese Smart Previews.lrdata/`
+ls
+cd 0
+ls
+cd 0052/
+ls
+cp ~/Downloads/dng_arm64 .
+./dng_arm64 `00525901-1139-4CA1-8004-84689CA7F105.dng`
+chmod +x dng_arm64
+./dng_arm64 `00525901-1139-4CA1-8004-84689CA7F105.dng`
+open .
+^open .
+cd editing/
+ls
+cd .binary/
+ls
+cd fnuEnMJC6kcDRuS4EXGbrWPZaviRct/
+ls
+chmod +x fnuEnMJC6kcDRuS4EXGbrWPZaviRct
+chmod +x fnuEnMJC6kcDRuS4EXGbrWPZaviRct.exe
+chmod +x fnuEnMJC6kcDRuS4EXGbrWPZaviRct_x86
+nv
+cd ../..
+cd ..
+cd ../..
+cd 9
+cd 9D48/
+ls
+cd ..
+^open .
+cd `Inglese Smart Previews.lrdata/`
+ls
+cd 8/8F37/
+ls
+cp ~/Downloads/dng_arm64 .
+ls
+./dng_arm64 `8F37B332-8E71-4182-8444-71B59128BD0C.dng`
+chmod +x dng_arm64
+./dng_arm64 `8F37B332-8E71-4182-8444-71B59128BD0C.dng`
+ls
+./dng_arm64 `8F37B332-8E71-4182-8444-71B59128BD0C.dng` x.tif
+ls
+./dng_arm64 -proxy 1024 -tif x.tif `8F37B332-8E71-4182-8444-71B59128BD0C.dng`
+ls
+^open x.tif
+open x.tif
+clear
+ls
+cd Downloads/
+ls
+cd aftershoot_inglese-helper-lrdata_2023-10-09_1212/
+ls
+cd `Inglese Smart Previews.lrdata/`
+ls
+cd 8/8F37/
+ls
+wezterm imgcat x.tif
+fish
+wezterm imgcat `8F37B332-8E71-4182-8444-71B59128BD0C.dng`
+python main.py -m preprocess -p '50e6d4a3-57a9-4152-b9b3-b8f47ec931e7' -devml7
+python main.py -m preprocess -p '8d795b32-9efc-4f4f-9022-c9d9f2140358' -devml7
+python main.py -m preprocess -p '6b82fed2-303b-45a9-bc23-9d6d635ac4b3' -devml7
+python main.py -m preprocess -p '8d795b32-9efc-4f4f-9022-c9d9f2140358' -devml7
+ssh -i "~/Documents/Work/Creds/editing-utils-aws.pem" admin@ec2-100-24-20-155.compute-1.amazonaws.com
+./cloud_sql_proxy -instances=aftershoot-co:us-central1:editing-uploader=tcp:5434
+cd ..
+cd model_sharing
+^open .
+python main.py -t kuWNJmqZa3gPO8dhnAElIQpmbqB2 -f MXU40ZJ0roMhtYB2A39rz4UwT3G2
+cd decrypted_models/
+ls
+fish
+cd Downloads/
+dfr open x.csv | dfr filter ((dfr col currTemp) == 0) | dfr get id_global currTemp
+dfr open x.csv | dfr get Temperature
+dfr open x.csv | dfr get camera_group Temperature
+dfr open x.csv | dfr get camera_group Temperature | dfr filter ((dfr col camera_group) == 'GLOBAL')
+dfr open x.csv | dfr get camera_group Temperature | dfr filter ((dfr col camera_group) == 'GLOBAL') | min Temperature
+dfr open x.csv | dfr get camera_group Temperature | dfr filter ((dfr col camera_group) == 'GLOBAL') | dfr min Temperature
+dfr open x.csv | dfr get camera_group Temperature | dfr filter ((dfr col camera_group) == 'GLOBAL') | dfr min
+dfr open x.csv | dfr get camera_group Temperature | dfr filter ((dfr col camera_group) == 'GLOBAL') | dfr max
+dfr open x.csv | dfr get camera_group Tint | dfr filter ((dfr col camera_group) == 'GLOBAL') | dfr min
+dfr open x.csv | dfr get camera_group Tint | dfr filter ((dfr col camera_group) == 'GLOBAL') | dfr max
+python
+cd ../../train_trigger/
+python main.py -m preprocess -p '5bd30e62-4a36-423a-bc97-e76d8e0acb5a' -prod2
+rc
+cd
+cd Downloads/
+rc
+cd rust
+cd advent_of_code/
+ls
+cargo add anyhow
+cd
+cd .wezterm
+nv ~/.wezterm.lua
+cd ~/.config/nvim
+yarn; yarn dev
+zsh
+nv
+cargo run --bin day002
+./cloud_sql_proxy -instances=aftershoot-co:us-central1:editing-uploader=tcp:5434
+nv
+nv
+cd Editing-Preprocesser/
+git merge master
+git checkout develop
+git merge master
+git diff master
+git checkout master
+git merge develop
+ls
+sha512sum models.enc.zip
+ls
+nv
+python main.py -m preprocess -p 'cd8264e9-efc3-4c55-88ce-4b22feafec88' -prod2
+nv
+git diff origin/master
+python main.py -m preprocess -p 'd0d3fb4c-41c6-4958-8b09-abb53d636995' -prod2
+nv x.csv
+cd 1image/
+ls
+open `1image.lrcat` | get Adobe_imageDevelopSettings.text
+ssh -i "~/Documents/Work/Creds/editing-utils-aws.pem" admin@ec2-100-24-20-155.compute-1.amazonaws.com
+open `1image.lrcat` | get Adobe_imageDevelopSettings.text
+git add; git commit -m "develop merge + resize c1 failsafe"; git push origin master
+git add -A; git commit -m "develop merge + resize c1 failsafe"; git push origin master
+clear
+git merge master
+git checkout master
+git merge develop
+nv
+git diff develop
+git diff origin/master
+git add -A; git commit -m "develop merge"; git push origin master
+python main.py -m preprocess -p '5e8d190a-72a2-4258-a0b0-fce7a28d2ba6' -prod2
+nv to_transfer.json
+nv main.py
+python main.py -m preprocess -p '130941fb-1af8-4d38-9464-9620e5668c80' -prod2
+./cloud_sql_proxy -instances=aftershoot-co:us-central1:editing-uploader=tcp:5434
+python main.py -m preprocess -p 'cc78622f-8b43-423f-b35b-1923d1fea0d0' -devml3
+nv c.json
+mv c.json c.py
+python c.py
+nv c.py
+nv
+nv
+l
+ls
+cp -r lua/custom/ ~/Downloads/
+ls
+cp -r lua/custom ~/Downloads/
+ls
+cd ..
+ls
+zip custom.zip custom
+ls
+zip -r custom.zip custom
+tldr zip
+zip -r custom.zip custom
+7z a custom.zip custom
+ls
+^open .
+nv
+nv Dockerfile
+git stash
+git checkout develop
+git stash pop
+git add -A; git commit -m "editing noob alert"; git push origin develop
+nv
+git pull
+git pull origin develop
+git checkout master
+git merge develop
+nv
+git diff origin/master
+git add -A; git commit -m "editing noob alert"; git push origin master
+nv
+python main.py -m preprocess -p '41dc6ccd-8425-4adc-84d7-da192f7f134a' -devml3
+python main.py -m preprocess -p '41ad1775-cf9d-466b-a721-55c9b9e2935e' -devml3
+./cloud_sql_proxy -instances=aftershoot-co:us-central1:editing-uploader=tcp:5434
+nv
+git checkout wb_diff_new
+nv
+ssh -i "~/Documents/Work/Creds/editing-utils-aws.pem" admin@ec2-100-24-20-155.compute-1.amazonaws.com
+ls
+cd JWyCd2H6e9W3gTfKsEyQ7jK9Dg63_cc78622f-8b43-423f-b35b-1923d1fea0d0_10d5defd-0dff-4016-93a6-36ff083f89b3_trained_models_1696774793_debug/
+ls
+open sliders_exif.csv | query 'select * from df where currTemp=0'
+open sliders_exif.csv | get Temperature
+open sliders_exif.csv | get currTemp
+open sliders_exif.csv | dfr into-df | dfr filter ((dfr col currTemp) == 0)
+./cloud_sql_proxy -instances=aftershoot-co:us-central1:editing-uploader=tcp:5434
+git stash
+git checkout smoothen_csift_graph
+git checkout wb_diff_new
+git merge smoothen_csift_new
+git merge smoothen_csift_grapg
+git merge smoothen_csift_graph
+nv
+code .
+git add -A; git commit -m "csift merge"; git push origin wb_diff_new
+git pull
+git add -A; git commit -m "csift merge"; git push origin wb_diff_new
+git pull
+git pull
+yarn && yarn dev
+cargo run
+ls
+cd editing/
+ls
+cd ..
+ls
+cd c1_edits/
+ls
+cd common/
+ls
+nv
+git add -A; git commit -m "csift merge fix"; git push origin wb_diff_new
+conda activate edit-app
+git add -A; git commit -m "csift merge fix"; git push origin wb_diff_new
+git checkout develop
+nv
+git checkout wb_diff_new
+git merge wb_diff
+git pull
+git reset --hard origin/wb_diff_new
+git stash
+git pull
+git merge wb_diff
+nv
+git add -A; git commit -m "wb_diff merge"; git push origin wb_diff_new
+git push origin wb_diff_new
+nv
+ls
+cd ..
+ls
+git checkout develop
+python
+conda activate edit-app
+nv
+git checkout master
+nv
+git status
+git status
+git diff
+git add -A; git commit -m "[bug fix] temp/tint drop train"; git push origin master
+^open .
+^ open .
+^open .
+cat message.txt
+^open .
+code .
+mv message.txt slider_mapping.json
+ls
+cd editing/.binary/
+ls
+cd fnuEnMJC6kcDRuS4EXGbrWPZaviRct/
+ls
+nv slider_mapping.json
+code slider_mapping.json
+ls
+^open .
+ls
+cd
+cd Pictures/ls
+cd Pictures/
+ls
+cd Lrcats/
+ls
+zip -r 'med smart.zip' 'med smart'
+ls
+7z a 'med smart.zip' `med smart/`
+ls
+croc
+croc `med smart.zip`
+ls
+croc `med smart.zip`
+cp `~/Pictures/Lrcats/med smart/med smart Smart Previews.lrdata/0/03B5/03B59681-1E46-44A1-91B5-E73127DC539B.dng` .
+ls
+cd ..
+ssh -i "~/Documents/Work/Creds/editing-utils-aws.pem" admin@ec2-100-24-20-155.compute-1.amazonaws.com
+nv
+nv x.py
+git reset --hard origin/develop
+ls
+rm `03B59681-1E46-44A1-91B5-E73127DC539B.dng`
+ls
+cd ..
+cd RpmnDfm7xBw3JQWtRzUSUaEJ3nwzWf/
+ls
+cd ..
+ls
+cd RpmnDfm7xBw3JQWtRzUSUaEJ3nwzWf/
+ls
+^open .
+chmod +x RpmnDfm7xBw3JQWtRzUSUaEJ3nwzWf
+python main.py -m train -p '5d6c612c-1111-4d8f-90b8-945343eec25b' -prod2
+python main.py -m preprocess -p '5d6c612c-1111-4d8f-90b8-945343eec25b' -prod2
+nv
+python3 main.py -m train -p d0bb45dc-cdd8-4d46-bd2f-c3f1300f7d30 -prod2
+nv
+git add -A; git commit -m "dont remove training data local"; git push
+nv
+python main.py -m train -p '5d6c612c-1111-4d8f-90b8-945343eec25b' -prod2
+python main.py -m train -p '6375c776-4ad9-497f-a49d-6ea59bb03980' -prod2
+python main.py -m train -p '679301e2-b5ff-4ba1-a0b4-3cfd8bd70005' -prod2
+nv
+ls
+cd jnMUwSPVhXdmftyxGNC9LBbQSpl1_a645007b-59d1-4147-bf21-9832a02c0ff1_9f2e60f5-9509-4b7d-bba8-6bc89444a288_1f3b0289-d911-4181-925c-dd44f73629fe_6/
+ls
+open `Emanuela e Massimo LR-v13.lrcat` | find 'version'
+open `Emanuela e Massimo LR-v13.lrcat` | find 'text'
+open `Emanuela e Massimo LR-v13.lrcat`
+open `Emanuela e Massimo LR-v13.lrcat` | get text
+open file.lrcat | save lrcat.json
+ls
+open `Emanuela e Massimo LR-v13.lrcat` | save lrcat.json
+rg '13.0' `lrcat.json`
+rg 'version' `lrcat.json`
+ls
+cd ..
+ls
+nv main.py
+cd ..
+cd Encryption
+ls
+cd editing
+ls
+python
+nv
+nv x.py
+cp slider_mapping.json ~/Documents/Editing/Scripts/LR13
+ls
+cd ../../..
+ls
+cd Scripts
+cd LR13/
+ls
+cp ~/Downloads/slider_mapping.json .
+ls
+git checkout wb_diff
+python main.py -m preprocess -p 'cc78622f-8b43-423f-b35b-1923d1fea0d0' -devml3
+ls
+rm slider_mapping.json
+mv `~/Downloads/slider_mapping(1).json` .
+ls
+mv `slider_mapping(1).json` slider_mapping.json
+python make_pkl.py
+nv make_pkl.py
+cd ../Encryption/
+cd editing
+ls
+cd dist
+ls
+cd ..
+cd ../../
+cd LR13
+ls
+../Encryption/editing/dist/encryption
+python
+clear
+./encryption -e --src editing_assets.pickle --dst editing_assets.asml --user zbiSeDTQ2EXtfrkuWNJmqZa3gPO8
+../Encryption/editing/dist/encryption -e --src editing_assets.pickle --dst editing_assets.asml --user zbiSeDTQ2EXtfrkuWNJmqZa3gPO8
+../Encryption/editing/dist/encryption -e --src editing_assets.pickle --dst . --user zbiSeDTQ2EXtfrkuWNJmqZa3gPO8
+ls
+^open .
+yarn; yarn dev
+conda activate edit-app
+./cloud_sql_proxy -instances=aftershoot-co:us-central1:editing-uploader=tcp:5434
+tmux a
+cd dist
+ls
+cd
+cd `AfterShoot Projects/assets/`
+ls
+sha512sum editing_assets.asml
+cd ~/Documents/Work/Editing/Scripts/LR13/
+ls
+cd ..
+ls
+cd /Users/illusion/Desktop
+sha512sum editing_assets.asml
+git checkout develop
+nv
+git stash
+git stash --hard origin/develop
+ls
+rm dng_win.exe
+git status
+rm ../fnuEnMJC6kcDRuS4EXGbrWPZaviRct/x.py
+ls
+git branch lrc_13
+git checkout lrc_13
+^open .
+chmod +x RpmnDfm7xBw3JQWtRzUSUaEJ3nwzWf
+chmod +x RpmnDfm7xBw3JQWtRzUSUaEJ3nwzWf.exe
+chmod +x RpmnDfm7xBw3JQWtRzUSUaEJ3nwzWf_x86
+git add -A; git commit -m "dng_validate update"; git push origin lrc_13
+ssh -i "~/Documents/Work/Creds/editing-utils-aws.pem" admin@ec2-100-24-20-155.compute-1.amazonaws.com
+git checkout lrc_13_fix
+git merge lrc_13
+nv
+git checkout lrc_13_fix
+git pull
+git checkout lrc_13_fix
+git merge lrc_13
+git add -A; git commit -m "dng_validate update"; git push origin lrc_13_fix
+git push origin lrc_13_fix
+nv README.md
+cd ../..
+cd ..
+nv README.md
+git add -A; git commit -m "[BUILD]"; git push origin lrc_13_fix
+python main.py -m preprocess -p '9afdc265-4848-4401-845a-54eaa1ead09a' -prod2
+./cloud_sql_proxy -instances=aftershoot-co:us-central1:editing-uploader=tcp:5434
+cd master
+git checkout master
+nv
+git checkout master
+cd ../model_sharing/
+ls
+cd models
+rm -r *
+ls
+cd ..
+nv main.py
+^open models
+cd Downloads/
+ls
+mv tZ4qb1b3lUeGNiA0hKyTiKRkjyq2_17aad332-7f2e-4dbb-904c-668fd4ca2424_training_data_out_sliders_exif.csv s.csv
+open s.csv
+python main.py -t kuWNJmqZa3gPO8dhnAElIQpmbqB2 -f tZ4qb1b3lUeGNiA0hKyTiKRkjyq2
+yarn; yarn dev
+editing; cd Aftershoot-Desktop-App
+conda activate edit-app
+editing; cd Desktop-Rust-Backend
+git pull
+git pull
+editing; cd Downloads
+editing; cd Aftershoot-Editing-App
+cargo run
+git checkout develop
+^open encrypted_models/
+editing
+cd agprefs
+ls
+git pull
+cd nu_from_agp/
+ls
+cargo install --path .
+rustup
+nv ~/.zshrc
+nb ~/.profile
+nb ~/.zprofile
+nv ~/.zprofile
+nv ~/.profile
+env-nu
+config-n
+config-nu
+$config-nu
+$env-nu
+$env.config
+config nu
+$env.PATH = ($env.PATH| prepend "$HOME/.cargo/bin")
+cargo
+rustup
+cargo update
+which rustup
+zs
+zsh
+register ~/.cargo/bin/nu_plugin_from_agp
+register
+register ~/.cargo/bin/nu_plugin_from_agp
+which nu_plugin_from_agp
+register /Users/illusion/.cargo/bin/nu_plugin_from_agp
+which register
+help register
+nu --version
+nushell --version
+nu update
+brew upgrade nu
+brew upgrade nushell
+register /Users/illusion/.cargo/bin/nu_plugin_from_agp
+clear
+exit
+config-path
+config path
+echo $nu.config-path
+cd /Users/illusion/Library/Application Support/nushell
+cd '/Users/illusion/Library/Application Support/nushell'
+clear
+ls
+nv config.nu
+nvim config.nu
+ls
+ls scripts/
+nvim config.nu
+exit
+clear
+echo $nu.config-path | cd
+echo $nu.config-path
+cd /Users/illusion/Library/Application Support/nushell/
+cd '/Users/illusion/Library/Application Support/nushell/'
+ls
+nvim env.nu
+nv config.nu
+nvim config.nu
+ls
+cd scripts/
+ls
+nv conda.nu
+nv starship.nu
+nv zoxide.nu
+cd ..
+nv env.nu
+nvim env.nu
+cd scripts/
+ls
+nv starship.nu
+nvim /Users/illusion/.cache/starship/init.nu
+cd '/Users/illusion/Library/Application Support/nushell/'
+clear
+ls
+nv env.nu
+ls
+nv config.nu
+nvim config.nu
+nv ~/.zoxide.nu
+ls
+cd scripts/
+ls
+cat zoxide.nu
+rm zoxide.nu
+ls
+zoxide init nushell | save zoxide.nu -f
+ls
+brew upgrade zoxide
+nv ~/.zoxide.nu
+nv zoxide.nu
+rm ~/.zoxide.nu
+cd ..
+ls
+nv config.nu
+cd ..
+cd nushell/
+nv config.nu
+clear
+nv config.nu
+nu
+nu
+nu
+nu
+nu
+nu
+nu
+nu
+nu
+nu
+vonfig nu
+config nu
+exit
+config nu
+exit
+config nu
+exit
+nu
+exit
+config nu
+exit

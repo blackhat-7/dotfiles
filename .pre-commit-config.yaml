@@ -1,0 +1,15 @@
+repos:
+-   repo: https://github.com/commitizen-tools/commitizen
+    rev: v2.42.1
+    hooks:
+    -   id: commitizen
+        stages: [commit-msg]
+-   repo: https://github.com/python-semantic-release/semantic-release
+    rev: v7.19.1
+    hooks:
+    -   id: python-semantic-release-check
+        args: [
+            "--hvcs=git",
+            "--preversionrange=patch",
+        ]
+        stages: [commit-msg]

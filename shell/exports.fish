@@ -1,0 +1,11 @@
+export FZF_DEFAULT_OPS="--extended"
+export FZF_DEFAULT_COMMAND="fd --type f"
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+export HOMEBREW_NO_AUTO_UPDATE=1
+export PATH="/usr/local/sbin:$PATH"
+export PATH="/usr/bin:$PATH"
+export PATH="$HOME/.local/bin:$PATH"
+export GOOGLE_APPLICATION_CREDENTIALS="/Users/illusion/Documents/Work/Creds/edits_service_account_creds.json"
+export EDITOR='nvim'
+export LD_LIBRARY_PATH="/usr/local/opt/gettext/lib:$LD_LIBRARY_PATH"
+export OPENAI_API_KEY="REDACTED_OPENAI_API_KEY"
