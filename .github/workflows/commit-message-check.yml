@@ -1,0 +1,17 @@
+name: "Commit Message Check"
+on: [push, pull_request]
+
+jobs:
+  commit-message-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Check Commit Messages
+        run: |
+          git fetch --prune --unshallow
+          echo "Checking commit messages..."
+          ! git log origin/main..HEAD --pretty=format:"%s" | grep -vE "^(fix|feat|BREAKING CHANGE): .+$" && echo "Some commit messages are not in the correct format" && exit 1 || echo "All commit messages are in the correct format."
+

@@ -1,0 +1,5 @@
+[semantic_release]
+version_variable = "version.py:__version__"
+commit_message = "chore(release): release v{version}"
+branch = "master"
+

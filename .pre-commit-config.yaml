@@ -1,15 +1,9 @@
 repos:
--   repo: https://github.com/commitizen-tools/commitizen
-    rev: v2.42.1
+-   repo: local
     hooks:
-    -   id: commitizen
+    -   id: commit-msg-check
+        name: 'Commit message check'
+        entry: '.github/hooks/commit-msg-check.sh'
+        language: script
         stages: [commit-msg]
--   repo: https://github.com/python-semantic-release/python-semantic-release
-    rev: v7.19.1
-    hooks:
-    -   id: python-semantic-release-check
-        args: [
-            "--hvcs=git",
-            "--preversionrange=patch",
-        ]
-        stages: [commit-msg]
+
