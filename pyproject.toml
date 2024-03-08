@@ -2,10 +2,10 @@
 name = "cz_conventional_commits"
 tag_format = "v$version"
 version_scheme = "semver"
-version = "1.1.8"
+version = "1.1.9"
 update_changelog_on_bump = true
 post_bump_hooks = [
   "scripts/write_branch_commit.sh"
 ]
 branch = "master"
-commit = "ec0ac715f68bf3fb2b5f27932cf1690e190c4fb8"
+commit = "6c26b2b9e727af4bbac776e7579fa4e8ee7adc19"
