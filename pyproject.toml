@@ -4,5 +4,8 @@ tag_format = "v$version"
 version_scheme = "semver"
 version = "1.1.7"
 update_changelog_on_bump = true
+post_bump_hooks = [
+  "scripts/write_branch_commit.sh"
+]
 branch = "master"
 commit = "e54bbb7869e0ebd36ab9bc8b51bc89c0e2882a1d"
