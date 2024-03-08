@@ -1,11 +1,11 @@
 [tool.commitizen]
 name = "cz_conventional_commits"
-tag_format = "v$version"
+tag_format = "v$major.$minor.$patch$prerelease"
 version_scheme = "semver"
-version = "1.1.9"
+major = 1
+minor = 1
+patch = 9
+path = "pyproject.toml"
+prerelease = "rc"
+devrelease = "dev1"
 update_changelog_on_bump = true
-pre_bump_hooks = [
-  "scripts/write_branch_commit.sh"
-]
-branch = "master"
-commit = "6c26b2b9e727af4bbac776e7579fa4e8ee7adc19"
