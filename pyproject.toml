@@ -4,3 +4,5 @@ tag_format = "v$version"
 version_scheme = "semver"
 version = "1.1.0"
 update_changelog_on_bump = true
+branch = "master"
+commit = "508b72ca91df14204fb2db7862853a71a977ad04"
