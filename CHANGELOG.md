@@ -1,3 +1,9 @@
+## v1.1.1 (2024-03-08)
+
+### Fix
+
+- lol removed from readme
+
 ## v1.1.0 (2024-03-08)
 
 ### Feat
