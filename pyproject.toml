@@ -5,4 +5,4 @@ version_scheme = "semver"
 version = "1.1.1"
 update_changelog_on_bump = true
 branch = "master"
-commit = "66ff895f3ae5f32b5724563f878e63d19533ad98"
+commit = "7502e9629bca4c0c8ad19796a6979e05ed385530"
