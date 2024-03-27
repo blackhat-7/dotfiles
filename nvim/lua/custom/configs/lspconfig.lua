@@ -23,8 +23,9 @@ local utils = require "core.utils"
 local on_attach = require("plugins.configs.lspconfig").on_attach
 local capabilities = require("plugins.configs.lspconfig").capabilities
 
+
 local lspconfig = require "lspconfig"
-local servers = { "html", "cssls", "clangd", "pyright", "gopls", "rust_analyzer", "lua_ls", "zls", "ocamllsp", "jsonls", "nil_ls" }
+local servers = { "html", "cssls", "clangd", "pyright", "gopls", "lua_ls", "zls", "ocamllsp", "jsonls", "nil_ls", "lemminx", "rust_analyzer"}
 
 on_attach = function(client, bufnr)
     client.server_capabilities.documentFormattingProvider = true
@@ -38,6 +39,9 @@ on_attach = function(client, bufnr)
     if client.server_capabilities.document_formatting then
         vim.cmd("autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()")
     end
+    if client.server_capabilities.inlayHintProvider then
+        vim.lsp.inlay_hint.enable(bufnr, true)
+    end
 end
 
 for _, lsp in ipairs(servers) do
@@ -46,6 +50,19 @@ for _, lsp in ipairs(servers) do
         capabilities = capabilities,
     }
 end
+
+-- lspconfig['pylyzer'].setup {
+--     on_attach = on_attach,
+--     capabilities = capabilities,
+--     -- settings = {
+--     --     python = {
+--     --         checkOnType = false,
+--     --         diagnostics = true,
+--     --         inlayHints = true,
+--     --         smartCompletion = true
+--     --     }
+--     -- }
+-- }
 
 lspconfig['pyright'].setup {
     on_attach = on_attach,
@@ -94,17 +111,19 @@ lspconfig["gopls"].setup({
     },
 })
 
-local ih = require "inlay-hints"
-lspconfig["rust_analyzer"].setup({
-    tools = {
-        on_initialized = function()
-            ih.set_all()
-        end,
-        inlay_hints = {
-            auto = false,
-        },
-    },
-})
+
+-- local ih = require "inlay-hints"
+-- lspconfig["rust_analyzer"].setup({
+--     tools = {
+--         on_initialized = function()
+--             ih.set_all()
+--         end,
+--         inlay_hints = {
+--             auto = false,
+--         },
+--     },
+-- })
+
 
 lspconfig["lua_ls"].setup({
     settings = {
@@ -115,3 +134,12 @@ lspconfig["lua_ls"].setup({
         }
     }
 })
+
+lspconfig['lemminx'].setup({
+    on_attach = on_attach,
+    capabilities = capabilities,
+    settings = {
+        filetypes = { "xml", "xsd", "xsl", "xslt", "svg", "xmp" }
+    }
+})
+

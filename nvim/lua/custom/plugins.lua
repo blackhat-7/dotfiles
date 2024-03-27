@@ -3,9 +3,20 @@ local overrides = require "custom.configs.overrides"
 ---@type NvPluginSpec[]
 local plugins = {
     -- Override plugin definition options
+    -- {
+    --     "NvChad/nvim-colorizer.lua",
+    --     enabled = false
+    -- },
     {
-        "NvChad/nvim-colorizer.lua",
-        enabled = false
+        "NvChad/nvterm",
+        init = function()
+            require("core.utils").load_mappings "nvterm"
+        end,
+        config = function(_, opts)
+            require "base46.term"
+            require("nvterm").setup(opts)
+        end,
+        opts = overrides.nvterm,
     },
 
     {
@@ -119,14 +130,14 @@ local plugins = {
             }
         end,
     },
-    {
-        "akinsho/git-conflict.nvim",
-        lazy = false,
-        -- tag = "*",
-        config = function()
-            require("git-conflict").setup()
-        end,
-    },
+    -- {
+    --     "akinsho/git-conflict.nvim",
+    --     lazy = false,
+    --     -- tag = "*",
+    --     config = function()
+    --         require("git-conflict").setup()
+    --     end,
+    -- },
     {
         "tpope/vim-fugitive",
         lazy = false,
@@ -306,7 +317,7 @@ local plugins = {
                 }
             })
             require("notify").setup({
-              background_colour = "#000000",
+                background_colour = "#000000",
             })
         end
     },
@@ -315,23 +326,31 @@ local plugins = {
         ft = "norg",
         run = ":Neorg sync-parsers", -- This is the important bit!
         config = function()
-        require('neorg').setup {
-            load = {
-                ["core.defaults"] = {},
-                ["core.concealer"] = {},
-                ["core.integrations.treesitter"] = {},
-                ["core.esupports.indent"] = {},
-                ["core.summary"] = {},
-                ["core.completion"] = {
-                    config = {
-                        engine = "nvim-cmp",
-                    }
-                },
-                ["core.export.markdown"] = {},
-                ["core.export"] = {},
+            require('neorg').setup {
+                load = {
+                    ["core.defaults"] = {},
+                    ["core.concealer"] = {},
+                    ["core.integrations.treesitter"] = {},
+                    ["core.esupports.indent"] = {},
+                    ["core.summary"] = {},
+                    ["core.completion"] = {
+                        config = {
+                            engine = "nvim-cmp",
+                        }
+                    },
+                    ["core.export.markdown"] = {},
+                    ["core.export"] = {},
+                }
             }
-        }
         end,
+    },
+    {
+        "rhysd/conflict-marker.vim",
+        lazy = false
+    },
+    {
+        "sindrets/diffview.nvim",
+        lazy = false
     }
 }
 

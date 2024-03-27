@@ -97,3 +97,4 @@ export VCPKG_ROOT="/Users/illusion/Documents/Work/Editing/vcpkg"
 export PATH="$VCPKG_ROOT:$PATH"
 export CMAKE_TOOLCHAIN_FILE="$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake"
 export CMAKE_MAKE_PROGRAM=/usr/bin/make
+# export HOME_MANAGER_CONFIG="~/.config/nixpkgs/"
