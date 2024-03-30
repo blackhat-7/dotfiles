@@ -32,12 +32,15 @@ alias et="editing && cd Editing-Trainer"
 alias dh="editing && cd DebugHelpers"
 alias sc="editing && cd Scripts"
 alias ms="editing && cd DebugHelpers/model_sharing"
-alias nv=nvim
 alias fishrc="nv ~/.config/fish/config.fish"
 alias source_fishrc="source ~/.config/fish/config.fish"
 alias ls="lsd"
 alias snp="/Users/illusion/Documents/randomCodes/snippets/snippets.sh"
 alias aseprite="/Users/illusion/Documents/Hobby/source/aseprite/build/bin/aseprite"
+
+# Nvim configs
+alias nv="nvim -u ~/.config/nvim/init.lua"
+alias nvi="nvim -u ~/.config/nvim_dt/init.lua"
 
 # Game alias
 alias minecraft="sudo java -jar ~/Documents/Games/minecraft/TLauncher-2.885.jar"
@@ -98,3 +101,4 @@ export PATH="$VCPKG_ROOT:$PATH"
 export CMAKE_TOOLCHAIN_FILE="$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake"
 export CMAKE_MAKE_PROGRAM=/usr/bin/make
 # export HOME_MANAGER_CONFIG="~/.config/nixpkgs/"
+
