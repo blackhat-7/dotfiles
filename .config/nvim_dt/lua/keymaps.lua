@@ -28,3 +28,10 @@ vim.keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
 -- Remap for dealing with word wrap
 vim.keymap.set('n', 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
 vim.keymap.set('n', 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
+
+-- Ctrl + hjkl to move windows
+vim.api.nvim_set_keymap('n', '<C-h>', '<C-w>h', {noremap = true})
+vim.api.nvim_set_keymap('n', '<C-j>', '<C-w>j', {noremap = true})
+vim.api.nvim_set_keymap('n', '<C-k>', '<C-w>k', {noremap = true})
+vim.api.nvim_set_keymap('n', '<C-l>', '<C-w>l', {noremap = true})
+

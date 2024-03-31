@@ -42,3 +42,5 @@ vim.o.conceallevel=2
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
+-- Enable mouse
+vim.opt.mouse = 'a'
