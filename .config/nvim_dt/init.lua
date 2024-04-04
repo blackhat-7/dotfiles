@@ -17,5 +17,8 @@ require('plugins.trouble')
 -- require('plugins.nvim-llama')
 require('plugins.obsidian')
 require('plugins.zenmode')
+require('plugins.openingh')
+require('plugins.glow')
+require('plugins.harpoon')
 
 -- vim: ts=8 sts=2 sw=2 et

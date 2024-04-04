@@ -44,3 +44,6 @@ vim.g.maplocalleader = ' '
 
 -- Enable mouse
 vim.opt.mouse = 'a'
+
+-- cursorline
+vim.opt.cursorline = true

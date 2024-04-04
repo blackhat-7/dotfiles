@@ -24,6 +24,7 @@ local on_attach = function(_, bufnr)
   nmap('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
   nmap('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
   nmap('gd', vim.lsp.buf.definition, '[G]oto [D]efinition')
+  -- vim.keymap.set('n', 'gd', "<cmd>vim.lsp.buf.definition<CR>zz")
   nmap('gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
   nmap('gI', vim.lsp.buf.implementation, '[G]oto [I]mplementation')
   nmap('<leader>D', vim.lsp.buf.type_definition, 'Type [D]efinition')
@@ -57,7 +58,7 @@ require('mason').setup()
 
 -- Enable the following language servers
 -- Feel free to add/remove any LSPs that you want here. They will automatically be installed
-local servers = { 'clangd', 'rust_analyzer', 'pyright', 'tsserver', 'gopls'  }
+local servers = { 'clangd', 'rust_analyzer', 'pyright', 'tsserver', 'gopls', 'lemminx'}
 
 -- Ensure the servers above are installed
 require('mason-lspconfig').setup {
@@ -108,6 +109,20 @@ require('lspconfig').luau_lsp.setup {
     },
   },
 }
+
+require('lspconfig').lemminx.setup {
+  on_attach = on_attach,
+  capabilities = capabilities,
+  settings = {
+    xmp = {
+      trace = {
+        server = verbose
+      }
+    }
+  }
+}
+
+
 --
 -- nvim-cmp setup
 local cmp = require 'cmp'
@@ -115,7 +130,7 @@ local luasnip = require 'luasnip'
 
 cmp.setup {
   view = {
-  	entries = "native"
+    entries = "native"
   },
   snippet = {
     expand = function(args)
