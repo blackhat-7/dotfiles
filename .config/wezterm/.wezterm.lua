@@ -22,8 +22,8 @@ config.color_scheme = 'Tango (terminal.sexy)'
 -- config.font = wezterm.font 'Fira Code'
 -- config.font = wezterm.font('Cascadia Code', { weight = 'Regular' })
 -- config.font = wezterm.font('Menlo', { weight = 'Regular' })
--- config.font = wezterm.font('FiraCode Nerd Font', { weight = 'Regular' })
-config.font = wezterm.font('JetBrains Mono', { weight = 'Regular' })
+config.font = wezterm.font('FiraCode Nerd Font', { weight = 'Regular' })
+-- config.font = wezterm.font('JetBrains Mono', { weight = 'Regular' })
 -- config.font = wezterm.font('Hack Nerd font', { weight = 'Regular' })
 config.font_size = 13
 config.line_height = 1.1

@@ -7,7 +7,12 @@ require('nvim-treesitter.configs').setup {
     'bash', 'markdown', 'markdown_inline', 'kdl', 'sql', 'org', 'xml'
   },
 
-  highlight = { enable = true },
+  highlight = { 
+    enable = true,
+    disable = function(lang, bufnr) -- Disable in files with more than 5K
+      return vim.api.nvim_buf_line_count(bufnr) > 5000
+    end
+  },
   indent = { enable = true },
   incremental_selection = {
     enable = true,

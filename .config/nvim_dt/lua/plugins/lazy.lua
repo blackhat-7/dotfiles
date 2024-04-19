@@ -20,6 +20,7 @@ require('lazy').setup({
   {
     'Exafunction/codeium.vim',
     config = function ()
+      vim.g.codeium_disable_bindings = 1
       -- Change '<C-g>' here to any keycode you like.
       vim.keymap.set('i', '<M-;>', function () return vim.fn['codeium#Accept']() end, { expr = true, silent = true })
       vim.keymap.set('i', '<c-n>', function() return vim.fn['codeium#CycleCompletions'](1) end, { expr = true, silent = true })
@@ -79,7 +80,11 @@ require('lazy').setup({
       "nvim-tree/nvim-web-devicons",
     },
     config = function()
-      require("nvim-tree").setup {}
+      require("nvim-tree").setup {
+        update_focused_file = {
+          enable = true,
+        },
+      }
     end,
   },
   -- Database
@@ -243,18 +248,27 @@ require('lazy').setup({
     }
   },
 
-  { "rcarriga/nvim-dap-ui", dependencies = {"mfussenegger/nvim-dap"} },
-  'theHamsta/nvim-dap-virtual-text',
-  'leoluz/nvim-dap-go',
+  -- { "rcarriga/nvim-dap-ui", dependencies = {"mfussenegger/nvim-dap"} },
+  -- 'theHamsta/nvim-dap-virtual-text',
+  -- 'leoluz/nvim-dap-go',
 
 
   -- Git related plugins
-  'tpope/vim-fugitive',
+  -- 'tpope/vim-fugitive',
   'lewis6991/gitsigns.nvim',
+  {
+    "NeogitOrg/neogit",
+    dependencies = {
+      "nvim-lua/plenary.nvim",         -- required
+      "sindrets/diffview.nvim",        -- optional - Diff integration
+      "nvim-telescope/telescope.nvim", -- optional
+    },
+    config = true
+  },
 
   'navarasu/onedark.nvim', -- Theme inspired by Atom
   'nvim-lualine/lualine.nvim', -- Fancier statusline
-  { "lukas-reineke/indent-blankline.nvim", main = "ibl", opts = {} },
+  -- { "lukas-reineke/indent-blankline.nvim", main = "ibl", opts = {} },
   'numToStr/Comment.nvim', -- "gc" to comment visual regions/lines 
   'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
   -- Fuzzy Finder (files, lsp, etc)
@@ -313,8 +327,46 @@ require('lazy').setup({
       { "<c-l>", "<cmd><C-U>TmuxNavigateRight<cr>" },
       { "<c-\\>", "<cmd><C-U>TmuxNavigatePrevious<cr>" },
     },
-  }
+  },
+  {
+    "LunarVim/bigfile.nvim",
+  },
+  {
+    "petertriho/nvim-scrollbar",
+    config = function()
+      require("scrollbar").setup()
+    end
+  },
+  -- {
+  --   "nvim-neorg/neorg",
+  --   version = "v7.0.0",
+  --   ft = "norg",
+  --   run = ":Neorg sync-parsers", -- This is the important bit!
+  --   config = function()
+  --     require('neorg').setup {
+  --       load = {
+  --         ["core.defaults"] = {},
+  --         ["core.concealer"] = {},
+  --         ["core.integrations.treesitter"] = {},
+  --         ["core.esupports.indent"] = {},
+  --         ["core.summary"] = {},
+  --         ["core.completion"] = {
+  --           config = {
+  --             engine = "nvim-cmp",
+  --           }
+  --         },
+  --         ["core.export.markdown"] = {},
+  --         ["core.export"] = {},
+  --       }
+  --     }
+  --   end,
+  -- },
 
+
+  -- Themes
+  { "arturgoms/moonbow.nvim" },
+  { "ellisonleao/gruvbox.nvim", priority = 1000 , config = true, opts = ...},
+  { "rose-pine/neovim", name = "rose-pine" }
 }
   -- {
   --   defaults = {

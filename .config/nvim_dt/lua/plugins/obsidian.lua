@@ -1,9 +1,5 @@
 require("obsidian").setup({
   workspaces = {
-    -- {
-    --   name = "OmerVault",
-    --   path = "/Users/omerhamerman/Obsidian/Omervault",
-    -- },
     {
       name = "Notes",
       path = "/Users/illusion/Documents/Notes",
@@ -11,7 +7,7 @@ require("obsidian").setup({
   },
   completion = {
     nvim_cmp = true,
-    min_chars = 2,
+    min_chars = 1,
   },
   new_notes_location = "current_dir",
   wiki_link_func = function(opts)

@@ -18,7 +18,7 @@ vim.api.nvim_set_keymap("n", "ss", ":noh<CR>", {noremap=true})
 -- splits
 vim.api.nvim_set_keymap("n", "<C-W>,", ":vertical resize -10<CR>", {noremap=true})
 vim.api.nvim_set_keymap("n", "<C-W>.", ":vertical resize +10<CR>", {noremap=true})
-vim.keymap.set('n', '<space><space>', "<cmd>set nohlsearch<CR>")
+vim.keymap.set('n', '<esc><esc>', "<cmd>set nohlsearch<CR>")
 
 
 -- Keymaps for better default experience
@@ -34,4 +34,7 @@ vim.api.nvim_set_keymap('n', '<C-h>', '<C-w>h', {noremap = true})
 vim.api.nvim_set_keymap('n', '<C-j>', '<C-w>j', {noremap = true})
 vim.api.nvim_set_keymap('n', '<C-k>', '<C-w>k', {noremap = true})
 vim.api.nvim_set_keymap('n', '<C-l>', '<C-w>l', {noremap = true})
+
+-- Search selection
+vim.keymap.set('v', '/', '<esc>/\\%V', { noremap = true, silent = true })
 

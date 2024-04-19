@@ -37,10 +37,12 @@ alias source_fishrc="source ~/.config/fish/config.fish"
 alias ls="lsd"
 alias snp="/Users/illusion/Documents/randomCodes/snippets/snippets.sh"
 alias aseprite="/Users/illusion/Documents/Hobby/source/aseprite/build/bin/aseprite"
+alias fe="/opt/homebrew/bin/yazi"
 
 # Nvim configs
 alias nv="nvim -u ~/.config/nvim/init.lua"
 alias nvi="nvim -u ~/.config/nvim_dt/init.lua"
+alias nvrc="cd ~/.config/nvim && nv"
 
 # Game alias
 alias minecraft="sudo java -jar ~/Documents/Games/minecraft/TLauncher-2.885.jar"
@@ -87,9 +89,9 @@ export PATH="$HOME/.config/emacs/bin:$PATH"
 source /Users/illusion/.opam/opam-init/init.fish > /dev/null 2> /dev/null; or true
 
 # GOLANG
-export GOPATH=$HOME/go
-export PATH="$GOPATH/bin:$PATH"
-export GOTRACEBACK=all
+# export GOPATH=$HOME/go
+# export PATH="$GOPATH/bin:$PATH"
+# export GOTRACEBACK=all
 
 # Zellij
 export ZELLIJ_CONFIG_DIR=/Users/illusion/.config/zellij
