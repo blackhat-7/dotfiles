@@ -18,7 +18,9 @@ vim.api.nvim_set_keymap("n", "ss", ":noh<CR>", {noremap=true})
 -- splits
 vim.api.nvim_set_keymap("n", "<C-W>,", ":vertical resize -10<CR>", {noremap=true})
 vim.api.nvim_set_keymap("n", "<C-W>.", ":vertical resize +10<CR>", {noremap=true})
-vim.keymap.set('n', '<esc><esc>', "<cmd>set nohlsearch<CR>")
+vim.keymap.set('n', '<space><space>', "<cmd>set nohlsearch<CR>")
+-- Insert Date
+vim.api.nvim_set_keymap("n", "<space>id", ":pu=strftime('%a %d %b %Y')<CR>", {noremap=true})
 
 
 -- Keymaps for better default experience

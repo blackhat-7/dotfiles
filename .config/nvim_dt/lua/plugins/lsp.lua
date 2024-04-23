@@ -122,6 +122,20 @@ require('lspconfig').lemminx.setup {
   }
 }
 
+require('lspconfig').gopls.setup({
+  on_attach = on_attach,
+  capabilities = capabilities,
+  settings = {
+    gopls = {
+      ["ui.inlayhint.hints"] = {
+        compositeLiteralFields = true,
+        constantValues = true,
+        parameterNames = true
+      },
+    },
+  },
+})
+
 
 --
 -- nvim-cmp setup

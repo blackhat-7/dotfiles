@@ -337,30 +337,30 @@ require('lazy').setup({
       require("scrollbar").setup()
     end
   },
-  -- {
-  --   "nvim-neorg/neorg",
-  --   version = "v7.0.0",
-  --   ft = "norg",
-  --   run = ":Neorg sync-parsers", -- This is the important bit!
-  --   config = function()
-  --     require('neorg').setup {
-  --       load = {
-  --         ["core.defaults"] = {},
-  --         ["core.concealer"] = {},
-  --         ["core.integrations.treesitter"] = {},
-  --         ["core.esupports.indent"] = {},
-  --         ["core.summary"] = {},
-  --         ["core.completion"] = {
-  --           config = {
-  --             engine = "nvim-cmp",
-  --           }
-  --         },
-  --         ["core.export.markdown"] = {},
-  --         ["core.export"] = {},
-  --       }
-  --     }
-  --   end,
-  -- },
+  {
+    "nvim-neorg/neorg",
+    version = "v7.0.0",
+    ft = "norg",
+    run = ":Neorg sync-parsers", -- This is the important bit!
+    config = function()
+      require('neorg').setup {
+        load = {
+          ["core.defaults"] = {},
+          ["core.concealer"] = {},
+          ["core.integrations.treesitter"] = {},
+          ["core.esupports.indent"] = {},
+          ["core.summary"] = {},
+          ["core.completion"] = {
+            config = {
+              engine = "nvim-cmp",
+            }
+          },
+          ["core.export.markdown"] = {},
+          ["core.export"] = {},
+        }
+      }
+    end,
+  },
 
 
   -- Themes
