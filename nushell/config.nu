@@ -594,7 +594,6 @@ $env.HOMEBREW_NO_AUTO_UPDATE = 1
 $env.GOOGLE_APPLICATION_CREDENTIALS = "/Users/illusion/Documents/Work/Creds/edits_service_account_creds.json"
 $env.EDITOR = 'nvim'
 $env.LD_LIBRARY_PATH = "/usr/local/opt/gettext/lib:$LD_LIBRARY_PATH"
-$env.OPENAI_API_KEY = "REDACTED_OPENAI_API_KEY"
 
 
 # Aliases

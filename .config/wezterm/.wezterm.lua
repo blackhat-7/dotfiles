@@ -22,15 +22,15 @@ config.color_scheme = 'Tango (terminal.sexy)'
 -- config.font = wezterm.font 'Fira Code'
 -- config.font = wezterm.font('Cascadia Code', { weight = 'Regular' })
 -- config.font = wezterm.font('Menlo', { weight = 'Regular' })
-config.font = wezterm.font('FiraCode Nerd Font', { weight = 'Regular' })
--- config.font = wezterm.font('JetBrains Mono', { weight = 'Regular' })
+-- config.font = wezterm.font('FiraCode Nerd Font', { weight = 'Regular' })
+config.font = wezterm.font('JetBrains Mono NL', { weight = 'Regular' })
 -- config.font = wezterm.font('Hack Nerd font', { weight = 'Regular' })
 config.font_size = 13
 config.line_height = 1.1
 
 -- Window
-config.window_background_opacity = 0.8
-config.macos_window_background_blur = 40
+config.window_background_opacity = 0.6
+config.macos_window_background_blur = 20
 config.window_decorations = "RESIZE"
 config.enable_tab_bar = false
 config.max_fps = 120

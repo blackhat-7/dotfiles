@@ -11,10 +11,14 @@ export HOMEBREW_NO_AUTO_UPDATE=1
 export PATH="/usr/local/sbin:$PATH"
 export PATH="/usr/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
-export GOOGLE_APPLICATION_CREDENTIALS="/Users/illusion/Documents/Work/Creds/edits_service_account_creds.json"
+
+# GCP
+export PROD_GCP_KEY="/Users/illusion/Documents/Work/Creds/edits_service_account_creds.json"
+export STAGE_GCP_KEY="/Users/illusion/Documents/Work/Creds/stage_gcp.json"
+export GOOGLE_APPLICATION_CREDENTIALS=$STAGE_GCP_KEY
+
 export EDITOR='nvim'
 export LD_LIBRARY_PATH="/usr/local/opt/gettext/lib:$LD_LIBRARY_PATH"
-export OPENAI_API_KEY="REDACTED_OPENAI_API_KEY"
 
 
 # Aliases
@@ -53,6 +57,8 @@ alias code-tmux="/Users/illusion/Documents/randomCodes/shortcuts/tmux_group/code
 alias server-tmux="/Users/illusion/Documents/randomCodes/shortcuts/tmux_group/server.sh"
 alias app-kill="/Users/illusion/Documents/randomCodes/shortcuts/spotify_kill/main.sh"
 alias long_training_jobs="/Users/illusion/Documents/Work/Editing/DebugHelpers/long_training/long_training_jobs"
+alias gcp_stage="source /Users/illusion/Documents/Work/Creds/gcp_stage.sh"
+alias gcp_prod="source /Users/illusion/Documents/Work/Creds/gcp_prod.sh"
 
 starship init fish | source
 

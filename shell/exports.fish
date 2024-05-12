@@ -8,4 +8,3 @@ export PATH="$HOME/.local/bin:$PATH"
 export GOOGLE_APPLICATION_CREDENTIALS="/Users/illusion/Documents/Work/Creds/edits_service_account_creds.json"
 export EDITOR='nvim'
 export LD_LIBRARY_PATH="/usr/local/opt/gettext/lib:$LD_LIBRARY_PATH"
-export OPENAI_API_KEY="REDACTED_OPENAI_API_KEY"

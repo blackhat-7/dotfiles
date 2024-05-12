@@ -24,6 +24,7 @@ vim.wo.signcolumn = 'yes'
 
 -- Set colorscheme
 --vim.cmd [[colorscheme onedark]]
+-- vim.cmd.colorscheme "catppuccin"
 vim.cmd.colorscheme "catppuccin"
 
 --vim.cmd()
@@ -53,3 +54,5 @@ vim.opt.tabstop = 4
 vim.opt.softtabstop = 4
 vim.opt.shiftwidth = 4
 vim.opt.expandtab = true
+
+vim.opt.splitright = true

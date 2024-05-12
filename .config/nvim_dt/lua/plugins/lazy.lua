@@ -15,8 +15,18 @@ vim.opt.rtp:prepend(lazypath)
 -- Fixes Notify opacity issues
 vim.o.termguicolors = true
 
+-- load gemini api key
+local file = io.open("/Users/illusion/Documents/Creds/gemini.txt", "r")
+if file then
+  local gemini_api_key = file:read("*all")
+  file:close()
+else
+  -- File opening failed, handle the error
+  print("Failed to open gemini.txt!")
+  local gemini_api_key = ''
+end
+
 require('lazy').setup({
-  'jackMort/ChatGPT.nvim',
   {
     'Exafunction/codeium.vim',
     config = function ()
@@ -26,6 +36,7 @@ require('lazy').setup({
       vim.keymap.set('i', '<c-n>', function() return vim.fn['codeium#CycleCompletions'](1) end, { expr = true, silent = true })
       vim.keymap.set('i', '<c-p>', function() return vim.fn['codeium#CycleCompletions'](-1) end, { expr = true, silent = true })
       vim.keymap.set('i', '<c-x>', function() return vim.fn['codeium#Clear']() end, { expr = true, silent = true })
+      enable_chat = true
     end
   },
   'onsails/lspkind.nvim',
@@ -35,11 +46,11 @@ require('lazy').setup({
     ft = { "markdown" },
     build = function() vim.fn["mkdp#util#install"]() end,
   },
-  "preservim/vim-pencil",
-  {
-    "sourcegraph/sg.nvim",
-    dependencies = { "nvim-lua/plenary.nvim" },
-  },
+  -- "preservim/vim-pencil",
+  -- {
+  --   "sourcegraph/sg.nvim",
+  --   dependencies = { "nvim-lua/plenary.nvim" },
+  -- },
   {
     "epwalsh/obsidian.nvim",
     version = "*",  -- recommended, use latest release instead of latest commit
@@ -65,7 +76,32 @@ require('lazy').setup({
     },
   },
   'folke/zen-mode.nvim',
-  'David-Kunz/gen.nvim',
+  {
+    "David-Kunz/gen.nvim",
+    opts = {
+      model = "dolphin-llama3", -- The default model to use.
+      host = "localhost", -- The host running the Ollama service.
+      port = "11434", -- The port on which the Ollama service is listening.
+      quit_map = "q", -- set keymap for close the response window
+      retry_map = "<c-r>", -- set keymap to re-send the current prompt
+      init = function(options) pcall(io.popen, "ollama serve > /dev/null 2>&1 &") end,
+      -- Function to initialize Ollama
+      command = function(options)
+        local body = {model = options.model, stream = true}
+        return "curl --silent --no-buffer -X POST http://" .. options.host .. ":" .. options.port .. "/api/chat -d $body"
+      end,
+      -- The command for the Ollama service. You can use placeholders $prompt, $model and $body (shellescaped).
+      -- This can also be a command string.
+      -- The executed command must return a JSON object with { response, context }
+      -- (context property is optional).
+      -- list_models = '<omitted lua function>', -- Retrieves a list of model names
+      display_mode = "split", -- The display mode. Can be "float" or "split".
+      show_prompt = true, -- Shows the prompt submitted to Ollama.
+      show_model = true, -- Displays which model you are using at the beginning of your chat session.
+      no_auto_close = false, -- Never closes the window automatically.
+      debug = false -- Prints errors and the command which is run.
+    }
+  },
   'tpope/vim-dadbod',
   'tpope/vim-obsession',
   'kristijanhusak/vim-dadbod-ui',
@@ -360,6 +396,181 @@ require('lazy').setup({
         }
       }
     end,
+  },
+  {
+    "jackMort/ChatGPT.nvim",
+    event = "VeryLazy",
+    config = function()
+      require("chatgpt").setup({
+        api_key_cmd = "cat " .. vim.fn.expand("$HOME") .. "/Documents/Creds/openai.txt",
+        -- api_key_cmd = "gpg --quiet --batch --passphrase 'somepass' --decrypt " .. vim.fn.expand("$HOME") .. "/Documents/Creds/openai.txt.gpg",
+      })
+    end,
+    dependencies = {
+      "MunifTanjim/nui.nvim",
+      "nvim-lua/plenary.nvim",
+      "folke/trouble.nvim",
+      "nvim-telescope/telescope.nvim"
+    }
+  },
+  {
+    "hedyhli/outline.nvim",
+    lazy = true,
+    cmd = { "Outline", "OutlineOpen" },
+    keys = { -- Example mapping to toggle outline
+      { "<space>m", "<cmd>Outline<CR>", desc = "Toggle outline" },
+    },
+    opts = {
+      -- Your setup opts here
+    },
+  },
+  {
+    {
+      "huynle/ogpt.nvim",
+      event = "VeryLazy",
+      opts = {
+        default_provider = "gemini",
+        edgy = true, -- enable this!
+        single_window = false, -- set this to true if you want only one OGPT window to appear at a time
+        providers = {
+          gemini = {
+            enabled = true,
+            api_key = gemini_api_key,
+            model = "gemini-pro",
+            api_params = {
+              temperature = 0.5,
+              topP = 0.99,
+            },
+            api_chat_params = {
+              temperature = 0.5,
+              topP = 0.99,
+            }
+          }
+        }
+      },
+      dependencies = {
+        "MunifTanjim/nui.nvim",
+        "nvim-lua/plenary.nvim",
+        "nvim-telescope/telescope.nvim"
+      }
+    },
+    {
+      "folke/edgy.nvim",
+      event = "VeryLazy",
+      branch = "main",
+      init = function()
+        vim.opt.laststatus = 3
+        vim.opt.splitkeep = "screen" -- or "topline" or "screen"
+      end,
+      opts = {
+        exit_when_last = false,
+        animate = {
+          enabled = false,
+        },
+        wo = {
+          winbar = true,
+          winfixwidth = true,
+          winfixheight = false,
+          winhighlight = "WinBar:EdgyWinBar,Normal:EdgyNormal",
+          spell = false,
+          signcolumn = "no",
+        },
+        keys = {
+          -- -- close window
+          ["q"] = function(win)
+            win:close()
+          end,
+          -- close sidebar
+          ["Q"] = function(win)
+            win.view.edgebar:close()
+          end,
+          -- increase width
+          ["<S-Right>"] = function(win)
+            win:resize("width", 3)
+          end,
+          -- decrease width
+          ["<S-Left>"] = function(win)
+            win:resize("width", -3)
+          end,
+          -- increase height
+          ["<S-Up>"] = function(win)
+            win:resize("height", 3)
+          end,
+          -- decrease height
+          ["<S-Down>"] = function(win)
+            win:resize("height", -3)
+          end,
+        },
+        right = {
+          {
+            title = "OGPT Popup",
+            ft = "ogpt-popup",
+            size = { width = 0.2 },
+            wo = {
+              wrap = true,
+            },
+          },
+          {
+            title = "OGPT Parameters",
+            ft = "ogpt-parameters-window",
+            size = { height = 6 },
+            wo = {
+              wrap = true,
+            },
+          },
+          {
+            title = "OGPT Template",
+            ft = "ogpt-template",
+            size = { height = 6 },
+          },
+          {
+            title = "OGPT Sessions",
+            ft = "ogpt-sessions",
+            size = { height = 6 },
+            wo = {
+              wrap = true,
+            },
+          },
+          {
+            title = "OGPT System Input",
+            ft = "ogpt-system-window",
+            size = { height = 6 },
+          },
+          {
+            title = "OGPT",
+            ft = "ogpt-window",
+            size = { height = 0.5 },
+            wo = {
+              wrap = true,
+            },
+          },
+          {
+            title = "OGPT {{{selection}}}",
+            ft = "ogpt-selection",
+            size = { width = 80, height = 4 },
+            wo = {
+              wrap = true,
+            },
+          },
+          {
+            title = "OGPt {{{instruction}}}",
+            ft = "ogpt-instruction",
+            size = { width = 80, height = 4 },
+            wo = {
+              wrap = true,
+            },
+          },
+          {
+            title = "OGPT Chat",
+            ft = "ogpt-input",
+            size = { width = 80, height = 4 },
+            wo = {
+              wrap = true,
+            },
+          },
+        },
+      },
+    }
   },
 
 
