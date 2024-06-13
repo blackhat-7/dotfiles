@@ -1,5 +1,7 @@
 if status is-interactive
     # Commands to run in interactive sessions can go here
+
+
 end
 
 # exports
@@ -15,7 +17,8 @@ export PATH="$HOME/.local/bin:$PATH"
 # GCP
 export PROD_GCP_KEY="/Users/illusion/Documents/Work/Creds/edits_service_account_creds.json"
 export STAGE_GCP_KEY="/Users/illusion/Documents/Work/Creds/stage_gcp.json"
-export GOOGLE_APPLICATION_CREDENTIALS=$STAGE_GCP_KEY
+export CROSS_GCP_KEY="/Users/illusion/Documents/Work/Creds/cross-accounts-service-account.json"
+export GOOGLE_APPLICATION_CREDENTIALS=$CROSS_GCP_KEY
 
 export EDITOR='nvim'
 export LD_LIBRARY_PATH="/usr/local/opt/gettext/lib:$LD_LIBRARY_PATH"
@@ -39,11 +42,14 @@ alias ms="editing && cd DebugHelpers/model_sharing"
 alias fishrc="nv ~/.config/fish/config.fish"
 alias source_fishrc="source ~/.config/fish/config.fish"
 alias ls="lsd"
+alias l="ls"
 alias snp="/Users/illusion/Documents/randomCodes/snippets/snippets.sh"
 alias aseprite="/Users/illusion/Documents/Hobby/source/aseprite/build/bin/aseprite"
 alias fe="/opt/homebrew/bin/yazi"
+alias cat=bat
 
 # Nvim configs
+alias nvim="/Users/illusion/nvim/bin/nvim"
 alias nv="nvim -u ~/.config/nvim/init.lua"
 alias nvi="nvim -u ~/.config/nvim_dt/init.lua"
 alias nvrc="cd ~/.config/nvim && nv"
@@ -95,8 +101,8 @@ export PATH="$HOME/.config/emacs/bin:$PATH"
 source /Users/illusion/.opam/opam-init/init.fish > /dev/null 2> /dev/null; or true
 
 # GOLANG
-# export GOPATH=$HOME/go
-# export PATH="$GOPATH/bin:$PATH"
+export GOPATH=$HOME/go
+export PATH="$GOPATH/bin:$PATH"
 # export GOTRACEBACK=all
 
 # Zellij
@@ -109,4 +115,15 @@ export PATH="$VCPKG_ROOT:$PATH"
 export CMAKE_TOOLCHAIN_FILE="$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake"
 export CMAKE_MAKE_PROGRAM=/usr/bin/make
 # export HOME_MANAGER_CONFIG="~/.config/nixpkgs/"
+
+# Aichat
+function _aichat_fish
+    set -l _old (commandline)
+    if test -n $_old
+        echo -n "⌛"
+        commandline -f repaint
+        commandline (aichat -e $_old)
+    end
+end
+bind -M insert \ck _aichat_fish
 

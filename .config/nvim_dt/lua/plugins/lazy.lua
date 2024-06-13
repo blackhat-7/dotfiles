@@ -256,7 +256,9 @@ require('lazy').setup({
     "windwp/nvim-autopairs",
     config = function() require("nvim-autopairs").setup {} end
   },
-
+  {
+    "jose-elias-alvarez/null-ls.nvim",
+  },
 
   { -- LSP Configuration & Plugins
     'neovim/nvim-lspconfig',
@@ -573,11 +575,21 @@ require('lazy').setup({
     }
   },
 
-
   -- Themes
   { "arturgoms/moonbow.nvim" },
   { "ellisonleao/gruvbox.nvim", priority = 1000 , config = true, opts = ...},
-  { "rose-pine/neovim", name = "rose-pine" }
+  { "rose-pine/neovim", name = "rose-pine" },
+  { "oxfist/night-owl.nvim" },
+  { "EdenEast/nightfox.nvim" },
+  { 'loctvl842/monokai-pro.nvim' },
+  { "adrian5/oceanic-next-vim"},
+  { 
+    "phha/zenburn.nvim",
+    config = function() 
+	    require("zenburn").setup() 
+    end
+  },
+  {"neanias/everforest-nvim"}
 }
   -- {
   --   defaults = {

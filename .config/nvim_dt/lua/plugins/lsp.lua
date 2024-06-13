@@ -6,7 +6,7 @@ vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist)
 
 -- LSP settings.
 --  This function gets run when an LSP connects to a particular buffer.
-local on_attach = function(_, bufnr)
+local on_attach = function(client, bufnr)
   -- NOTE: Remember that lua is a real programming language, and as such it is possible
   -- to define small helper and utility functions so you don't have to repeat yourself
   -- many times.
@@ -44,13 +44,15 @@ local on_attach = function(_, bufnr)
   end, '[W]orkspace [L]ist Folders')
 
   -- Create a command `:Format` local to the LSP buffer
-  vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)
-    if vim.lsp.buf.format then
-      vim.lsp.buf.format()
-    elseif vim.lsp.buf.formatting then
-      vim.lsp.buf.formatting()
-    end
-  end, { desc = 'Format current buffer with LSP' })
+  -- vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)
+  --   if vim.lsp.buf.format then
+  --     vim.lsp.buf.format()
+  --   elseif vim.lsp.buf.formatting then
+  --     vim.lsp.buf.formatting()
+  --   end
+  -- end, { desc = 'Format current buffer with LSP' })
+  client.server_capabilities.documentFormattingProvider = false
+  vim.api.nvim_buf_set_keymap(bufnr, "n", "<space>fm", "<cmd>lua vim.lsp.buf.format()<CR>", {})
 end
 
 -- Setup mason so it can manage external tooling
@@ -58,7 +60,7 @@ require('mason').setup()
 
 -- Enable the following language servers
 -- Feel free to add/remove any LSPs that you want here. They will automatically be installed
-local servers = { 'clangd', 'rust_analyzer', 'pyright', 'tsserver', 'gopls', 'lemminx'}
+local servers = { 'clangd', 'rust_analyzer', 'basedpyright', 'tsserver', 'gopls', 'lemminx'}
 
 -- Ensure the servers above are installed
 require('mason-lspconfig').setup {
@@ -137,6 +139,23 @@ require('lspconfig').gopls.setup({
 })
 
 
+require('lspconfig').basedpyright.setup({
+  on_attach = on_attach,
+  capabilities = capabilities,
+  settings = {
+    basedpyright = {
+      analysis = {
+        typeCheckingMode = "basic",
+        inlayHints = {
+          variableTypes = true,
+          functionReturnTypes = true
+        }
+      }
+    }
+  }
+})
+
+
 --
 -- nvim-cmp setup
 local cmp = require 'cmp'
@@ -195,3 +214,5 @@ vim.api.nvim_create_autocmd('FileType', {
   end,
 })
 
+vim.lsp.inlay_hint.enable(true)
+require('lspconfig')["null-ls"].setup({})

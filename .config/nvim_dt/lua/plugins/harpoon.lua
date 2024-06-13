@@ -40,4 +40,11 @@ end
 vim.keymap.set('n', '<leader>ha', require('harpoon.mark').add_file, { desc = '[H]arpoon [A]dd' })
 vim.keymap.set('n', '<leader>hn', require('harpoon.ui').nav_next, { desc = '[H]arpoon [N]ext' })
 vim.keymap.set('n', '<leader>hp', require('harpoon.ui').nav_prev, { desc = '[H]arpoon [P]rev' })
-vim.keymap.set('n', '<leader>hm', require('harpoon.cmd-ui').toggle_quick_menu, { desc = '[H]arpoon [M]enu' })
+vim.keymap.set('n', '<leader>hm', require('harpoon.ui').toggle_quick_menu, { desc = '[H]arpoon [M]enu' })
+-- :lua require("harpoon.ui").nav_file(3)
+-- do it in a loop
+for i = 1, 9 do
+  vim.keymap.set('n', '<leader>' .. i, function()
+    require('harpoon.ui').nav_file(i)
+  end)
+end

@@ -29,4 +29,4 @@ vim.keymap.set("n", "<leader>ee", "<cmd>GoIfErr<cr>",
 -- vim.api.nvim_set_keymap("n", "<leader>gp", ":Git push -u origin HEAD<CR>", {noremap=false})
 
 -- Nvim-tree
-vim.api.nvim_set_keymap("n", "<C-n>", ":NvimTreeToggle<CR>", {noremap=false})
+vim.api.nvim_set_keymap("n", "<C-n>", ":NvimTreeToggle<CR>", {noremap=false, silent=true})
