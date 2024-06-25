@@ -187,3 +187,5 @@ export PATH="$VCPKG_ROOT:$PATH"
 export CMAKE_TOOLCHAIN_FILE="$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake"
 export CMAKE_MAKE_PROGRAM=/usr/bin/make
 export MACOSX_DEPLOYMENT_TARGET=10.8
+
+source /Users/illusion/.docker/init-zsh.sh || true # Added by Docker Desktop

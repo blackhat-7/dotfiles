@@ -125,5 +125,7 @@ function _aichat_fish
         commandline (aichat -e $_old)
     end
 end
-bind -M insert \ck _aichat_fish
+bind -M insert \cb _aichat_fish
 
+
+source /Users/illusion/.docker/init-fish.sh || true # Added by Docker Desktop

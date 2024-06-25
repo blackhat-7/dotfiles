@@ -17,6 +17,7 @@
   "glow.nvim": { "branch": "main", "commit": "238070a686c1da3bccccf1079700eb4b5e19aea4" },
   "go.nvim": { "branch": "master", "commit": "294d65c93514f14fbbe8af0545ab8918d939acdb" },
   "goto-preview": { "branch": "main", "commit": "3552fad4a0244ffd9ac86508e29ccc5166f19eb8" },
+  "gruvbox-baby": { "branch": "main", "commit": "bd52e62d8134647090108189e69c8b3cd18bdbbf" },
   "gruvbox.nvim": { "branch": "main", "commit": "96a8ec336fb48a11cefbd57508888361431aac26" },
   "guihua.lua": { "branch": "master", "commit": "5b45e29629eb1136c82870a5ebe55747ffebe79b" },
   "harpoon": { "branch": "master", "commit": "ccae1b9bec717ae284906b0bf83d720e59d12b91" },

@@ -577,7 +577,7 @@ require('lazy').setup({
 
   -- Themes
   { "arturgoms/moonbow.nvim" },
-  { "ellisonleao/gruvbox.nvim", priority = 1000 , config = true, opts = ...},
+  { "ellisonleao/gruvbox.nvim", priority = 1000 , opts = ...},
   { "rose-pine/neovim", name = "rose-pine" },
   { "oxfist/night-owl.nvim" },
   { "EdenEast/nightfox.nvim" },
@@ -589,7 +589,8 @@ require('lazy').setup({
 	    require("zenburn").setup() 
     end
   },
-  {"neanias/everforest-nvim"}
+  {"neanias/everforest-nvim"},
+  {"luisiacc/gruvbox-baby"},
 }
   -- {
   --   defaults = {

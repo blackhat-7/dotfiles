@@ -24,8 +24,7 @@ vim.wo.signcolumn = 'yes'
 
 -- Set colorscheme
 --vim.cmd [[colorscheme onedark]]
--- vim.cmd.colorscheme "catppuccin"
-vim.cmd.colorscheme "gruvbox"
+-- vim.cmd.colorscheme "gruvbox-baby"
 
 --vim.cmd()
 vim.opt.clipboard = 'unnamedplus'
