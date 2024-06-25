@@ -10,7 +10,7 @@ atuin import auto
 sudo apt install zoxide
 # add this to the end of ~/.config/fish/config.fish: zoxide init fish | source
 echo 'zoxide init fish | source' >> ~/.config/fish/config.fish
-echo 'alias cd=z' >> ~/.config/fish/config.fish
+echo 'alias cd="z"' >> ~/.config/fish/config.fish
 
 # conda
 mkdir -p ~/miniconda3
