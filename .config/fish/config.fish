@@ -125,7 +125,31 @@ function _aichat_fish
         commandline (aichat -e $_old)
     end
 end
-bind -M insert \cb _aichat_fish
-
+bind -M insert \cx _aichat_fish
+# function _aichat_fish
+#     # Save the current command line content to a variable
+#     set _old (commandline)
+#     
+#     # If the current command line is not empty
+#     if test -n "$_old"
+#         # Print an indicator to show that processing is happening
+#         echo -n "⌛"
+#         
+#         # Force a repaint of the command line interface to show the indicator
+#         commandline -f repaint
+#         
+#         # Call `aichat` with the current command line content and replace the content with the result
+#         set _new (aichat -e "$_old")
+#         
+#         # Replace the command line with the output of the `aichat` command
+#         commandline -r "$_new"
+#     end
+# end
 
 source /Users/illusion/.docker/init-fish.sh || true # Added by Docker Desktop
+
+
+# export OPENAI_API_BASE="http://100.95.18.138:42069/v1"
+export OPENAI_API_BASE="https://glhf.chat/api/openai/v1"
+export AIDER_MODEL="hf:Qwen/Qwen2.5-Coder-32B-Instruct"
+export OPENAI_API_KEY=$(cat $HOME/Documents/Creds/glhf.txt)

@@ -1,4 +1,5 @@
 require("obsidian").setup({
+  ui = { enable = true },
   workspaces = {
     {
       name = "Notes",
@@ -28,13 +29,13 @@ require("obsidian").setup({
       end,
       opts = { noremap = false, expr = true, buffer = true },
     },
-    -- Toggle check-boxes "obsidian done"
-    ["<leader>od"] = {
-      action = function()
-        return require("obsidian").util.toggle_checkbox()
-      end,
-      opts = { buffer = true },
-    },
+    -- -- Toggle check-boxes "obsidian done"
+    -- ["<leader>od"] = {
+    --   action = function()
+    --     return require("obsidian").util.toggle_checkbox()
+    --   end,
+    --   opts = { buffer = true },
+    -- },
     -- Create a new newsletter issue
     ["<leader>onn"] = {
       action = function()

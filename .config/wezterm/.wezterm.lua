@@ -13,27 +13,29 @@ end
 -- This is where you actually apply your config choices
 
 -- For example, changing the color scheme:
--- config.color_scheme = 'rose-pine'
+config.color_scheme = 'rose-pine'
 -- config.color_scheme = 'Tokyo Night'
 -- config.color_scheme = 'Tango (terminal.sexy)'
+-- config.color_scheme = 'Laser'
 -- config.color_scheme = 'Catppuccin Mocha'
-config.color_scheme = 'Gruvbox Dark (Gogh)'
+-- config.color_scheme = 'Gruvbox Dark (Gogh)'
 --
 -- Font
 -- config.font = wezterm.font 'Fira Code'
 -- config.font = wezterm.font('Cascadia Code', { weight = 'Regular' })
 -- config.font = wezterm.font('Menlo', { weight = 'Regular' })
--- config.font = wezterm.font('FiraCode Nerd Font', { weight = 'Regular' })
+config.font = wezterm.font('FiraCode Nerd Font', { weight = 'Regular' })
 -- config.font = wezterm.font('JetBrains Mono NL', { weight = 'Regular' })
-config.font = wezterm.font('SF Mono', { weight = 'Regular' })
+-- config.font = wezterm.font('SF Mono', { weight = 'Regular' })
 -- config.font = wezterm.font('Monaspace Neon', { weight = 'Regular' })
 -- config.font = wezterm.font('Monaspace Krypton', { weight = 'Regular' })
 -- config.font = wezterm.font('Hack Nerd font', { weight = 'Regular' })
 config.font_size = 13
 config.line_height = 1.1
+config.front_end = "OpenGL"
 
 -- Window
-config.window_background_opacity = 0.8
+config.window_background_opacity = 0.9
 config.macos_window_background_blur = 20
 config.window_decorations = "RESIZE"
 config.enable_tab_bar = false

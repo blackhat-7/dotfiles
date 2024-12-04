@@ -53,6 +53,14 @@ local on_attach = function(client, bufnr)
   -- end, { desc = 'Format current buffer with LSP' })
   client.server_capabilities.documentFormattingProvider = false
   vim.api.nvim_buf_set_keymap(bufnr, "n", "<space>fm", "<cmd>lua vim.lsp.buf.format()<CR>", {})
+
+  -- FIXME: [gopls]: Error SERVER_REQUEST_HANDLER_ERROR
+  if type(v) == "table" and v.workspace then
+    v.workspace.didChangeWatchedFiles = {
+      dynamicRegistration = false,
+      relativePatternSupport = false,
+    }
+  end
 end
 
 -- Setup mason so it can manage external tooling
@@ -60,7 +68,7 @@ require('mason').setup()
 
 -- Enable the following language servers
 -- Feel free to add/remove any LSPs that you want here. They will automatically be installed
-local servers = { 'clangd', 'rust_analyzer', 'basedpyright', 'tsserver', 'gopls', 'lemminx'}
+local servers = { 'clangd', 'rust_analyzer', 'basedpyright', 'gopls', 'lemminx', 'omnisharp'}
 
 -- Ensure the servers above are installed
 require('mason-lspconfig').setup {
@@ -146,9 +154,33 @@ require('lspconfig').basedpyright.setup({
     basedpyright = {
       analysis = {
         typeCheckingMode = "basic",
-        inlayHints = {
-          variableTypes = true,
-          functionReturnTypes = true
+        -- inlayHints = {
+        --   variableTypes = true,
+        --   functionReturnTypes = true
+        -- }
+      }
+    }
+  }
+})
+
+
+require('lspconfig').rust_analyzer.setup({
+  on_attack = on_attach,
+  capabilities = capabilities,
+  settings = {
+    ['rust-analyzer'] = {
+      -- diagnostics = {
+      --   enable = true
+      -- },
+      inlayHints = {
+        typeHints = {
+          enable = true
+        },
+        chainingHints = {
+          enable = true
+        },
+        parameterHints = {
+          enable = true
         }
       }
     }
@@ -214,5 +246,5 @@ vim.api.nvim_create_autocmd('FileType', {
   end,
 })
 
-vim.lsp.inlay_hint.enable(true)
+-- vim.lsp.inlay_hint.enable(true)
 require('lspconfig')["null-ls"].setup({})

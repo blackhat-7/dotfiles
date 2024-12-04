@@ -27,7 +27,7 @@ require('plugins.neogit')
 -- Neovide
 if vim.g.neovide then
     -- Put anything you want to happen only in Neovide here
-    vim.g.neovide_input_macos_alt_is_meta = true
+    vim.g.neovide_input_macos_option_key_is_meta = 'only_left'
     -- Helper function for transparency formatting
     -- local alpha = function()
     --     return string.format("%x", math.floor(255 * vim.g.transparency or 0.8))
@@ -47,4 +47,4 @@ if vim.g.neovide then
     vim.keymap.set('i', '<D-v>', '<ESC>l"+Pli') -- Paste insert mode
 end
 
--- vim: ts=8 sts=2 sw=2 et
+

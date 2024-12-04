@@ -30,3 +30,9 @@ vim.keymap.set("n", "<leader>ee", "<cmd>GoIfErr<cr>",
 
 -- Nvim-tree
 vim.api.nvim_set_keymap("n", "<C-n>", ":NvimTreeToggle<CR>", {noremap=false, silent=true})
+
+-- Toggle inlay hint
+vim.keymap.set('n', '<leader>l', function()
+  vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
+end)
+

@@ -28,84 +28,111 @@ end
 
 require('lazy').setup({
   {
-    'Exafunction/codeium.vim',
-    config = function ()
-      vim.g.codeium_disable_bindings = 1
-      -- Change '<C-g>' here to any keycode you like.
-      vim.keymap.set('i', '<M-;>', function () return vim.fn['codeium#Accept']() end, { expr = true, silent = true })
-      vim.keymap.set('i', '<c-n>', function() return vim.fn['codeium#CycleCompletions'](1) end, { expr = true, silent = true })
-      vim.keymap.set('i', '<c-p>', function() return vim.fn['codeium#CycleCompletions'](-1) end, { expr = true, silent = true })
-      vim.keymap.set('i', '<c-x>', function() return vim.fn['codeium#Clear']() end, { expr = true, silent = true })
-      enable_chat = true
-    end
+    "supermaven-inc/supermaven-nvim",
+    config = function()
+      require("supermaven-nvim").setup({
+        keymaps = {
+          accept_suggestion = "<M-;>",
+          clear_suggestion = "<M-c>",
+          accept_word = "<C-j>",
+        },
+        ignore_filetypes = { env = true }, -- or { "cpp", }
+        color = {
+          suggestion_color = "#ff0000",
+          cterm = 244,
+        },
+        log_level = "info", -- set to "off" to disable logging completely
+        disable_inline_completion = false, -- disables inline completion for use with cmp
+        disable_keymaps = false, -- disables built in keymaps for more manual control
+        condition = function()
+          return false
+        end -- condition to check for stopping supermaven, `true` means to stop supermaven when the condition is true.
+      })
+    end,
   },
-  'onsails/lspkind.nvim',
-  {
-    "iamcco/markdown-preview.nvim",
-    cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
-    ft = { "markdown" },
-    build = function() vim.fn["mkdp#util#install"]() end,
-  },
-  -- "preservim/vim-pencil",
   -- {
-  --   "sourcegraph/sg.nvim",
-  --   dependencies = { "nvim-lua/plenary.nvim" },
+  --   'Exafunction/codeium.vim',
+  --   config = function ()
+  --     vim.g.codeium_disable_bindings = 1
+  --     -- Change '<C-g>' here to any keycode you like.
+  --     vim.keymap.set('i', '<M-;>', function () return vim.fn['codeium#Accept']() end, { expr = true, silent = true })
+  --     vim.keymap.set('i', '<c-n>', function() return vim.fn['codeium#CycleCompletions'](1) end, { expr = true, silent = true })
+  --     vim.keymap.set('i', '<c-p>', function() return vim.fn['codeium#CycleCompletions'](-1) end, { expr = true, silent = true })
+  --     vim.keymap.set('i', '<c-x>', function() return vim.fn['codeium#Clear']() end, { expr = true, silent = true })
+  --     enable_chat = true
+  --   end
   -- },
-  {
-    "epwalsh/obsidian.nvim",
-    version = "*",  -- recommended, use latest release instead of latest commit
-    lazy = true,
-    ft = "markdown",
-
-    keys = {
-      { "<leader>on", "<cmd>ObsidianNew<cr>", desc = "New Obsidian note", mode = "n" },
-      { "<leader>oo", "<cmd>ObsidianSearch<cr>", desc = "Search Obsidian notes", mode = "n" },
-      { "<leader>os", "<cmd>ObsidianQuickSwitch<cr>", desc = "Quick Switch", mode = "n" },
-      { "<leader>ob", "<cmd>ObsidianBacklinks<cr>", desc = "Show location list of backlinks", mode = "n" },
-      { "<leader>ot", "<cmd>ObsidianTemplate<cr>", desc = "Follow link under cursor", mode = "n" },
-    },
-    -- Replace the above line with this if you only want to load obsidian.nvim for markdown files in your vault:
-    -- event = {
-    --   -- If you want to use the home shortcut '~' here you need to call 'vim.fn.expand'.
-    --   -- E.g. "BufReadPre " .. vim.fn.expand "~" .. "/my-vault/**.md"
-    --   "BufReadPre path/to/my-vault/**.md",
-    --   "BufNewFile path/to/my-vault/**.md",
-    -- },
-    dependencies = {
-      "nvim-lua/plenary.nvim",
-    },
-  },
+  'onsails/lspkind.nvim',
   'folke/zen-mode.nvim',
   {
-    "David-Kunz/gen.nvim",
-    opts = {
-      model = "dolphin-llama3", -- The default model to use.
-      host = "localhost", -- The host running the Ollama service.
-      port = "11434", -- The port on which the Ollama service is listening.
-      quit_map = "q", -- set keymap for close the response window
-      retry_map = "<c-r>", -- set keymap to re-send the current prompt
-      init = function(options) pcall(io.popen, "ollama serve > /dev/null 2>&1 &") end,
-      -- Function to initialize Ollama
-      command = function(options)
-        local body = {model = options.model, stream = true}
-        return "curl --silent --no-buffer -X POST http://" .. options.host .. ":" .. options.port .. "/api/chat -d $body"
-      end,
-      -- The command for the Ollama service. You can use placeholders $prompt, $model and $body (shellescaped).
-      -- This can also be a command string.
-      -- The executed command must return a JSON object with { response, context }
-      -- (context property is optional).
-      -- list_models = '<omitted lua function>', -- Retrieves a list of model names
-      display_mode = "split", -- The display mode. Can be "float" or "split".
-      show_prompt = true, -- Shows the prompt submitted to Ollama.
-      show_model = true, -- Displays which model you are using at the beginning of your chat session.
-      no_auto_close = false, -- Never closes the window automatically.
-      debug = false -- Prints errors and the command which is run.
-    }
+    "olimorris/codecompanion.nvim",
+    branch = "main",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "nvim-treesitter/nvim-treesitter",
+      -- The following are optional:
+      -- { "MeanderingProgrammer/render-markdown.nvim", ft = { "markdown", "codecompanion" } },
+    },
+    config = function()
+      require("codecompanion").setup({
+        adapters = {
+          ollama = function()
+            return require("codecompanion.adapters").extend("openai_compatible", {
+              env_replaced = {
+                -- glhf
+                -- url = "https://glhf.chat/api/openai",
+                -- model = "hf:Qwen/Qwen2.5-Coder-32B-Instruct"
+
+                -- pc
+                url = "http://100.95.18.138:42069",
+                model = "qwen2.5.1-coder-7b-instruct"
+
+                -- llama cpp
+                -- url = "http://localhost:42070",
+              },
+            })
+          end,
+        },
+        -- display = {
+        --   action_palette = {
+        --     provider = "telescope",
+        --   },
+        -- },
+        strategies = {
+          chat = {
+            adapter = "ollama",
+            slash_commands = {
+              ["buffer"] = {
+                opts = {
+                  provider = "telescope",
+                }
+              },
+              ["fetch"] = {
+                opts = {
+                  provider = "telescope",
+                }
+              },
+              ["file"] = {
+                opts = {
+                  provider = "telescope",
+                }
+              },
+              ["symbols"] = {
+                opts = {
+                  provider = "telescope",
+                }
+              },
+            },
+          }
+        },
+        vim.api.nvim_set_keymap("n", "<C-a>", "<cmd>CodeCompanionActions<cr>", { noremap = true, silent = true }),
+        vim.api.nvim_set_keymap("v", "<C-a>", "<cmd>CodeCompanionActions<cr>", { noremap = true, silent = true }),
+        vim.api.nvim_set_keymap("n", "<LocalLeader>a", "<cmd>CodeCompanionChat Toggle<cr>", { noremap = true, silent = true }),
+        vim.api.nvim_set_keymap("v", "<LocalLeader>a", "<cmd>CodeCompanionChat Toggle<cr>", { noremap = true, silent = true }),
+        vim.api.nvim_set_keymap("v", "ga", "<cmd>CodeCompanionChat Add<cr>", { noremap = true, silent = true }),
+      })
+    end,
   },
-  'tpope/vim-dadbod',
-  'tpope/vim-obsession',
-  'kristijanhusak/vim-dadbod-ui',
-  'kristijanhusak/vim-dadbod-completion',
 
   -- Tree
   {
@@ -123,19 +150,6 @@ require('lazy').setup({
       }
     end,
   },
-  -- Database
-  {
-    "tpope/vim-dadbod",
-    opt = true,
-    requires = {
-      "kristijanhusak/vim-dadbod-ui",
-      "kristijanhusak/vim-dadbod-completion",
-    },
-    config = function()
-      require("config.dadbod").setup()
-    end,
-  },
-
   'ThePrimeagen/git-worktree.nvim',
   'tpope/vim-surround',
   'xiyaowong/nvim-transparent',
@@ -286,13 +300,7 @@ require('lazy').setup({
     }
   },
 
-  -- { "rcarriga/nvim-dap-ui", dependencies = {"mfussenegger/nvim-dap"} },
-  -- 'theHamsta/nvim-dap-virtual-text',
-  -- 'leoluz/nvim-dap-go',
-
-
   -- Git related plugins
-  -- 'tpope/vim-fugitive',
   'lewis6991/gitsigns.nvim',
   {
     "NeogitOrg/neogit",
@@ -306,7 +314,7 @@ require('lazy').setup({
 
   'navarasu/onedark.nvim', -- Theme inspired by Atom
   'nvim-lualine/lualine.nvim', -- Fancier statusline
-  -- { "lukas-reineke/indent-blankline.nvim", main = "ibl", opts = {} },
+  { "lukas-reineke/indent-blankline.nvim", main = "ibl", opts = {} },
   'numToStr/Comment.nvim', -- "gc" to comment visual regions/lines 
   'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
   -- Fuzzy Finder (files, lsp, etc)
@@ -346,9 +354,9 @@ require('lazy').setup({
   {
     "almo7aya/openingh.nvim"
   },
-  {
-    "ellisonleao/glow.nvim", config = true, cmd = "Glow"
-  },
+  -- {
+  --   "ellisonleao/glow.nvim", config = true, cmd = "Glow"
+  -- },
   {
     "christoomey/vim-tmux-navigator",
     cmd = {
@@ -375,205 +383,68 @@ require('lazy').setup({
       require("scrollbar").setup()
     end
   },
+  -- {
+  --   "nvim-neorg/neorg",
+  --   version = "v7.0.0",
+  --   ft = "norg",
+  --   run = ":Neorg sync-parsers", -- This is the important bit!
+  --   config = function()
+  --     require('neorg').setup {
+  --       load = {
+  --         ["core.defaults"] = {},
+  --         ["core.concealer"] = {},
+  --         ["core.integrations.treesitter"] = {},
+  --         ["core.esupports.indent"] = {},
+  --         ["core.summary"] = {},
+  --         ["core.completion"] = {
+  --           config = {
+  --             engine = "nvim-cmp",
+  --           }
+  --         },
+  --         ["core.export.markdown"] = {},
+  --         ["core.export"] = {},
+  --       }
+  --     }
+  --   end,
+  -- },
+
+  -- Note taking
   {
-    "nvim-neorg/neorg",
-    version = "v7.0.0",
-    ft = "norg",
-    run = ":Neorg sync-parsers", -- This is the important bit!
-    config = function()
-      require('neorg').setup {
-        load = {
-          ["core.defaults"] = {},
-          ["core.concealer"] = {},
-          ["core.integrations.treesitter"] = {},
-          ["core.esupports.indent"] = {},
-          ["core.summary"] = {},
-          ["core.completion"] = {
-            config = {
-              engine = "nvim-cmp",
-            }
-          },
-          ["core.export.markdown"] = {},
-          ["core.export"] = {},
-        }
-      }
-    end,
-  },
-  {
-    "jackMort/ChatGPT.nvim",
-    event = "VeryLazy",
-    config = function()
-      require("chatgpt").setup({
-        api_key_cmd = "cat " .. vim.fn.expand("$HOME") .. "/Documents/Creds/openai.txt",
-        -- api_key_cmd = "gpg --quiet --batch --passphrase 'somepass' --decrypt " .. vim.fn.expand("$HOME") .. "/Documents/Creds/openai.txt.gpg",
-      })
-    end,
-    dependencies = {
-      "MunifTanjim/nui.nvim",
-      "nvim-lua/plenary.nvim",
-      "folke/trouble.nvim",
-      "nvim-telescope/telescope.nvim"
-    }
-  },
-  {
-    "hedyhli/outline.nvim",
+    "epwalsh/obsidian.nvim",
+    -- branch = "main",
+    -- version = "*",  -- recommended, use latest release instead of latest commit
     lazy = true,
-    cmd = { "Outline", "OutlineOpen" },
-    keys = { -- Example mapping to toggle outline
-      { "<space>m", "<cmd>Outline<CR>", desc = "Toggle outline" },
+    ft = "markdown",
+
+    keys = {
+      { "<leader>on", "<cmd>ObsidianNew<cr>", desc = "New Obsidian note", mode = "n" },
+      { "<leader>oo", "<cmd>ObsidianSearch<cr>", desc = "Search Obsidian notes", mode = "n" },
+      { "<leader>os", "<cmd>ObsidianQuickSwitch<cr>", desc = "Quick Switch", mode = "n" },
+      { "<leader>ob", "<cmd>ObsidianBacklinks<cr>", desc = "Show location list of backlinks", mode = "n" },
+      { "<leader>ot", "<cmd>ObsidianTemplate<cr>", desc = "Follow link under cursor", mode = "n" },
+      { "<leader>oc", "<cmd>ObsidianToggleCheckbox<cr>", desc = "Toggle checkbox", mode = "n" },
+
     },
-    opts = {
-      -- Your setup opts here
+    dependencies = {
+      "nvim-lua/plenary.nvim",
     },
   },
-  {
-    {
-      "huynle/ogpt.nvim",
-      event = "VeryLazy",
-      opts = {
-        default_provider = "gemini",
-        edgy = true, -- enable this!
-        single_window = false, -- set this to true if you want only one OGPT window to appear at a time
-        providers = {
-          gemini = {
-            enabled = true,
-            api_key = gemini_api_key,
-            model = "gemini-pro",
-            api_params = {
-              temperature = 0.5,
-              topP = 0.99,
-            },
-            api_chat_params = {
-              temperature = 0.5,
-              topP = 0.99,
-            }
-          }
-        }
-      },
-      dependencies = {
-        "MunifTanjim/nui.nvim",
-        "nvim-lua/plenary.nvim",
-        "nvim-telescope/telescope.nvim"
-      }
-    },
-    {
-      "folke/edgy.nvim",
-      event = "VeryLazy",
-      branch = "main",
-      init = function()
-        vim.opt.laststatus = 3
-        vim.opt.splitkeep = "screen" -- or "topline" or "screen"
-      end,
-      opts = {
-        exit_when_last = false,
-        animate = {
-          enabled = false,
-        },
-        wo = {
-          winbar = true,
-          winfixwidth = true,
-          winfixheight = false,
-          winhighlight = "WinBar:EdgyWinBar,Normal:EdgyNormal",
-          spell = false,
-          signcolumn = "no",
-        },
-        keys = {
-          -- -- close window
-          ["q"] = function(win)
-            win:close()
-          end,
-          -- close sidebar
-          ["Q"] = function(win)
-            win.view.edgebar:close()
-          end,
-          -- increase width
-          ["<S-Right>"] = function(win)
-            win:resize("width", 3)
-          end,
-          -- decrease width
-          ["<S-Left>"] = function(win)
-            win:resize("width", -3)
-          end,
-          -- increase height
-          ["<S-Up>"] = function(win)
-            win:resize("height", 3)
-          end,
-          -- decrease height
-          ["<S-Down>"] = function(win)
-            win:resize("height", -3)
-          end,
-        },
-        right = {
-          {
-            title = "OGPT Popup",
-            ft = "ogpt-popup",
-            size = { width = 0.2 },
-            wo = {
-              wrap = true,
-            },
-          },
-          {
-            title = "OGPT Parameters",
-            ft = "ogpt-parameters-window",
-            size = { height = 6 },
-            wo = {
-              wrap = true,
-            },
-          },
-          {
-            title = "OGPT Template",
-            ft = "ogpt-template",
-            size = { height = 6 },
-          },
-          {
-            title = "OGPT Sessions",
-            ft = "ogpt-sessions",
-            size = { height = 6 },
-            wo = {
-              wrap = true,
-            },
-          },
-          {
-            title = "OGPT System Input",
-            ft = "ogpt-system-window",
-            size = { height = 6 },
-          },
-          {
-            title = "OGPT",
-            ft = "ogpt-window",
-            size = { height = 0.5 },
-            wo = {
-              wrap = true,
-            },
-          },
-          {
-            title = "OGPT {{{selection}}}",
-            ft = "ogpt-selection",
-            size = { width = 80, height = 4 },
-            wo = {
-              wrap = true,
-            },
-          },
-          {
-            title = "OGPt {{{instruction}}}",
-            ft = "ogpt-instruction",
-            size = { width = 80, height = 4 },
-            wo = {
-              wrap = true,
-            },
-          },
-          {
-            title = "OGPT Chat",
-            ft = "ogpt-input",
-            size = { width = 80, height = 4 },
-            wo = {
-              wrap = true,
-            },
-          },
-        },
-      },
-    }
-  },
+  -- {
+  --     "OXY2DEV/markview.nvim",
+  --     lazy = false,      -- Recommended
+  --     -- ft = "markdown" -- If you decide to lazy-load anyway
+  --
+  --     dependencies = {
+  --         "nvim-treesitter/nvim-treesitter",
+  --         "nvim-tree/nvim-web-devicons"
+  --     }
+  -- },
+  -- {
+  --   "MeanderingProgrammer/markdown.nvim",
+  --   main = "render-markdown",
+  --   opts = { enabled = true },
+  --   dependencies = { "nvim-treesitter/nvim-treesitter", "nvim-tree/nvim-web-devicons" },
+  -- },
 
   -- Themes
   { "arturgoms/moonbow.nvim" },
@@ -586,11 +457,35 @@ require('lazy').setup({
   { 
     "phha/zenburn.nvim",
     config = function() 
-	    require("zenburn").setup() 
+      require("zenburn").setup() 
     end
   },
   {"neanias/everforest-nvim"},
   {"luisiacc/gruvbox-baby"},
+  {"slugbyte/lackluster.nvim"},
+  {
+    "wincent/base16-nvim",
+    lazy = false, -- load at start
+    priority = 1000, -- load first
+    config = function()
+      vim.cmd([[colorscheme gruvbox]])
+      vim.o.background = 'dark'
+      -- XXX: hi Normal ctermbg=NONE
+      -- Make comments more prominent -- they are important.
+      local bools = vim.api.nvim_get_hl(0, { name = 'Boolean' })
+      vim.api.nvim_set_hl(0, 'Comment', bools)
+      -- Make it clearly visible which argument we're at.
+      local marked = vim.api.nvim_get_hl(0, { name = 'PMenu' })
+      vim.api.nvim_set_hl(0, 'LspSignatureActiveParameter', { fg = marked.fg, bg = marked.bg, ctermfg = marked.ctermfg, ctermbg = marked.ctermbg, bold = true })
+      -- XXX
+      -- Would be nice to customize the highlighting of warnings and the like to make
+      -- them less glaring. But alas
+      -- https://github.com/nvim-lua/lsp_extensions.nvim/issues/21
+      -- call Base16hi("CocHintSign", g:base16_gui03, "", g:base16_cterm03, "", "", "")
+    end
+  },
+  { 'RRethy/nvim-base16' },
+  { 'gambhirsharma/vesper.nvim' }
 }
   -- {
   --   defaults = {
