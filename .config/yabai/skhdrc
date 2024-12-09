@@ -1,6 +1,6 @@
 # open terminal, blazingly fast compared to iTerm/Hyper
 # alt - return : /Applications/kitty.app/Contents/MacOS/kitty --single-instance -d ~
-alt - return : /Applications/WezTerm.app/Contents/MacOS/wezterm
+# alt - return : /Applications/WezTerm.app/Contents/MacOS/wezterm
 shift + alt - return: pkill mpv
 # alt + \ : pkill mpv
 

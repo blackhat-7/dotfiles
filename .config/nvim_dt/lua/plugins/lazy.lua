@@ -80,12 +80,12 @@ require('lazy').setup({
             return require("codecompanion.adapters").extend("openai_compatible", {
               env_replaced = {
                 -- glhf
-                -- url = "https://glhf.chat/api/openai",
-                -- model = "hf:Qwen/Qwen2.5-Coder-32B-Instruct"
+                url = "https://glhf.chat/api/openai",
+                model = "hf:meta-llama/Llama-3.3-70B-Instruct"
 
                 -- pc
-                url = "http://100.95.18.138:42069",
-                model = "qwen2.5.1-coder-7b-instruct"
+                -- url = "http://100.95.18.138:42069",
+                -- model = "qwen2.5.1-coder-7b-instruct"
 
                 -- llama cpp
                 -- url = "http://localhost:42070",
@@ -445,6 +445,11 @@ require('lazy').setup({
   --   opts = { enabled = true },
   --   dependencies = { "nvim-treesitter/nvim-treesitter", "nvim-tree/nvim-web-devicons" },
   -- },
+  {
+    "marcussimonsen/let-it-snow.nvim",
+    cmd = "LetItSnow", -- Wait with loading until command is run
+    opts = {},
+  },
 
   -- Themes
   { "arturgoms/moonbow.nvim" },
