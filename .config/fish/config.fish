@@ -71,15 +71,6 @@ starship init fish | source
 # Brew
 eval "$(/opt/homebrew/bin/brew shellenv)"
 
-# >>> conda initialize >>>
-# !! Contents within this block are managed by 'conda init' !!
-if test -f /Users/illusion/miniconda3/bin/conda
-    eval /Users/illusion/miniconda3/bin/conda "shell.fish" "hook" $argv | source
-end
-# <<< conda initialize <<<
-
-conda deactivate
-conda activate
 
 # zoxide
 zoxide init fish | source
@@ -149,7 +140,31 @@ bind -M insert \cx _aichat_fish
 source /Users/illusion/.docker/init-fish.sh || true # Added by Docker Desktop
 
 
+# tmux fzf window
+function tmux_fzf_window
+    set -l window_list (tmux list-windows -F '#{window_index} #{window_name}')
+    set -l window_index (echo "$window_list" | fzf | awk '{ print $1 }')
+    tmux select-window -t $window_index
+end
+
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+if test -f /Users/illusion/miniconda3/bin/conda
+    eval /Users/illusion/miniconda3/bin/conda "shell.fish" "hook" $argv | source
+else
+    if test -f "/Users/illusion/miniconda3/etc/fish/conf.d/conda.fish"
+        . "/Users/illusion/miniconda3/etc/fish/conf.d/conda.fish"
+    else
+        set -x PATH "/Users/illusion/miniconda3/bin" $PATH
+    end
+end
+# <<< conda initialize <<<
+
+conda deactivate
+conda activate
+
 # export OPENAI_API_BASE="http://100.95.18.138:42069/v1"
-export OPENAI_API_BASE="https://glhf.chat/api/openai/v1"
+export OPENAI_API_BASE="http://100.109.37.59:8080/api"
 export AIDER_MODEL="hf:Qwen/Qwen2.5-Coder-32B-Instruct"
-export OPENAI_API_KEY=$(cat $HOME/Documents/Creds/glhf.txt)
+export OPENAI_API_KEY=$(cat $HOME/Documents/Creds/owui.txt)
+export GEMINI_API_KEY=$(cat $HOME/Documents/Creds/gemini.txt)

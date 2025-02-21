@@ -150,21 +150,6 @@ export EDITOR='nvim'
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
-# >>> conda initialize >>>
-# !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$('/Users/illusion/miniconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
-if [ $? -eq 0 ]; then
-    eval "$__conda_setup"
-else
-    if [ -f "/Users/illusion/miniconda3/etc/profile.d/conda.sh" ]; then
-        . "/Users/illusion/miniconda3/etc/profile.d/conda.sh"
-    else
-        export PATH="/Users/illusion/miniconda3/bin:$PATH"
-    fi
-fi
-unset __conda_setup
-# <<< conda initialize <<<
-
 
 conda deactivate
 conda activate
@@ -189,3 +174,22 @@ export CMAKE_MAKE_PROGRAM=/usr/bin/make
 export MACOSX_DEPLOYMENT_TARGET=10.8
 
 source /Users/illusion/.docker/init-zsh.sh || true # Added by Docker Desktop
+
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+__conda_setup="$('/Users/illusion/miniconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "/Users/illusion/miniconda3/etc/profile.d/conda.sh" ]; then
+        . "/Users/illusion/miniconda3/etc/profile.d/conda.sh"
+    else
+        export PATH="/Users/illusion/miniconda3/bin:$PATH"
+    fi
+fi
+unset __conda_setup
+# <<< conda initialize <<<
+
+
+autoload -U +X bashcompinit && bashcompinit
+complete -o nospace -C /opt/homebrew/bin/terraform terraform

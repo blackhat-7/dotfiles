@@ -35,8 +35,8 @@ config.line_height = 1.1
 config.front_end = "OpenGL"
 
 -- Window
-config.window_background_opacity = 0.9
-config.macos_window_background_blur = 20
+config.window_background_opacity = 0.1
+config.macos_window_background_blur = 50
 config.window_decorations = "RESIZE"
 config.enable_tab_bar = false
 config.max_fps = 120
