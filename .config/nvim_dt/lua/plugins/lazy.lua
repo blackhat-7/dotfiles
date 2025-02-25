@@ -32,7 +32,7 @@ require('lazy').setup({
     config = function()
       require("supermaven-nvim").setup({
         keymaps = {
-          accept_suggestion = "<M-;>",
+          accept_suggestion = "<M-tab>",
           clear_suggestion = "<M-c>",
           accept_word = "<C-j>",
         },
