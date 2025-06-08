@@ -152,16 +152,15 @@ source /Users/illusion/.docker/init-fish.sh || true # Added by Docker Desktop
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
-# if test -f /Users/illusion/miniconda3/bin/conda
-#     eval /Users/illusion/miniconda3/bin/conda "shell.fish" "hook" $argv | source
-# else
-#     if test -f "/Users/illusion/miniconda3/etc/fish/conf.d/conda.fish"
-#         . "/Users/illusion/miniconda3/etc/fish/conf.d/conda.fish"
-#     else
-#         set -x PATH "/Users/illusion/miniconda3/bin" $PATH
-#     end
-# end
-
+if test -f /Users/illusion/miniconda3/bin/conda
+    eval /Users/illusion/miniconda3/bin/conda "shell.fish" "hook" $argv | source
+else
+    if test -f "/Users/illusion/miniconda3/etc/fish/conf.d/conda.fish"
+        . "/Users/illusion/miniconda3/etc/fish/conf.d/conda.fish"
+    else
+        set -x PATH "/Users/illusion/miniconda3/bin" $PATH
+    end
+end
 # <<< conda initialize <<<
 
 # conda deactivate

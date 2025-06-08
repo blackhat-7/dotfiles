@@ -64,80 +64,136 @@ require('lazy').setup({
   -- },
   'onsails/lspkind.nvim',
   'folke/zen-mode.nvim',
+  -- {
+  --   "olimorris/codecompanion.nvim",
+  --   branch = "main",
+  --   dependencies = {
+  --     "nvim-lua/plenary.nvim",
+  --     "nvim-treesitter/nvim-treesitter",
+  --     -- The following are optional:
+  --     -- { "MeanderingProgrammer/render-markdown.nvim", ft = { "markdown", "codecompanion" } },
+  --   },
+  --   config = function()
+  --     require("codecompanion").setup({
+  --       adapters = {
+  --         ollama = function()
+  --           return require("codecompanion.adapters").extend("openai_compatible", {
+  --             env_replaced = {
+  --               -- owui
+  --               url = "http://100.109.37.59:8080/api",
+  --               model = "gemini.gemini-2.5-flash-preview-04-17",
+  --               api_key = "REDACTED_JWT_TOKEN",
+  --
+  --               -- pc
+  --               -- url = "http://100.95.18.138:42069",
+  --               -- model = "qwen2.5.1-coder-7b-instruct"
+  --
+  --             },
+  --           })
+  --         end,
+  --       },
+  --       -- display = {
+  --       --   action_palette = {
+  --       --     provider = "telescope",
+  --       --   },
+  --       -- },
+  --       strategies = {
+  --         chat = {
+  --           adapter = "ollama",
+  --           slash_commands = {
+  --             ["buffer"] = {
+  --               opts = {
+  --                 provider = "telescope",
+  --               }
+  --             },
+  --             ["fetch"] = {
+  --               opts = {
+  --                 provider = "telescope",
+  --               }
+  --             },
+  --             ["file"] = {
+  --               opts = {
+  --                 provider = "telescope",
+  --               }
+  --             },
+  --             ["symbols"] = {
+  --               opts = {
+  --                 provider = "telescope",
+  --               }
+  --             },
+  --           },
+  --         }
+  --       },
+  --       vim.api.nvim_set_keymap("n", "<C-a>", "<cmd>CodeCompanionActions<cr>", { noremap = true, silent = true }),
+  --       vim.api.nvim_set_keymap("v", "<C-a>", "<cmd>CodeCompanionActions<cr>", { noremap = true, silent = true }),
+  --       vim.api.nvim_set_keymap("n", "<LocalLeader>a", "<cmd>CodeCompanionChat Toggle<cr>", { noremap = true, silent = true }),
+  --       vim.api.nvim_set_keymap("v", "<LocalLeader>a", "<cmd>CodeCompanionChat Toggle<cr>", { noremap = true, silent = true }),
+  --       vim.api.nvim_set_keymap("v", "ga", "<cmd>CodeCompanionChat Add<cr>", { noremap = true, silent = true }),
+  --     })
+  --   end,
+  -- }
   {
-    "olimorris/codecompanion.nvim",
-    branch = "main",
-    dependencies = {
-      "nvim-lua/plenary.nvim",
-      "nvim-treesitter/nvim-treesitter",
-      -- The following are optional:
-      -- { "MeanderingProgrammer/render-markdown.nvim", ft = { "markdown", "codecompanion" } },
+  "yetone/avante.nvim",
+  event = "VeryLazy",
+  version = false, -- Never set this value to "*"! Never!
+  opts = {
+    -- add any opts here
+    -- for example
+    provider = "gemini",
+    -- openai = {
+    --   endpoint = "http://100.109.37.59:8080/api",
+    --   model = "qwen3-8b", -- your desired model (or use gpt-4o, etc.)
+    --   timeout = 30000, -- Timeout in milliseconds, increase this for reasoning models
+    --   temperature = 0,
+    --   max_completion_tokens = 8192, -- Increase this to include reasoning tokens (for reasoning models)
+    -- },
+    gemini = {
+      model = "gemini-2.5-flash-preview-04-17",
+      timeout = 30000, -- Timeout in milliseconds, increase this for reasoning models
     },
-    config = function()
-      require("codecompanion").setup({
-        adapters = {
-          ollama = function()
-            return require("codecompanion.adapters").extend("openai_compatible", {
-              env_replaced = {
-                -- owui
-                url = "http://100.109.37.59:8080/api",
-                model = "google_genai.gemini-2.0-flash-thinking-exp-1219",
-                api_key = "REDACTED_JWT_TOKEN",
-
-                -- glhf
-                url = "https://glhf.chat/api/openai",
-                model = "hf:Qwen/Qwen2.5-Coder-32B-Instruct",
-
-                -- pc
-                -- url = "http://100.95.18.138:42069",
-                -- model = "qwen2.5.1-coder-7b-instruct"
-
-                -- llama cpp
-                -- url = "http://localhost:42070",
-              },
-            })
-          end,
-        },
-        -- display = {
-        --   action_palette = {
-        --     provider = "telescope",
-        --   },
-        -- },
-        strategies = {
-          chat = {
-            adapter = "ollama",
-            slash_commands = {
-              ["buffer"] = {
-                opts = {
-                  provider = "telescope",
-                }
-              },
-              ["fetch"] = {
-                opts = {
-                  provider = "telescope",
-                }
-              },
-              ["file"] = {
-                opts = {
-                  provider = "telescope",
-                }
-              },
-              ["symbols"] = {
-                opts = {
-                  provider = "telescope",
-                }
-              },
-            },
-          }
-        },
-        vim.api.nvim_set_keymap("n", "<C-a>", "<cmd>CodeCompanionActions<cr>", { noremap = true, silent = true }),
-        vim.api.nvim_set_keymap("v", "<C-a>", "<cmd>CodeCompanionActions<cr>", { noremap = true, silent = true }),
-        vim.api.nvim_set_keymap("n", "<LocalLeader>a", "<cmd>CodeCompanionChat Toggle<cr>", { noremap = true, silent = true }),
-        vim.api.nvim_set_keymap("v", "<LocalLeader>a", "<cmd>CodeCompanionChat Toggle<cr>", { noremap = true, silent = true }),
-        vim.api.nvim_set_keymap("v", "ga", "<cmd>CodeCompanionChat Add<cr>", { noremap = true, silent = true }),
-      })
-    end,
   },
+  -- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
+  build = "make",
+  -- build = "powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false" -- for windows
+  dependencies = {
+    "nvim-treesitter/nvim-treesitter",
+    "stevearc/dressing.nvim",
+    "nvim-lua/plenary.nvim",
+    "MunifTanjim/nui.nvim",
+    --- The below dependencies are optional,
+    "echasnovski/mini.pick", -- for file_selector provider mini.pick
+    "nvim-telescope/telescope.nvim", -- for file_selector provider telescope
+    "hrsh7th/nvim-cmp", -- autocompletion for avante commands and mentions
+    "ibhagwan/fzf-lua", -- for file_selector provider fzf
+    "nvim-tree/nvim-web-devicons", -- or echasnovski/mini.icons
+    "zbirenbaum/copilot.lua", -- for providers='copilot'
+    {
+      -- support for image pasting
+      "HakonHarnes/img-clip.nvim",
+      event = "VeryLazy",
+      opts = {
+        -- recommended settings
+        default = {
+          embed_image_as_base64 = false,
+          prompt_for_file_name = false,
+          drag_and_drop = {
+            insert_mode = true,
+          },
+          -- required for Windows users
+          use_absolute_path = true,
+        },
+      },
+    },
+    {
+      -- Make sure to set this up properly if you have lazy=true
+      'MeanderingProgrammer/render-markdown.nvim',
+      opts = {
+        file_types = { "markdown", "Avante" },
+      },
+      ft = { "markdown", "Avante" },
+    },
+  },
+},
 
   -- Tree
   {
