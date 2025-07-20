@@ -184,16 +184,16 @@ require('lazy').setup({
         },
       },
     },
-    {
-      -- Make sure to set this up properly if you have lazy=true
-      'MeanderingProgrammer/render-markdown.nvim',
-      opts = {
-        file_types = { "markdown", "Avante" },
-      },
-      ft = { "markdown", "Avante" },
-    },
+    -- {
+    --   -- Make sure to set this up properly if you have lazy=true
+    --   'MeanderingProgrammer/render-markdown.nvim',
+    --   opts = {
+    --     file_types = { "markdown", "Avante" },
+    --   },
+    --   ft = { "markdown", "Avante" },
+    -- },
   },
-},
+ },
 
   -- Tree
   {
@@ -490,22 +490,6 @@ require('lazy').setup({
       "nvim-lua/plenary.nvim",
     },
   },
-  -- {
-  --     "OXY2DEV/markview.nvim",
-  --     lazy = false,      -- Recommended
-  --     -- ft = "markdown" -- If you decide to lazy-load anyway
-  --
-  --     dependencies = {
-  --         "nvim-treesitter/nvim-treesitter",
-  --         "nvim-tree/nvim-web-devicons"
-  --     }
-  -- },
-  -- {
-  --   "MeanderingProgrammer/markdown.nvim",
-  --   main = "render-markdown",
-  --   opts = { enabled = true },
-  --   dependencies = { "nvim-treesitter/nvim-treesitter", "nvim-tree/nvim-web-devicons" },
-  -- },
   {
     "marcussimonsen/let-it-snow.nvim",
     cmd = "LetItSnow", -- Wait with loading until command is run

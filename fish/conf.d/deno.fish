@@ -1,0 +1,1 @@
+source "/Users/illusion/.deno/env.fish"

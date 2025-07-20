@@ -24,7 +24,7 @@ vim.wo.signcolumn = 'yes'
 
 -- Set colorscheme
 --vim.cmd [[colorscheme onedark]]
-vim.cmd.colorscheme "base16-nord"
+vim.cmd.colorscheme "vesper"
 
 --vim.cmd()
 vim.opt.clipboard = 'unnamedplus'

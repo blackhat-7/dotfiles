@@ -200,3 +200,6 @@ export OPENAI_API_BASE="http://100.109.37.59:8080/api"
 export AIDER_MODEL="hf:Qwen/Qwen2.5-Coder-32B-Instruct"
 export OPENAI_API_KEY=$(cat $HOME/Documents/Creds/owui.txt)
 export GEMINI_API_KEY=$(cat $HOME/Documents/Creds/gemini.txt)
+export OLLAMA_HOST="0.0.0.0"
+
+direnv hook fish | source
