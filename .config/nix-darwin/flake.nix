@@ -15,21 +15,35 @@
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = { self, nixpkgs, nix-darwin, home-manager, ... }@inputs: {
+  outputs =
+    {
+      self,
+      nixpkgs,
+      nix-darwin,
+      home-manager,
+      ...
+    }@inputs:
     # This is the main output that Nix-Darwin will build.
-    darwinConfigurations."illusion" = nix-darwin.lib.darwinSystem {
-      system = "aarch64-darwin";
+    let
+      pkgs = import nixpkgs { system = "aarch64-darwin"; };
+    in
+    {
+      darwinConfigurations."illusion" = nix-darwin.lib.darwinSystem {
+        system = "aarch64-darwin";
 
-      # Special arguments passed to your configuration
-      specialArgs = { inherit inputs; };
+        # Special arguments passed to your configuration
+        specialArgs = { inherit inputs; };
 
-      # The list of modules to import.
-      # Your main configuration file will be `./darwin-configuration.nix`
-      # We also include the home-manager module.
-      modules = [
-        ./darwin-configuration.nix
-        home-manager.darwinModules.home-manager
-      ];
+        # The list of modules to import.
+        # Your main configuration file will be `./darwin-configuration.nix`
+        # We also include the home-manager module.
+        modules = [
+          ./darwin-configuration.nix
+          home-manager.darwinModules.home-manager
+        ];
+      };
+      devShells.aarch64-darwin = {
+        default = pkgs.mkShell { packages = with pkgs; [ nixfmt-tree ]; };
+      };
     };
-  };
 }

@@ -138,7 +138,6 @@ bind -M insert \cx _aichat_fish
 #     end
 # end
 
-source /Users/illusion/.docker/init-fish.sh || true # Added by Docker Desktop
 
 
 # tmux fzf window
@@ -148,51 +147,51 @@ source /Users/illusion/.docker/init-fish.sh || true # Added by Docker Desktop
 #     tmux select-window -t $window_index
 # end
 
-# Conda stuff
-
-# >>> conda initialize >>>
-# !! Contents within this block are managed by 'conda init' !!
-if test -f /Users/illusion/miniconda3/bin/conda
-    eval /Users/illusion/miniconda3/bin/conda "shell.fish" "hook" $argv | source
-else
-    if test -f "/Users/illusion/miniconda3/etc/fish/conf.d/conda.fish"
-        . "/Users/illusion/miniconda3/etc/fish/conf.d/conda.fish"
-    else
-        set -x PATH "/Users/illusion/miniconda3/bin" $PATH
-    end
-end
-# <<< conda initialize <<<
-
-# conda deactivate
-# conda activate
-
-set -x CONDA_PATH /data/miniconda3/bin/conda $HOME/miniconda3/bin/conda
-
-function conda
-    echo "Lazy loading conda upon first invocation..."
-    functions --erase conda
-    for conda_path in $CONDA_PATH
-        if test -f $conda_path
-            echo "Using Conda installation found in $conda_path"
-            eval $conda_path "shell.fish" "hook" | source
-            conda $argv
-            return
-        end
-    end
-    echo "No conda installation found in $CONDA_PATH"
-end
-
-function ce
-    conda activate (conda info --envs \
-        | grep -v '^#' \
-        | grep -v '^Using Conda' \
-        | grep -v '^Lazy loading' \
-        | grep -v '^[[:space:]]*$' \
-        | fzf \
-        | awk '{print $1}')
-end
-
-# Conda stuff end
+# # Conda stuff
+#
+# # >>> conda initialize >>>
+# # !! Contents within this block are managed by 'conda init' !!
+# if test -f /Users/illusion/miniconda3/bin/conda
+#     eval /Users/illusion/miniconda3/bin/conda "shell.fish" "hook" $argv | source
+# else
+#     if test -f "/Users/illusion/miniconda3/etc/fish/conf.d/conda.fish"
+#         . "/Users/illusion/miniconda3/etc/fish/conf.d/conda.fish"
+#     else
+#         set -x PATH "/Users/illusion/miniconda3/bin" $PATH
+#     end
+# end
+# # <<< conda initialize <<<
+#
+# # conda deactivate
+# # conda activate
+#
+# set -x CONDA_PATH /data/miniconda3/bin/conda $HOME/miniconda3/bin/conda
+#
+# function conda
+#     echo "Lazy loading conda upon first invocation..."
+#     functions --erase conda
+#     for conda_path in $CONDA_PATH
+#         if test -f $conda_path
+#             echo "Using Conda installation found in $conda_path"
+#             eval $conda_path "shell.fish" "hook" | source
+#             conda $argv
+#             return
+#         end
+#     end
+#     echo "No conda installation found in $CONDA_PATH"
+# end
+#
+# function ce
+#     conda activate (conda info --envs \
+#         | grep -v '^#' \
+#         | grep -v '^Using Conda' \
+#         | grep -v '^Lazy loading' \
+#         | grep -v '^[[:space:]]*$' \
+#         | fzf \
+#         | awk '{print $1}')
+# end
+#
+# # Conda stuff end
 
 
 # export OPENAI_API_BASE="http://100.95.18.138:42069/v1"

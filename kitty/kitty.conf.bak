@@ -1,7 +1,7 @@
 hide_window_decorations      titlebar-only
 cursor_trail 3
 
-background_opacity 0.8
+# background_opacity 0.8
 # background_blur -5
 
 font_size 14
@@ -12,7 +12,7 @@ font_size 14
 
 
 # BEGIN_KITTY_THEME
-# Gruvbox Dark
+# Gruvbox Material Dark Soft
 include current-theme.conf
 # END_KITTY_THEME
 
