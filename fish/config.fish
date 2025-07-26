@@ -1,1 +1,1 @@
-/Users/illusion/dotfiles/.config/fish/config.fish
+/nix/store/rpg3ykrx49m2k1358f4ik0hgks56ns3b-home-manager-files/.config/fish/config.fish

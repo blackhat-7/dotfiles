@@ -39,8 +39,6 @@
   ];
 
   users.users."illusion" = {
-    # On macOS, this is the most important setting.
-    # It tells nix-darwin that this user exists and where their home is.
     home = "/Users/illusion";
   };
 
