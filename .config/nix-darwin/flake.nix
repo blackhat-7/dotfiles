@@ -36,6 +36,7 @@
 
         modules = [
           ./darwin
+          ./homebrew
           home-manager.darwinModules.home-manager
         ];
       };

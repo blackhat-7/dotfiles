@@ -5,6 +5,7 @@
   ];
   home.stateVersion = "23.11"; # Or your desired version
   # Packages you want for your user
+  # nixpkgs.config.allowUnfree = true;
   home.packages = [
     pkgs.neofetch
     pkgs.colima
@@ -14,6 +15,7 @@
     pkgs.tailscale
     pkgs.python311
   ];
+
 
   # services = {
   #   ollama.enable = true;

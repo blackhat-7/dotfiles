@@ -11,6 +11,7 @@
   # using, which helps avoid breaking changes when you upgrade.
   # For a new install, you can start with 4.
   system.stateVersion = 4;
+  system.primaryUser = "illusion";
 
   programs = {
     fish.enable = true;
