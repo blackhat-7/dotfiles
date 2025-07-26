@@ -34,11 +34,8 @@
         # Special arguments passed to your configuration
         specialArgs = { inherit inputs; };
 
-        # The list of modules to import.
-        # Your main configuration file will be `./darwin-configuration.nix`
-        # We also include the home-manager module.
         modules = [
-          ./darwin-configuration.nix
+          ./darwin
           home-manager.darwinModules.home-manager
         ];
       };
