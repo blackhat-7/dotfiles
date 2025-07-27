@@ -1,4 +1,19 @@
-{ pkgs, ... }: {
+{ pkgs, ... }: 
+  let tmux-fzf-pane-switch = pkgs.tmuxPlugins.mkTmuxPlugin
+    {
+      name = "tmux-fzf-pane-switch";
+      pluginName = "tmux-fzf-pane-switch";
+      # version = "1.0";
+      version = "unstable-2021-08-02";
+      src = pkgs.fetchFromGitHub {
+        owner = "Kristijan";
+        repo = "tmux-fzf-pane-switch";
+        rev = "0b8586ef41c45edfbd10bf2e5cefdda1b217f728";
+        hash = "sha256-Kwvj92yUVRUbr0zHQQO5eoQwDtkqaLosWA4Q/nJ/+Mw=";
+      };
+      rtpFilePath = "select_pane.tmux";
+    };
+  in {
   programs.tmux = {
     enable = true;
     # shell = "${pkgs.fish}/bin/fish";
@@ -11,9 +26,9 @@
         tmuxPlugins.yank
         tmuxPlugins.tmux-thumbs
         tmuxPlugins.battery
-        tmuxPlugins.tmux-floax
+        # tmuxPlugins.tmux-floax
         tmuxPlugins.vim-tmux-navigator
-        tmuxPlugins.tmux-fzf
+        # tmuxPlugins.tmux-fzf
         {
             plugin = tmuxPlugins.catppuccin;
             extraConfig = ''
@@ -29,6 +44,12 @@
             extraConfig = ''
                 set -g @online_icon "ok"
                 set -g @offline_icon "nok"
+            '';
+        }
+        {
+            plugin = tmux-fzf-pane-switch;
+            extraConfig = ''
+                set -g @fzf_pane_switch_bind-key "C-f"
             '';
         }
         # {
@@ -115,10 +136,6 @@
       bind j select-pane -D
       bind k select-pane -U
       bind l select-pane -R
-
-      # Switch sessions and windows
-      # set -g @plugin 'cfoust/tmux-fuzzywuzzy'
-      # set -g @fuzzy-wuzzy "C-f"
 
       # Set status bar on/off
       bind C-s set-option -g status

@@ -4,6 +4,7 @@
     global.autoUpdate = true;
     casks = [
       "raycast"
+      "zen"
     ];
   };
 }

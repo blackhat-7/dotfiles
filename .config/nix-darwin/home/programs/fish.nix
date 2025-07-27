@@ -61,10 +61,7 @@ alias nvrc="cd ~/.config/nvim && nv"
 alias minecraft="sudo java -jar ~/Documents/Games/minecraft/TLauncher-2.885.jar"
 
 # Tmux envs
-alias sessions="/Users/illusion/Documents/randomCodes/shortcuts/tmux_group/sessions.sh"
-alias code-tmux="/Users/illusion/Documents/randomCodes/shortcuts/tmux_group/code.sh"
-alias server-tmux="/Users/illusion/Documents/randomCodes/shortcuts/tmux_group/server.sh"
-alias app-kill="/Users/illusion/Documents/randomCodes/shortcuts/spotify_kill/main.sh"
+alias sessions="/Users/illusion/dotfiles/.config/tmux/tmux_group/sessions.sh"
 alias long_training_jobs="/Users/illusion/Documents/Work/Editing/DebugHelpers/long_training/long_training_jobs"
 alias gcp_stage="source /Users/illusion/Documents/Work/Creds/gcp_stage.sh"
 alias gcp_prod="source /Users/illusion/Documents/Work/Creds/gcp_prod.sh"
