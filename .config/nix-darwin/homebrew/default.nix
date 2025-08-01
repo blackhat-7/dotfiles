@@ -5,6 +5,7 @@
     casks = [
       "raycast"
       "zen"
+      "docker"
     ];
   };
 }

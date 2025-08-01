@@ -27,111 +27,31 @@ else
 end
 
 require('lazy').setup({
-  {
-    "supermaven-inc/supermaven-nvim",
-    config = function()
-      require("supermaven-nvim").setup({
-        keymaps = {
-          accept_suggestion = "<M-tab>",
-          clear_suggestion = "<M-c>",
-          accept_word = "<C-j>",
-        },
-        ignore_filetypes = { env = true }, -- or { "cpp", }
-        color = {
-          suggestion_color = "#ff0000",
-          cterm = 244,
-        },
-        log_level = "info", -- set to "off" to disable logging completely
-        disable_inline_completion = false, -- disables inline completion for use with cmp
-        disable_keymaps = false, -- disables built in keymaps for more manual control
-        condition = function()
-          return false
-        end -- condition to check for stopping supermaven, `true` means to stop supermaven when the condition is true.
-      })
-    end,
-  },
   -- {
-  --   'Exafunction/codeium.vim',
-  --   config = function ()
-  --     vim.g.codeium_disable_bindings = 1
-  --     -- Change '<C-g>' here to any keycode you like.
-  --     vim.keymap.set('i', '<M-;>', function () return vim.fn['codeium#Accept']() end, { expr = true, silent = true })
-  --     vim.keymap.set('i', '<c-n>', function() return vim.fn['codeium#CycleCompletions'](1) end, { expr = true, silent = true })
-  --     vim.keymap.set('i', '<c-p>', function() return vim.fn['codeium#CycleCompletions'](-1) end, { expr = true, silent = true })
-  --     vim.keymap.set('i', '<c-x>', function() return vim.fn['codeium#Clear']() end, { expr = true, silent = true })
-  --     enable_chat = true
-  --   end
+  --   "supermaven-inc/supermaven-nvim",
+  --   config = function()
+  --     require("supermaven-nvim").setup({
+  --       keymaps = {
+  --         accept_suggestion = "<M-tab>",
+  --         clear_suggestion = "<M-c>",
+  --         accept_word = "<C-j>",
+  --       },
+  --       ignore_filetypes = { env = true }, -- or { "cpp", }
+  --       color = {
+  --         suggestion_color = "#ff0000",
+  --         cterm = 244,
+  --       },
+  --       log_level = "info", -- set to "off" to disable logging completely
+  --       disable_inline_completion = false, -- disables inline completion for use with cmp
+  --       disable_keymaps = false, -- disables built in keymaps for more manual control
+  --       condition = function()
+  --         return false
+  --       end -- condition to check for stopping supermaven, `true` means to stop supermaven when the condition is true.
+  --     })
+  --   end,
   -- },
   'onsails/lspkind.nvim',
   'folke/zen-mode.nvim',
-  -- {
-  --   "olimorris/codecompanion.nvim",
-  --   branch = "main",
-  --   dependencies = {
-  --     "nvim-lua/plenary.nvim",
-  --     "nvim-treesitter/nvim-treesitter",
-  --     -- The following are optional:
-  --     -- { "MeanderingProgrammer/render-markdown.nvim", ft = { "markdown", "codecompanion" } },
-  --   },
-  --   config = function()
-  --     require("codecompanion").setup({
-  --       adapters = {
-  --         ollama = function()
-  --           return require("codecompanion.adapters").extend("openai_compatible", {
-  --             env_replaced = {
-  --               -- owui
-  --               url = "http://100.109.37.59:8080/api",
-  --               model = "gemini.gemini-2.5-flash-preview-04-17",
-  --               api_key = "REDACTED_JWT_TOKEN",
-  --
-  --               -- pc
-  --               -- url = "http://100.95.18.138:42069",
-  --               -- model = "qwen2.5.1-coder-7b-instruct"
-  --
-  --             },
-  --           })
-  --         end,
-  --       },
-  --       -- display = {
-  --       --   action_palette = {
-  --       --     provider = "telescope",
-  --       --   },
-  --       -- },
-  --       strategies = {
-  --         chat = {
-  --           adapter = "ollama",
-  --           slash_commands = {
-  --             ["buffer"] = {
-  --               opts = {
-  --                 provider = "telescope",
-  --               }
-  --             },
-  --             ["fetch"] = {
-  --               opts = {
-  --                 provider = "telescope",
-  --               }
-  --             },
-  --             ["file"] = {
-  --               opts = {
-  --                 provider = "telescope",
-  --               }
-  --             },
-  --             ["symbols"] = {
-  --               opts = {
-  --                 provider = "telescope",
-  --               }
-  --             },
-  --           },
-  --         }
-  --       },
-  --       vim.api.nvim_set_keymap("n", "<C-a>", "<cmd>CodeCompanionActions<cr>", { noremap = true, silent = true }),
-  --       vim.api.nvim_set_keymap("v", "<C-a>", "<cmd>CodeCompanionActions<cr>", { noremap = true, silent = true }),
-  --       vim.api.nvim_set_keymap("n", "<LocalLeader>a", "<cmd>CodeCompanionChat Toggle<cr>", { noremap = true, silent = true }),
-  --       vim.api.nvim_set_keymap("v", "<LocalLeader>a", "<cmd>CodeCompanionChat Toggle<cr>", { noremap = true, silent = true }),
-  --       vim.api.nvim_set_keymap("v", "ga", "<cmd>CodeCompanionChat Add<cr>", { noremap = true, silent = true }),
-  --     })
-  --   end,
-  -- }
   {
   "yetone/avante.nvim",
   event = "VeryLazy",
@@ -139,7 +59,7 @@ require('lazy').setup({
   opts = {
     -- add any opts here
     -- for example
-    provider = "gemini",
+    provider = "copilot",
     -- openai = {
     --   endpoint = "http://100.109.37.59:8080/api",
     --   model = "qwen3-8b", -- your desired model (or use gpt-4o, etc.)
@@ -147,9 +67,24 @@ require('lazy').setup({
     --   temperature = 0,
     --   max_completion_tokens = 8192, -- Increase this to include reasoning tokens (for reasoning models)
     -- },
-    gemini = {
-      model = "gemini-2.5-flash-preview-04-17",
-      timeout = 30000, -- Timeout in milliseconds, increase this for reasoning models
+    -- gemini = {
+    --   model = "gemini-2.5-pro",
+    --   timeout = 30000, -- Timeout in milliseconds, increase this for reasoning models
+    -- },
+    copilot = {
+      model = "o4-mini",
+      timeout = 30000
+    },
+    web_search_engine = {
+      provider = "searxng",
+      providers = {
+        searxng = {
+          api_url_name = "SEARXNG_API_URL",
+          extra_request_body = {
+            format = "json",
+          },
+        },
+      },
     },
   },
   -- if you want to build from source then do `make BUILD_FROM_SOURCE=true`

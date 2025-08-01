@@ -17,10 +17,10 @@ export PATH="/usr/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
 
 # GCP
-export PROD_GCP_KEY="/Users/illusion/Documents/Work/Creds/edits_service_account_creds.json"
-export STAGE_GCP_KEY="/Users/illusion/Documents/Work/Creds/stage_gcp.json"
-export CROSS_GCP_KEY="/Users/illusion/Documents/Work/Creds/cross-accounts-service-account.json"
-export GOOGLE_APPLICATION_CREDENTIALS=$CROSS_GCP_KEY
+# export PROD_GCP_KEY="/Users/illusion/Documents/Work/Creds/edits_service_account_creds.json"
+# export STAGE_GCP_KEY="/Users/illusion/Documents/Work/Creds/stage_gcp.json"
+# export CROSS_GCP_KEY="/Users/illusion/Documents/Work/Creds/cross-accounts-service-account.json"
+# export GOOGLE_APPLICATION_CREDENTIALS=$CROSS_GCP_KEY
 
 export EDITOR='nvim'
 export LD_LIBRARY_PATH="/usr/local/opt/gettext/lib:$LD_LIBRARY_PATH"
@@ -50,6 +50,7 @@ alias aseprite="/Users/illusion/Documents/Hobby/source/aseprite/build/bin/asepri
 alias fe="/opt/homebrew/bin/yazi"
 alias cat=bat
 alias pdb="./cloud_sql_proxy -instances=aftershoot-co:us-central1:editing-uploader=tcp:5434"
+alias sdb="./cloud_sql_proxy -instances=aftershoot-stage:us-central1:aftershoot-stage-db=tcp:5436"
 
 # Nvim configs
 alias nvim="/Users/illusion/nvim/bin/nvim"
@@ -199,6 +200,7 @@ export AIDER_MODEL="hf:Qwen/Qwen2.5-Coder-32B-Instruct"
 export OPENAI_API_KEY=$(cat $HOME/Documents/Creds/owui.txt)
 export GEMINI_API_KEY=$(cat $HOME/Documents/Creds/gemini.txt)
 export OLLAMA_HOST="0.0.0.0"
+export SEARXNG_API_URL="http://raspberrypi:8081"
 
 direnv hook fish | source
     '';

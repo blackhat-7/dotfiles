@@ -75,7 +75,7 @@ fi
 # Remote session with VM, DB
 if ! tmux has-session -t Remote 2>/dev/null; then
     create_session "Services" "Services" "cd ~/"
-    new_window_in_session_with_4_way_split "Serivces" "servers" "cd ~/ && pdb" "cd ~/" "cd ~/" "cd ~/ && sudo tailscaled"
+    new_window_in_session_with_4_way_split "Serivces" "servers" "cd ~/ && pdb" "cd ~/ && sdb" "cd ~/" "cd ~/"
 fi
 
 # Hobby session with rc window
