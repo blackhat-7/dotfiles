@@ -3,7 +3,6 @@
   imports = [
     ./kitty.nix
     ./tmux.nix
-    ./tmux.nix
     ./fish.nix
   ];
 
@@ -11,7 +10,6 @@
     bash.enable = true;
     # zsh.enable = true;
     fish.enable = true;
-    neovim.enable = true;
     aichat.enable = true;
     direnv.enable = true;
     direnv.nix-direnv.enable = true;
@@ -23,5 +21,6 @@
     bat.enable = true;
     fzf.enable = true;
     zed-editor.enable = true;
+    neovim.enable = true;
   };
 }

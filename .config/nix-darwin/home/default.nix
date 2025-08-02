@@ -15,6 +15,7 @@
     pkgs.tailscale
     pkgs.python311
     pkgs.opentofu
+    pkgs.terragrunt
     (pkgs.google-cloud-sdk.withExtraComponents [pkgs.google-cloud-sdk.components.kubectl pkgs.google-cloud-sdk.components.gke-gcloud-auth-plugin])
   ];
 

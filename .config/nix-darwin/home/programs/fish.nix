@@ -53,7 +53,7 @@ alias pdb="./cloud_sql_proxy -instances=aftershoot-co:us-central1:editing-upload
 alias sdb="./cloud_sql_proxy -instances=aftershoot-stage:us-central1:aftershoot-stage-db=tcp:5436"
 
 # Nvim configs
-alias nvim="/Users/illusion/nvim/bin/nvim"
+# alias nvim="/Users/illusion/nvim/bin/nvim"
 alias nv="nvim -u ~/.config/nvim/init.lua"
 alias nvi="nvim -u ~/.config/nvim_dt/init.lua"
 alias nvrc="cd ~/.config/nvim && nv"
@@ -195,12 +195,13 @@ bind -M insert \cx _aichat_fish
 
 
 # export OPENAI_API_BASE="http://100.95.18.138:42069/v1"
-export OPENAI_API_BASE="http://100.109.37.59:8080/api"
+export OPENAI_API_BASE="http://100.85.231.84:8080/api"
 export AIDER_MODEL="hf:Qwen/Qwen2.5-Coder-32B-Instruct"
 export OPENAI_API_KEY=$(cat $HOME/Documents/Creds/owui.txt)
 export GEMINI_API_KEY=$(cat $HOME/Documents/Creds/gemini.txt)
 export OLLAMA_HOST="0.0.0.0"
 export SEARXNG_API_URL="http://raspberrypi:8081"
+export OPENROUTER_API_KEY=$(cat $HOME/Documents/Creds/openrouter.txt)
 
 direnv hook fish | source
     '';

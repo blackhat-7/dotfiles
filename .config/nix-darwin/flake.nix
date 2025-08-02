@@ -13,6 +13,10 @@
     # Optional but highly recommended: Home Manager for user-level config
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
+    neovim-nightly-overlay = {
+      url = "github:nix-community/neovim-nightly-overlay";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -21,6 +25,7 @@
       nixpkgs,
       nix-darwin,
       home-manager,
+      neovim-nightly-overlay,
       ...
     }@inputs:
     # This is the main output that Nix-Darwin will build.
@@ -35,6 +40,7 @@
         specialArgs = { inherit inputs; };
 
         modules = [
+          { nixpkgs.overlays = [ neovim-nightly-overlay.overlays.default ]; }
           ./darwin
           ./homebrew
           home-manager.darwinModules.home-manager
