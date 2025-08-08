@@ -50,9 +50,9 @@ fi
 if ! tmux has-session -t Main 2>/dev/null; then
     create_session "Main" "editing_preprocesser" "editing; cd Editing-Preprocesser/"
     add_window "Main" "editing_trainer" "editing; cd Editing-Trainer"
-    add_window "Main" "editing_app" "editing; cd Aftershoot-Editing-App"
-    add_window "Main" "backend" "editing; cd backend"
     add_window "Main" "aftershoot-cloud" "editing; cd aftershoot-cloud"
+    add_window "Main" "infra" "editing; cd infra"
+    add_window "Main" "editing-ml" "editing; cd editing-ml"
 fi
 
 # DebugHelper session with TT, PF windows
@@ -72,15 +72,15 @@ if ! tmux has-session -t Downloads 2>/dev/null; then
     add_window "Downloads" "Downloads" "cd ~/Downloads"
 fi
 
-# Remote session with VM, DB
-if ! tmux has-session -t Remote 2>/dev/null; then
-    create_session "Services" "Services" "cd ~/"
-    new_window_in_session_with_4_way_split "Serivces" "servers" "cd ~/ && pdb" "cd ~/ && sdb" "cd ~/" "cd ~/"
-fi
-
 # Hobby session with rc window
 if ! tmux has-session -t Hobby 2>/dev/null; then
     create_session "Hobby" "RandomCodes" "rc"
+fi
+
+# Sessions and daemons
+if ! tmux has-session -t Remote 2>/dev/null; then
+    create_session "Services" "Services" "cd ~/"
+    new_window_in_session_with_4_way_split "Serivces" "servers" "cd ~/ && pdb" "cd ~/ && sdb" "cd ~/" "cd ~/"
 fi
 
 # Attach to the main session or to the session that was just created

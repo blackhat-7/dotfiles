@@ -17,31 +17,28 @@
     pkgs.opentofu
     pkgs.terragrunt
     (pkgs.google-cloud-sdk.withExtraComponents [pkgs.google-cloud-sdk.components.kubectl pkgs.google-cloud-sdk.components.gke-gcloud-auth-plugin])
+    pkgs.golangci-lint
+    pkgs.ollama
   ];
 
 
-  # services = {
-  #   ollama.enable = true;
-  # };
-
-  # Docker daemon
-  # launchd.agents.colima = {
-  #   enable = true;
-  #   config = {
-  #     # A label for the service
-  #     Label = "com.abiosoft.colima";
-  #     # The command to run
-  #     ProgramArguments = [
-  #       "${pkgs.colima}/bin/colima"
-  #       "start"
-  #     ];
-  #     # Run the service when you log in
-  #     RunAtLoad = true;
-  #     # Keep the process alive, or restart if it dies
-  #     KeepAlive = false;
-  #     # Log files
-  #     StandardOutPath = "/Users/illusion/Library/Logs/colima.log";
-  #     StandardErrorPath = "/Users/illusion/Library/Logs/colima.error.log";
-  #   };
-  # };
+  # Launchd agent for Ollama service
+  launchd.agents.ollama = {
+    enable = true;
+    config = {
+      # Unique label for the Ollama service
+      Label = "com.illusion.ollama";
+      # Command to start the Ollama server
+      ProgramArguments = [
+        "${pkgs.ollama}/bin/ollama"
+        "serve"
+      ];
+      # Start on load and keep alive
+      RunAtLoad = true;
+      KeepAlive = true;
+      # Log standard output and errors
+      StandardOutPath = "/Users/illusion/Library/Logs/ollama.log";
+      StandardErrorPath = "/Users/illusion/Library/Logs/ollama.error.log";
+    };
+  };
 }

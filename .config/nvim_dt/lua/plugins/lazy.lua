@@ -59,18 +59,7 @@ require('lazy').setup({
   opts = {
     -- add any opts here
     -- for example
-    provider = "openrouter",
-    -- openai = {
-    --   endpoint = "http://100.109.37.59:8080/api",
-    --   model = "qwen3-8b", -- your desired model (or use gpt-4o, etc.)
-    --   timeout = 30000, -- Timeout in milliseconds, increase this for reasoning models
-    --   temperature = 0,
-    --   max_completion_tokens = 8192, -- Increase this to include reasoning tokens (for reasoning models)
-    -- },
-    -- gemini = {
-    --   model = "gemini-2.5-pro",
-    --   timeout = 30000, -- Timeout in milliseconds, increase this for reasoning models
-    -- },
+    provider = "openai",
     providers = {
       copilot = {
         model = "o4-mini",
@@ -81,6 +70,16 @@ require('lazy').setup({
         endpoint = 'https://openrouter.ai/api/v1',
         api_key_name = 'OPENROUTER_API_KEY',
         model = 'deepseek/deepseek-r1:free',
+      },
+      openai = {
+        endpoint = "http://100.95.18.138:42069/v1",
+        model = "openai/gpt-oss-20b", -- your desired model (or use gpt-4o, etc.)
+        api_key_name = "OPENAI_API_KEY",
+        timeout = 30000, -- Timeout in milliseconds, increase this for reasoning models
+      },
+      gemini = {
+        model = "gemini-2.5-pro",
+        timeout = 30000, -- Timeout in milliseconds, increase this for reasoning models
       },
     },
     web_search_engine = {
@@ -109,24 +108,23 @@ require('lazy').setup({
     "hrsh7th/nvim-cmp", -- autocompletion for avante commands and mentions
     "ibhagwan/fzf-lua", -- for file_selector provider fzf
     "nvim-tree/nvim-web-devicons", -- or echasnovski/mini.icons
-    "zbirenbaum/copilot.lua", -- for providers='copilot'
-    {
-      -- support for image pasting
-      "HakonHarnes/img-clip.nvim",
-      event = "VeryLazy",
-      opts = {
-        -- recommended settings
-        default = {
-          embed_image_as_base64 = false,
-          prompt_for_file_name = false,
-          drag_and_drop = {
-            insert_mode = true,
-          },
-          -- required for Windows users
-          use_absolute_path = true,
-        },
-      },
-    },
+    -- {
+    --   -- support for image pasting
+    --   "HakonHarnes/img-clip.nvim",
+    --   event = "VeryLazy",
+    --   opts = {
+    --     -- recommended settings
+    --     default = {
+    --       embed_image_as_base64 = false,
+    --       prompt_for_file_name = false,
+    --       drag_and_drop = {
+    --         insert_mode = true,
+    --       },
+    --       -- required for Windows users
+    --       use_absolute_path = true,
+    --     },
+    --   },
+    -- },
     -- {
     --   -- Make sure to set this up properly if you have lazy=true
     --   'MeanderingProgrammer/render-markdown.nvim',
@@ -274,9 +272,9 @@ require('lazy').setup({
     "windwp/nvim-autopairs",
     config = function() require("nvim-autopairs").setup {} end
   },
-  {
-    "jose-elias-alvarez/null-ls.nvim",
-  },
+  -- {
+  --   "jose-elias-alvarez/null-ls.nvim",
+  -- },
 
   { -- LSP Configuration & Plugins
     'neovim/nvim-lspconfig',

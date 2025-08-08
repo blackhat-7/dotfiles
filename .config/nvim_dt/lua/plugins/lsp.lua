@@ -247,4 +247,4 @@ vim.api.nvim_create_autocmd('FileType', {
 })
 
 -- vim.lsp.inlay_hint.enable(true)
-require('lspconfig')["null-ls"].setup({})
+-- require('lspconfig')["null-ls"].setup({})
