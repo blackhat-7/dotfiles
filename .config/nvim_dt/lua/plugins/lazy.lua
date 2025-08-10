@@ -59,7 +59,7 @@ require('lazy').setup({
   opts = {
     -- add any opts here
     -- for example
-    provider = "openai",
+    provider = "copilot",
     providers = {
       copilot = {
         model = "o4-mini",
@@ -135,6 +135,14 @@ require('lazy').setup({
     -- },
   },
  },
+  {
+  "zbirenbaum/copilot.lua",
+  cmd = "Copilot",
+  event = "InsertEnter",
+  config = function()
+    require("copilot").setup({})
+  end,
+},
 
   -- Tree
   {

@@ -3,6 +3,7 @@
   config,
   pkgs,
   inputs,
+  localOverlays,
   ...
 }:
 
@@ -12,6 +13,15 @@
   # For a new install, you can start with 4.
   system.stateVersion = 4;
   system.primaryUser = "illusion";
+  system.defaults = {
+    dock = {
+      autohide = true;
+      orientation = "left";
+      mru-spaces = false;
+    };
+    NSGlobalDomain.InitialKeyRepeat = 35;
+    NSGlobalDomain.KeyRepeat = 2;
+  };
   system.keyboard.enableKeyMapping = true;
   system.keyboard.remapCapsLockToControl = true;
 
@@ -20,9 +30,30 @@
     zsh.enable = true;
   };
 
+  fonts.packages = [
+    pkgs.meslo-lg
+    pkgs.nerd-fonts.fira-code
+  ];
+
   services = {
     tailscale.enable = true;
+    # skhd = {
+    #   enable = true;
+    #   skhdConfig = ''
+    #     # Remap Option + H/J/K/L using AppleScript
+    #     alt - h : osascript -e 'tell application "System Events" to key code 123'
+    #     alt - j : osascript -e 'tell application "System Events" to key code 125'
+    #     alt - k : osascript -e 'tell application "System Events" to key code 126'
+    #     alt - l : osascript -e 'tell application "System Events" to key code 124'
+    #   '';
+    # };
   };
+
+  nixpkgs.overlays = localOverlays ++ [
+    inputs.neovim-nightly-overlay.overlays.default
+  ];
+  
+  # caps lock to control
 
   nix.enable = false;
   # nix.package = pkgs.nix;
@@ -47,6 +78,7 @@
 
   # Basic user configuration for Home Manager
   # This is where you configure your own user environment.
+  nixpkgs.config.allowUnfree = true;
   home-manager = {
     backupFileExtension = "bak";
     users."illusion".imports = [../home];
