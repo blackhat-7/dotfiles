@@ -27,6 +27,10 @@
     pkgs.raycast
     pkgs.google-cloud-sql-proxy
     pkgs.dbeaver-bin
+    pkgs.gopls
+    pkgs.rustup
+    pkgs.mongodb-compass
+    pkgs.brave
   ];
 
 

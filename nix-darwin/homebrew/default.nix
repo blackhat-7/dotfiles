@@ -6,6 +6,7 @@
       "zen"
       "docker"
       "hammerspoon"
+      "linear-linear"
     ];
   };
 }

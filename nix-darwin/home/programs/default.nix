@@ -26,5 +26,8 @@
     zed-editor.enable = true;
     vscode.enable = true;
     gh.enable = true;
+    uv.enable = true;
+    television.enable = true;
+    fd.enable = true;
   };
 }
