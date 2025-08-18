@@ -4,12 +4,12 @@
     ./kitty.nix
     ./tmux.nix
     ./fish.nix
+    ./starship.nix
   ];
 
   programs = {
     bash.enable = true;
     # zsh.enable = true;
-    starship.enable = true;
     atuin.enable = true;
     aichat.enable = true;
     direnv.enable = true;

@@ -44,7 +44,6 @@
         specialArgs = { inherit inputs localOverlays; };
 
         modules = [
-          # { nixpkgs.overlays = [ neovim-nightly-overlay.overlays.default ]; }
           { nixpkgs.config.allowUnfree = true; }
           ./darwin
           ./homebrew

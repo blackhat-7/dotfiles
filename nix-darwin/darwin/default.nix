@@ -31,7 +31,7 @@
   };
 
   fonts.packages = [
-    pkgs.meslo-lg
+    pkgs.meslo-lgs-nf
     pkgs.nerd-fonts.fira-code
   ];
 
@@ -81,6 +81,8 @@
   nixpkgs.config.allowUnfree = true;
   home-manager = {
     backupFileExtension = "bak";
-    users."illusion".imports = [../home];
+    users."illusion".imports = [
+      ../home
+    ];
   };
 }

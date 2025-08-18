@@ -31,6 +31,7 @@
     pkgs.rustup
     pkgs.mongodb-compass
     pkgs.brave
+    pkgs.onefetch
   ];
 
 

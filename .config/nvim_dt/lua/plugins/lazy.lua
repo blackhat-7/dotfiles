@@ -494,6 +494,7 @@ require('lazy').setup({
       vim.cmd([[colorscheme aura-dark]])
     end
   },
+  { 'kooparse/vim-color-desert-night'}
 }
   -- {
   --   defaults = {
