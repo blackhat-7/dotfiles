@@ -13,12 +13,13 @@
     # pkgs.docker-compose
     pkgs.exiftool
     pkgs.tailscale
-    pkgs.python311
+    # pkgs.python311
+    # pkgs.python311Packages.pip
     pkgs.opentofu
     pkgs.terragrunt
     (pkgs.google-cloud-sdk.withExtraComponents [pkgs.google-cloud-sdk.components.kubectl pkgs.google-cloud-sdk.components.gke-gcloud-auth-plugin])
     pkgs.golangci-lint
-    # pkgs.ollama
+    pkgs.ollama
     pkgs.nightlight
     pkgs.nodejs_24
     pkgs.spotify
@@ -31,7 +32,7 @@
     pkgs.rustup
     pkgs.mongodb-compass
     pkgs.brave
-    pkgs.onefetch
+    pkgs.ffmpeg_6-headless
   ];
 
 
@@ -57,8 +58,8 @@
 
   launchd.agents.turn-on-night-shift = {
     # 'enable = true' is conventional for Home Manager modules
-    enable = true; 
-    
+    enable = true;
+
     # Use 'config' instead of 'serviceConfig'
     config = {
       ProgramArguments = [
@@ -66,6 +67,25 @@
         "on"
       ];
       RunAtLoad = true;
+    };
+  };
+
+  launchd.agents.ollama = {
+    enable = true;
+    config = {
+      # Unique label for the Ollama service
+      Label = "com.illusion.ollama";
+      # Command to start the Ollama server
+      ProgramArguments = [
+        "${pkgs.ollama}/bin/ollama"
+        "serve"
+      ];
+      # Start on load and keep alive
+      RunAtLoad = true;
+      KeepAlive = true;
+      # Log standard output and errors
+      StandardOutPath = "/Users/illusion/Library/Logs/ollama.log";
+      StandardErrorPath = "/Users/illusion/Library/Logs/ollama.error.log";
     };
   };
 }

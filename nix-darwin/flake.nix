@@ -4,7 +4,7 @@
 
   inputs = {
     # The source for all packages
-    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+    nixpkgs.url = "github:NixOS/nixpkgs/32f313e49e42f715491e1ea7b306a87c16fe0388";
 
     # The tool that manages macOS
     nix-darwin.url = "github:LnL7/nix-darwin";
@@ -17,6 +17,10 @@
       url = "github:nix-community/neovim-nightly-overlay";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nix-index-database = {
+      url = "github:Mic92/nix-index-database";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -26,6 +30,7 @@
       nix-darwin,
       home-manager,
       neovim-nightly-overlay,
+      nix-index-database,
       ...
     }@inputs:
     # This is the main output that Nix-Darwin will build.

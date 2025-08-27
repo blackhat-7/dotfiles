@@ -5,7 +5,6 @@
     casks = [
       "zen"
       "docker"
-      "hammerspoon"
       "linear-linear"
     ];
   };

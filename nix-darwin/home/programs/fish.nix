@@ -51,6 +51,7 @@ alias fe="/opt/homebrew/bin/yazi"
 alias cat=bat
 alias pdb="cloud-sql-proxy aftershoot-co:us-central1:editing-uploader -p 5434"
 alias sdb="cloud-sql-proxy aftershoot-stage:us-central1:aftershoot-stage-db -p 5436"
+alias jbuild="cd ./secret/jarvis && cargo build --release && cd - && mv ./secret/jarvis/target/release/jarvis ."
 
 # Nvim configs
 # alias nvim="/Users/illusion/nvim/bin/nvim"
@@ -85,6 +86,9 @@ atuin init fish | source
 
 # Rust
 export PATH="$HOME/.cargo/bin:$PATH"
+
+# npm
+export PATH="$HOME/.npm-global/bin:$PATH"
 
 # Doom emacs
 export PATH="$HOME/.config/emacs/bin:$PATH"

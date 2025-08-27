@@ -1,10 +1,11 @@
-{ pkgs, ... }: {
+{ pkgs, inputs, ... }: {
 
   imports = [
     ./kitty.nix
     ./tmux.nix
     ./fish.nix
     ./starship.nix
+    inputs.nix-index-database.homeModules.nix-index
   ];
 
   programs = {
@@ -27,7 +28,13 @@
     vscode.enable = true;
     gh.enable = true;
     uv.enable = true;
-    television.enable = true;
+    # television.enable = true;
     fd.enable = true;
+    nix-index-database.comma.enable = true;
+    nix-index = {
+      enable = true;
+      enableFishIntegration = true;
+    };
+    # yt-dlp.enable = true;
   };
 }

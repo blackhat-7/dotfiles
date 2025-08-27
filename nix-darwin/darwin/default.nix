@@ -70,6 +70,7 @@
     git
     go
     inputs.nix-darwin
+    comma
   ];
 
   users.users."illusion" = {
@@ -80,6 +81,7 @@
   # This is where you configure your own user environment.
   nixpkgs.config.allowUnfree = true;
   home-manager = {
+    extraSpecialArgs = { inherit inputs; };
     backupFileExtension = "bak";
     users."illusion".imports = [
       ../home

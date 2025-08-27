@@ -5,3 +5,6 @@ run:
 
 update:
 	sudo nix flake update
+
+index:
+	nix run 'nixpkgs#nix-index' --extra-experimental-features 'nix-command flakes'
