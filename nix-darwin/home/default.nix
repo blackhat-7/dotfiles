@@ -13,8 +13,8 @@
     # pkgs.docker-compose
     pkgs.exiftool
     pkgs.tailscale
-    # pkgs.python311
-    # pkgs.python311Packages.pip
+    pkgs.python311
+    pkgs.python311Packages.pip
     pkgs.opentofu
     pkgs.terragrunt
     (pkgs.google-cloud-sdk.withExtraComponents [pkgs.google-cloud-sdk.components.kubectl pkgs.google-cloud-sdk.components.gke-gcloud-auth-plugin])
@@ -33,6 +33,7 @@
     pkgs.mongodb-compass
     pkgs.brave
     pkgs.ffmpeg_6-headless
+    pkgs.exempi
   ];
 
 

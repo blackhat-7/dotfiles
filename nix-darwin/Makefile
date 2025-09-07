@@ -8,3 +8,8 @@ update:
 
 index:
 	nix run 'nixpkgs#nix-index' --extra-experimental-features 'nix-command flakes'
+
+repair:
+	sudo nix-store --verify --check-contents --repair
+
+
