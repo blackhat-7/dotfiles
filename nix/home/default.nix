@@ -3,10 +3,6 @@
 {
   imports = [
     ./programs
-  ] ++ lib.optionals (builtins.pathExists ./darwin) [
-    ./darwin
-  ] ++ lib.optionals (builtins.pathExists ./linux) [
-    ./linux
   ];
 
   # Basic home-manager configuration
@@ -32,8 +28,8 @@
   # Common git configuration
   programs.git = {
     enable = true;
-    userName = "Illusion";
-    userEmail = "illusion@example.com"; # Replace with your actual email
+    userName = "blackhat-7";
+    userEmail = "palshaunak7@gmail.com"; # Replace with your actual email
   };
 
   # Other common configurations for both platforms
@@ -41,7 +37,8 @@
     enable = true;
     enableCompletion = true;
     shellAliases = {
-      ll = "ls -la";
+      # Using lib.mkForce to override any conflicts
+      ll = lib.mkForce "ls -la";
       ".." = "cd ..";
     };
   };
@@ -49,11 +46,11 @@
   # ZSH shell configuration
   programs.zsh = {
     enable = true;
-    enableAutosuggestions = true;
+    autosuggestion.enable = true;  # Updated to new option name
     enableCompletion = true;
     syntaxHighlighting.enable = true;
     shellAliases = {
-      ll = "ls -la";
+      ll = lib.mkForce "ls -la";
       ".." = "cd ..";
     };
   };
@@ -65,7 +62,7 @@
       set fish_greeting # Disable greeting
     '';
     shellAliases = {
-      ll = "ls -la";
+      ll = lib.mkForce "ls -la";
       ".." = "cd ..";
     };
   };

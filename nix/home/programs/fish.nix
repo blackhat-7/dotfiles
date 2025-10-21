@@ -47,10 +47,18 @@ alias ls="lsd"
 alias l="ls"
 alias snp="/Users/illusion/Documents/randomCodes/snippets/snippets.sh"
 alias aseprite="/Users/illusion/Documents/Hobby/source/aseprite/build/bin/aseprite"
-alias fe="/opt/homebrew/bin/yazi"
+# Use yazi from system path or homebrew path if available
+if type -q yazi
+    alias fe="yazi"
+else if test -f /opt/homebrew/bin/yazi
+    alias fe="/opt/homebrew/bin/yazi"
+end
 alias cat=bat
-alias pdb="cloud-sql-proxy aftershoot-co:us-central1:editing-uploader -p 5434"
-alias sdb="cloud-sql-proxy aftershoot-stage:us-central1:aftershoot-stage-db -p 5436"
+# Cloud SQL aliases (if cloud-sql-proxy is available)
+if type -q cloud-sql-proxy
+    alias pdb="cloud-sql-proxy aftershoot-co:us-central1:editing-uploader -p 5434"
+    alias sdb="cloud-sql-proxy aftershoot-stage:us-central1:aftershoot-stage-db -p 5436"
+end
 alias jbuild="cd ./secret/jarvis && cargo build --release && cd - && mv ./secret/jarvis/target/release/jarvis ."
 
 # Nvim configs
@@ -60,18 +68,31 @@ alias nvi="nvim -u ~/.config/nvim_dt/init.lua"
 alias nvrc="cd ~/.config/nvim && nv"
 
 # Game alias
-alias minecraft="sudo java -jar ~/Documents/Games/minecraft/TLauncher-2.885.jar"
+# Game alias - macOS specific path
+if test -f ~/Documents/Games/minecraft/TLauncher-2.885.jar
+    alias minecraft="sudo java -jar ~/Documents/Games/minecraft/TLauncher-2.885.jar"
+end
 
 # Tmux envs
-alias sessions="/Users/illusion/dotfiles/.config/tmux/tmux_group/sessions.sh"
-alias long_training_jobs="/Users/illusion/Documents/Work/Editing/DebugHelpers/long_training/long_training_jobs"
-alias gcp_stage="source /Users/illusion/Documents/Work/Creds/gcp_stage.sh"
-alias gcp_prod="source /Users/illusion/Documents/Work/Creds/gcp_prod.sh"
+# Platform-specific paths
+if test (uname) = "Darwin"
+    alias sessions="/Users/illusion/dotfiles/.config/tmux/tmux_group/sessions.sh"
+    alias long_training_jobs="/Users/illusion/Documents/Work/Editing/DebugHelpers/long_training/long_training_jobs"
+    alias gcp_stage="source /Users/illusion/Documents/Work/Creds/gcp_stage.sh"
+    alias gcp_prod="source /Users/illusion/Documents/Work/Creds/gcp_prod.sh"
+else
+    # Linux paths (adjust as needed)
+    test -f ~/dotfiles/.config/tmux/tmux_group/sessions.sh; and alias sessions="~/dotfiles/.config/tmux/tmux_group/sessions.sh"
+end
 
 starship init fish | source
 
-# Brew
-eval "$(/opt/homebrew/bin/brew shellenv)"
+# Brew (macOS only)
+if test -f /opt/homebrew/bin/brew
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+else if test -f /usr/local/bin/brew
+    eval "$(/usr/local/bin/brew shellenv)"
+end
 
 
 # zoxide
@@ -81,8 +102,9 @@ alias cd="z"
 # For vi key bindings in terminal
 fish_vi_key_bindings
 
+# Fix binding warning by using the new style for atuin
 # atuin
-atuin init fish | source
+atuin init fish --disable-up-arrow | source
 
 # Rust
 export PATH="$HOME/.cargo/bin:$PATH"
@@ -93,23 +115,37 @@ export PATH="$HOME/.npm-global/bin:$PATH"
 # Doom emacs
 export PATH="$HOME/.config/emacs/bin:$PATH"
 
-# opam configuration
-source /Users/illusion/.opam/opam-init/init.fish > /dev/null 2> /dev/null; or true
+# opam configuration (platform specific)
+if test -f /Users/illusion/.opam/opam-init/init.fish
+    source /Users/illusion/.opam/opam-init/init.fish > /dev/null 2> /dev/null; or true
+else if test -f ~/.opam/opam-init/init.fish
+    source ~/.opam/opam-init/init.fish > /dev/null 2> /dev/null; or true
+end
 
 # GOLANG
 export GOPATH=$HOME/go
 export PATH="$GOPATH/bin:$PATH"
 # export GOTRACEBACK=all
 
-# Zellij
-export ZELLIJ_CONFIG_DIR=/Users/illusion/.config/zellij
-export ZELLIJ_CONFIG_FILE=/Users/illusion/.config/zellij/config.kdl
+# Zellij (use $HOME for cross-platform compatibility)
+export ZELLIJ_CONFIG_DIR=$HOME/.config/zellij
+export ZELLIJ_CONFIG_FILE=$HOME/.config/zellij/config.kdl
 
-# vcpkg
-export VCPKG_ROOT="/Users/illusion/Documents/Work/Editing/vcpkg"
-export PATH="$VCPKG_ROOT:$PATH"
-export CMAKE_TOOLCHAIN_FILE="$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake"
-export CMAKE_MAKE_PROGRAM=/usr/bin/make
+# vcpkg (platform specific)
+if test (uname) = "Darwin"
+    export VCPKG_ROOT="/Users/illusion/Documents/Work/Editing/vcpkg"
+    export PATH="$VCPKG_ROOT:$PATH"
+    export CMAKE_TOOLCHAIN_FILE="$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake"
+    export CMAKE_MAKE_PROGRAM=/usr/bin/make
+else
+    # Linux paths (adjust if needed)
+    if test -d "$HOME/Documents/Work/Editing/vcpkg"
+        export VCPKG_ROOT="$HOME/Documents/Work/Editing/vcpkg"
+        export PATH="$VCPKG_ROOT:$PATH"
+        export CMAKE_TOOLCHAIN_FILE="$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake"
+    end
+    export CMAKE_MAKE_PROGRAM=/usr/bin/make
+end
 # export HOME_MANAGER_CONFIG="~/.config/nixpkgs/"
 
 # Aichat
@@ -121,7 +157,7 @@ function _aichat_fish
         commandline (aichat -e $_old)
     end
 end
-bind -M insert \cx _aichat_fish
+bind --mode insert \cx _aichat_fish
 # function _aichat_fish
 #     # Save the current command line content to a variable
 #     set _old (commandline)
@@ -198,14 +234,23 @@ bind -M insert \cx _aichat_fish
 # # Conda stuff end
 
 
+# API keys and endpoints
 # export OPENAI_API_BASE="http://100.95.18.138:42069/v1"
 export OPENAI_API_BASE="http://100.85.231.84:8080/api"
 export AIDER_MODEL="hf:Qwen/Qwen2.5-Coder-32B-Instruct"
-export OPENAI_API_KEY=$(cat $HOME/Documents/Creds/owui.txt)
-export GEMINI_API_KEY=$(cat $HOME/Documents/Creds/gemini.txt)
 export OLLAMA_HOST="0.0.0.0"
 export SEARXNG_API_URL="http://raspberrypi:8081"
-export OPENROUTER_API_KEY=$(cat $HOME/Documents/Creds/openrouter.txt)
+
+# Safely load API keys if files exist
+if test -f $HOME/Documents/Creds/owui.txt
+    export OPENAI_API_KEY=$(cat $HOME/Documents/Creds/owui.txt)
+end
+if test -f $HOME/Documents/Creds/gemini.txt
+    export GEMINI_API_KEY=$(cat $HOME/Documents/Creds/gemini.txt)
+end
+if test -f $HOME/Documents/Creds/openrouter.txt
+    export OPENROUTER_API_KEY=$(cat $HOME/Documents/Creds/openrouter.txt)
+end
 
 direnv hook fish | source
     '';

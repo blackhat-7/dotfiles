@@ -1,9 +1,19 @@
 # Linux system configuration with system-manager
-{ config, pkgs, inputs, ... }:
+{ config, pkgs, inputs, lib, ... }:
 
 {
+  imports = [
+    # Import any other Linux-specific modules here
+  ];
   # Set host platform
   nixpkgs.hostPlatform = "x86_64-linux";
+
+  # User configuration - only defining the minimum needed for home-manager
+  users.users.illusion = {
+    name = "illusion";
+    home = "/home/illusion";
+    # Don't set isNormalUser, description, or groups as they already exist
+  };
 
   # Environment configuration
   environment = {
@@ -85,4 +95,7 @@
       Subsystem sftp ${pkgs.openssh}/libexec/sftp-server
     '';
   };
+
+
+
 }

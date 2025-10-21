@@ -55,9 +55,12 @@
       # Username
       username = "illusion";
 
-      # Shared home-manager configuration
-      homeManagerConfig = { pkgs, config, lib, ... }: {
-        imports = [ ./home ];
+      # Shared home-manager configuration for macOS
+      darwinHomeManagerConfig = { pkgs, config, lib, ... }: {
+        imports = [
+          ./home
+          ./home/darwin
+        ];
       };
 
     in {
@@ -74,13 +77,29 @@
               useGlobalPkgs = true;
               useUserPackages = true;
               extraSpecialArgs = { inherit inputs; };
-              users.${username} = homeManagerConfig;
+              users.${username} = darwinHomeManagerConfig;
             };
           }
         ];
       };
 
       # Linux configurations using system-manager
+      # Standalone home-manager configuration for Linux
+      homeConfigurations.${username} = home-manager.lib.homeManagerConfiguration {
+        pkgs = nixpkgsFor.x86_64-linux;
+        extraSpecialArgs = { inherit inputs; };
+        modules = [
+          ./home
+          ./home/linux
+          {
+            home.username = username;
+            home.homeDirectory = "/home/${username}";
+            nixpkgs.config.allowUnfree = true;
+          }
+        ];
+      };
+
+      # Linux system configuration with system-manager
       systemConfigs."illusionPC" = system-manager.lib.makeSystemConfig {
           modules = [
             ./linux

@@ -3,7 +3,7 @@ NIX_BIN := /nix/var/nix/profiles/default/bin
 NIX := $(NIX_BIN)/nix
 NIX_STORE := $(NIX_BIN)/nix-store
 
-.PHONY: switch darwin linux update repair index rollback darwin-rollback linux-rollback
+.PHONY: switch darwin linux home update repair index rollback darwin-rollback linux-rollback
 
 # Default target
 switch:
@@ -14,6 +14,7 @@ switch:
 		echo "Detected Linux, applying configuration..."; \
 		$(MAKE) linux; \
 	fi
+	$(MAKE) home
 
 # macOS-specific target
 darwin:
@@ -21,7 +22,11 @@ darwin:
 
 # Linux-specific target
 linux:
-	sudo $(NIX) run github:numtide/system-manager -- switch --flake .
+	sudo $(NIX) run github:numtide/system-manager -- switch --flake .#illusionPC
+
+# Home Manager target for Linux
+home:
+	$(NIX) run home-manager/master -- switch --flake .#illusion -b hm-backup-$(shell date +%Y%m%d%H%M%S)
 
 # Update flake inputs
 update:
