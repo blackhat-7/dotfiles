@@ -3,6 +3,7 @@
     enable = true;
     themeFile = "Catppuccin-Mocha";
     extraConfig = ''
+      shell /home/illusion/.nix-profile/bin/fish
       hide_window_decorations      titlebar-only
       cursor_trail 3
 

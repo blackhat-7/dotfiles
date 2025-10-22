@@ -20,6 +20,7 @@
     golangci-lint
     nodejs_24
     gopls
+    tmux
     rustup
     git
     ffmpeg_6-headless
@@ -28,8 +29,10 @@
   # Common git configuration
   programs.git = {
     enable = true;
-    userName = "blackhat-7";
-    userEmail = "palshaunak7@gmail.com"; # Replace with your actual email
+    settings = {
+      user.name = "blackhat-7";
+      user.email = "palshaunak7@gmail.com"; # Replace with your actual email
+    };
   };
 
   # Other common configurations for both platforms

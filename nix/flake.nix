@@ -116,11 +116,11 @@
 
               # Instead of replacing /etc/passwd and /etc/group, just ensure
               # needed packages are installed for the user
-              environment.etc."profile.d/user-shell.sh".text = ''
-                # Set default shell if desired
-                # To actually change your shell, use: chsh -s ${pkgs.fish}/bin/fish
-                export DEFAULT_SHELL="${pkgs.fish}/bin/fish"
-              '';
+              # environment.etc."profile.d/user-shell.sh".text = ''
+              #   # Set default shell if desired
+              #   # To actually change your shell, use: chsh -s ${pkgs.fish}/bin/fish
+              #   export DEFAULT_SHELL="${pkgs.fish}/bin/fish"
+              # '';
 
               # System packages
               environment.systemPackages = with pkgs; [

@@ -61,8 +61,8 @@
     ];
 
     extraConfig = ''
-      set-option -g default-shell "/run/current-system/sw/bin/fish"
-      set -g default-command "/run/current-system/sw/bin/fish -l"
+      set-option -g default-shell "/usr/bin/fish"
+      set -g default-command "/usr/bin/fish -l"
 
       # tmux scroll speed
       bind-key -T copy-mode-vi WheelUpPane send -N1 -X scroll-up
