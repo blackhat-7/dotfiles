@@ -16,7 +16,7 @@ vim.opt.rtp:prepend(lazypath)
 vim.o.termguicolors = true
 
 -- load gemini api key
-local file = io.open("/Users/illusion/Documents/Creds/gemini.txt", "r")
+local file = io.open(os.getenv("HOME") .. "/Documents/Creds/gemini.txt", "r")
 if file then
   local gemini_api_key = file:read("*all")
   file:close()

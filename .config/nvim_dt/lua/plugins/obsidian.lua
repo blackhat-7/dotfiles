@@ -1,9 +1,11 @@
+notes_dir = os.getenv("HOME") .. "/Documents/Notes"
+
 require("obsidian").setup({
   ui = { enable = true },
   workspaces = {
     {
       name = "Notes",
-      path = "/Users/illusion/Documents/Notes",
+      path = notes_dir,
     },
   },
   completion = {
