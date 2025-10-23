@@ -22,11 +22,23 @@ darwin:
 
 # Linux-specific target
 linux:
-	sudo $(NIX) run github:numtide/system-manager -- switch --flake .#illusionPC
+	@if [ "$$(uname -m)" = "aarch64" ]; then \
+		echo "Detected ARM64 architecture, using aarch64 configuration..."; \
+		sudo $(NIX) run github:numtide/system-manager -- switch --flake .#illusion-aarch64; \
+	else \
+		echo "Detected x86_64 architecture, using default configuration..."; \
+		sudo $(NIX) run github:numtide/system-manager -- switch --flake .#illusion; \
+	fi
 
 # Home Manager target for Linux
 home:
-	$(NIX) run home-manager/master -- switch --flake .#illusion -b hm-backup-$(shell date +%Y%m%d%H%M%S)
+	@if [ "$$(uname -m)" = "aarch64" ]; then \
+		echo "Detected ARM64 architecture, using aarch64 home configuration..."; \
+		PATH="$(NIX_BIN):$$PATH" $(NIX) run home-manager/master -- switch --flake .#illusion-aarch64 -b hm-backup-$(shell date +%Y%m%d%H%M%S); \
+	else \
+		echo "Detected x86_64 architecture, using default home configuration..."; \
+		PATH="$(NIX_BIN):$$PATH" $(NIX) run home-manager/master -- switch --flake .#illusion -b hm-backup-$(shell date +%Y%m%d%H%M%S); \
+	fi
 
 # Update flake inputs
 update:

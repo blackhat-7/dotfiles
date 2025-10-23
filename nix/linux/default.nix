@@ -5,13 +5,14 @@
   imports = [
     # Import any other Linux-specific modules here
   ];
-  # Set host platform
-  nixpkgs.hostPlatform = "x86_64-linux";
+  # Set host platform - will be determined by the system calling this config
+  # nixpkgs.hostPlatform is set by the system-manager configuration
 
   # User configuration - only defining the minimum needed for home-manager
   users.users.illusion = {
     name = "illusion";
     home = "/home/illusion";
+    shell = "usr/bin/fish";
     # Don't set isNormalUser, description, or groups as they already exist
   };
 
@@ -50,9 +51,9 @@
       mode = "append";
       text = ''
         # Added by system-manager
-        LANG=en_US.UTF-8
-        LC_ALL=en_US.UTF-8
-        TZ=UTC
+        # LANG=en_US.UTF-8
+        # LC_ALL=en_US.UTF-8
+        # TZ=UTC
         # Add other environment variables here
       '';
     };

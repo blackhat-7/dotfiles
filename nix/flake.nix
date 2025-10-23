@@ -63,6 +63,26 @@
         ];
       };
 
+      # Shared Linux system packages
+      linuxSystemPackages = pkgs: with pkgs; [
+        # Basic tools
+        vim
+        htop
+        git
+        curl
+        wget
+        fish
+        zsh
+        tmux
+
+        # Development
+        go
+        python3
+
+        # Networking
+        tailscale
+      ];
+
     in {
       # macOS configurations
       darwinConfigurations."illusion" = nix-darwin.lib.darwinSystem {
@@ -83,8 +103,7 @@
         ];
       };
 
-      # Linux configurations using system-manager
-      # Standalone home-manager configuration for Linux
+      # Home Manager configurations for Linux
       homeConfigurations.${username} = home-manager.lib.homeManagerConfiguration {
         pkgs = nixpkgsFor.x86_64-linux;
         extraSpecialArgs = { inherit inputs; };
@@ -99,53 +118,54 @@
         ];
       };
 
-      # Linux system configuration with system-manager
-      systemConfigs."illusionPC" = system-manager.lib.makeSystemConfig {
-          modules = [
-            ./linux
-            { nixpkgs.config.allowUnfree = true; }
-            # Allow system-manager to run on any Linux distribution
-            {
-              system-manager.allowAnyDistro = true;
-              # Make user management less intrusive
-              users.mutableUsers = true;
-            }
-            ({ config, lib, pkgs, ... }: {
-              # Basic system configuration
-              nixpkgs.hostPlatform = "x86_64-linux";
+      homeConfigurations."${username}-aarch64" = home-manager.lib.homeManagerConfiguration {
+        pkgs = nixpkgsFor.aarch64-linux;
+        extraSpecialArgs = { inherit inputs; };
+        modules = [
+          ./home
+          ./home/linux
+          {
+            home.username = username;
+            home.homeDirectory = "/home/${username}";
+            nixpkgs.config.allowUnfree = true;
+          }
+        ];
+      };
 
-              # Instead of replacing /etc/passwd and /etc/group, just ensure
-              # needed packages are installed for the user
-              # environment.etc."profile.d/user-shell.sh".text = ''
-              #   # Set default shell if desired
-              #   # To actually change your shell, use: chsh -s ${pkgs.fish}/bin/fish
-              #   export DEFAULT_SHELL="${pkgs.fish}/bin/fish"
-              # '';
+      # Linux system configurations with system-manager
+      systemConfigs."illusion" = system-manager.lib.makeSystemConfig {
+        modules = [
+          ./linux
+          {
+            nixpkgs.config.allowUnfree = true;
+            nixpkgs.hostPlatform = "x86_64-linux";
+          }
+          {
+            system-manager.allowAnyDistro = true;
+            users.mutableUsers = true;
+          }
+          ({ config, lib, pkgs, ... }: {
+            environment.systemPackages = linuxSystemPackages pkgs;
+          })
+        ];
+      };
 
-              # System packages
-              environment.systemPackages = with pkgs; [
-                # Basic tools
-                vim
-                htop
-                git
-                curl
-                wget
-                fish
-                zsh
-                tmux
-
-                # Development
-                go
-                python3
-
-                # Networking
-                tailscale
-
-                # Add more packages as needed
-              ];
-            })
-          ];
-        };
+      systemConfigs."illusion-aarch64" = system-manager.lib.makeSystemConfig {
+        modules = [
+          ./linux
+          {
+            nixpkgs.config.allowUnfree = true;
+            nixpkgs.hostPlatform = "aarch64-linux";
+          }
+          {
+            system-manager.allowAnyDistro = true;
+            users.mutableUsers = true;
+          }
+          ({ config, lib, pkgs, ... }: {
+            environment.systemPackages = linuxSystemPackages pkgs;
+          })
+        ];
+      };
 
       # Development shells
       devShells = forAllSystems (system: {
