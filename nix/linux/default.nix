@@ -33,6 +33,7 @@
 
       # Other system utilities
       openssh
+      tailscale
     ];
 
     # Add shells to /etc/shells
@@ -87,14 +88,32 @@
     enable = true;
     text = ''
       # Settings from system-manager
-      PermitRootLogin no
-      PasswordAuthentication no
+      PermitRootLogin yes
+      PasswordAuthentication yes
       ChallengeResponseAuthentication no
       UsePAM yes
       PrintMotd no
       AcceptEnv LANG LC_*
       Subsystem sftp ${pkgs.openssh}/libexec/sftp-server
     '';
+  };
+
+
+
+  # Configure Tailscale service
+  systemd.services.tailscaled = {
+    enable = true;
+    description = "Tailscale daemon";
+    after = [ "network.target" ];
+    wantedBy = [ "multi-user.target" ];
+
+    serviceConfig = {
+      ExecStart = "${pkgs.tailscale}/bin/tailscaled --state=/var/lib/tailscale/tailscaled.state --socket=/run/tailscale/tailscaled.sock";
+      RuntimeDirectory = "tailscale";
+      StateDirectory = "tailscale";
+      Type = "notify";
+      Restart = "on-failure";
+    };
   };
 
 
