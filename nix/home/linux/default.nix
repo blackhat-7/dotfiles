@@ -13,6 +13,7 @@
     docker
     discord
     just
+    jdk21
   ];
 
   # Enable the generic Linux target

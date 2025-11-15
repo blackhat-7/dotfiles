@@ -1,0 +1,4 @@
+/keys.txt
+/sops/age/keys.txt
+**/.sops/age/keys.txt
+secrets.yaml
