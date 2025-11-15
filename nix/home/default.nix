@@ -24,6 +24,8 @@
     rustup
     git
     ffmpeg_6-headless
+    exiftool
+    exempi
   ];
 
   # Common git configuration

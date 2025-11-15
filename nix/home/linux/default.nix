@@ -5,7 +5,14 @@
   home.packages = with pkgs; [
     firefox
     cowsay
-    # Add other Linux-specific packages here
+    wine
+    (google-cloud-sdk.withExtraComponents [
+      google-cloud-sdk.components.kubectl
+      google-cloud-sdk.components.gke-gcloud-auth-plugin
+    ])
+    docker
+    discord
+    just
   ];
 
   # Enable the generic Linux target

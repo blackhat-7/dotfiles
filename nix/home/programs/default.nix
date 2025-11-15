@@ -35,6 +35,5 @@
       enable = true;
       enableFishIntegration = true;
     };
-    # yt-dlp.enable = true;
   };
 }

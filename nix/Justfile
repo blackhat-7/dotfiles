@@ -1,0 +1,78 @@
+# --- Variables ---
+
+# Define paths to Nix executables
+NIX_BIN := "/nix/var/nix/profiles/default/bin"
+NIX := NIX_BIN + "/nix"
+NIX_STORE := NIX_BIN + "/nix-store"
+
+# --- Main Recipes ---
+
+# Default target
+default: switch
+
+# Apply the system configuration, then the home configuration
+switch: _switch_os home
+
+# Update flake inputs
+update:
+    {{NIX}} flake update
+
+# Run nix-index
+index:
+    {{NIX}} run 'nixpkgs#nix-index'
+
+# Repair nix store
+repair:
+    sudo {{NIX_STORE}} --verify --check-contents --repair
+
+# Rollback to the previous configuration
+rollback: _rollback_os
+
+# --- OS-Specific & Helper Recipes ---
+
+# This recipe runs the appropriate system-specific target.
+# It is "private" and not meant to be called directly.
+_switch_os:
+    @case `uname` in \
+        "Darwin") \
+            echo "Detected macOS, applying configuration..."; \
+            just darwin; \
+            ;; \
+        *) \
+            echo "Detected Linux, applying configuration..."; \
+            just linux; \
+            ;; \
+    esac
+
+# This recipe runs the appropriate rollback target.
+_rollback_os:
+    @case `uname` in \
+        "Darwin") \
+            echo "Rolling back macOS configuration..."; \
+            just darwin-rollback; \
+            ;; \
+        *) \
+            echo "Rolling back Linux configuration..."; \
+            just linux-rollback; \
+            ;; \
+    esac
+
+# macOS-specific target
+darwin:
+    sudo darwin-rebuild switch --flake .#illusion
+
+# Linux-specific target
+linux:
+    sudo {{NIX}} run github:numtide/system-manager -- switch --flake .#illusionPC
+
+# Home Manager target
+home:
+    {{NIX}} run home-manager/master -- switch --flake .#illusion -b hm-backup-`date +%Y%m%d%H%M%S`
+
+# macOS rollback
+darwin-rollback:
+    sudo darwin-rebuild switch --flake .#illusion --rollback
+
+# Linux rollback
+linux-rollback:
+    sudo {{NIX}} run github:numtide/system-manager -- rollback

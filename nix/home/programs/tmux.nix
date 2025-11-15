@@ -18,7 +18,7 @@
     enable = true;
     # shell = "${pkgs.fish}/bin/fish";
     # shell = "/run/current-system/sw/bin/fish";
-    prefix = "C-a";
+    prefix = "C-b";
     mouse = true;
     escapeTime = 0;
     plugins = with pkgs; [
