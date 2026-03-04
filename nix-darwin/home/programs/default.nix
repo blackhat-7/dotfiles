@@ -44,6 +44,7 @@
     obsidian.enable = true;
     zellij.enable = true;
     yazi.enable = true;
-    opencode.enable = true;
+    # opencode.enable = true;
+    claude-code.enable = true;
   };
 }

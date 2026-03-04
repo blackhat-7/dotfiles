@@ -10,7 +10,6 @@
       "tigervnc-viewer"
       "krisp"
       "wine-stable"
-      "opencode-desktop"
       "whisky"
       "ollama"
       "signal"
