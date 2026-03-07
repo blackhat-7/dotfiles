@@ -1,4 +1,10 @@
-{ pkgs, inputs, lib, ... }: {
+{
+  pkgs,
+  inputs,
+  lib,
+  ...
+}:
+{
 
   imports = [
     ./kitty.nix
@@ -12,7 +18,26 @@
     bash.enable = true;
     # zsh.enable = true;
     atuin.enable = true;
-    aichat.enable = true;
+    aichat = {
+      enable = true;
+      settings = {
+        clients = [
+          {
+            type = "openai-compatible";
+            name = "pc";
+            api_base = "http://100.64.0.1:7000/v1";
+            api_key = "";
+            models = [
+              {
+                name = "openai/gpt-oss-20b";
+                supports_function_calling = true;
+                use_tools = "web_search";
+              }
+            ];
+          }
+        ];
+      };
+    };
     direnv.enable = true;
     direnv.nix-direnv.enable = true;
     btop.enable = true;
@@ -38,10 +63,10 @@
     hyprpanel.enable = true;
     yazi.enable = true;
     feh.enable = true;
-    opencode.enable = true;
+    # opencode.enable = true;
   };
 
-  home.activation.install-uv-tools = lib.hm.dag.entryAfter ["writeBoundary"] ''
+  home.activation.install-uv-tools = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
     # A list of Python packages to install with 'uv tool install'
     tools="
       basedpyright
