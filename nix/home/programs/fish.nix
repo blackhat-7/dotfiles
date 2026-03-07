@@ -293,6 +293,9 @@ end
 if test -f $HOME/Documents/Creds/openrouter.txt
     export OPENROUTER_API_KEY=$(cat $HOME/Documents/Creds/openrouter.txt)
 end
+if test -f $HOME/Documents/Creds/chutes.txt
+    export CHUTES_API_KEY=$(cat $HOME/Documents/Creds/chutes.txt)
+end
 
 direnv hook fish | source
     '';

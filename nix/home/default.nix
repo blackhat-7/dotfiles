@@ -1,4 +1,9 @@
-{ pkgs, config, lib, ... }:
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}:
 
 {
   imports = [ ./programs ];
@@ -21,7 +26,7 @@
     git
     ffmpeg_6-headless
     exempi
-    
+
     # Linux-specific packages
     firefox
     cowsay
@@ -82,7 +87,7 @@
   };
 
   # Linux-specific activation
-  home.activation.noisetorch-caps = lib.hm.dag.entryAfter ["writeBoundary"] ''
+  home.activation.noisetorch-caps = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
     /usr/bin/sudo ${pkgs.libcap}/bin/setcap 'CAP_SYS_RESOURCE+ep' "${pkgs.noisetorch}/bin/noisetorch"
   '';
 
@@ -105,10 +110,10 @@
       RestartSec = "3s";
     };
 
-    Install = { 
-      WantedBy = [ "default.target" ]; 
+    Install = {
+      WantedBy = [ "default.target" ];
     };
   };
-  
+
   wayland.windowManager.hyprland.systemd.enable = true;
 }
