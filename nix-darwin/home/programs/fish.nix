@@ -170,6 +170,9 @@ export GEMINI_API_KEY=$(cat $HOME/Documents/Creds/gemini.txt)
 export OLLAMA_HOST="0.0.0.0"
 export SEARXNG_API_URL="http://135.181.228.158:9000"
 export OPENROUTER_API_KEY=$(cat $HOME/Documents/Creds/openrouter.txt)
+if test -f $HOME/Documents/Creds/chutes.txt
+    export CHUTES_API_KEY=$(cat $HOME/Documents/Creds/chutes.txt)
+end
 
 direnv hook fish | source
     '';

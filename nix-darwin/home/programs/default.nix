@@ -1,4 +1,9 @@
-{ pkgs, inputs, ... }: {
+{
+  pkgs,
+  inputs,
+  config,
+  ...
+}: {
 
   imports = [
     ./kitty.nix
@@ -13,7 +18,39 @@
     bash.enable = true;
     # zsh.enable = true;
     atuin.enable = true;
-    aichat.enable = true;
+    aichat = {
+      enable = true;
+      settings = {
+        model = "chutes:openai/gpt-oss-120b-TEE";
+        clients = [
+          # {
+          #   type = "openai-compatible";
+          #   name = "pc";
+          #   api_base = "http://100.64.0.1:7000/v1";
+          #   api_key = "";
+          #   models = [
+          #     {
+          #       name = "openai/gpt-oss-20b";
+          #       supports_function_calling = true;
+          #       use_tools = "web_search";
+          #     }
+          #   ];
+          # }
+          {
+            type = "openai-compatible";
+            name = "chutes";
+            api_base = "https://llm.chutes.ai/v1";
+            models = [
+              {
+                name = "openai/gpt-oss-120b-TEE";
+                supports_function_calling = true;
+                strip_reasoning_contents = true;
+              }
+            ];
+          }
+        ];
+      };
+    };
     direnv.enable = true;
     direnv.nix-direnv.enable = true;
     btop.enable = true;
