@@ -5,10 +5,10 @@
   ];
   home.stateVersion = "23.11";
   home.packages = [
-    pkgs.neofetch
+    pkgs.fastfetch
     pkgs.exiftool
-    pkgs.python311
-    pkgs.python311Packages.pip
+    pkgs.python313
+    pkgs.python313Packages.pip
     pkgs.opentofu
     (pkgs.google-cloud-sdk.withExtraComponents [pkgs.google-cloud-sdk.components.kubectl pkgs.google-cloud-sdk.components.gke-gcloud-auth-plugin])
     pkgs.golangci-lint

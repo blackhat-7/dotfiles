@@ -369,6 +369,12 @@ require('lazy').setup({
 
   -- Theme
   { "ellisonleao/gruvbox.nvim" },
+  {
+    "loctvl842/monokai-pro.nvim",
+    config = function()
+      require("monokai-pro").setup()
+    end,
+  }
   -- {
   --   "gambhirsharma/vesper.nvim",
   --   priority = 1000,
