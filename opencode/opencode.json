@@ -16,7 +16,10 @@
     "mongo-reader_*": "allow",
     "stage-mongo-reader_*": "allow",
     "grafana-loki-reader_*": "allow",
-    "sentry-reader_*": "allow"
+    "sentry-reader_*": "allow",
+    "skill": {
+      "*": "allow"
+    }
   },
   "provider": {
     "local-llm": {
