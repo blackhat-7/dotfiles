@@ -56,3 +56,39 @@ vim.keymap.set('n', '<leader>gt', require('telescope.builtin').git_status, { des
 vim.keymap.set('n', '<leader>cm', require('telescope.builtin').git_commits, { desc = '' })
 vim.keymap.set('n', '<leader>th', ":Telescope colorscheme<CR>", { desc = 'Select [TH]eme' })
 vim.keymap.set('n', '<leader>fm', ":lua vim.lsp.buf.format({async = true})<CR>", { desc = 'LSP [F]or[M]at' })
+
+-- DiffviewOpen picker: list branches + special refs and open with DiffviewOpen
+vim.keymap.set('n', '<leader>dv', function()
+  local pickers = require('telescope.pickers')
+  local finders = require('telescope.finders')
+  local actions = require('telescope.actions')
+  local action_state = require('telescope.actions.state')
+
+  -- Collect git branches
+  local branches = vim.fn.systemlist('git branch -a --format="%(refname:short)" 2>/dev/null')
+
+  -- Prepend useful special targets
+  local entries = { 'HEAD', 'HEAD~1', 'HEAD~2', 'HEAD~3' }
+  for _, b in ipairs(branches) do
+    local trimmed = vim.trim(b)
+    if trimmed ~= '' then
+      table.insert(entries, trimmed)
+    end
+  end
+
+  pickers.new({}, {
+    prompt_title = 'DiffviewOpen',
+    finder = finders.new_table { results = entries },
+    sorter = require('telescope.config').values.generic_sorter({}),
+    attach_mappings = function(prompt_bufnr)
+      actions.select_default:replace(function()
+        local selection = action_state.get_selected_entry()
+        actions.close(prompt_bufnr)
+        if selection then
+          vim.cmd('DiffviewOpen ' .. selection[1])
+        end
+      end)
+      return true
+    end,
+  }):find()
+end, { desc = '[D]iff[V]iew open branch' })
