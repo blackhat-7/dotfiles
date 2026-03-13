@@ -63,7 +63,7 @@ darwin:
 
 # Linux-specific target
 linux:
-    sudo {{NIX}} run github:numtide/system-manager -- switch --flake .#illusionPC
+    sudo env PATH="$PATH" {{NIX}} run github:numtide/system-manager -- switch --flake .#illusionPC
 
 # Home Manager target
 home:
@@ -75,4 +75,4 @@ darwin-rollback:
 
 # Linux rollback
 linux-rollback:
-    sudo {{NIX}} run github:numtide/system-manager -- rollback
+    sudo env PATH="$PATH" {{NIX}} run github:numtide/system-manager -- rollback

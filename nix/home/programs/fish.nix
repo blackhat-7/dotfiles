@@ -91,7 +91,6 @@ alias source_fishrc="source ~/.config/fish/config.fish"
 alias ls="lsd"
 alias l="ls"
 alias geeqie="geeqie --disable-clutter"
-alias opencode="opencode --agent plan"
 
 
 # Use yazi from system path or homebrew path if available
