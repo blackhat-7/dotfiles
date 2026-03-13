@@ -1,4 +1,4 @@
 .DS_Store
 .direnv
-__pycache__/
+**/__pycache__/
 *aftershoot*
