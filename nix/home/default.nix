@@ -49,6 +49,7 @@
     wl-clipboard
     mongodb-compass
     # element-desktop
+    gitleaks
   ];
 
   # Git configuration
@@ -58,6 +59,17 @@
       user.name = "blackhat-7";
       user.email = "palshaunak7@gmail.com";
     };
+    extraConfig = {
+      core.hooksPath = "~/.githooks";
+    };
+  };
+
+  home.file.".githooks/pre-commit" = {
+    executable = true;
+    text = ''
+      #!/usr/bin/env bash
+      exec gitleaks protect --staged --verbose
+    '';
   };
 
   # Shell configuration
