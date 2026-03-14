@@ -81,7 +81,10 @@
     };
     obsidian.enable = true;
     zellij.enable = true;
-    yazi.enable = true;
+    yazi = {
+      enable = true;
+      shellWrapperName = "y";
+    };
     # opencode.enable = true;
     claude-code.enable = true;
   };

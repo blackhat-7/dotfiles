@@ -2,8 +2,12 @@
 {
   programs.git = {
     enable = true;
-    extraConfig = {
+    settings = {
+      user.name = "blackhat-7";
+      user.email = "palshaunak7@gmail.com";
       core.hooksPath = "~/.githooks";
+      push.autoSetupRemote = true;
+      rerere.enabled = true;
     };
   };
 
