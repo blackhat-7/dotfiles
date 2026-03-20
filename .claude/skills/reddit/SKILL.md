@@ -5,67 +5,35 @@ description: Search and retrieve content from Reddit. Get posts, comments, subre
 
 # Reddit Skill
 
-Get posts, comments, subreddit info, and user profiles from Reddit via the public JSON API.
-
-## Prerequisites
-
-**No API key required!** Reddit's public JSON API works without authentication.
-
-**Quick Check**:
-```bash
-cd <skill_directory>
-python3 scripts/get_posts.py python --limit 3
-```
+**IMPORTANT**: All commands run from `~/.claude/skills/reddit` directory. Use workdir parameter.
 
 ## Commands
 
-All commands run from the skill directory.
-
-### Subreddit Posts
+**Search posts**
 ```bash
-python3 scripts/get_posts.py python --limit 20           # Hot posts (default)
-python3 scripts/get_posts.py python --sort new --limit 20
-python3 scripts/get_posts.py python --sort top --time week
-python3 scripts/get_posts.py python --sort top --time all --limit 10
+./reddit.py search "query" --subreddit NAME --sort top --time week --limit 20
 ```
 
-### Search Posts
+**Get subreddit posts**
 ```bash
-python3 scripts/search_posts.py "AI agent" --limit 20
-python3 scripts/search_posts.py "MCP server" --subreddit ClaudeAI --limit 10
-python3 scripts/search_posts.py "async python" --sort top --time year
+./reddit.py posts SUBREDDIT --sort hot --limit 20
 ```
 
-### Subreddit Info
+**Get subreddit info**
 ```bash
-python3 scripts/get_subreddit.py python
-python3 scripts/get_subreddit.py ClaudeAI
+./reddit.py subreddit NAME
 ```
 
-### Post & Comments
+**Get post details**
 ```bash
-python3 scripts/get_post.py abc123                       # Get post by ID
-python3 scripts/get_post.py abc123 --comments 50         # With more comments
+./reddit.py post POST_ID --comments 50
 ```
 
-### User Profile
+**Get user profile**
 ```bash
-python3 scripts/get_user.py spez
-python3 scripts/get_user.py spez --posts 10              # Include recent posts
+./reddit.py user USERNAME --posts 10
 ```
 
 ## Sort Options
-
-| Sort | Description | Time Options |
-|------|-------------|--------------|
-| `hot` | Trending posts (default) | - |
-| `new` | Latest posts | - |
-| `top` | Highest voted | hour, day, week, month, year, all |
-| `rising` | Gaining traction | - |
-| `controversial` | Mixed votes | hour, day, week, month, year, all |
-
-## API Info
-- **Method**: Public JSON API (no auth needed)
-- **Trick**: Append `.json` to any Reddit URL
-- **Rate Limit**: 100 requests/minute
-- **Docs**: https://www.reddit.com/dev/api
+- hot, new, top, rising, controversial
+- Time filters (for top/controversial): hour, day, week, month, year, all
