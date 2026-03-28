@@ -45,7 +45,7 @@
               return 1
           end
         '';
-        opencode_here = ''
+        ocn = ''
           set -l cmd opencode
 
           if test (count $argv) -gt 0
