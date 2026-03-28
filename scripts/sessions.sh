@@ -1,87 +1,44 @@
 #!/bin/sh
 
-# Function to create a new session with a given name and first window name
 create_session() {
     session_name=$1
-    first_window_name=$2
-    first_window_command=$3
+    start_dir=$2
+    window_name=$3
 
-    tmux new-session -d -s "$session_name" -n "$first_window_name"
-    tmux send-keys "$first_window_command" C-m
+    tmux new-session -d -s "$session_name" -n "$window_name" "cd $start_dir && exec \$SHELL -l"
 }
 
-# Function to add a new window to a session
-add_window() {
+ensure_session() {
     session_name=$1
-    window_name=$2
-    window_command=$3
+    start_dir=$2
+    window_name=$3
 
-    tmux new-window -t "$session_name" -n "$window_name"
-    tmux send-keys "$window_command" C-m
+    if ! tmux has-session -t "$session_name" 2>/dev/null; then
+        create_session "$session_name" "$start_dir" "$window_name"
+    fi
 }
 
-new_window_in_session_with_4_way_split() {
-    session_name=$1
-    window_name=$2
-    split_command1=$3
-    split_command2=$4
-    split_command3=$5
-    split_command4=$6
-
-    tmux new-window -t "$session_name" -n "$window_name"
-    tmux send-keys "$split_command1" C-m
-    tmux split-pane -v
-    tmux send-keys "$split_command2" C-m
-    tmux select-pane -t 0
-    tmux split-window -h
-    tmux send-keys "$split_command3" C-m
-    tmux select-pane -t 2
-    tmux split-window -h
-    tmux send-keys "$split_command4" C-m
+attach_session() {
+    if [ -n "$TMUX" ]; then
+        tmux switch-client -t "$1"
+    else
+        tmux attach-session -t "$1"
+    fi
 }
 
-# Dotfiles
-if ! tmux has-session -t Home 2>/dev/null; then
-    create_session "Home" "Dotfiles" "cd ~/"
-    add_window "Home" "Notes" "cd ~/Documents/Notes"
+ensure_session "dotfiles" "$HOME/dotfiles" "code"
+ensure_session "projects" "$HOME/Documents/projects" "code"
+ensure_session "editing-trainer" "$HOME/Documents/Work/Editing/editing-trainer" "code"
+ensure_session "editing-preprocesser" "$HOME/Documents/Work/Editing/Editing-Preprocesser" "code"
+ensure_session "editing-ml" "$HOME/Documents/Work/Editing/editing-ml" "code"
+ensure_session "editingdebughelper" "$HOME/Documents/Work/Editing/EditingDebugHelper" "code"
+ensure_session "aftershoot-cloud" "$HOME/Documents/Work/Editing/aftershoot-cloud" "code"
+ensure_session "scratchpad" "$HOME/Downloads" "scratchpad"
+
+if ! tmux has-session -t "services" 2>/dev/null; then
+    tmux new-session -d -s "services" -n servers "cd $HOME && pdb"
+    tmux split-window -h -t "services":servers "cd $HOME && sdb"
+    tmux select-layout -t "services":servers even-horizontal
 fi
 
-# Main session with EP, ET, EA windows
-if ! tmux has-session -t Main 2>/dev/null; then
-    create_session "Main" "aftershoot-cloud" "editing; cd aftershoot-cloud"
-    add_window "Main" "editing-preprocesser" "editing; cd Editing-Preprocesser"
-    add_window "Main" "editing-scripts" "editing; cd Editing-Scripts"
-    add_window "Main" "editing-trainer" "editing; cd editing-trainer"
-    add_window "Main" "editing-ml" "editing; cd editing-ml"
-fi
-
-# DebugHelper session with TT, PF windows
-if ! tmux has-session -t DebugHelper 2>/dev/null; then
-    create_session "DebugHelper" "model_sharing" "dh; cd model_sharing"
-    add_window "DebugHelper" "train_trigger" "dh; cd train_trigger"
-fi
-
-# Scripts session with PT window
-if ! tmux has-session -t Scripts 2>/dev/null; then
-    create_session "Scripts" "Scripts" "sc"
-fi
-
-# Downloads
-if ! tmux has-session -t Downloads 2>/dev/null; then
-    create_session "Downloads" "Downloads" "cd ~/Downloads"
-    add_window "Downloads" "Downloads" "cd ~/Downloads"
-fi
-
-# Hobby session with rc window
-if ! tmux has-session -t Hobby 2>/dev/null; then
-    create_session "Hobby" "Projects" "cd ~/Documents/projects"
-fi
-
-# Sessions and daemons
-if ! tmux has-session -t Remote 2>/dev/null; then
-    create_session "Services" "Services" "cd ~/"
-    new_window_in_session_with_4_way_split "Serivces" "servers" "cd ~/ && pdb" "cd ~/ && sdb" "cd ~/" "cd ~/"
-fi
-
-# Attach to the main session or to the session that was just created
-tmux attach-session -t Main
+attach_session "dotfiles"

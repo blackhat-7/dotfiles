@@ -49,13 +49,7 @@
         {
             plugin = tmux-fzf-pane-switch;
             extraConfig = ''
-                set -g @fzf_pane_switch_bind-key "C-f"
-            '';
-        }
-        {
-            plugin = tmuxPlugins.tmux-floax;
-            extraConfig = ''
-                set -g @floax-bind 'C-e'
+                set -g @fzf_pane_switch_bind-key "M-f"
             '';
         }
     ];
@@ -138,6 +132,8 @@
       bind j select-pane -D
       bind k select-pane -U
       bind l select-pane -R
+      bind C-e run-shell "$HOME/dotfiles/scripts/tmux-toggle-scratchpad.sh '#{client_name}' '#{session_name}'"
+      bind C-f run-shell "$HOME/dotfiles/scripts/tmux-open-jump.sh '#{client_name}' '#{session_name}'"
 
       # Set status bar on/off
       bind C-s set-option -g status

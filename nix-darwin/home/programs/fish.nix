@@ -45,6 +45,19 @@
               return 1
           end
         '';
+        opencode_here = ''
+          set -l cmd opencode
+
+          if test (count $argv) -gt 0
+              set cmd "$cmd "(string join ' ' (string escape -- $argv))
+          end
+
+          if set -q TMUX
+              tmux new-window -n opencode -c "$PWD" "$cmd"
+          else
+              eval $cmd
+          end
+        '';
     };
     shellInit = ''
 if status is-interactive
