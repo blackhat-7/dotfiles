@@ -22,7 +22,7 @@
     aichat = {
       enable = true;
       settings = {
-        model = "chutes:openai/gpt-oss-120b-TEE";
+        model = "chutes:zai-org/GLM-4.7-TEE";
         clients = [
           # {
           #   type = "openai-compatible";
@@ -43,7 +43,7 @@
             api_base = "https://llm.chutes.ai/v1";
             models = [
               {
-                name = "openai/gpt-oss-120b-TEE";
+                name = "chutes/zai-org/GLM-4.7-TEE";
                 supports_function_calling = true;
                 strip_reasoning_contents = true;
               }
@@ -87,5 +87,6 @@
     };
     # opencode.enable = true;
     claude-code.enable = true;
+    bun.enable = true;
   };
 }

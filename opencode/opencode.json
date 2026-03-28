@@ -17,6 +17,7 @@
     "stage-mongo-reader_*": "allow",
     "grafana-loki-reader_*": "allow",
     "sentry-reader_*": "allow",
+    "linear_*": "allow",
     "skill": {
       "*": "allow"
     },
@@ -94,6 +95,11 @@
         "{env:HOME}/Documents/Work/Editing/aftershoot-cloud/env/dev/sentry-reader/app.env",
         "{env:HOME}/Documents/Work/Editing/aftershoot-cloud/dist/mcp-servers/sentry-reader"
       ],
+      "enabled": false
+    },
+    "linear": {
+      "type": "remote",
+      "url": "https://mcp.linear.app/mcp",
       "enabled": false
     }
   }

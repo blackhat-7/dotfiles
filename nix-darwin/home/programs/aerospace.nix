@@ -27,16 +27,16 @@
           "${sticky-pip-script}/bin/sticky-pip"
         ];
         workspace-to-monitor-force-assignment = {
-          "1" = 2;
-          "2" = 2;
-          "3" = 2;
-          "4" = 2;
-          "5" = 2;
-          "6" = 2;
-          "7" = 2;
-          "8" = 2;
-          "9" = 2;
-          "0" = 1;
+          "1" = "main";
+          "2" = "main";
+          "3" = "main";
+          "4" = "main";
+          "5" = "main";
+          "6" = "main";
+          "7" = "main";
+          "8" = "main";
+          "9" = "main";
+          "0" = "secondary";
         };
         on-focused-monitor-changed = ["move-mouse monitor-lazy-center"];
       }
