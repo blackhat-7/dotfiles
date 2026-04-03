@@ -12,15 +12,27 @@
 caller_client="$1"
 current_session="$2"
 
-if [ "$current_session" = "scratchpad" ]; then
-    # We are inside the scratchpad (nested tmux).
+case "$current_session" in
+    scratchpad)
+        parent_option='@scratchpad_parent_client'
+        ;;
+    popup-terminal)
+        parent_option='@popup_terminal_parent_client'
+        ;;
+    *)
+        parent_option=''
+        ;;
+esac
+
+if [ -n "$parent_option" ]; then
+    # We are inside a nested popup tmux session.
     # Read the saved parent client.
-    parent_client=$(tmux show-options -gqv @scratchpad_parent_client)
+    parent_client=$(tmux show-options -gqv "$parent_option")
     if [ -z "$parent_client" ]; then
         parent_client="$caller_client"
     fi
 
-    # Detach the inner scratchpad client. This causes the popup's
+    # Detach the inner popup client. This causes the popup's
     # shell command ("tmux attach-session -t scratchpad") to return,
     # and since the popup was opened with -E, it closes automatically.
     tmux detach-client -t "$caller_client" 2>/dev/null

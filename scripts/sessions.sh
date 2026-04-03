@@ -27,6 +27,8 @@ attach_session() {
 }
 
 ensure_session "dotfiles" "$HOME/dotfiles" "code"
+ensure_session "notes" "$HOME/dotfiles/Notes" "code"
+ensure_session "Downloads" "$HOME/Downloads" "code"
 ensure_session "projects" "$HOME/Documents/projects" "code"
 ensure_session "editing-trainer" "$HOME/Documents/Work/Editing/editing-trainer" "code"
 ensure_session "editing-preprocesser" "$HOME/Documents/Work/Editing/Editing-Preprocesser" "code"

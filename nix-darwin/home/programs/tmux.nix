@@ -137,7 +137,8 @@
       bind j select-pane -D
       bind k select-pane -U
       bind l select-pane -R
-      bind C-e run-shell "$HOME/dotfiles/scripts/tmux-toggle-scratchpad.sh '#{client_name}' '#{session_name}'"
+      bind C-e run-shell "$HOME/dotfiles/scripts/tmux-toggle-popup-terminal.sh '#{client_name}' '#{session_name}' '#{pane_current_path}'"
+      bind C-p run-shell "$HOME/dotfiles/scripts/tmux-toggle-scratchpad.sh '#{client_name}' '#{session_name}'"
       bind C-f run-shell "$HOME/dotfiles/scripts/tmux-open-jump.sh '#{client_name}' '#{session_name}'"
 
       # Set status bar on/off

@@ -55,7 +55,7 @@
         "{env:HOME}/Documents/Work/Editing/aftershoot-cloud/env/dev/cloudsql-reader/app.env",
         "{env:HOME}/Documents/Work/Editing/aftershoot-cloud/dist/mcp-servers/cloudsql-reader"
       ],
-      "enabled": false
+      "enabled": true
     },
     "mongo-reader": {
       "type": "local",
@@ -85,7 +85,7 @@
         "{env:HOME}/Documents/Work/Editing/aftershoot-cloud/env/dev/grafana-loki-reader/app.env",
         "{env:HOME}/Documents/Work/Editing/aftershoot-cloud/dist/mcp-servers/grafana-loki-reader"
       ],
-      "enabled": false
+      "enabled": true
     },
     "sentry-reader": {
       "type": "local",
