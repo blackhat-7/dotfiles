@@ -189,6 +189,9 @@ end
 if test -f $HOME/Documents/Work/Creds/linear.txt
     export LINEAR_API_KEY=$(cat $HOME/Documents/Work/Creds/linear.txt)
 end
+if test -f $HOME/Documents/Creds/huggingface.txt
+    export HF_TOKEN=$(cat $HOME/Documents/Creds/huggingface.txt)
+end
 
 direnv hook fish | source
     '';
