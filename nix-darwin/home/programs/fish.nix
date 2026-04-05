@@ -58,6 +58,13 @@
               eval $cmd
           end
         '';
+        local-claude = ''
+          env ANTHROPIC_BASE_URL=http://pc:6868 \
+              ANTHROPIC_AUTH_TOKEN=none \
+              ANTHROPIC_API_KEY=none \
+              CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1 \
+              claude --model "Qwen3.5-9B-Q4_K_M.gguf" $argv
+        '';
     };
     shellInit = ''
 if status is-interactive

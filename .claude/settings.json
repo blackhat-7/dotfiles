@@ -13,7 +13,8 @@
       "mcp__mongo-reader",
       "mcp__stage-mongo-reader",
       "mcp__grafana-loki-reader",
-      "mcp__sentry-reader"
+      "mcp__sentry-reader",
+      "mcp__arxiv"
     ],
     "deny": [],
     "ask": [
@@ -22,8 +23,8 @@
       "Write"
     ]
   },
+  "model": "opus",
   "enabledPlugins": {
     "pyright-lsp@claude-plugins-official": true
-  },
-  "model": "opus"
+  }
 }

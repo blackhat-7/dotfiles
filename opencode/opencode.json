@@ -18,6 +18,7 @@
     "grafana-loki-reader_*": "allow",
     "sentry-reader_*": "allow",
     "linear_*": "allow",
+    "arxiv_*": "allow",
     "skill": {
       "*": "allow"
     },
@@ -35,12 +36,15 @@
       "npm": "@ai-sdk/openai-compatible",
       "name": "Local LLM",
       "options": {
-        "baseURL": "http://100.64.0.1:7000/v1/",
+        "baseURL": "http://100.64.0.1:6868/v1/",
         "apiKey": "none"
       },
       "models": {
         "qwen3.5-9b": {
           "name": "qwen3.5-9b"
+        },
+        "qwen3.5-35b-a3b": {
+          "name": "qwen3.5-35b-a3b"
         }
       }
     }
@@ -100,6 +104,14 @@
     "linear": {
       "type": "remote",
       "url": "https://mcp.linear.app/mcp",
+      "enabled": false
+    },
+    "arxiv": {
+      "type": "local",
+      "command": ["arxiv-mcp-server"],
+      "environment": {
+        "ARXIV_STORAGE_PATH": "~/Downloads/papers"
+      },
       "enabled": false
     }
   }

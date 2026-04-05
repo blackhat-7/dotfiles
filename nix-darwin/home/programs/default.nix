@@ -2,6 +2,7 @@
   pkgs,
   inputs,
   config,
+  lib,
   ...
 }: {
 
@@ -96,4 +97,16 @@
     claude-code.enable = true;
     bun.enable = true;
   };
+
+  home.activation.install-uv-tools = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    tools="
+      basedpyright
+      ruff
+      arxiv-mcp-server
+    "
+    for tool in $tools; do
+      echo "Installing $tool with uv..."
+      ${pkgs.uv}/bin/uv tool install $tool
+    done
+  '';
 }

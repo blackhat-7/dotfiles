@@ -85,6 +85,7 @@
     tools="
       basedpyright
       ruff
+      arxiv-mcp-server
     "
     # Install each tool
     for tool in $tools; do
