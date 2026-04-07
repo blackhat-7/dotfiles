@@ -61,6 +61,16 @@
       ],
       "enabled": true
     },
+    "grafana-loki-reader": {
+      "type": "local",
+      "command": [
+        "env-cmd",
+        "-f",
+        "{env:HOME}/Documents/Work/Editing/aftershoot-cloud/env/dev/grafana-loki-reader/app.env",
+        "{env:HOME}/Documents/Work/Editing/aftershoot-cloud/dist/mcp-servers/grafana-loki-reader"
+      ],
+      "enabled": true
+    },
     "mongo-reader": {
       "type": "local",
       "command": [
@@ -81,16 +91,7 @@
       ],
       "enabled": false
     },
-    "grafana-loki-reader": {
-      "type": "local",
-      "command": [
-        "env-cmd",
-        "-f",
-        "{env:HOME}/Documents/Work/Editing/aftershoot-cloud/env/dev/grafana-loki-reader/app.env",
-        "{env:HOME}/Documents/Work/Editing/aftershoot-cloud/dist/mcp-servers/grafana-loki-reader"
-      ],
-      "enabled": true
-    },
+
     "sentry-reader": {
       "type": "local",
       "command": [

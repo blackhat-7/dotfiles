@@ -16,9 +16,6 @@ case "$current_session" in
     scratchpad)
         parent_option='@scratchpad_parent_client'
         ;;
-    popup-terminal)
-        parent_option='@popup_terminal_parent_client'
-        ;;
     *)
         parent_option=''
         ;;

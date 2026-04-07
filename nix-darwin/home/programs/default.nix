@@ -23,7 +23,7 @@
     aichat = {
       enable = true;
       settings = {
-        model = "chutes:deepseek-ai/DeepSeek-V3";
+        model = "chutes/deepseek-ai/DeepSeek-V3.2-TEE";
         clients = [
           # {
           #   type = "openai-compatible";
@@ -44,7 +44,7 @@
             api_base = "https://llm.chutes.ai/v1";
             models = [
               {
-                name = "chutes/deepseek-ai/DeepSeek-V3";
+                name = "chutes/deepseek-ai/DeepSeek-V3.2-TEE";
                 supports_function_calling = true;
                 strip_reasoning_contents = true;
               }

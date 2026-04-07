@@ -28,4 +28,4 @@ tmux set-option -g @scratchpad_parent_client "$caller_client"
 
 # Open the scratchpad popup on this client.
 tmux display-popup -c "$caller_client" -w 85% -h 85% -E \
-    "tmux attach-session -t scratchpad 2>/dev/null || tmux new-session -s scratchpad -c $HOME/Downloads"
+    "tmux attach-session -t scratchpad"

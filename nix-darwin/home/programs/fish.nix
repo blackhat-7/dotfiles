@@ -58,13 +58,6 @@
               eval $cmd
           end
         '';
-        local-claude = ''
-          env ANTHROPIC_BASE_URL=http://pc:6868 \
-              ANTHROPIC_AUTH_TOKEN=none \
-              ANTHROPIC_API_KEY=none \
-              CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1 \
-              claude --model "Qwen3.5-9B-Q4_K_M.gguf" $argv
-        '';
     };
     shellInit = ''
 if status is-interactive
@@ -111,6 +104,9 @@ alias pdb="cloud-sql-proxy aftershoot-co:us-central1:editing-uploader -p 5434"
 alias sdb="cloud-sql-proxy aftershoot-stage:us-central1:aftershoot-stage-db -p 5436"
 alias jbuild="cd ./secret/jarvis && cargo build --release && cd - && mv ./secret/jarvis/target/release/jarvis ."
 alias initflake="~/dotfiles/scripts/init-direnv-flake.sh"
+alias ccr-local="ccr code --model local,Qwen3.5-9B-Q4_K_M.gguf"
+alias ccr-glm="ccr code --model chutes,zai-org/GLM-5-Turbo"
+alias ccr-kimi="ccr code --model chutes,moonshotai/Kimi-K2.5-TEE"
 
 # Nvim configs
 alias nv="nvim -u ~/.config/nvim/init.lua"
@@ -198,6 +194,9 @@ if test -f $HOME/Documents/Work/Creds/linear.txt
 end
 if test -f $HOME/Documents/Creds/huggingface.txt
     export HF_TOKEN=$(cat $HOME/Documents/Creds/huggingface.txt)
+end
+if test -f $HOME/Documents/Work/Creds/github-mcp.txt
+    export GITHUB_MCP_TOKEN=$(cat $HOME/Documents/Work/Creds/github-mcp.txt)
 end
 
 direnv hook fish | source
