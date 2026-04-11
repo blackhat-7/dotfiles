@@ -6,6 +6,7 @@ No authentication required - just append .json to URLs
 
 import urllib.request
 import urllib.parse
+import urllib.error
 import json
 import sys
 from credential import get_user_agent
@@ -13,7 +14,7 @@ from credential import get_user_agent
 BASE_URL = "https://www.reddit.com"
 
 
-def api_get(path: str, params: dict = None) -> dict:
+def api_get(path: str, params: dict | None = None) -> dict:
     """Make GET request to Reddit JSON API"""
     url = f"{BASE_URL}/{path}.json"
     if params:
@@ -163,11 +164,11 @@ def print_user(u: dict):
 def print_posts_list(posts: list, label: str = "posts"):
     """Print list of posts"""
     cleaned = [clean_post(p) for p in posts if p]
-    print(f"{label}[{len(cleaned)}]{{title,subreddit,score,comments}}:")
+    print(f"{label}[{len(cleaned)}]{{id,title,subreddit,score,comments}}:")
     for p in cleaned:
         title = (p["title"] or "")[:60]
         print(
-            f"  {title},r/{p['subreddit']},{format_count(p['score'])},{format_count(p['num_comments'])}"
+            f"  {p['id']},{title},r/{p['subreddit']},{format_count(p['score'])},{format_count(p['num_comments'])}"
         )
 
 

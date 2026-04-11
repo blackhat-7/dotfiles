@@ -19,16 +19,9 @@
     "sentry-reader_*": "allow",
     "linear_*": "allow",
     "arxiv_*": "allow",
+    "reddit": "allow",
     "skill": {
       "*": "allow"
-    },
-    "reddit*": "allow",
-    "bash": {
-      "./reddit.py search *": "allow",
-      "./reddit.py posts *": "allow",
-      "./reddit.py subreddit *": "allow",
-      "./reddit.py post *": "allow",
-      "./reddit.py user *": "allow"
     }
   },
   "provider": {

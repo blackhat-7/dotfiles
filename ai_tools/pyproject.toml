@@ -1,0 +1,26 @@
+[project]
+name = "ai-tools"
+version = "0.1.0"
+requires-python = ">=3.12"
+
+[project.scripts]
+ai-tools-cli = "ai_tools.hosts.cli:main"
+ai-tools-mcp = "ai_tools.hosts.mcp:main"
+
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = [
+  "ai_tools",
+  "ai_tools.core",
+  "ai_tools.hosts",
+  "ai_tools.tools",
+]
+
+[tool.setuptools.package-dir]
+ai_tools = "."
+"ai_tools.core" = "core"
+"ai_tools.hosts" = "hosts"
+"ai_tools.tools" = "tools"

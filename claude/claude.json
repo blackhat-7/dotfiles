@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "ai-tools": {
+      "command": "ai-tools-mcp",
+      "args": []
+    }
+  }
+}

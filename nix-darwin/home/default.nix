@@ -50,4 +50,16 @@
       RunAtLoad = true;
     };
   };
+
+  home.file.".claude.json" = {
+    source = ../../claude/claude.json;
+  };
+
+  home.file.".config/opencode/package.json" = {
+    source = ../../opencode/package.json;
+  };
+
+  home.file.".config/opencode/tools/reddit.ts" = {
+    source = ../../opencode/tools/reddit.ts;
+  };
 }
