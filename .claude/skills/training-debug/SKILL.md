@@ -18,6 +18,7 @@ If the user asks for "all failures", stay within the training/preprocess pipelin
 Answer in this order:
 - `Scope:` exact unit counted (`bifrost_jobs`, `profiles`, logs) and whether stats are external-only
 - `Stats:` counts by source and top failure patterns for the requested window
+- `Cause:` exact failed-job cause if proven; otherwise say `not proven yet`
 - `Internal anomalies:` excluded internal rows that are still worth calling out
 - `Hunch:` 1-3 likely causes, explicitly marked as hunches
 - `Next checks:` exact logs, SQL rows, and repo files to inspect next
@@ -60,6 +61,17 @@ For aggregate stats:
 - Use rolling windows from `NOW()` or the system date. Do not hardcode calendar dates.
 - Loki queries must stay within `189h`. Do not use midnight-to-23:59 7-day ranges.
 
+## Attribution Rules
+
+- For "why did this fail?", work job-first, not profile-first.
+- Start from the exact failed `bifrost_jobs` row and keep `external_job_id`, `created_at`, `completed_at`, `provider`, and `profile_id`.
+- If a profile has multiple jobs in the window, treat them as separate runs. Do not merge them.
+- Use `bifrost_job_events` first, then logs scoped to that job window. Prefer `external_job_id`, `job_id`, or `correlation_id` over raw `profile_id` searches.
+- Treat profile-level training logs as pattern-finding only. They are not enough to prove causality for one failed job.
+- `ERROR` does not mean fatal. Only call something the cause if you have a terminal traceback, explicit failure reason, or matching terminal state transition.
+- Do not use final `profiles.status` or `retry_count` to explain why one specific job failed unless the evidence directly supports it.
+- If you only see incidental warnings or mixed signals, say `not proven yet` instead of guessing.
+
 ## First Pass
 
 For recent failures, query only:
@@ -98,6 +110,27 @@ WHERE created_at >= '<start>'::timestamptz
 GROUP BY provider, job_state, COALESCE(failure_reason, 'null')
 ORDER BY count DESC
 LIMIT 20;
+```
+
+Exact failed jobs to attribute:
+
+```sql
+SELECT id,
+       external_job_id,
+       provider,
+       job_state,
+       failure_reason,
+       created_at,
+       completed_at,
+       job_payload->>'display_name' AS display_name,
+       job_payload->'tracking_args'->>'profile_id' AS profile_id
+FROM bifrost_jobs
+WHERE created_at >= '<start>'::timestamptz
+  AND job_state = 'failed'
+  AND job_payload->>'job_type' = 'training'
+  AND COALESCE(job_payload->>'display_name', '') !~ 'job_(kuWNJmqZa3gPO8dhnAElIQpmbqB2|6qGM63ZK7nboNlfDNr0Wvg6sKCW2|JYtB9LvE9IMBYg7Zg2RpFMhu3fY2|4dWuJcxkWUeUM4xHiBWbJBITyXj2|u8M9wFO10sbcmEsiOvq7mij8ObP2|yO22z2le3TeK19of97His5tgnEm2|FXASuLnhGUV5T8tK7PnRMpP0iG33|S25p6qAYA8dl4tqIRTDHAKGaiv03|e7mKZtmzA5bLsUSxhTStLN6Eyay2)_'
+ORDER BY created_at DESC
+LIMIT 100;
 ```
 
 Resolve ids first:
@@ -152,6 +185,8 @@ WHERE external_job_id = '<external_job_id>'
 ORDER BY event_timestamp ASC
 LIMIT 50;
 ```
+
+Then search logs only around that failed job's time window. Do not attribute cause from unrelated profile-level errors outside that run.
 
 If training got far enough to write metrics:
 
