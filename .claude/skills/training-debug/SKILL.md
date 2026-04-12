@@ -47,10 +47,11 @@ job_(kuWNJmqZa3gPO8dhnAElIQpmbqB2|6qGM63ZK7nboNlfDNr0Wvg6sKCW2|JYtB9LvE9IMBYg7Zg
 ```
 
 Filtering rules:
-- `bifrost_jobs`: use `COALESCE(job_payload->>'display_name', '') !~ '<internal-regex>'`
+- `bifrost_jobs`: do not rely on `display_name` alone for internal filtering; prefer `profile_id -> profiles.user_id` when available, and use the regex only as a fallback
 - `bifrost_serverless_jobs`: exclude rows where `user_id` is one of the ids above
 - `profiles`: exclude rows where `user_id` is one of the ids above
 - logs: ignore hits whose job id or display name contains one of those ids
+- If a supposed external row resolves to an internal `profiles.user_id`, treat it as internal even if `display_name` differs by case or typo.
 - If excluded internal rows show up in the same window, mention them separately under `Internal anomalies` instead of mixing them into customer-facing stats.
 
 ## Stats First
@@ -60,6 +61,7 @@ For aggregate stats:
 - Keep units separate: `bifrost_jobs` failures, `profiles` currently `failed`, and logs are different things.
 - Use rolling windows from `NOW()` or the system date. Do not hardcode calendar dates.
 - Loki queries must stay within `189h`. Do not use midnight-to-23:59 7-day ranges.
+- In `Stats:`, report terminal failure states and proved failure classes. Do not list repeated non-fatal log lines as failure reasons.
 
 ## Attribution Rules
 
@@ -69,6 +71,8 @@ For aggregate stats:
 - Use `bifrost_job_events` first, then logs scoped to that job window. Prefer `external_job_id`, `job_id`, or `correlation_id` over raw `profile_id` searches.
 - Treat profile-level training logs as pattern-finding only. They are not enough to prove causality for one failed job.
 - `ERROR` does not mean fatal. Only call something the cause if you have a terminal traceback, explicit failure reason, or matching terminal state transition.
+- Common non-fatal logs are not causes. Do not report a repeated warning/error line as the failure reason unless the code path or traceback shows it terminates the run.
+- If a log line is common but non-fatal, omit it from `Stats:` and mention it only as background noise if needed.
 - Do not use final `profiles.status` or `retry_count` to explain why one specific job failed unless the evidence directly supports it.
 - If you only see incidental warnings or mixed signals, say `not proven yet` instead of guessing.
 
@@ -82,13 +86,12 @@ If signal is weak, expand to `WARN`.
 
 Current real patterns:
 - preprocess: `No catalog found ... Integrity check failed`, `Image dir not found ... /DNGs`, `Some Catalogs don't have lrcat or dngs/tiffs/jpgs`
-- trainer-refactored: `chkpts.zip does not exist at the specified GCS bucket path`
+- trainer-refactored: `chkpts.zip does not exist at the specified GCS bucket path` is common noise unless a traceback proves otherwise
 - one real trainer traceback involved `ToneCurvePV2012` in `editing_trainer/processing.py`
 - recent external `bifrost_jobs` also showed `lost_job`, `requested_state_stuck`, and `scheduled_state_stuck`
 
 Default hunches:
 - preprocess integrity errors: upload/catalog/DNG problem before training
-- missing `chkpts.zip`: checkpoint lookup path, incremental assumption, or previous artifacts absent
 - `lost_job` / `*_state_stuck`: infra scheduling or watcher issue before app code
 
 ## Safe SQL
@@ -99,13 +102,18 @@ Never paste raw tool output containing keys, tokens, or payload blobs.
 
 For stats, always filter `bifrost_jobs` with `job_payload->>'job_type' = 'training'` unless the user explicitly asks for broader Bifrost job stats.
 
+When `profile_id` is present, prefer joining through `profiles` to exclude internal rows instead of trusting `display_name`.
+
 Recent external-only training job failures:
 
 ```sql
 SELECT provider, job_state, COALESCE(failure_reason, 'null') AS failure_reason, COUNT(*) AS count
 FROM bifrost_jobs
+LEFT JOIN profiles p
+  ON p.key = bifrost_jobs.job_payload->'tracking_args'->>'profile_id'
 WHERE created_at >= '<start>'::timestamptz
   AND job_payload->>'job_type' = 'training'
+  AND COALESCE(p.user_id, '') NOT IN ('kuWNJmqZa3gPO8dhnAElIQpmbqB2','6qGM63ZK7nboNlfDNr0Wvg6sKCW2','JYtB9LvE9IMBYg7Zg2RpFMhu3fY2','4dWuJcxkWUeUM4xHiBWbJBITyXj2','u8M9wFO10sbcmEsiOvq7mij8ObP2','yO22z2le3TeK19of97His5tgnEm2','FXASuLnhGUV5T8tK7PnRMpP0iG33','S25p6qAYA8dl4tqIRTDHAKGaiv03','e7mKZtmzA5bLsUSxhTStLN6Eyay2')
   AND COALESCE(job_payload->>'display_name', '') !~ 'job_(kuWNJmqZa3gPO8dhnAElIQpmbqB2|6qGM63ZK7nboNlfDNr0Wvg6sKCW2|JYtB9LvE9IMBYg7Zg2RpFMhu3fY2|4dWuJcxkWUeUM4xHiBWbJBITyXj2|u8M9wFO10sbcmEsiOvq7mij8ObP2|yO22z2le3TeK19of97His5tgnEm2|FXASuLnhGUV5T8tK7PnRMpP0iG33|S25p6qAYA8dl4tqIRTDHAKGaiv03|e7mKZtmzA5bLsUSxhTStLN6Eyay2)_'
 GROUP BY provider, job_state, COALESCE(failure_reason, 'null')
 ORDER BY count DESC
@@ -123,11 +131,16 @@ SELECT id,
        created_at,
        completed_at,
        job_payload->>'display_name' AS display_name,
-       job_payload->'tracking_args'->>'profile_id' AS profile_id
+       job_payload->'tracking_args'->>'profile_id' AS profile_id,
+       p.user_id,
+       p.user_email
 FROM bifrost_jobs
+LEFT JOIN profiles p
+  ON p.key = bifrost_jobs.job_payload->'tracking_args'->>'profile_id'
 WHERE created_at >= '<start>'::timestamptz
   AND job_state = 'failed'
   AND job_payload->>'job_type' = 'training'
+  AND COALESCE(p.user_id, '') NOT IN ('kuWNJmqZa3gPO8dhnAElIQpmbqB2','6qGM63ZK7nboNlfDNr0Wvg6sKCW2','JYtB9LvE9IMBYg7Zg2RpFMhu3fY2','4dWuJcxkWUeUM4xHiBWbJBITyXj2','u8M9wFO10sbcmEsiOvq7mij8ObP2','yO22z2le3TeK19of97His5tgnEm2','FXASuLnhGUV5T8tK7PnRMpP0iG33','S25p6qAYA8dl4tqIRTDHAKGaiv03','e7mKZtmzA5bLsUSxhTStLN6Eyay2')
   AND COALESCE(job_payload->>'display_name', '') !~ 'job_(kuWNJmqZa3gPO8dhnAElIQpmbqB2|6qGM63ZK7nboNlfDNr0Wvg6sKCW2|JYtB9LvE9IMBYg7Zg2RpFMhu3fY2|4dWuJcxkWUeUM4xHiBWbJBITyXj2|u8M9wFO10sbcmEsiOvq7mij8ObP2|yO22z2le3TeK19of97His5tgnEm2|FXASuLnhGUV5T8tK7PnRMpP0iG33|S25p6qAYA8dl4tqIRTDHAKGaiv03|e7mKZtmzA5bLsUSxhTStLN6Eyay2)_'
 ORDER BY created_at DESC
 LIMIT 100;
