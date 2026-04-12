@@ -1,6 +1,6 @@
 ---
 name: training-debug
-description: Debug Aftershoot training and preprocessing failures. Use whenever the user mentions failure stats, recent training failures, a time window of failures, `editing-preprocesser`, `editing-trainer-refactored`, `editing-trainer-reactored`, `profile_id`, `folder_id`, `job_id`, `chkpts.zip`, `lost_job`, `requested_state_stuck`, `scheduled_state_stuck`, `No catalog found`, `Image dir not found`, or asks what logs, SQL tables, or repo files to check for a broken training run.
+description: Debug Aftershoot training and preprocessing failures. Use whenever the user mentions failure stats, recent training failures, a time window of failures, `editing-preprocesser`, `editing-trainer-refactored`, `editing-trainer-reactored`, `profile_id`, `folder_id`, `job_id`, `lost_job`, `requested_state_stuck`, `scheduled_state_stuck`, `No catalog found`, `Image dir not found`, or asks what logs, SQL tables, or repo files to check for a broken training run.
 ---
 
 # Training Debug
@@ -20,7 +20,7 @@ Answer in this order:
 - `Stats:` counts by source and top failure patterns for the requested window
 - `Cause:` exact failed-job cause if proven; otherwise say `not proven yet`
 - `Internal anomalies:` excluded internal rows that are still worth calling out
-- `Hunch:` 1-3 likely causes, explicitly marked as hunches
+- `Hunch:` 1-3 likely causes, explicitly marked as hunches, but derive them from repeated terminal failure classes or explicit failure states, not from the noisiest repeated `ERROR` line
 - `Next checks:` exact logs, SQL rows, and repo files to inspect next
 
 Default to the last 24 hours if the user does not specify a time window.
@@ -51,17 +51,22 @@ Filtering rules:
 - `bifrost_serverless_jobs`: exclude rows where `user_id` is one of the ids above
 - `profiles`: exclude rows where `user_id` is one of the ids above
 - logs: ignore hits whose job id or display name contains one of those ids
+- normalize `user_id` to lowercase before comparing; casing can drift across rows and logs
 - If a supposed external row resolves to an internal `profiles.user_id`, treat it as internal even if `display_name` differs by case or typo.
 - If excluded internal rows show up in the same window, mention them separately under `Internal anomalies` instead of mixing them into customer-facing stats.
+- If an internal row leaks into a result set, fix the filter and rerun the query. Do not subtract it by hand in prose.
 
 ## Stats First
 
 For aggregate stats:
 - Use SQL first. Logs are for explanation, not the source of truth for counts.
+- If the user asked for failures, query failure-like rows first. Do not lead with `succeeded`, `running`, or `scheduled` counts unless the user asked for totals.
 - Keep units separate: `bifrost_jobs` failures, `profiles` currently `failed`, and logs are different things.
 - Use rolling windows from `NOW()` or the system date. Do not hardcode calendar dates.
 - Loki queries must stay within `189h`. Do not use midnight-to-23:59 7-day ranges.
+- For Loki, use explicit ISO timestamps from the current date. Do not guess relative strings or calendar years.
 - In `Stats:`, report terminal failure states and proved failure classes. Do not list repeated non-fatal log lines as failure reasons.
+- A capped Loki sample is not a count. Do not estimate frequencies from `limit`ed logs; say `seen in sample` unless you ran a real count.
 
 ## Attribution Rules
 
@@ -69,29 +74,36 @@ For aggregate stats:
 - Start from the exact failed `bifrost_jobs` row and keep `external_job_id`, `created_at`, `completed_at`, `provider`, and `profile_id`.
 - If a profile has multiple jobs in the window, treat them as separate runs. Do not merge them.
 - Use `bifrost_job_events` first, then logs scoped to that job window. Prefer `external_job_id`, `job_id`, or `correlation_id` over raw `profile_id` searches.
+- Within one failed run, rank evidence in this order: terminal `Training failed` traceback or explicit exception, then `bifrost_jobs.failure_reason` / `bifrost_job_events`, then preprocess integrity errors in the same window, then other log lines.
 - Treat profile-level training logs as pattern-finding only. They are not enough to prove causality for one failed job.
 - `ERROR` does not mean fatal. Only call something the cause if you have a terminal traceback, explicit failure reason, or matching terminal state transition.
+- If multiple `ERROR` lines exist in the same job window, use the last terminal traceback as the cause. Earlier helper-module `ERROR`s are supporting context only.
 - Common non-fatal logs are not causes. Do not report a repeated warning/error line as the failure reason unless the code path or traceback shows it terminates the run.
 - If a log line is common but non-fatal, omit it from `Stats:` and mention it only as background noise if needed.
+- Do not form `Hunch:` from a global trainer log sample. Form it from repeated terminal tracebacks or repeated explicit failure states across failed jobs.
 - Do not use final `profiles.status` or `retry_count` to explain why one specific job failed unless the evidence directly supports it.
+- Global trainer log search can include internal or local/dev runs. Do not mix those into external customer failure classes unless you tie them back to the failed jobs you counted.
 - If you only see incidental warnings or mixed signals, say `not proven yet` instead of guessing.
 
 ## First Pass
 
 For recent failures, query only:
-- `editing-preprocesser` `ERROR`
-- `editing-trainer-refactored` `ERROR`
+- `bifrost_jobs` failure-like rows first
+- `editing-trainer-refactored` `ERROR` with `Training failed` or traceback search inside the failed-job window
+- `editing-preprocesser` `ERROR` inside the same failed-job window
 
 If signal is weak, expand to `WARN`.
 
-Current real patterns:
-- preprocess: `No catalog found ... Integrity check failed`, `Image dir not found ... /DNGs`, `Some Catalogs don't have lrcat or dngs/tiffs/jpgs`
-- trainer-refactored: `chkpts.zip does not exist at the specified GCS bucket path` is common noise unless a traceback proves otherwise
-- one real trainer traceback involved `ToneCurvePV2012` in `editing_trainer/processing.py`
-- recent external `bifrost_jobs` also showed `lost_job`, `requested_state_stuck`, and `scheduled_state_stuck`
+Recent fatal patterns seen in real logs:
+- trainer: `FileNotFoundError` for `cache/data/metrics/metrics_exif.csv`
+- trainer: `KeyError` in `editing_trainer/processing.py` involving `ToneCurvePV2012`
+- trainer: `RuntimeError` in `editing_trainer/utils/gcs.py` while downloading TIFFs
+- preprocess: integrity failures such as missing catalog or image dirs
+- infra: `lost_job`, `requested_state_stuck`, and `scheduled_state_stuck`
 
 Default hunches:
-- preprocess integrity errors: upload/catalog/DNG problem before training
+- repeated trainer tracebacks ending at `main.py: Training failed` usually point to the real failure class; for example, missing `metrics_exif.csv` means evaluation inputs were never produced
+- preprocess integrity errors usually mean upstream upload/catalog/image-dir problems that later break training artifacts
 - `lost_job` / `*_state_stuck`: infra scheduling or watcher issue before app code
 
 ## Safe SQL
@@ -104,7 +116,7 @@ For stats, always filter `bifrost_jobs` with `job_payload->>'job_type' = 'traini
 
 When `profile_id` is present, prefer joining through `profiles` to exclude internal rows instead of trusting `display_name`.
 
-Recent external-only training job failures:
+Recent external-only training failure summary:
 
 ```sql
 SELECT provider, job_state, COALESCE(failure_reason, 'null') AS failure_reason, COUNT(*) AS count
@@ -113,14 +125,15 @@ LEFT JOIN profiles p
   ON p.key = bifrost_jobs.job_payload->'tracking_args'->>'profile_id'
 WHERE created_at >= '<start>'::timestamptz
   AND job_payload->>'job_type' = 'training'
-  AND COALESCE(p.user_id, '') NOT IN ('kuWNJmqZa3gPO8dhnAElIQpmbqB2','6qGM63ZK7nboNlfDNr0Wvg6sKCW2','JYtB9LvE9IMBYg7Zg2RpFMhu3fY2','4dWuJcxkWUeUM4xHiBWbJBITyXj2','u8M9wFO10sbcmEsiOvq7mij8ObP2','yO22z2le3TeK19of97His5tgnEm2','FXASuLnhGUV5T8tK7PnRMpP0iG33','S25p6qAYA8dl4tqIRTDHAKGaiv03','e7mKZtmzA5bLsUSxhTStLN6Eyay2')
-  AND COALESCE(job_payload->>'display_name', '') !~ 'job_(kuWNJmqZa3gPO8dhnAElIQpmbqB2|6qGM63ZK7nboNlfDNr0Wvg6sKCW2|JYtB9LvE9IMBYg7Zg2RpFMhu3fY2|4dWuJcxkWUeUM4xHiBWbJBITyXj2|u8M9wFO10sbcmEsiOvq7mij8ObP2|yO22z2le3TeK19of97His5tgnEm2|FXASuLnhGUV5T8tK7PnRMpP0iG33|S25p6qAYA8dl4tqIRTDHAKGaiv03|e7mKZtmzA5bLsUSxhTStLN6Eyay2)_'
+  AND (job_state = 'failed' OR COALESCE(failure_reason, '') <> '')
+  AND LOWER(COALESCE(p.user_id, '')) NOT IN ('kuwnjmqza3gpo8dhnaeliqpmbqb2','6qgm63zk7nbonlfdnr0wvg6skcw2','jytb9lve9imbyg7zg2rpfmhu3fy2','4dwujcxkwueum4xhibwjbityxj2','u8m9wfo10sbcmesiovq7mij8obp2','yo22z2le3tek19of97his5tgnem2','fxasulnhguv5t8tk7pnrmpp0ig33','s25p6qaya8dl4tqirtdhakgaiv03','e7mkztmza5blsusxhtstln6eyay2')
+  AND COALESCE(job_payload->>'display_name', '') !~* 'job_(kuWNJmqZa3gPO8dhnAElIQpmbqB2|6qGM63ZK7nboNlfDNr0Wvg6sKCW2|JYtB9LvE9IMBYg7Zg2RpFMhu3fY2|4dWuJcxkWUeUM4xHiBWbJBITyXj2|u8M9wFO10sbcmEsiOvq7mij8ObP2|yO22z2le3TeK19of97His5tgnEm2|FXASuLnhGUV5T8tK7PnRMpP0iG33|S25p6qAYA8dl4tqIRTDHAKGaiv03|e7mKZtmzA5bLsUSxhTStLN6Eyay2)_'
 GROUP BY provider, job_state, COALESCE(failure_reason, 'null')
 ORDER BY count DESC
 LIMIT 20;
 ```
 
-Exact failed jobs to attribute:
+Exact failed-like jobs to attribute:
 
 ```sql
 SELECT id,
@@ -138,10 +151,10 @@ FROM bifrost_jobs
 LEFT JOIN profiles p
   ON p.key = bifrost_jobs.job_payload->'tracking_args'->>'profile_id'
 WHERE created_at >= '<start>'::timestamptz
-  AND job_state = 'failed'
   AND job_payload->>'job_type' = 'training'
-  AND COALESCE(p.user_id, '') NOT IN ('kuWNJmqZa3gPO8dhnAElIQpmbqB2','6qGM63ZK7nboNlfDNr0Wvg6sKCW2','JYtB9LvE9IMBYg7Zg2RpFMhu3fY2','4dWuJcxkWUeUM4xHiBWbJBITyXj2','u8M9wFO10sbcmEsiOvq7mij8ObP2','yO22z2le3TeK19of97His5tgnEm2','FXASuLnhGUV5T8tK7PnRMpP0iG33','S25p6qAYA8dl4tqIRTDHAKGaiv03','e7mKZtmzA5bLsUSxhTStLN6Eyay2')
-  AND COALESCE(job_payload->>'display_name', '') !~ 'job_(kuWNJmqZa3gPO8dhnAElIQpmbqB2|6qGM63ZK7nboNlfDNr0Wvg6sKCW2|JYtB9LvE9IMBYg7Zg2RpFMhu3fY2|4dWuJcxkWUeUM4xHiBWbJBITyXj2|u8M9wFO10sbcmEsiOvq7mij8ObP2|yO22z2le3TeK19of97His5tgnEm2|FXASuLnhGUV5T8tK7PnRMpP0iG33|S25p6qAYA8dl4tqIRTDHAKGaiv03|e7mKZtmzA5bLsUSxhTStLN6Eyay2)_'
+  AND (job_state = 'failed' OR COALESCE(failure_reason, '') <> '')
+  AND LOWER(COALESCE(p.user_id, '')) NOT IN ('kuwnjmqza3gpo8dhnaeliqpmbqb2','6qgm63zk7nbonlfdnr0wvg6skcw2','jytb9lve9imbyg7zg2rpfmhu3fy2','4dwujcxkwueum4xhibwjbityxj2','u8m9wfo10sbcmesiovq7mij8obp2','yo22z2le3tek19of97his5tgnem2','fxasulnhguv5t8tk7pnrmpp0ig33','s25p6qaya8dl4tqirtdhakgaiv03','e7mkztmza5blsusxhtstln6eyay2')
+  AND COALESCE(job_payload->>'display_name', '') !~* 'job_(kuWNJmqZa3gPO8dhnAElIQpmbqB2|6qGM63ZK7nboNlfDNr0Wvg6sKCW2|JYtB9LvE9IMBYg7Zg2RpFMhu3fY2|4dWuJcxkWUeUM4xHiBWbJBITyXj2|u8M9wFO10sbcmEsiOvq7mij8ObP2|yO22z2le3TeK19of97His5tgnEm2|FXASuLnhGUV5T8tK7PnRMpP0iG33|S25p6qAYA8dl4tqIRTDHAKGaiv03|e7mKZtmzA5bLsUSxhTStLN6Eyay2)_'
 ORDER BY created_at DESC
 LIMIT 100;
 ```
@@ -227,6 +240,8 @@ LIMIT 10;
 
 Bias toward input integrity first.
 
+If trainer fails on missing evaluation inputs such as `metrics_exif.csv`, check preprocess integrity logs first.
+
 Check:
 - folder status, image count, app version
 - training queue row
@@ -242,14 +257,17 @@ Read:
 ### Trainer-refactored-looking failure
 
 Bias toward:
-- missing checkpoints
+- terminal `main.py: Training failed` tracebacks first
+- missing generated evaluation inputs such as `metrics/metrics_exif.csv`
 - bad processed artifacts / slider shape mismatch
+- GCS download failures for training data
 - infra never got the job fully running
 
 Read:
 - `~/Documents/Work/Editing/editing-trainer/main.py`
-- `~/Documents/Work/Editing/editing-trainer/editing_trainer/checkpoints/utils.py`
+- `~/Documents/Work/Editing/editing-trainer/editing_trainer/evaluation.py`
 - `~/Documents/Work/Editing/editing-trainer/editing_trainer/processing.py`
+- `~/Documents/Work/Editing/editing-trainer/editing_trainer/utils/gcs.py`
 - `~/Documents/Work/Editing/editing-trainer/editing_trainer/model_packer/info_builder.py`
 - `~/Documents/Work/Editing/editing-trainer/docs/05-monitoring-debugging.md`
 
