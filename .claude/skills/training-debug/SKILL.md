@@ -1,6 +1,6 @@
 ---
 name: training-debug
-description: Debug Aftershoot training and preprocessing failures. Use whenever the user mentions recent training failures, a time window of failures, `editing-preprocesser`, `editing-trainer-refactored`, `editing-trainer-reactored`, `profile_id`, `folder_id`, `job_id`, `chkpts.zip`, `lost_job`, `requested_state_stuck`, `scheduled_state_stuck`, `No catalog found`, `Image dir not found`, or asks what logs, SQL tables, or repo files to check for a broken training run.
+description: Debug Aftershoot training and preprocessing failures. Use whenever the user mentions failure stats, recent training failures, a time window of failures, `editing-preprocesser`, `editing-trainer-refactored`, `editing-trainer-reactored`, `profile_id`, `folder_id`, `job_id`, `chkpts.zip`, `lost_job`, `requested_state_stuck`, `scheduled_state_stuck`, `No catalog found`, `Image dir not found`, or asks what logs, SQL tables, or repo files to check for a broken training run.
 ---
 
 # Training Debug
@@ -9,12 +9,16 @@ Scope:
 - `editing-preprocesser`
 - `editing-trainer-refactored`
 
-Do not start with other services. Only check `bifrost` if the evidence points to infra handoff.
+Do not start with other services. For aggregate failure stats, start with `bifrost_jobs`. For root cause, start with `editing-preprocesser` and `editing-trainer-refactored`. Only expand beyond `bifrost` if the evidence points there.
+
+If the user asks for "all failures", stay within the training/preprocess pipeline unless they explicitly ask for every service.
 
 ## Output Shape
 
 Answer in this order:
-- `Stats:` counts by service and top failure patterns for the requested window
+- `Scope:` exact unit counted (`bifrost_jobs`, `profiles`, logs) and whether stats are external-only
+- `Stats:` counts by source and top failure patterns for the requested window
+- `Internal anomalies:` excluded internal rows that are still worth calling out
 - `Hunch:` 1-3 likely causes, explicitly marked as hunches
 - `Next checks:` exact logs, SQL rows, and repo files to inspect next
 
@@ -32,17 +36,29 @@ Internal user ids:
 - `u8M9wFO10sbcmEsiOvq7mij8ObP2`
 - `yO22z2le3TeK19of97His5tgnEm2`
 - `FXASuLnhGUV5T8tK7PnRMpP0iG33`
+- `S25p6qAYA8dl4tqIRTDHAKGaiv03`
+- `e7mKZtmzA5bLsUSxhTStLN6Eyay2`
 
 Internal regex:
 
 ```text
-job_(kuWNJmqZa3gPO8dhnAElIQpmbqB2|6qGM63ZK7nboNlfDNr0Wvg6sKCW2|JYtB9LvE9IMBYg7Zg2RpFMhu3fY2|4dWuJcxkWUeUM4xHiBWbJBITyXj2|u8M9wFO10sbcmEsiOvq7mij8ObP2|yO22z2le3TeK19of97His5tgnEm2|FXASuLnhGUV5T8tK7PnRMpP0iG33)_
+job_(kuWNJmqZa3gPO8dhnAElIQpmbqB2|6qGM63ZK7nboNlfDNr0Wvg6sKCW2|JYtB9LvE9IMBYg7Zg2RpFMhu3fY2|4dWuJcxkWUeUM4xHiBWbJBITyXj2|u8M9wFO10sbcmEsiOvq7mij8ObP2|yO22z2le3TeK19of97His5tgnEm2|FXASuLnhGUV5T8tK7PnRMpP0iG33|S25p6qAYA8dl4tqIRTDHAKGaiv03|e7mKZtmzA5bLsUSxhTStLN6Eyay2)_
 ```
 
 Filtering rules:
 - `bifrost_jobs`: use `COALESCE(job_payload->>'display_name', '') !~ '<internal-regex>'`
 - `bifrost_serverless_jobs`: exclude rows where `user_id` is one of the ids above
+- `profiles`: exclude rows where `user_id` is one of the ids above
 - logs: ignore hits whose job id or display name contains one of those ids
+- If excluded internal rows show up in the same window, mention them separately under `Internal anomalies` instead of mixing them into customer-facing stats.
+
+## Stats First
+
+For aggregate stats:
+- Use SQL first. Logs are for explanation, not the source of truth for counts.
+- Keep units separate: `bifrost_jobs` failures, `profiles` currently `failed`, and logs are different things.
+- Use rolling windows from `NOW()` or the system date. Do not hardcode calendar dates.
+- Loki queries must stay within `189h`. Do not use midnight-to-23:59 7-day ranges.
 
 ## First Pass
 
@@ -66,6 +82,10 @@ Default hunches:
 ## Safe SQL
 
 Never `SELECT job_payload` raw from `bifrost_jobs`. It contains secrets.
+Never call `describe_table` on `bifrost_jobs`; sample rows can expose secrets.
+Never paste raw tool output containing keys, tokens, or payload blobs.
+
+For stats, always filter `bifrost_jobs` with `job_payload->>'job_type' = 'training'` unless the user explicitly asks for broader Bifrost job stats.
 
 Recent external-only training job failures:
 
@@ -74,7 +94,7 @@ SELECT provider, job_state, COALESCE(failure_reason, 'null') AS failure_reason, 
 FROM bifrost_jobs
 WHERE created_at >= '<start>'::timestamptz
   AND job_payload->>'job_type' = 'training'
-  AND COALESCE(job_payload->>'display_name', '') !~ 'job_(kuWNJmqZa3gPO8dhnAElIQpmbqB2|6qGM63ZK7nboNlfDNr0Wvg6sKCW2|JYtB9LvE9IMBYg7Zg2RpFMhu3fY2|4dWuJcxkWUeUM4xHiBWbJBITyXj2|u8M9wFO10sbcmEsiOvq7mij8ObP2|yO22z2le3TeK19of97His5tgnEm2|FXASuLnhGUV5T8tK7PnRMpP0iG33)_'
+  AND COALESCE(job_payload->>'display_name', '') !~ 'job_(kuWNJmqZa3gPO8dhnAElIQpmbqB2|6qGM63ZK7nboNlfDNr0Wvg6sKCW2|JYtB9LvE9IMBYg7Zg2RpFMhu3fY2|4dWuJcxkWUeUM4xHiBWbJBITyXj2|u8M9wFO10sbcmEsiOvq7mij8ObP2|yO22z2le3TeK19of97His5tgnEm2|FXASuLnhGUV5T8tK7PnRMpP0iG33|S25p6qAYA8dl4tqIRTDHAKGaiv03|e7mKZtmzA5bLsUSxhTStLN6Eyay2)_'
 GROUP BY provider, job_state, COALESCE(failure_reason, 'null')
 ORDER BY count DESC
 LIMIT 20;
@@ -118,7 +138,7 @@ SELECT id,
 FROM bifrost_jobs
 WHERE job_payload->>'job_type' = 'training'
   AND job_payload->'tracking_args'->>'profile_id' = '<profile_id>'
-  AND COALESCE(job_payload->>'display_name', '') !~ 'job_(kuWNJmqZa3gPO8dhnAElIQpmbqB2|6qGM63ZK7nboNlfDNr0Wvg6sKCW2|JYtB9LvE9IMBYg7Zg2RpFMhu3fY2|4dWuJcxkWUeUM4xHiBWbJBITyXj2|u8M9wFO10sbcmEsiOvq7mij8ObP2|yO22z2le3TeK19of97His5tgnEm2|FXASuLnhGUV5T8tK7PnRMpP0iG33)_'
+  AND COALESCE(job_payload->>'display_name', '') !~ 'job_(kuWNJmqZa3gPO8dhnAElIQpmbqB2|6qGM63ZK7nboNlfDNr0Wvg6sKCW2|JYtB9LvE9IMBYg7Zg2RpFMhu3fY2|4dWuJcxkWUeUM4xHiBWbJBITyXj2|u8M9wFO10sbcmEsiOvq7mij8ObP2|yO22z2le3TeK19of97His5tgnEm2|FXASuLnhGUV5T8tK7PnRMpP0iG33|S25p6qAYA8dl4tqIRTDHAKGaiv03|e7mKZtmzA5bLsUSxhTStLN6Eyay2)_'
 ORDER BY created_at DESC
 LIMIT 20;
 ```
