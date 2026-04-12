@@ -106,7 +106,7 @@
       "environment": {
         "ARXIV_STORAGE_PATH": "~/Downloads/papers"
       },
-      "enabled": false
+      "enabled": true
     }
   }
 }
