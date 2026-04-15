@@ -23,7 +23,7 @@
     aichat = {
       enable = true;
       settings = {
-        model = "chutes:deepseek-ai/DeepSeek-V3.2";
+        model = "chutes:zai-org/GLM-5-Turbo";
         clients = [
           # {
           #   type = "openai-compatible";
@@ -44,7 +44,7 @@
             api_base = "https://llm.chutes.ai/v1";
             models = [
               {
-                name = "deepseek-ai/DeepSeek-V3.2";
+                name = "zai-org/GLM-5-Turbo";
                 supports_function_calling = true;
                 strip_reasoning_contents = true;
               }
@@ -70,9 +70,19 @@
     bat.enable = true;
     fzf.enable = true;
     ripgrep.enable = true;
-    neovim.enable = true;
+    neovim = {
+      enable = true;
+      withRuby = false;
+      withPython3 = false;
+    };
     # zed-editor.enable = true;
-    vscode.enable = true;
+    vscode = {
+      enable = true;
+      package = pkgs.vscode.overrideAttrs (old: {
+        # nixpkgs 13043924 regressed on Darwin by adding glibc to vscode's preFixup path.
+        preFixup = if pkgs.stdenv.hostPlatform.isDarwin then "" else old.preFixup or "";
+      });
+    };
     gh.enable = true;
     uv.enable = true;
     television.enable = true;

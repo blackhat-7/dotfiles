@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 {
   imports = [
     ./programs
@@ -51,15 +51,89 @@
     };
   };
 
-  home.file.".claude.json" = {
-    source = ../../claude/claude.json;
-  };
+  home.activation.writeMutableAiConfigs =
+    let
+      claudeConfig = ''
+        {
+          "mcpServers": {
+            "ai-tools": {
+              "command": "ai-tools-mcp",
+              "args": []
+            }
+          }
+        }
+      '';
 
-  home.file.".config/opencode/package.json" = {
-    source = ../../opencode/package.json;
-  };
+      opencodePackageJson = ''
+        {
+          "private": true,
+          "type": "module",
+          "dependencies": {
+            "@opencode-ai/plugin": "latest"
+          }
+        }
+      '';
 
-  home.file.".config/opencode/tools/reddit.ts" = {
-    source = ../../opencode/tools/reddit.ts;
-  };
+      opencodeRedditTool = ''
+        import { tool } from "@opencode-ai/plugin"
+
+        async function run(args: Record<string, unknown>) {
+          const process = Bun.spawn(["ai-tools-cli", "reddit", JSON.stringify(args)], {
+            stdout: "pipe",
+            stderr: "pipe",
+          })
+
+          const [stdout, stderr, exitCode] = await Promise.all([
+            new Response(process.stdout).text(),
+            new Response(process.stderr).text(),
+            process.exited,
+          ])
+
+          if (exitCode !== 0) {
+            throw new Error(stderr.trim() || "ai-tools-cli failed for reddit")
+          }
+
+          return stdout.trim()
+        }
+
+        export default tool({
+          description: "Read Reddit.",
+          args: {
+            op: tool.schema.enum(["search", "posts", "subreddit", "post", "user"]),
+            query: tool.schema.string().optional(),
+            subreddit: tool.schema.string().optional(),
+            sort: tool.schema
+              .enum(["relevance", "hot", "top", "new", "comments", "rising", "controversial"])
+              .optional(),
+            time: tool.schema.enum(["hour", "day", "week", "month", "year", "all"]).optional(),
+            limit: tool.schema.number().int().min(1).max(100).optional(),
+            post_id: tool.schema.string().optional(),
+            comments: tool.schema.number().int().min(1).max(100).optional(),
+            username: tool.schema.string().optional(),
+            posts: tool.schema.number().int().min(1).max(100).optional(),
+          },
+          async execute(args) {
+            return run(args)
+          },
+        })
+      '';
+    in
+    lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+      mkdir -p "$HOME/.config/opencode/tools"
+
+      rm -f "$HOME/.claude.json"
+      cat <<'EOF' > "$HOME/.claude.json"
+      ${claudeConfig}
+      EOF
+
+      rm -f "$HOME/.config/opencode/package.json"
+      cat <<'EOF' > "$HOME/.config/opencode/package.json"
+      ${opencodePackageJson}
+      EOF
+
+      rm -f "$HOME/.config/opencode/tools/reddit.ts"
+      cat <<'EOF' > "$HOME/.config/opencode/tools/reddit.ts"
+      ${opencodeRedditTool}
+      EOF
+    '';
 }

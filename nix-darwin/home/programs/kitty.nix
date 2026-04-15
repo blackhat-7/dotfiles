@@ -67,7 +67,7 @@ color15  #fcfcfa
       background_opacity 0.9
 
       font_size 14
-      font_family      family="MesloLGLDZ Nerd Font"
+      font_family      family="FiraCode Nerd Font"
       bold_font        auto
       italic_font      auto
       bold_italic_font auto

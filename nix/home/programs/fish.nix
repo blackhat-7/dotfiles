@@ -120,7 +120,7 @@ if type -q cloud-sql-proxy
 end
 alias jbuild="cd ./secret/jarvis && cargo build --release && cd - && mv ./secret/jarvis/target/release/jarvis ."
 alias ccr-local="ccr code --model local,Qwen3.5-9B-Q4_K_M.gguf"
-alias ccr-glm="ccr code --model chutes,zai-org/GLM-5-Turbo"
+        alias ccr-glm="ccr code --model chutes,zai-org/GLM-5-Turbo"
 alias ccr-kimi="ccr code --model chutes,moonshotai/Kimi-K2.5-TEE"
 
 # Nvim configs

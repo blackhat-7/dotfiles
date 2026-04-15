@@ -2,6 +2,7 @@
 {
   programs.git = {
     enable = true;
+    signing.format = null;
     settings = {
       user.name = "blackhat-7";
       user.email = "palshaunak7@gmail.com";

@@ -30,7 +30,9 @@
     let
       pkgs = import nixpkgs {
         system = "aarch64-darwin";
-        config = { allowUnfree = true; };
+        config = {
+          allowUnfree = true;
+        };
       };
     in
     {

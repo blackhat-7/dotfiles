@@ -17,6 +17,7 @@
     "stage-mongo-reader_*": "allow",
     "grafana-loki-reader_*": "allow",
     "sentry-reader_*": "allow",
+    "chrome-devtools_*": "allow",
     "linear_*": "allow",
     "arxiv_*": "allow",
     "reddit": "allow",
@@ -62,7 +63,7 @@
         "{env:HOME}/Documents/Work/Editing/aftershoot-cloud/env/dev/grafana-loki-reader/app.env",
         "{env:HOME}/Documents/Work/Editing/aftershoot-cloud/dist/mcp-servers/grafana-loki-reader"
       ],
-      "enabled": true
+      "enabled": false
     },
     "mongo-reader": {
       "type": "local",
@@ -98,6 +99,11 @@
     "linear": {
       "type": "remote",
       "url": "https://mcp.linear.app/mcp",
+      "enabled": false
+    },
+    "chrome-devtools": {
+      "type": "local",
+      "command": ["npx", "-y", "chrome-devtools-mcp@latest"],
       "enabled": false
     },
     "arxiv": {

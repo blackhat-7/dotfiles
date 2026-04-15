@@ -22,7 +22,6 @@
   };
 
   fonts.packages = [
-    pkgs.meslo-lgs-nf
     pkgs.nerd-fonts.fira-code
   ];
 

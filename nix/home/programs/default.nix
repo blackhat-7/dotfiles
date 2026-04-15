@@ -22,7 +22,7 @@
     aichat = {
       enable = true;
       settings = {
-        model = "chutes:openai/gpt-oss-120b-TEE";
+        model = "chutes:zai-org/GLM-5-Turbo";
         clients = [
           # {
           #   type = "openai-compatible";
@@ -43,7 +43,7 @@
             api_base = "https://llm.chutes.ai/v1";
             models = [
               {
-                name = "openai/gpt-oss-120b-TEE";
+                name = "zai-org/GLM-5-Turbo";
                 supports_function_calling = true;
                 strip_reasoning_contents = true;
               }
