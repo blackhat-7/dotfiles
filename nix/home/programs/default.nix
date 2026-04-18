@@ -62,7 +62,11 @@
     bat.enable = true;
     fzf.enable = true;
     ripgrep.enable = true;
-    neovim.enable = true;
+    neovim = {
+      enable = true;
+      withRuby = false;
+      withPython3 = false;
+    };
     zed-editor.enable = true;
     vscode.enable = true;
     gh.enable = true;
@@ -78,6 +82,7 @@
     yazi.enable = true;
     feh.enable = true;
     # opencode.enable = true;
+    claude-code.enable = true;
   };
 
   home.activation.install-uv-tools = lib.hm.dag.entryAfter [ "writeBoundary" ] ''

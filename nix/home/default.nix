@@ -51,6 +51,7 @@
     mongodb-compass
     # element-desktop
     gitleaks
+    claude-code-router
   ];
 
   # Git configuration
@@ -72,6 +73,47 @@
       exec gitleaks protect --staged --verbose --config "$HOME/.config/gitleaks/config.toml"
     '';
   };
+
+  home.activation.writeCcrConfig = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    mkdir -p "$HOME/.claude-code-router"
+    cat > "$HOME/.claude-code-router/config.json" <<'EOF'
+{
+  "Providers": [
+    {
+      "name": "local",
+      "api_base_url": "http://100.64.0.1:6868/v1/messages",
+      "api_key": "none",
+      "models": [
+        "Qwen3.5-9B-Q4_K_M.gguf"
+      ],
+      "transformer": {
+        "use": [
+          "Anthropic"
+        ]
+      }
+    },
+    {
+      "name": "chutes",
+      "api_base_url": "https://llm.chutes.ai/v1/chat/completions",
+      "api_key": "$CHUTES_API_KEY",
+      "models": [
+        "zai-org/GLM-5-Turbo",
+        "moonshotai/Kimi-K2.5-TEE"
+      ],
+      "transformer": {
+        "use": [
+          "deepseek"
+        ]
+      }
+    }
+  ],
+  "Router": {
+    "default": "chutes,zai-org/GLM-5-Turbo",
+    "background": "local,Qwen3.5-9B-Q4_K_M.gguf"
+  }
+}
+EOF
+  '';
 
   home.activation.writeMutableAiConfigs = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
     rm -f "$HOME/.claude.json"
