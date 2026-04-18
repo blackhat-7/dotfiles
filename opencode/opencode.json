@@ -18,6 +18,7 @@
     "grafana-loki-reader_*": "allow",
     "sentry-reader_*": "allow",
     "chrome-devtools_*": "allow",
+    "playwright_*": "allow",
     "linear_*": "allow",
     "arxiv_*": "allow",
     "reddit": "allow",
@@ -113,6 +114,11 @@
         "ARXIV_STORAGE_PATH": "~/Downloads/papers"
       },
       "enabled": true
+    },
+    "playwright": {
+      "type": "local",
+      "command": ["npx", "@playwright/mcp@latest"],
+      "enabled": false
     }
   }
 }

@@ -104,6 +104,7 @@ alias source_fishrc="source ~/.config/fish/config.fish"
 alias ls="lsd"
 alias l="ls"
 alias geeqie="geeqie --disable-clutter"
+alias chutes="uv run ~/Documents/projects/chutes-tui/main.py"
 
 
 # Use yazi from system path or homebrew path if available
@@ -120,7 +121,7 @@ if type -q cloud-sql-proxy
 end
 alias jbuild="cd ./secret/jarvis && cargo build --release && cd - && mv ./secret/jarvis/target/release/jarvis ."
 alias ccr-local="ccr code --model local,Qwen3.5-9B-Q4_K_M.gguf"
-        alias ccr-glm="ccr code --model chutes,zai-org/GLM-5-Turbo"
+        alias ccr-glm="ccr code --model chutes,zai-org/GLM-5.1-TEE"
 alias ccr-kimi="ccr code --model chutes,moonshotai/Kimi-K2.5-TEE"
 
 # Nvim configs

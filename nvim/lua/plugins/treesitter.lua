@@ -1,76 +1,110 @@
--- [[ Configure Treesitter ]]
--- See `:help nvim-treesitter`
-require('nvim-treesitter.configs').setup {
-  -- Add languages to be installed here that you want installed for treesitter
-  ensure_installed = { 
-    'python', 'go', 'lua', 'rust', 'typescript', 'regex', 
-    'bash', 'markdown', 'markdown_inline', 'kdl', 'sql', 'xml'
-  },
+local ts = require('nvim-treesitter')
 
-  highlight = { 
-    enable = true,
-    disable = function(lang, bufnr) -- Disable in files with more than 5K
-      return vim.api.nvim_buf_line_count(bufnr) > 5000
+local treesitter_filetypes = {
+  'python',
+  'go',
+  'lua',
+  'rust',
+  'typescript',
+  'regex',
+  'bash',
+  'sh',
+  'zsh',
+  'markdown',
+  'kdl',
+  'sql',
+  'xml',
+}
+
+ts.setup {}
+
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = treesitter_filetypes,
+  callback = function(args)
+    if vim.api.nvim_buf_line_count(args.buf) <= 5000 then
+      pcall(vim.treesitter.start, args.buf)
     end
+
+    vim.bo[args.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+  end,
+})
+
+require('nvim-treesitter-textobjects').setup {
+  select = {
+    lookahead = true,
   },
-  indent = { enable = true },
-  incremental_selection = {
-    enable = true,
-    keymaps = {
-      init_selection = '<c-space>',
-      node_incremental = '<c-space>',
-      scope_incremental = '<c-s>',
-      node_decremental = '<c-backspace>',
-    },
-  },
-  textobjects = {
-    select = {
-      enable = true,
-      lookahead = true, -- Automatically jump forward to textobj, similar to targets.vim
-      keymaps = {
-        -- You can use the capture groups defined in textobjects.scm
-        ['aa'] = '@parameter.outer',
-        ['ia'] = '@parameter.inner',
-        ['af'] = '@function.outer',
-        ['if'] = '@function.inner',
-        ['ac'] = '@class.outer',
-        ['ic'] = '@class.inner',
-        ['ii'] = '@conditional.inner',
-        ['ai'] = '@conditional.outer',
-        ['il'] = '@loop.inner',
-        ['al'] = '@loop.outer',
-        ['at'] = '@comment.outer',
-      },
-    },
-    move = {
-      enable = true,
-      set_jumps = true, -- whether to set jumps in the jumplist
-      goto_next_start = {
-        [']m'] = '@function.outer',
-        [']]'] = '@class.outer',
-      },
-      goto_next_end = {
-        [']M'] = '@function.outer',
-        [']['] = '@class.outer',
-      },
-      goto_previous_start = {
-        ['[m'] = '@function.outer',
-        ['[['] = '@class.outer',
-      },
-      goto_previous_end = {
-        ['[M'] = '@function.outer',
-        ['[]'] = '@class.outer',
-      },
-    },
-    swap = {
-      enable = true,
-      swap_next = {
-        ['<leader>a'] = '@parameter.inner',
-      },
-      swap_previous = {
-        ['<leader>A'] = '@parameter.inner',
-      },
-    },
+  move = {
+    set_jumps = true,
   },
 }
 
+for _, mode in ipairs { 'x', 'o' } do
+  vim.keymap.set(mode, 'aa', function()
+    require('nvim-treesitter-textobjects.select').select_textobject('@parameter.outer', 'textobjects', mode)
+  end)
+  vim.keymap.set(mode, 'ia', function()
+    require('nvim-treesitter-textobjects.select').select_textobject('@parameter.inner', 'textobjects', mode)
+  end)
+  vim.keymap.set(mode, 'af', function()
+    require('nvim-treesitter-textobjects.select').select_textobject('@function.outer', 'textobjects', mode)
+  end)
+  vim.keymap.set(mode, 'if', function()
+    require('nvim-treesitter-textobjects.select').select_textobject('@function.inner', 'textobjects', mode)
+  end)
+  vim.keymap.set(mode, 'ac', function()
+    require('nvim-treesitter-textobjects.select').select_textobject('@class.outer', 'textobjects', mode)
+  end)
+  vim.keymap.set(mode, 'ic', function()
+    require('nvim-treesitter-textobjects.select').select_textobject('@class.inner', 'textobjects', mode)
+  end)
+  vim.keymap.set(mode, 'ii', function()
+    require('nvim-treesitter-textobjects.select').select_textobject('@conditional.inner', 'textobjects', mode)
+  end)
+  vim.keymap.set(mode, 'ai', function()
+    require('nvim-treesitter-textobjects.select').select_textobject('@conditional.outer', 'textobjects', mode)
+  end)
+  vim.keymap.set(mode, 'il', function()
+    require('nvim-treesitter-textobjects.select').select_textobject('@loop.inner', 'textobjects', mode)
+  end)
+  vim.keymap.set(mode, 'al', function()
+    require('nvim-treesitter-textobjects.select').select_textobject('@loop.outer', 'textobjects', mode)
+  end)
+  vim.keymap.set(mode, 'at', function()
+    require('nvim-treesitter-textobjects.select').select_textobject('@comment.outer', 'textobjects', mode)
+  end)
+end
+
+for _, mode in ipairs { 'n', 'x', 'o' } do
+  vim.keymap.set(mode, ']m', function()
+    require('nvim-treesitter-textobjects.move').goto_next_start('@function.outer', 'textobjects')
+  end)
+  vim.keymap.set(mode, ']]', function()
+    require('nvim-treesitter-textobjects.move').goto_next_start('@class.outer', 'textobjects')
+  end)
+  vim.keymap.set(mode, ']M', function()
+    require('nvim-treesitter-textobjects.move').goto_next_end('@function.outer', 'textobjects')
+  end)
+  vim.keymap.set(mode, '][', function()
+    require('nvim-treesitter-textobjects.move').goto_next_end('@class.outer', 'textobjects')
+  end)
+  vim.keymap.set(mode, '[m', function()
+    require('nvim-treesitter-textobjects.move').goto_previous_start('@function.outer', 'textobjects')
+  end)
+  vim.keymap.set(mode, '[[', function()
+    require('nvim-treesitter-textobjects.move').goto_previous_start('@class.outer', 'textobjects')
+  end)
+  vim.keymap.set(mode, '[M', function()
+    require('nvim-treesitter-textobjects.move').goto_previous_end('@function.outer', 'textobjects')
+  end)
+  vim.keymap.set(mode, '[]', function()
+    require('nvim-treesitter-textobjects.move').goto_previous_end('@class.outer', 'textobjects')
+  end)
+end
+
+vim.keymap.set('n', '<leader>a', function()
+  require('nvim-treesitter-textobjects.swap').swap_next('@parameter.inner')
+end)
+
+vim.keymap.set('n', '<leader>A', function()
+  require('nvim-treesitter-textobjects.swap').swap_previous('@parameter.inner')
+end)

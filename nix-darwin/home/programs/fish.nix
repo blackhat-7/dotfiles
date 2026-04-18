@@ -105,7 +105,8 @@ alias sdb="cloud-sql-proxy aftershoot-stage:us-central1:aftershoot-stage-db -p 5
 alias jbuild="cd ./secret/jarvis && cargo build --release && cd - && mv ./secret/jarvis/target/release/jarvis ."
 alias initflake="~/dotfiles/scripts/init-direnv-flake.sh"
 alias ccr-local="ccr code --model local,Qwen3.5-9B-Q4_K_M.gguf"
-        alias ccr-glm="ccr code --model chutes,zai-org/GLM-5-Turbo"
+alias chutes="uv run --project ~/Documents/projects/chutes-tui ~/Documents/projects/chutes-tui/main.py"
+        alias ccr-glm="ccr code --model chutes,zai-org/GLM-5.1-TEE"
 alias ccr-kimi="ccr code --model chutes,moonshotai/Kimi-K2.5-TEE"
 
 # Nvim configs

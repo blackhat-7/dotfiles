@@ -1,4 +1,4 @@
-{ pkgs, lib, ... }:
+{ pkgs, lib, config, ... }:
 {
   imports = [
     ./programs
@@ -14,6 +14,7 @@
     pkgs.golangci-lint
     pkgs.nightlight
     pkgs.nodejs_24
+    pkgs.tree-sitter
     pkgs.spotify
     pkgs.slack
     pkgs.discord
@@ -59,6 +60,40 @@
             "ai-tools": {
               "command": "ai-tools-mcp",
               "args": []
+            },
+            "playwright": {
+              "command": "/opt/homebrew/bin/npx",
+              "args": ["@playwright/mcp@latest"],
+              "disabled": true
+            },
+            "cloudsql-reader": {
+              "command": "${config.home.homeDirectory}/.npm-global/bin/env-cmd",
+              "args": ["-f", "${config.home.homeDirectory}/Documents/Work/Editing/aftershoot-cloud/env/dev/cloudsql-reader/app.env", "${config.home.homeDirectory}/Documents/Work/Editing/aftershoot-cloud/dist/mcp-servers/cloudsql-reader"]
+            },
+            "grafana-loki-reader": {
+              "command": "${config.home.homeDirectory}/.npm-global/bin/env-cmd",
+              "args": ["-f", "${config.home.homeDirectory}/Documents/Work/Editing/aftershoot-cloud/env/dev/grafana-loki-reader/app.env", "${config.home.homeDirectory}/Documents/Work/Editing/aftershoot-cloud/dist/mcp-servers/grafana-loki-reader"],
+              "disabled": true
+            },
+            "mongo-reader": {
+              "command": "${config.home.homeDirectory}/.npm-global/bin/env-cmd",
+              "args": ["-f", "${config.home.homeDirectory}/Documents/Work/Editing/aftershoot-cloud/env/dev/mongo-reader/app.env", "${config.home.homeDirectory}/Documents/Work/Editing/aftershoot-cloud/dist/mcp-servers/mongo-reader"],
+              "disabled": true
+            },
+            "stage-mongo-reader": {
+              "command": "${config.home.homeDirectory}/.npm-global/bin/env-cmd",
+              "args": ["-f", "${config.home.homeDirectory}/Documents/Work/Editing/aftershoot-cloud/env/dev/mongo-reader/stage-app.env", "${config.home.homeDirectory}/Documents/Work/Editing/aftershoot-cloud/dist/mcp-servers/mongo-reader"],
+              "disabled": true
+            },
+            "sentry-reader": {
+              "command": "${config.home.homeDirectory}/.npm-global/bin/env-cmd",
+              "args": ["-f", "${config.home.homeDirectory}/Documents/Work/Editing/aftershoot-cloud/env/dev/sentry-reader/app.env", "${config.home.homeDirectory}/Documents/Work/Editing/aftershoot-cloud/dist/mcp-servers/sentry-reader"],
+              "disabled": true
+            },
+            "arxiv": {
+              "command": "arxiv-mcp-server",
+              "args": [],
+              "env": {"ARXIV_STORAGE_PATH": "~/Downloads/papers"}
             }
           }
         }

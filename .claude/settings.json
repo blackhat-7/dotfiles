@@ -1,5 +1,9 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "statusLine": {
+    "type": "command",
+    "command": "bash /Users/illusion/.claude/statusline-command.sh"
+  },
   "permissions": {
     "allow": [
       "Read",
@@ -25,7 +29,7 @@
     ]
   },
   "enabledPlugins": {
-    "pyright-lsp@claude-plugins-official": true
-  },
-  "model": "opus"
+    "pyright-lsp@claude-plugins-official": true,
+    "gopls-lsp@claude-plugins-official": true
+  }
 }

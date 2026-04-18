@@ -17,9 +17,11 @@ if [ -z "$target_client" ]; then
 fi
 
 # Run fzf to pick a target window
+# Include pane current path and command so fzf can match on folder/command too
 choice=$(
-    tmux list-windows -a -F '#{session_name}:#{window_index}	#{session_name}: #{window_name}' |
-        fzf --prompt='jump> ' --reverse --height=100% --with-nth=2.. --delimiter='	'
+    tmux list-windows -a -F '#{session_name}:#{window_index}	#{session_name}: #{window_name}  #{pane_current_path}  #{pane_current_command}' |
+        fzf --prompt='jump> ' --reverse --height=100% --with-nth=2.. --delimiter='	' \
+            --preview 'tmux capture-pane -ep -t {1}' --preview-window right:60%
 )
 
 [ -n "$choice" ] || exit 0
