@@ -1,0 +1,3 @@
+[submodule ".claude/private-skills"]
+	path = .claude/private-skills
+	url = git@github.com:blackhat-7/private-skills.git
