@@ -104,7 +104,7 @@ alias source_fishrc="source ~/.config/fish/config.fish"
 alias ls="lsd"
 alias l="ls"
 alias geeqie="geeqie --disable-clutter"
-alias chutes="uv run ~/Documents/projects/chutes-tui/main.py"
+alias chutes="uv run --project ~/Documents/projects/chutes-tui ~/Documents/projects/chutes-tui/main.py"
 
 
 # Use yazi from system path or homebrew path if available

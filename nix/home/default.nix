@@ -210,7 +210,8 @@ EOF
             "mcp__grafana-loki-reader",
             "mcp__sentry-reader",
             "mcp__arxiv",
-            "mcp__ai-tools"
+            "mcp__ai-tools",
+            "mcp__chrome-devtools"
           ],
           "deny": [],
           "ask": [
@@ -234,10 +235,9 @@ EOF
             "command": "ai-tools-mcp",
             "args": []
           },
-          "playwright": {
+          "chrome-devtools": {
             "command": "npx",
-            "args": ["@playwright/mcp@latest"],
-            "disabled": true
+            "args": ["chrome-devtools-mcp@latest"]
           },
           "cloudsql-reader": {
             "command": "${config.home.homeDirectory}/.npm-global/bin/env-cmd",
