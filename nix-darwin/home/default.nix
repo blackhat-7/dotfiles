@@ -5,6 +5,7 @@
   ];
   home.stateVersion = "23.11";
   home.packages = [
+    pkgs.neovim
     pkgs.fastfetch
     pkgs.exiftool
     pkgs.python313

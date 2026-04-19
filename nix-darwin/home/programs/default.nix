@@ -70,11 +70,6 @@
     bat.enable = true;
     fzf.enable = true;
     ripgrep.enable = true;
-    neovim = {
-      enable = true;
-      withRuby = false;
-      withPython3 = false;
-    };
     # zed-editor.enable = true;
     vscode = {
       enable = true;
