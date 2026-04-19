@@ -105,6 +105,7 @@ alias ls="lsd"
 alias l="ls"
 alias geeqie="geeqie --disable-clutter"
 alias chutes="uv run --project ~/Documents/projects/chutes-tui ~/Documents/projects/chutes-tui/main.py"
+alias easyeffects="QT_QPA_PLATFORM=xcb command easyeffects"
 
 
 # Use yazi from system path or homebrew path if available
