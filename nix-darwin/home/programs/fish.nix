@@ -58,6 +58,17 @@
               eval $cmd
           end
         '';
+        notes-sync = ''
+          # single command to save notes to remote
+          set -l notes_dir "$HOME/Documents/Notes"
+          pushd $notes_dir >/dev/null
+          git add -A
+          if not git diff --cached --quiet
+              git commit -m "notes"
+          end
+          git push
+          popd >/dev/null
+        '';
     };
     shellInit = ''
 if status is-interactive
@@ -87,6 +98,7 @@ alias work="cd ~/Documents/Work/"
 alias rc="cd ~/Documents/randomCodes/"
 alias mis="cd ~/Documents/Work/MIS/"
 alias todo="cd ~/Documents/Work/todos"
+alias kb="uv run ~/Documents/Notes/kanban.py"
 alias editing="cd ~/Documents/Work/Editing/"
 alias ep="editing && cd Editing-Preprocesser"
 alias et="editing && cd Editing-Trainer"
