@@ -211,7 +211,8 @@ EOF
             "mcp__sentry-reader",
             "mcp__arxiv",
             "mcp__ai-tools",
-            "mcp__chrome-devtools"
+            "mcp__chrome-devtools",
+            "mcp__github"
           ],
           "deny": [],
           "ask": [
@@ -234,6 +235,13 @@ EOF
           "ai-tools": {
             "command": "ai-tools-mcp",
             "args": []
+          },
+          "github": {
+            "type": "http",
+            "url": "https://api.githubcopilot.com/mcp/",
+            "headers": {
+              "Authorization": "Bearer ''${GITHUB_MCP_TOKEN}"
+            }
           },
           "chrome-devtools": {
             "command": "npx",
