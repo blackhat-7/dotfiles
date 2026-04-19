@@ -62,11 +62,6 @@
     bat.enable = true;
     fzf.enable = true;
     ripgrep.enable = true;
-    neovim = {
-      enable = true;
-      withRuby = false;
-      withPython3 = false;
-    };
     zed-editor.enable = true;
     vscode.enable = true;
     gh.enable = true;
@@ -79,7 +74,10 @@
       enableFishIntegration = true;
     };
     hyprpanel.enable = true;
-    yazi.enable = true;
+    yazi = {
+      enable = true;
+      shellWrapperName = "y";
+    };
     feh.enable = true;
     # opencode.enable = true;
     claude-code.enable = true;

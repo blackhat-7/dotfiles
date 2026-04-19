@@ -13,7 +13,8 @@
   # All packages consolidated
   home.packages = with pkgs; [
     # Common packages
-    neofetch
+    neovim
+    fastfetch
     exiftool
     tailscale
     python313
@@ -60,10 +61,9 @@
     settings = {
       user.name = "blackhat-7";
       user.email = "palshaunak7@gmail.com";
-    };
-    extraConfig = {
       core.hooksPath = "~/.githooks";
     };
+    signing.format = null;
   };
 
   home.file.".githooks/pre-commit" = {

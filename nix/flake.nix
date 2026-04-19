@@ -14,11 +14,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     
-    neovim-nightly-overlay = {
-      url = "github:nix-community/neovim-nightly-overlay";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    
     nix-index-database = {
       url = "github:Mic92/nix-index-database";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -28,15 +23,36 @@
   outputs = { self, nixpkgs, home-manager, system-manager, ... }@inputs:
     let
       supportedSystems = [ "x86_64-linux" "aarch64-linux" ];
-      
+
       forAllSystems = nixpkgs.lib.genAttrs supportedSystems;
-      
+
       nixpkgsFor = forAllSystems (system: import nixpkgs {
         inherit system;
         config.allowUnfree = true;
       });
-      
+
       username = "illusion";
+
+      # Upstream's cargo check runs `nix eval`, which tries to write to
+      # $HOME/.cache/nix. The Nix sandbox sets HOME=/homeless-shelter
+      # (unwritable), so patch the source to redirect HOME to $TMPDIR.
+      # Remove once upstream sets HOME in its own preCheck.
+      patchedSystemManagerSrc = nixpkgsFor.x86_64-linux.applyPatches {
+        name = "system-manager-src-patched";
+        src = system-manager;
+        postPatch = ''
+          substituteInPlace package.nix \
+            --replace-fail \
+              'export NIX_STATE_DIR=$TMPDIR' \
+              'export NIX_STATE_DIR=$TMPDIR
+              export HOME=$TMPDIR'
+        '';
+      };
+
+      patchedSystemManagerLib = import "${patchedSystemManagerSrc}/nix/lib.nix" {
+        inherit nixpkgs;
+        userborn = system-manager.inputs.userborn;
+      };
     in {
       # Home Manager configuration for Linux
       homeConfigurations.${username} = home-manager.lib.homeManagerConfiguration {
@@ -52,8 +68,8 @@
         ];
       };
 
-      # System configuration with system-manager
-      systemConfigs.illusionPC = system-manager.lib.makeSystemConfig {
+      # System configuration with system-manager (patched source)
+      systemConfigs.illusionPC = patchedSystemManagerLib.makeSystemConfig {
         modules = [
           ./linux
           {
@@ -66,6 +82,12 @@
           }
         ];
       };
+
+      packages.x86_64-linux.system-manager =
+        nixpkgsFor.x86_64-linux.callPackage "${patchedSystemManagerSrc}/nix/packages/wrapper.nix" {
+          system-manager-unwrapped =
+            nixpkgsFor.x86_64-linux.callPackage "${patchedSystemManagerSrc}/package.nix" { };
+        };
 
       # Development shells
       devShells = forAllSystems (system: {

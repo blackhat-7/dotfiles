@@ -61,9 +61,9 @@ _rollback_os:
 darwin:
     sudo darwin-rebuild switch --flake .#illusion
 
-# Linux-specific target
+# Linux-specific target (uses patched system-manager from this flake)
 linux:
-    sudo env PATH="$PATH" {{NIX}} run github:numtide/system-manager -- switch --flake .#illusionPC
+    sudo env PATH="$PATH" {{NIX}} run .#system-manager -- switch --flake .#illusionPC
 
 # Home Manager target
 home:
@@ -75,4 +75,4 @@ darwin-rollback:
 
 # Linux rollback
 linux-rollback:
-    sudo env PATH="$PATH" {{NIX}} run github:numtide/system-manager -- rollback
+    sudo env PATH="$PATH" {{NIX}} run .#system-manager -- rollback
