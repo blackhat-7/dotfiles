@@ -144,7 +144,6 @@
             ],
             "deny": [],
             "ask": [
-              "Bash",
               "Edit",
               "Write"
             ]
