@@ -210,7 +210,7 @@ EOF
             "mcp__grafana-loki-reader",
             "mcp__sentry-reader",
             "mcp__arxiv",
-            "mcp__ai-tools",
+            "mcp__bestiary",
             "mcp__chrome-devtools",
             "mcp__github"
           ],
@@ -231,9 +231,9 @@ EOF
       cat <<'EOF' > "$HOME/.claude.json"
       {
         "mcpServers": {
-          "ai-tools": {
-            "command": "ai-tools-mcp",
-            "args": []
+          "bestiary": {
+            "command": "uvx",
+            "args": ["--from", "git+https://github.com/blackhat-7/bestiary.git@main", "bestiary", "serve"]
           },
           "github": {
             "type": "http",
@@ -282,10 +282,6 @@ EOF
 
   home.file.".config/opencode/package.json" = {
     source = ../../opencode/package.json;
-  };
-
-  home.file.".config/opencode/tools/reddit.ts" = {
-    source = ../../opencode/tools/reddit.ts;
   };
 
   home.file.".config/gitleaks/config.toml" = {

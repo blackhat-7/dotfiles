@@ -1,3 +1,0 @@
-[console_scripts]
-ai-tools-cli = ai_tools.hosts.cli:main
-ai-tools-mcp = ai_tools.hosts.mcp:main

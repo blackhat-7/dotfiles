@@ -138,7 +138,7 @@
               "mcp__grafana-loki-reader",
               "mcp__sentry-reader",
               "mcp__arxiv",
-              "mcp__ai-tools",
+              "mcp__bestiary",
               "mcp__chrome-devtools",
               "mcp__github"
             ],
@@ -158,9 +158,9 @@
       claudeConfig = ''
         {
           "mcpServers": {
-            "ai-tools": {
-              "command": "ai-tools-mcp",
-              "args": []
+            "bestiary": {
+              "command": "uvx",
+              "args": ["--from", "git+https://github.com/blackhat-7/bestiary.git@main", "bestiary", "serve"]
             },
             "github": {
               "type": "http",
@@ -216,52 +216,9 @@
         }
       '';
 
-      opencodeRedditTool = ''
-        import { tool } from "@opencode-ai/plugin"
-
-        async function run(args: Record<string, unknown>) {
-          const process = Bun.spawn(["ai-tools-cli", "reddit", JSON.stringify(args)], {
-            stdout: "pipe",
-            stderr: "pipe",
-          })
-
-          const [stdout, stderr, exitCode] = await Promise.all([
-            new Response(process.stdout).text(),
-            new Response(process.stderr).text(),
-            process.exited,
-          ])
-
-          if (exitCode !== 0) {
-            throw new Error(stderr.trim() || "ai-tools-cli failed for reddit")
-          }
-
-          return stdout.trim()
-        }
-
-        export default tool({
-          description: "Read Reddit.",
-          args: {
-            op: tool.schema.enum(["search", "posts", "subreddit", "post", "user"]),
-            query: tool.schema.string().optional(),
-            subreddit: tool.schema.string().optional(),
-            sort: tool.schema
-              .enum(["relevance", "hot", "top", "new", "comments", "rising", "controversial"])
-              .optional(),
-            time: tool.schema.enum(["hour", "day", "week", "month", "year", "all"]).optional(),
-            limit: tool.schema.number().int().min(1).max(100).optional(),
-            post_id: tool.schema.string().optional(),
-            comments: tool.schema.number().int().min(1).max(100).optional(),
-            username: tool.schema.string().optional(),
-            posts: tool.schema.number().int().min(1).max(100).optional(),
-          },
-          async execute(args) {
-            return run(args)
-          },
-        })
-      '';
     in
     lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-      mkdir -p "$HOME/.config/opencode/tools"
+      mkdir -p "$HOME/.config/opencode"
       mkdir -p "$HOME/.claude"
 
       rm -f "$HOME/.claude/statusline-command.sh"
@@ -285,9 +242,5 @@
       ${opencodePackageJson}
       EOF
 
-      rm -f "$HOME/.config/opencode/tools/reddit.ts"
-      cat <<'EOF' > "$HOME/.config/opencode/tools/reddit.ts"
-      ${opencodeRedditTool}
-      EOF
     '';
 }

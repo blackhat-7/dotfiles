@@ -1,1 +1,0 @@
-"""Shared AI tool implementations."""

@@ -23,7 +23,7 @@
     "linear_*": "allow",
     "github_*": "allow",
     "arxiv_*": "allow",
-    "reddit": "allow",
+    "bestiary_*": "allow",
     "skill": {
       "*": "allow"
     }
@@ -129,6 +129,17 @@
       "type": "local",
       "command": ["npx", "@playwright/mcp@latest"],
       "enabled": false
+    },
+    "bestiary": {
+      "type": "local",
+      "command": [
+        "uvx",
+        "--from",
+        "git+https://github.com/blackhat-7/bestiary.git@main",
+        "bestiary",
+        "serve"
+      ],
+      "enabled": true
     }
   }
 }
