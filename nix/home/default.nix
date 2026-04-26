@@ -181,19 +181,28 @@ EOF
         #!/usr/bin/env bash
         input=$(cat)
         event=$(printf '%s' "$input" | jq -r '.hook_event_name // ""')
+        cwd=$(printf '%s' "$input" | jq -r '.cwd // ""')
+        session_id=$(printf '%s' "$input" | jq -r '.session_id // ""')
+        label=$(basename "$cwd" 2>/dev/null)
+        [ -z "$label" ] && label="claude"
+
         case "$event" in
           Stop)
-            title="Claude Code"
+            title="Claude · $label"
             message="Done"
             urgency="normal"
             ;;
           *)
-            title=$(printf '%s' "$input" | jq -r '.title // "Claude Code"')
+            title="Claude · $label"
             message=$(printf '%s' "$input" | jq -r '.message // ""')
             urgency="critical"
             ;;
         esac
-        notify-send -u "$urgency" -a "Claude Code" "$title" "$message"
+
+        args=(-u "$urgency" -a "Claude Code")
+        [ -f "$HOME/.claude/icon.png" ] && args+=(-i "$HOME/.claude/icon.png")
+        [ -n "$session_id" ] && args+=(-h "string:x-dunst-stack-tag:claude-$session_id")
+        notify-send "''${args[@]}" "$title" "$message"
       '';
     in
     lib.hm.dag.entryAfter [ "writeBoundary" ] ''

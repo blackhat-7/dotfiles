@@ -120,17 +120,27 @@
         #!/usr/bin/env bash
         input=$(cat)
         event=$(printf '%s' "$input" | jq -r '.hook_event_name // ""')
+        cwd=$(printf '%s' "$input" | jq -r '.cwd // ""')
+        session_id=$(printf '%s' "$input" | jq -r '.session_id // ""')
+        label=$(basename "$cwd" 2>/dev/null)
+        [ -z "$label" ] && label="claude"
+
         case "$event" in
           Stop)
-            title="Claude Code"
+            title="Claude · $label"
             message="Done"
             ;;
           *)
-            title=$(printf '%s' "$input" | jq -r '.title // "Claude Code"')
+            title="Claude · $label"
             message=$(printf '%s' "$input" | jq -r '.message // ""')
             ;;
         esac
-        terminal-notifier -title "$title" -message "$message" -group claude-code
+
+        group="claude-code"
+        [ -n "$session_id" ] && group="claude-code-$session_id"
+        args=(-title "$title" -message "$message" -group "$group")
+        [ -f "$HOME/.claude/icon.png" ] && args+=(-appIcon "$HOME/.claude/icon.png")
+        terminal-notifier "''${args[@]}"
       '';
 
       claudeSettings = ''
