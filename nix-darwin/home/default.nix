@@ -40,6 +40,7 @@
     pkgs.moonlight-qt
     pkgs.gitleaks
     pkgs.monitorcontrol
+    pkgs.terminal-notifier
   ];
 
   launchd.agents.turn-on-night-shift = {
@@ -118,9 +119,9 @@
       notifyScript = ''
         #!/usr/bin/env bash
         input=$(cat)
-        title=$(printf '%s' "$input" | jq -r '.title // "Claude Code"' | sed -e 's|\\|\\\\|g' -e 's|"|\\"|g')
-        message=$(printf '%s' "$input" | jq -r '.message // ""' | sed -e 's|\\|\\\\|g' -e 's|"|\\"|g')
-        osascript -e "display notification \"$message\" with title \"$title\""
+        title=$(printf '%s' "$input" | jq -r '.title // "Claude Code"')
+        message=$(printf '%s' "$input" | jq -r '.message // ""')
+        terminal-notifier -title "$title" -message "$message" -group claude-code
       '';
 
       claudeSettings = ''
