@@ -176,6 +176,14 @@ EOF
         printf "\033[0;37m%s%s\033[0m" "$ctx_info" "$model_info"
         printf "\n"
       '';
+
+      notifyScript = ''
+        #!/usr/bin/env bash
+        input=$(cat)
+        title=$(printf '%s' "$input" | jq -r '.title // "Claude Code"')
+        message=$(printf '%s' "$input" | jq -r '.message // ""')
+        notify-send -u critical -a "Claude Code" "$title" "$message"
+      '';
     in
     lib.hm.dag.entryAfter [ "writeBoundary" ] ''
       mkdir -p "$HOME/.claude"
@@ -185,6 +193,12 @@ EOF
       ${statuslineScript}
       EOF
       chmod +x "$HOME/.claude/statusline-command.sh"
+
+      rm -f "$HOME/.claude/notify.sh"
+      cat <<'EOF' > "$HOME/.claude/notify.sh"
+      ${notifyScript}
+      EOF
+      chmod +x "$HOME/.claude/notify.sh"
 
       rm -f "$HOME/.claude/settings.json"
       cat <<'EOF' > "$HOME/.claude/settings.json"
@@ -223,6 +237,19 @@ EOF
         "enabledPlugins": {
           "pyright-lsp@claude-plugins-official": true,
           "gopls-lsp@claude-plugins-official": true
+        },
+        "hooks": {
+          "Notification": [
+            {
+              "matcher": "",
+              "hooks": [
+                {
+                  "type": "command",
+                  "command": "bash ${config.home.homeDirectory}/.claude/notify.sh"
+                }
+              ]
+            }
+          ]
         }
       }
       EOF

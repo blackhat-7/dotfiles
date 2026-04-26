@@ -115,6 +115,14 @@
         printf "\n"
       '';
 
+      notifyScript = ''
+        #!/usr/bin/env bash
+        input=$(cat)
+        title=$(printf '%s' "$input" | jq -r '.title // "Claude Code"' | sed -e 's|\\|\\\\|g' -e 's|"|\\"|g')
+        message=$(printf '%s' "$input" | jq -r '.message // ""' | sed -e 's|\\|\\\\|g' -e 's|"|\\"|g')
+        osascript -e "display notification \"$message\" with title \"$title\""
+      '';
+
       claudeSettings = ''
         {
           "$schema": "https://json.schemastore.org/claude-code-settings.json",
@@ -151,6 +159,19 @@
           "enabledPlugins": {
             "pyright-lsp@claude-plugins-official": true,
             "gopls-lsp@claude-plugins-official": true
+          },
+          "hooks": {
+            "Notification": [
+              {
+                "matcher": "",
+                "hooks": [
+                  {
+                    "type": "command",
+                    "command": "bash ${config.home.homeDirectory}/.claude/notify.sh"
+                  }
+                ]
+              }
+            ]
           }
         }
       '';
@@ -226,6 +247,12 @@
       ${statuslineScript}
       EOF
       chmod +x "$HOME/.claude/statusline-command.sh"
+
+      rm -f "$HOME/.claude/notify.sh"
+      cat <<'EOF' > "$HOME/.claude/notify.sh"
+      ${notifyScript}
+      EOF
+      chmod +x "$HOME/.claude/notify.sh"
 
       rm -f "$HOME/.claude/settings.json"
       cat <<'EOF' > "$HOME/.claude/settings.json"
