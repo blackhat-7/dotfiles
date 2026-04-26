@@ -180,9 +180,20 @@ EOF
       notifyScript = ''
         #!/usr/bin/env bash
         input=$(cat)
-        title=$(printf '%s' "$input" | jq -r '.title // "Claude Code"')
-        message=$(printf '%s' "$input" | jq -r '.message // ""')
-        notify-send -u critical -a "Claude Code" "$title" "$message"
+        event=$(printf '%s' "$input" | jq -r '.hook_event_name // ""')
+        case "$event" in
+          Stop)
+            title="Claude Code"
+            message="Done"
+            urgency="normal"
+            ;;
+          *)
+            title=$(printf '%s' "$input" | jq -r '.title // "Claude Code"')
+            message=$(printf '%s' "$input" | jq -r '.message // ""')
+            urgency="critical"
+            ;;
+        esac
+        notify-send -u "$urgency" -a "Claude Code" "$title" "$message"
       '';
     in
     lib.hm.dag.entryAfter [ "writeBoundary" ] ''
@@ -240,6 +251,17 @@ EOF
         },
         "hooks": {
           "Notification": [
+            {
+              "matcher": "",
+              "hooks": [
+                {
+                  "type": "command",
+                  "command": "bash ${config.home.homeDirectory}/.claude/notify.sh"
+                }
+              ]
+            }
+          ],
+          "Stop": [
             {
               "matcher": "",
               "hooks": [

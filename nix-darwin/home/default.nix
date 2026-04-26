@@ -119,8 +119,17 @@
       notifyScript = ''
         #!/usr/bin/env bash
         input=$(cat)
-        title=$(printf '%s' "$input" | jq -r '.title // "Claude Code"')
-        message=$(printf '%s' "$input" | jq -r '.message // ""')
+        event=$(printf '%s' "$input" | jq -r '.hook_event_name // ""')
+        case "$event" in
+          Stop)
+            title="Claude Code"
+            message="Done"
+            ;;
+          *)
+            title=$(printf '%s' "$input" | jq -r '.title // "Claude Code"')
+            message=$(printf '%s' "$input" | jq -r '.message // ""')
+            ;;
+        esac
         terminal-notifier -title "$title" -message "$message" -group claude-code
       '';
 
@@ -163,6 +172,17 @@
           },
           "hooks": {
             "Notification": [
+              {
+                "matcher": "",
+                "hooks": [
+                  {
+                    "type": "command",
+                    "command": "bash ${config.home.homeDirectory}/.claude/notify.sh"
+                  }
+                ]
+              }
+            ],
+            "Stop": [
               {
                 "matcher": "",
                 "hooks": [
