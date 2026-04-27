@@ -291,7 +291,7 @@ EOF
         "mcpServers": {
           "bestiary": {
             "command": "uvx",
-            "args": ["--from", "git+https://github.com/blackhat-7/bestiary.git@main", "bestiary", "serve"]
+            "args": ["--with", "yt-dlp", "--from", "${config.home.homeDirectory}/Documents/projects/bestiary", "bestiary", "serve"]
           },
           "github": {
             "type": "http",

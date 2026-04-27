@@ -122,6 +122,19 @@
         event=$(printf '%s' "$input" | jq -r '.hook_event_name // ""')
         cwd=$(printf '%s' "$input" | jq -r '.cwd // ""')
         session_id=$(printf '%s' "$input" | jq -r '.session_id // ""')
+        message=$(printf '%s' "$input" | jq -r '.message // ""')
+
+        # Suppress Claude Code's recurring idle "waiting for your input" notification.
+        if [ "$event" = "Notification" ] && printf '%s' "$message" | grep -qiE "waiting for (your )?input"; then
+          exit 0
+        fi
+
+        # Suppress when the terminal is already the frontmost app — user is watching.
+        front_bundle=$(lsappinfo info -only bundleid "$(lsappinfo front)" 2>/dev/null | cut -d'"' -f4)
+        if [ "$front_bundle" = "net.kovidgoyal.kitty" ]; then
+          exit 0
+        fi
+
         label=$(basename "$cwd" 2>/dev/null)
         [ -z "$label" ] && label="claude"
 
@@ -132,7 +145,6 @@
             ;;
           *)
             title="Claude · $label"
-            message=$(printf '%s' "$input" | jq -r '.message // ""')
             ;;
         esac
 
@@ -212,7 +224,7 @@
           "mcpServers": {
             "bestiary": {
               "command": "uvx",
-              "args": ["--from", "git+https://github.com/blackhat-7/bestiary.git@main", "bestiary", "serve"]
+              "args": ["--with", "yt-dlp", "--from", "${config.home.homeDirectory}/Documents/projects/bestiary", "bestiary", "serve"]
             },
             "github": {
               "type": "http",
