@@ -22,7 +22,7 @@ inactive_tab_font_style normal
 tab_fade 0.1 0.2 0.8 1
 tab_bar_margin_width 1.0
 
-dim_opacity 0.5
+dim_opacity 0.3
 inactive_text_alpha 0.5
 active_border_color #19181a
 draw_minimal_borders yes
