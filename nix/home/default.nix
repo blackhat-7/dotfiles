@@ -246,7 +246,24 @@ EOF
             "mcp__arxiv",
             "mcp__bestiary",
             "mcp__chrome-devtools",
-            "mcp__github"
+            "mcp__github",
+            "mcp__linear__linear_getViewer",
+            "mcp__linear__linear_getOrganization",
+            "mcp__linear__linear_getUsers",
+            "mcp__linear__linear_getLabels",
+            "mcp__linear__linear_getTeams",
+            "mcp__linear__linear_getProjects",
+            "mcp__linear__linear_getIssues",
+            "mcp__linear__linear_getIssueById",
+            "mcp__linear__linear_searchIssues",
+            "mcp__linear__linear_getComments",
+            "mcp__linear__linear_getProjectIssues",
+            "mcp__linear__linear_getCycles",
+            "mcp__linear__linear_getActiveCycle",
+            "mcp__linear__linear_getInitiatives",
+            "mcp__linear__linear_getInitiativeById",
+            "mcp__linear__linear_getInitiativeProjects",
+            "mcp__linear__linear_getIssueHistory"
           ],
           "deny": [],
           "ask": [
@@ -332,6 +349,11 @@ EOF
             "command": "arxiv-mcp-server",
             "args": [],
             "env": {"ARXIV_STORAGE_PATH": "~/Downloads/papers"}
+          },
+          "linear": {
+            "command": "npx",
+            "args": ["-y", "@tacticlaunch/mcp-linear"],
+            "env": {"LINEAR_API_TOKEN": "''${LINEAR_API_KEY}"}
           }
         }
       }

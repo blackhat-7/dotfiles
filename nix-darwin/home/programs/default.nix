@@ -47,6 +47,15 @@
                 name = "openai/gpt-oss-120b-TEE";
                 supports_function_calling = true;
                 strip_reasoning_contents = true;
+                patch = {
+                  body = {
+                    reasoning_effort = "low";
+                  };
+                };
+              }
+              {
+                name = "Qwen/Qwen3-Next-80B-A3B-Instruct";
+                supports_function_calling = true;
               }
             ];
           }

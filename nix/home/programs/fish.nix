@@ -23,17 +23,21 @@
           set -l prompt "Your task is to generate a concise and informative commit message based on the provided diff. Use the conventional commit format (type: subject). The message should be in the imperative mood and under 200 chars. Don't include additional text. The diff is:
           $diff_output"
 
-          # 5. Call aichat
-          set -l ai_msg (echo "$prompt" | aichat)
+          # 5. Call aichat (with fallback to Qwen3-Next if primary 404s)
+          set -l ai_msg (echo "$prompt" | aichat 2>/dev/null)
+          if test -z "$ai_msg"
+              echo "⚠️  Primary model unavailable, falling back to Qwen3-Next..."
+              set ai_msg (echo "$prompt" | aichat -m chutes:Qwen/Qwen3-Next-80B-A3B-Instruct)
+          end
 
           # 6. Process the output
-          if test $status -eq 0 -a -n "$ai_msg"
+          if test -n "$ai_msg"
               # Remove <think>...</think> blocks using regex
               # We use "" for the empty string replacement
               set ai_msg (string replace -r -a '(?s)<think>.*?</think>' "" "$ai_msg")
-              
-              # Trim surrounding whitespace
-              set ai_msg (string trim "$ai_msg")
+
+              # Trim surrounding whitespace and stray backticks/quotes
+              set ai_msg (string trim --chars '`" ' "$ai_msg")
               
               # Escape double quotes to ensure the command is valid
               set -l escaped_msg (string replace -a '"' '\"' "$ai_msg")
