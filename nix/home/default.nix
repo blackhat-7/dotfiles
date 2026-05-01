@@ -336,6 +336,7 @@ EOF
         }
       }
       EOF
+
     '';
 
   home.file.".config/opencode/package.json" = {
