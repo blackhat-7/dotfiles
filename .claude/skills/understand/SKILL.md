@@ -1,23 +1,45 @@
 ---
 name: understand
-description: Read code in the Editing work folder, ask sharp questions, and output a short bulleted PROBLEM summary in chat. Do not propose solutions or write a plan. No file is written; output stays in chat.
+description: Start a flow task by reading code, asking sharp questions, and outputting a bulleted PROBLEM summary in chat. Argument is a kebab-case task slug (e.g. fix-jpeg-corrupt). Creates .flow/<slug>/ as the task directory. PROBLEM stays in chat — no file is written.
+argument-hint: <task-slug>
 ---
 
 # /understand
 
-Deeply understand a problem before any code or plan exists. Output is bullets in chat — **no file is written**. You **do not** propose solutions, suggest approaches, or sketch fixes.
+Start a flow task. Deeply understand the problem before any code or plan exists. Output is bullets in chat — **no PROBLEM.md file is written**. You **do not** propose solutions, suggest approaches, or sketch fixes.
 
 Only runs inside `~/Documents/Work/Editing/`. If cwd is elsewhere, say so and stop.
 
-## Step 1 — One question first
+## Step 0 — Validate slug
+
+Slug: `$ARGUMENTS`
+
+Must match `[a-z0-9][a-z0-9-]*` (kebab-case, no spaces, no slashes, no uppercase). If empty or invalid, reply:
+
+> Task slug required. Usage: `/understand <kebab-case-slug>` (e.g. `/understand fix-jpeg-corrupt`).
+
+Then stop.
+
+## Step 1 — Set up task directory
+
+```bash
+SLUG="$ARGUMENTS"
+DIR="$HOME/Documents/Work/Editing/.flow/$SLUG"
+mkdir -p "$DIR"
+[[ -f "$DIR/PLAN.md" ]] && echo "EXISTS_WITH_PLAN" || echo "OK"
+```
+
+If `EXISTS_WITH_PLAN`: a previous plan exists for this slug. Tell the user and ask whether they want to extend the existing task (re-run `/draft <slug> <mode>` to overwrite) or pick a different slug. Stop.
+
+## Step 2 — One question first
 
 If the user's invoking message already states clearly what's broken / what's needed, skip this. Otherwise ask, with no preamble:
 
 > One-line description: what's broken or what needs to be added?
 
-Wait for the answer. No tool calls yet.
+Wait for the answer. No further tool calls yet.
 
-## Step 2 — Read the code
+## Step 3 — Read the code
 
 Read aggressively. Do **not** guess.
 
@@ -27,7 +49,7 @@ Read aggressively. Do **not** guess.
 
 One short sentence at the start ("reading X to find Y") and a brief signal when you find the relevant code. Don't narrate every file.
 
-## Step 3 — Output PROBLEM in chat
+## Step 4 — Output PROBLEM in chat
 
 Reply with **exactly** this structure (omit a section only if explicitly noted):
 
@@ -59,19 +81,19 @@ Rules:
 - Stay **descriptive**. No "we should", "the fix is", "let's add". No solution language.
 - Tiny ASCII diagram only if structure is non-trivial.
 
-## Step 4 — Hand back
+## Step 5 — Hand back
 
 After the bulleted output, end with one short line:
 
-> Open questions: \<N\>. Answer them in chat, then run one of:
-> `/draft patch` · `/draft clean` · `/draft refactor`
+> Task `<slug>` started. Open questions: \<N\>. Answer them in chat, then run one of:
+> `/draft <slug> patch` · `/draft <slug> clean` · `/draft <slug> refactor`
 
 Stop. Do not start planning.
 
 ## Forbidden
 
 - Proposing solutions, fixes, or approaches anywhere
-- Writing any file (PROBLEM stays in chat)
+- Writing any file (PROBLEM stays in chat; only the empty `.flow/<slug>/` dir is created)
 - Editing application code
 - Walls of text — bullets only
 - Running `/draft` on the user's behalf

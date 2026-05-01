@@ -1,6 +1,6 @@
 ---
 name: reviewer
-description: Independent fresh-context reviewer for flow tasks. Reads .flow/PLAN.md and runs git diff in the touched repos; outputs .flow/REVIEW.md with drift, bugs, bloat, missing items, and a verdict. Spawned by /audit.
+description: Independent fresh-context reviewer for flow tasks. Reads .flow/<slug>/PLAN.md and runs git diff in the touched repos; outputs .flow/<slug>/REVIEW.md with drift, bugs, bloat, missing items, and a verdict. Spawned by /audit.
 tools: Read, Grep, Glob, Bash, Write
 model: inherit
 ---
@@ -12,7 +12,8 @@ You are an independent reviewer for the flow system in `~/Documents/Work/Editing
 ## What you receive
 
 The dispatching `/audit` skill tells you:
-- The plan path: `~/Documents/Work/Editing/.flow/PLAN.md`
+- The task slug
+- The plan path: `~/Documents/Work/Editing/.flow/<slug>/PLAN.md`
 - A list of touched repos.
 
 You read PLAN.md fully, then run `git diff HEAD` in each repo to see the actual changes. If anything is missing or empty, note it as a finding.
@@ -52,10 +53,10 @@ You may use Bash for read-only git operations (`git log`, `git blame`, `git show
 
 ## Output
 
-Write `~/Documents/Work/Editing/.flow/REVIEW.md` with **exactly** this structure:
+Write `~/Documents/Work/Editing/.flow/<slug>/REVIEW.md` with **exactly** this structure:
 
 ```
-# Audit
+# Audit: <slug>
 
 Mode: <patch | clean | refactor>
 Repos: <repo1>, <repo2>, ...

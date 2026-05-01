@@ -1,24 +1,34 @@
 ---
 name: explain
-description: Write a 1-page .flow/EXPLAIN.md summarizing the just-completed task — problem, solution, why-it-works, when-it-won't, files changed, decisions worth remembering. Run after /audit returns SHIP.
+description: Write a 1-page .flow/<slug>/EXPLAIN.md summarizing the named task — problem, solution, why-it-works, when-it-won't, files changed, decisions worth remembering. Argument is the task slug. Run after /audit returns SHIP.
+argument-hint: <task-slug>
 ---
 
 # /explain
 
-Produce a 1-page `.flow/EXPLAIN.md` that captures, in one place, what to tell anyone who later asks **"why did we do this?"** or **"why so much code for that?"**.
+Produce a 1-page `.flow/<slug>/EXPLAIN.md` that captures, in one place, what to tell anyone who later asks **"why did we do this?"** or **"why so much code for that?"**.
 
 Only runs inside `~/Documents/Work/Editing/`. If cwd is elsewhere, say so and stop.
+
+## Step 0 — Validate slug
+
+Slug: `$ARGUMENTS`. Must match `[a-z0-9][a-z0-9-]*`. If empty or invalid, reply:
+
+> Usage: `/explain <task-slug>` (e.g. `/explain fix-jpeg-corrupt`).
+
+Then stop.
 
 ## Step 1 — Locate state
 
 ```bash
-FLOW="$HOME/Documents/Work/Editing/.flow"
-[[ -f "$FLOW/PLAN.md"   ]] && echo "PLAN=yes"   || echo "PLAN=no"
-[[ -f "$FLOW/REVIEW.md" ]] && echo "REVIEW=yes" || echo "REVIEW=no"
+SLUG="$ARGUMENTS"
+DIR="$HOME/Documents/Work/Editing/.flow/$SLUG"
+[[ -f "$DIR/PLAN.md"   ]] && echo "PLAN=yes"   || echo "PLAN=no"
+[[ -f "$DIR/REVIEW.md" ]] && echo "REVIEW=yes" || echo "REVIEW=no"
 ```
 
-- `PLAN=no` → tell user to run `/draft` and `/build` first. Stop.
-- `REVIEW=no` → ask user to confirm an audit isn't needed before continuing. If they decline confirmation, tell them to run `/audit`.
+- `PLAN=no` → tell user no plan for slug `<slug>` — run `/draft <slug> <mode>` and `/build <slug>` first. Stop.
+- `REVIEW=no` → ask user to confirm an audit isn't needed before continuing. If they decline, tell them to run `/audit <slug>`.
 
 If REVIEW.md exists, read its `## Verdict`:
 - `SHIP` → continue.
@@ -40,12 +50,12 @@ Sum across repos.
 
 If you find yourself wanting to re-read application code to write the explanation, the PLAN/REVIEW are not specific enough — ask the user before continuing.
 
-## Step 3 — Write `.flow/EXPLAIN.md`
+## Step 3 — Write `.flow/<slug>/EXPLAIN.md`
 
 ≤1 page rendered. Bullets > prose. Cite file:line where relevant.
 
 ```
-# <one-line task title>
+# <slug> — <one-line task title>
 
 ## Problem
 1 sentence. What was broken or what was needed.
@@ -86,11 +96,11 @@ Rules:
 
 Output **only**:
 
-> EXPLAIN.md written at `.flow/EXPLAIN.md`.
+> EXPLAIN.md written at `.flow/<slug>/EXPLAIN.md`.
 > Diff: \<+X / -Y\> across \<N\> files.
 >
-> Paste into the PR description. The flow is closed for this task — `/draft` will
-> overwrite the artifacts when you start the next one.
+> Paste into the PR description. The task directory `.flow/<slug>/` keeps the full
+> record (PLAN, REVIEW, EXPLAIN) until you delete it.
 
 Stop.
 

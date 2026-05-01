@@ -1,28 +1,38 @@
 ---
 name: build
-description: Implement strictly according to .flow/PLAN.md. Halt on any deviation — append a "## Build notes" section to PLAN.md, stop, and ask. Run after /draft.
+description: Implement strictly according to .flow/<slug>/PLAN.md for the named task. Halt on any deviation — append "## Build notes" to PLAN.md, stop, and ask. Argument is the task slug. Run after /draft.
+argument-hint: <task-slug>
 ---
 
 # /build
 
-Implement **strictly** according to `~/Documents/Work/Editing/.flow/PLAN.md`. Every diff hunk must trace to a PLAN.md line. **Halt on any deviation**: stop, write what you found, ask. Do not paper over snags. Do not expand scope.
+Implement **strictly** according to `~/Documents/Work/Editing/.flow/<slug>/PLAN.md`. Every diff hunk must trace to a PLAN.md line. **Halt on any deviation**: stop, write what you found, ask. Do not paper over snags. Do not expand scope.
 
 Only runs inside `~/Documents/Work/Editing/`. If cwd is elsewhere, say so and stop.
+
+## Step 0 — Validate slug
+
+Slug: `$ARGUMENTS`. Must match `[a-z0-9][a-z0-9-]*`. If empty or invalid, reply:
+
+> Usage: `/build <task-slug>` (e.g. `/build fix-jpeg-corrupt`).
+
+Then stop.
 
 ## Step 1 — Locate the plan
 
 ```bash
-PLAN="$HOME/Documents/Work/Editing/.flow/PLAN.md"
+SLUG="$ARGUMENTS"
+PLAN="$HOME/Documents/Work/Editing/.flow/$SLUG/PLAN.md"
 [[ -f "$PLAN" ]] && echo "OK" || echo "MISSING"
 ```
 
-If `MISSING`: tell user to run `/draft <mode>` first. Stop.
+If `MISSING`: tell user no plan exists for slug `<slug>` — run `/draft <slug> <mode>` first. Stop.
 
 ## Step 2 — Read the plan once, fully
 
 Read PLAN.md fully before any edits. Do not implement from skim.
 
-Output one sentence in chat: "Plan loaded — \<mode\>, \<N\> file changes, budget \<X\>. Starting build."
+Output one sentence in chat: "Plan loaded — \<slug\>, \<mode\>, \<N\> file changes, budget \<X\>. Starting build."
 
 ## Step 3 — Implement, plan-line by plan-line
 
@@ -48,8 +58,8 @@ A deviation is **anything**:
 
 When you hit one:
 1. **Stop editing.** Do not press on. Do not "make it work."
-2. Append a `## Build notes` section to `.flow/PLAN.md` describing exactly what you found (1–3 bullets).
-3. Tell the user, one short message: "Hit a deviation: \<one line\>. Notes appended to PLAN.md. Update the plan and re-run /build, or tell me how to proceed."
+2. Append a `## Build notes` section to `.flow/<slug>/PLAN.md` describing exactly what you found (1–3 bullets).
+3. Tell the user, one short message: "Hit a deviation: \<one line\>. Notes appended to PLAN.md. Update the plan and re-run `/build <slug>`, or tell me how to proceed."
 4. Stop.
 
 ## Step 4 — Self-check before declaring done
@@ -68,8 +78,8 @@ After the last planned change:
 
 If self-check passed, output **only**:
 
-> Build done. Diff: \<+X / -Y\> across \<N\> files in \<repos\>.
-> Run `/audit` for an independent review.
+> Build done for `<slug>`. Diff: \<+X / -Y\> across \<N\> files in \<repos\>.
+> Run `/audit <slug>` for an independent review.
 
 Stop. Do not run `/audit` yourself.
 

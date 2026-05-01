@@ -1,38 +1,38 @@
 ---
 name: draft
-description: Draft a plan to .flow/PLAN.md against the problem just discussed. Mode argument is required — patch (minimum diff, hacky-OK), clean (local cleanup, ≤300 lines), or refactor (structural change, justify each new file). Run after /understand.
-argument-hint: <patch|clean|refactor>
+description: Draft a plan to .flow/<slug>/PLAN.md for the named task. Two arguments — task slug (kebab-case, must match a /understand task) and mode (patch | clean | refactor). Run after /understand.
+argument-hint: <task-slug> <patch|clean|refactor>
 ---
 
 # /draft
 
-Draft `~/Documents/Work/Editing/.flow/PLAN.md` for the problem just discussed in chat. Stop after writing — do not implement.
+Draft `~/Documents/Work/Editing/.flow/<slug>/PLAN.md` for the problem just discussed in chat. Stop after writing — do not implement.
 
 Only runs inside `~/Documents/Work/Editing/`. If cwd is elsewhere, say so and stop.
 
-## Step 0 — Validate mode
+## Step 0 — Validate args
 
-Mode: `$ARGUMENTS`
+`$ARGUMENTS` must be `<slug> <mode>` (whitespace-separated). Slug must match `[a-z0-9][a-z0-9-]*`. Mode must be exactly one of `patch`, `clean`, `refactor`. If anything is missing or invalid, reply:
 
-Must be exactly one of `patch`, `clean`, `refactor`. If empty or anything else, reply:
-
-> Mode required. Usage: `/draft patch` (minimum diff) · `/draft clean` (local cleanup) · `/draft refactor` (structural).
+> Usage: `/draft <slug> <patch|clean|refactor>` (e.g. `/draft fix-jpeg-corrupt patch`).
 
 Then stop.
 
 ## Step 1 — Locate state
 
 ```bash
-FLOW="$HOME/Documents/Work/Editing/.flow"
-mkdir -p "$FLOW"
-[[ -f "$FLOW/PLAN.md" ]] && echo "EXISTS" || echo "NEW"
+read SLUG MODE <<< "$ARGUMENTS"
+DIR="$HOME/Documents/Work/Editing/.flow/$SLUG"
+[[ -d "$DIR" ]] || { echo "NO_TASK"; exit 0; }
+[[ -f "$DIR/PLAN.md" ]] && echo "EXISTS" || echo "NEW"
 ```
 
-If `EXISTS`: read the file, summarize its mode and approach in 3 bullets, ask whether to replace it. Stop unless the user says replace.
+- `NO_TASK`: tell user to run `/understand <slug>` first. Stop.
+- `EXISTS`: read the file, summarize its mode and approach in 3 bullets, ask whether to replace it. Stop unless the user says replace.
 
 ## Step 2 — Confirm problem context
 
-There must be a clear problem in the recent chat (from `/understand` or the user's message). If there isn't — no concrete problem statement, no file:line refs, no edge cases — say so and ask the user to run `/understand` first or paste the context. Stop.
+There must be a clear problem in the recent chat (from `/understand <slug>` or the user's message). If there isn't — no concrete problem statement, no file:line refs, no edge cases — say so and ask the user to run `/understand <slug>` first or paste the context. Stop.
 
 If `/understand` listed open questions and they aren't yet answered, surface the unanswered ones (numbered) and stop until answered.
 
@@ -73,12 +73,12 @@ For each new file/abstraction/boundary you must answer:
 
 If you can't answer all three for a piece, drop it.
 
-## Step 4 — Write `.flow/PLAN.md`
+## Step 4 — Write `.flow/<slug>/PLAN.md`
 
-Write `$HOME/Documents/Work/Editing/.flow/PLAN.md`. Header line:
+Write `$HOME/Documents/Work/Editing/.flow/<slug>/PLAN.md`. Header line:
 
 ```
-# Plan — mode: <patch|clean|refactor>
+# Plan: <slug> — mode: <patch|clean|refactor>
 ```
 
 Then the sections below for the chosen mode. ≤1 page rendered (≤2 for refactor). Bullets > prose. File:line precision in `## Changes` is required for all modes — vague targets ("the auth module") are forbidden. Use full paths from the work folder (e.g. `editing-trainer/src/foo.py:42`).
@@ -198,8 +198,8 @@ For each edge case from PROBLEM.
 
 Output **only**:
 
-> PLAN.md drafted (mode: \<mode\>). Budget: \<X\> lines. New files: \<count\>.
-> Review and run `/build` when ready, or push back in chat.
+> PLAN.md drafted at `.flow/<slug>/PLAN.md` (mode: \<mode\>). Budget: \<X\> lines. New files: \<count\>.
+> Review and run `/build <slug>` when ready, or push back in chat.
 
 Stop. Do not implement.
 
@@ -210,5 +210,5 @@ Stop. Do not implement.
 - Adding error handling, validation, fallbacks not asked for
 - Adding tests unless the user asked — that's a separate decision
 - "We could also..." sections — pick one approach
-- Editing any file other than `.flow/PLAN.md`
+- Editing any file other than `.flow/<slug>/PLAN.md`
 - Walls of text in chat
