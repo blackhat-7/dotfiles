@@ -42,6 +42,8 @@
       set-option -g default-shell "/run/current-system/sw/bin/fish"
       set -g default-command "/run/current-system/sw/bin/fish -l"
 
+      set -g extended-keys on
+      set -g extended-keys-format csi-u
       set -g set-clipboard on
 
       # tmux scroll speed

@@ -236,61 +236,80 @@
         }
       '';
 
-      claudeConfig = ''
-        {
-          "mcpServers": {
-            "bestiary": {
-              "command": "uvx",
-              "args": ["--with", "yt-dlp", "--from", "${config.home.homeDirectory}/Documents/projects/bestiary", "bestiary", "serve"]
-            },
-            "github": {
-              "type": "http",
-              "url": "https://api.githubcopilot.com/mcp/",
-              "headers": {
-                "Authorization": "Bearer ''${GITHUB_MCP_TOKEN}"
-              }
-            },
-            "chrome-devtools": {
-              "command": "/opt/homebrew/bin/npx",
-              "args": ["chrome-devtools-mcp@latest"]
-            },
-            "cloudsql-reader": {
-              "command": "${config.home.homeDirectory}/.npm-global/bin/env-cmd",
-              "args": ["-f", "${config.home.homeDirectory}/Documents/Work/Editing/aftershoot-cloud/env/dev/cloudsql-reader/app.env", "${config.home.homeDirectory}/Documents/Work/Editing/aftershoot-cloud/dist/mcp-servers/cloudsql-reader"]
-            },
-            "grafana-loki-reader": {
-              "command": "${config.home.homeDirectory}/.npm-global/bin/env-cmd",
-              "args": ["-f", "${config.home.homeDirectory}/Documents/Work/Editing/aftershoot-cloud/env/dev/grafana-loki-reader/app.env", "${config.home.homeDirectory}/Documents/Work/Editing/aftershoot-cloud/dist/mcp-servers/grafana-loki-reader"],
-              "disabled": true
-            },
-            "mongo-reader": {
-              "command": "${config.home.homeDirectory}/.npm-global/bin/env-cmd",
-              "args": ["-f", "${config.home.homeDirectory}/Documents/Work/Editing/aftershoot-cloud/env/dev/mongo-reader/app.env", "${config.home.homeDirectory}/Documents/Work/Editing/aftershoot-cloud/dist/mcp-servers/mongo-reader"],
-              "disabled": true
-            },
-            "stage-mongo-reader": {
-              "command": "${config.home.homeDirectory}/.npm-global/bin/env-cmd",
-              "args": ["-f", "${config.home.homeDirectory}/Documents/Work/Editing/aftershoot-cloud/env/dev/mongo-reader/stage-app.env", "${config.home.homeDirectory}/Documents/Work/Editing/aftershoot-cloud/dist/mcp-servers/mongo-reader"],
-              "disabled": true
-            },
-            "sentry-reader": {
-              "command": "${config.home.homeDirectory}/.npm-global/bin/env-cmd",
-              "args": ["-f", "${config.home.homeDirectory}/Documents/Work/Editing/aftershoot-cloud/env/dev/sentry-reader/app.env", "${config.home.homeDirectory}/Documents/Work/Editing/aftershoot-cloud/dist/mcp-servers/sentry-reader"],
-              "disabled": true
-            },
-            "arxiv": {
-              "command": "arxiv-mcp-server",
-              "args": [],
-              "env": {"ARXIV_STORAGE_PATH": "~/Downloads/papers"}
-            },
-            "linear": {
-              "command": "/opt/homebrew/bin/npx",
-              "args": ["-y", "@tacticlaunch/mcp-linear"],
-              "env": {"LINEAR_API_TOKEN": "''${LINEAR_API_KEY}"}
-            }
-          }
-        }
-      '';
+      mcpServersAttr = {
+        bestiary = {
+          command = "uvx";
+          args = [ "--with" "yt-dlp" "--from" "${config.home.homeDirectory}/Documents/projects/bestiary" "bestiary" "serve" ];
+        };
+        github = {
+          type = "http";
+          url = "https://api.githubcopilot.com/mcp/";
+          headers = { Authorization = "Bearer \${GITHUB_MCP_TOKEN}"; };
+        };
+        chrome-devtools = {
+          command = "/opt/homebrew/bin/npx";
+          args = [ "chrome-devtools-mcp@latest" ];
+        };
+        cloudsql-reader = {
+          command = "${config.home.homeDirectory}/.npm-global/bin/env-cmd";
+          args = [ "-f" "${config.home.homeDirectory}/Documents/Work/Editing/aftershoot-cloud/env/dev/cloudsql-reader/app.env" "${config.home.homeDirectory}/Documents/Work/Editing/aftershoot-cloud/dist/mcp-servers/cloudsql-reader" ];
+        };
+        grafana-loki-reader = {
+          command = "${config.home.homeDirectory}/.npm-global/bin/env-cmd";
+          args = [ "-f" "${config.home.homeDirectory}/Documents/Work/Editing/aftershoot-cloud/env/dev/grafana-loki-reader/app.env" "${config.home.homeDirectory}/Documents/Work/Editing/aftershoot-cloud/dist/mcp-servers/grafana-loki-reader" ];
+          disabled = true;
+        };
+        mongo-reader = {
+          command = "${config.home.homeDirectory}/.npm-global/bin/env-cmd";
+          args = [ "-f" "${config.home.homeDirectory}/Documents/Work/Editing/aftershoot-cloud/env/dev/mongo-reader/app.env" "${config.home.homeDirectory}/Documents/Work/Editing/aftershoot-cloud/dist/mcp-servers/mongo-reader" ];
+          disabled = true;
+        };
+        stage-mongo-reader = {
+          command = "${config.home.homeDirectory}/.npm-global/bin/env-cmd";
+          args = [ "-f" "${config.home.homeDirectory}/Documents/Work/Editing/aftershoot-cloud/env/dev/mongo-reader/stage-app.env" "${config.home.homeDirectory}/Documents/Work/Editing/aftershoot-cloud/dist/mcp-servers/mongo-reader" ];
+          disabled = true;
+        };
+        sentry-reader = {
+          command = "${config.home.homeDirectory}/.npm-global/bin/env-cmd";
+          args = [ "-f" "${config.home.homeDirectory}/Documents/Work/Editing/aftershoot-cloud/env/dev/sentry-reader/app.env" "${config.home.homeDirectory}/Documents/Work/Editing/aftershoot-cloud/dist/mcp-servers/sentry-reader" ];
+          disabled = true;
+        };
+        arxiv = {
+          command = "arxiv-mcp-server";
+          args = [ ];
+          env = { ARXIV_STORAGE_PATH = "~/Downloads/papers"; };
+        };
+        linear = {
+          command = "/opt/homebrew/bin/npx";
+          args = [ "-y" "@tacticlaunch/mcp-linear" ];
+          env = { LINEAR_API_TOKEN = "\${LINEAR_API_KEY}"; };
+        };
+      };
+
+      claudeConfig = builtins.toJSON { mcpServers = mcpServersAttr; };
+
+      piMcpSettings = {
+        # Keep MCP context small: expose the single mcp proxy tool, not every MCP tool directly.
+        directTools = false;
+      };
+
+      piMcpServer = v: removeAttrs (v // { lifecycle = "eager"; }) [ "disabled" ];
+
+      mcpConfig = {
+        settings = piMcpSettings;
+        mcpServers = builtins.mapAttrs (_: piMcpServer) mcpServersAttr;
+      };
+
+      mcpCatalog = builtins.toJSON mcpConfig;
+      mcpActive = builtins.toJSON mcpConfig;
+
+      piSettings = builtins.toJSON {
+        skills = [ "${config.home.homeDirectory}/.claude/skills" ];
+        permissionLevel = "minimal";
+        permissionMode = "ask";
+        defaultProvider = "openai-codex";
+        compaction = { enabled = true; };
+      };
 
       opencodePackageJson = ''
         {
@@ -306,6 +325,8 @@
     lib.hm.dag.entryAfter [ "writeBoundary" ] ''
       mkdir -p "$HOME/.config/opencode"
       mkdir -p "$HOME/.claude"
+      mkdir -p "$HOME/.pi/agent"
+      mkdir -p "$HOME/.config/mcp"
 
       rm -f "$HOME/.claude/statusline-command.sh"
       cat <<'EOF' > "$HOME/.claude/statusline-command.sh"
@@ -333,6 +354,29 @@
       cat <<'EOF' > "$HOME/.config/opencode/package.json"
       ${opencodePackageJson}
       EOF
+
+      pi_settings_tmp="$(mktemp)"
+      cat <<'EOF' > "$pi_settings_tmp"
+      ${piSettings}
+      EOF
+      if [[ -f "$HOME/.pi/agent/settings.json" ]]; then
+        ${pkgs.jq}/bin/jq -s '.[0] * .[1] | del(.enabledModels)' "$HOME/.pi/agent/settings.json" "$pi_settings_tmp" > "$HOME/.pi/agent/settings.json.tmp"
+      else
+        ${pkgs.jq}/bin/jq 'del(.enabledModels)' "$pi_settings_tmp" > "$HOME/.pi/agent/settings.json.tmp"
+      fi
+      mv "$HOME/.pi/agent/settings.json.tmp" "$HOME/.pi/agent/settings.json"
+      rm -f "$pi_settings_tmp"
+
+      rm -f "$HOME/.config/mcp/mcp.catalog.json"
+      cat <<'EOF' > "$HOME/.config/mcp/mcp.catalog.json"
+      ${mcpCatalog}
+      EOF
+
+      if [[ ! -f "$HOME/.config/mcp/mcp.json" ]]; then
+        cat <<'EOF' > "$HOME/.config/mcp/mcp.json"
+      ${mcpActive}
+      EOF
+      fi
 
     '';
 }

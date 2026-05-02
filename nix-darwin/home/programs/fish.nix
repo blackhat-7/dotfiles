@@ -73,6 +73,23 @@
           git push
           popd >/dev/null
         '';
+        mcp-on = ''
+          jq --argjson e (jq -c --arg n $argv[1] '.mcpServers[$n]' $HOME/.config/mcp/mcp.catalog.json) --arg n $argv[1] '.mcpServers[$n] = $e' $HOME/.config/mcp/mcp.json | sponge $HOME/.config/mcp/mcp.json
+        '';
+        mcp-off = ''
+          jq --arg n $argv[1] 'del(.mcpServers[$n])' $HOME/.config/mcp/mcp.json | sponge $HOME/.config/mcp/mcp.json
+        '';
+        mcp-list = ''
+          set -l catalog $HOME/.config/mcp/mcp.catalog.json
+          set -l active $HOME/.config/mcp/mcp.json
+          for name in (jq -r '.mcpServers | keys[]' $catalog)
+              if jq -e --arg n $name '.mcpServers | has($n)' $active >/dev/null
+                  echo "✓ $name"
+              else
+                  echo "✗ $name"
+              end
+          end
+        '';
     };
     shellInit = ''
 if status is-interactive

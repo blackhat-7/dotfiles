@@ -164,4 +164,39 @@ EOF
       ${pkgs.uv}/bin/uv tool install $tool
     done
   '';
+
+  home.activation.install-pi = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    export PATH="${pkgs.nodejs_24}/bin:$PATH"
+    npm_bin="${config.home.homeDirectory}/.npm-global/bin"
+    npm i -g @mariozechner/pi-coding-agent || true
+    "$npm_bin/pi" install npm:pi-mcp-adapter || true
+    "$npm_bin/pi" install npm:permission-pi || true
+
+    # permission-pi plays /System/Library/Sounds/Funk.aiff (or terminal bell) for prompts.
+    # Replace that with a silent macOS notification banner, similar to Claude Code alerts.
+    permission_ext="${config.home.homeDirectory}/.npm-global/lib/node_modules/permission-pi/permission.ts"
+    if [[ -f "$permission_ext" ]]; then
+      ${pkgs.python313}/bin/python - <<'PY'
+import re
+from pathlib import Path
+
+path = Path.home() / ".npm-global/lib/node_modules/permission-pi/permission.ts"
+text = path.read_text()
+new = """function playPermissionSound(): void {
+  if (process.platform !== "darwin") return;
+
+  exec('${pkgs.terminal-notifier}/bin/terminal-notifier -title "Pi" -message "Permission required" -group "pi-permission" 2>/dev/null || true');
+}"""
+patched = re.sub(
+    r"function playPermissionSound\(\): void \{.*?\n\}",
+    new,
+    text,
+    count=1,
+    flags=re.S,
+)
+if patched != text:
+    path.write_text(patched)
+PY
+    fi
+  '';
 }
