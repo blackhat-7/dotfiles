@@ -1,340 +1,344 @@
-{ pkgs, ... }: {
+{ pkgs, ... }:
+{
   programs.fish = {
     enable = true;
     generateCompletions = true;
     functions = {
-        gcm = ''
-          # 1. Stage all changes
-          echo "➕ Staging all changes..."
-          git add -A
+      gcm = ''
+        # 1. Stage all changes
+        echo "➕ Staging all changes..."
+        git add -A
 
-          # 2. Check for staged changes
-          set -l diff_output (git diff --cached)
+        # 2. Check for staged changes
+        set -l diff_output (git diff --cached)
 
-          if test -z "$diff_output"
-              echo "🚫 No changes found to commit."
-              return 1
-          end
+        if test -z "$diff_output"
+            echo "🚫 No changes found to commit."
+            return 1
+        end
 
-          # 3. Inform user
-          echo "🤖 Generating commit message..."
+        # 3. Inform user
+        echo "🤖 Generating commit message..."
 
-          # 4. Construct the prompt
-          set -l prompt "Your task is to generate a concise and informative commit message based on the provided diff. Use the conventional commit format (type: subject). The message should be in the imperative mood and under 200 chars. Don't include additional text. The diff is:
-          $diff_output"
+        # 4. Construct the prompt
+        set -l prompt "Your task is to generate a concise and informative commit message based on the provided diff. Use the conventional commit format (type: subject). The message should be in the imperative mood and under 200 chars. Don't include additional text. The diff is:
+        $diff_output"
 
-          # 5. Call aichat (with fallback to Qwen3-Next if primary 404s)
-          set -l ai_msg (echo "$prompt" | aichat 2>/dev/null)
-          if test -z "$ai_msg"
-              echo "⚠️  Primary model unavailable, falling back to Qwen3-Next..."
-              set ai_msg (echo "$prompt" | aichat -m chutes:Qwen/Qwen3-Next-80B-A3B-Instruct)
-          end
+        # 5. Call aichat (with fallback to Qwen3-Next if primary 404s)
+        set -l ai_msg (echo "$prompt" | aichat 2>/dev/null)
+        if test -z "$ai_msg"
+            echo "⚠️  Primary model unavailable, falling back to Qwen3-Next..."
+            set ai_msg (echo "$prompt" | aichat -m chutes:Qwen/Qwen3-Next-80B-A3B-Instruct)
+        end
 
-          # 6. Process the output
-          if test -n "$ai_msg"
-              # Remove <think>...</think> blocks using regex
-              # We use "" for the empty string replacement
-              set ai_msg (string replace -r -a '(?s)<think>.*?</think>' "" "$ai_msg")
+        # 6. Process the output
+        if test -n "$ai_msg"
+            # Remove <think>...</think> blocks using regex
+            # We use "" for the empty string replacement
+            set ai_msg (string replace -r -a '(?s)<think>.*?</think>' "" "$ai_msg")
 
-              # Trim surrounding whitespace and stray backticks/quotes
-              set ai_msg (string trim --chars '`" ' "$ai_msg")
-              
-              # Escape double quotes to ensure the command is valid
-              set -l escaped_msg (string replace -a '"' '\"' "$ai_msg")
-              
-              # Replace 'gcm' with the final git command
-              commandline -r "git commit -m \"$escaped_msg\""
-          else
-              echo "❌ Failed to generate message."
-              return 1
-          end
-        '';
-        ocn = ''
-          set -l cmd opencode
+            # Trim surrounding whitespace and stray backticks/quotes
+            set ai_msg (string trim --chars '`" ' "$ai_msg")
+            
+            # Escape double quotes to ensure the command is valid
+            set -l escaped_msg (string replace -a '"' '\"' "$ai_msg")
+            
+            # Replace 'gcm' with the final git command
+            commandline -r "git commit -m \"$escaped_msg\""
+        else
+            echo "❌ Failed to generate message."
+            return 1
+        end
+      '';
+      ocn = ''
+        set -l cmd opencode
 
-          if test (count $argv) -gt 0
-              set cmd "$cmd "(string join ' ' (string escape -- $argv))
-          end
+        if test (count $argv) -gt 0
+            set cmd "$cmd "(string join ' ' (string escape -- $argv))
+        end
 
-          if set -q TMUX
-              tmux new-window -n opencode -c "$PWD" "$cmd"
-          else
-              eval $cmd
-          end
-        '';
-        notes-sync = ''
-          # single command to save notes to remote
-          set -l notes_dir "$HOME/Documents/Notes"
-          pushd $notes_dir >/dev/null
-          git add -A
-          if not git diff --cached --quiet
-              git commit -m "notes"
-          end
-          git push
-          popd >/dev/null
-        '';
+        if set -q TMUX
+            tmux new-window -n opencode -c "$PWD" "$cmd"
+        else
+            eval $cmd
+        end
+      '';
+      notes-sync = ''
+        # single command to save notes to remote
+        set -l notes_dir "$HOME/Documents/Notes"
+        pushd $notes_dir >/dev/null
+        git add -A
+        if not git diff --cached --quiet
+            git commit -m "notes"
+        end
+        git push
+        popd >/dev/null
+      '';
     };
     shellInit = ''
-if status is-interactive
-    # Commands to run in interactive sessions can go here
-end
+      if status is-interactive
+          # Commands to run in interactive sessions can go here
+      end
 
-# exports
+      # exports
 
-export FZF_DEFAULT_OPS="--extended"
-export FZF_DEFAULT_COMMAND="fd --type f"
-export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-export HOMEBREW_NO_AUTO_UPDATE=1
-export PATH="/usr/local/sbin:$PATH"
-export PATH="/usr/bin:$PATH"
-export PATH="$HOME/.local/bin:$PATH"
+      export FZF_DEFAULT_OPS="--extended"
+      export FZF_DEFAULT_COMMAND="fd --type f"
+      export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+      export HOMEBREW_NO_AUTO_UPDATE=1
+      export PATH="/usr/local/sbin:$PATH"
+      export PATH="/usr/bin:$PATH"
+      export PATH="$HOME/.local/bin:$PATH"
 
-# GCP
-# export PROD_GCP_KEY="/Users/illusion/Documents/Work/Creds/edits_service_account_creds.json"
-# export STAGE_GCP_KEY="/Users/illusion/Documents/Work/Creds/stage_gcp.json"
-# export CROSS_GCP_KEY="/Users/illusion/Documents/Work/Creds/cross-accounts-service-account.json"
-# export GOOGLE_APPLICATION_CREDENTIALS=$CROSS_GCP_KEY
+      # GCP
+      # export PROD_GCP_KEY="/Users/illusion/Documents/Work/Creds/edits_service_account_creds.json"
+      # export STAGE_GCP_KEY="/Users/illusion/Documents/Work/Creds/stage_gcp.json"
+      # export CROSS_GCP_KEY="/Users/illusion/Documents/Work/Creds/cross-accounts-service-account.json"
+      # export GOOGLE_APPLICATION_CREDENTIALS=$CROSS_GCP_KEY
 
-export EDITOR='nvim'
-export LD_LIBRARY_PATH="/usr/local/opt/gettext/lib:$LD_LIBRARY_PATH"
-
-
-# Aliases
-
-alias zshconfig="nvim ~/.zshrc"
-alias ohmyzsh="nvim ~/.oh-my-zsh"
-alias push="git add -A && git commit -m 'Update' && git push"
-alias work="cd ~/Documents/Work/"
-alias rc="cd ~/Documents/randomCodes/"
-alias mis="cd ~/Documents/Work/MIS/"
-alias todo="cd ~/Documents/Work/todos"
-alias kb="uv run ~/Documents/Notes/kanban.py"
-alias nve="nvim ~/Documents/Notes/Everyday.md"
-alias editing="cd ~/Documents/Work/Editing/"
-alias ep="editing && cd Editing-Preprocesser"
-alias et="editing && cd Editing-Trainer"
-alias dh="editing && cd EditingDebugHelper"
-alias sc="editing && cd Scripts"
-alias ms="editing && cd DebugHelpers/model_sharing"
-alias fishrc="nv ~/.config/fish/config.fish"
-alias source_fishrc="source ~/.config/fish/config.fish"
-alias ls="lsd"
-alias l="ls"
-alias geeqie="geeqie --disable-clutter"
-alias chutes="uv run --project ~/Documents/projects/chutes-tui ~/Documents/projects/chutes-tui/main.py"
-alias easyeffects="QT_QPA_PLATFORM=xcb command easyeffects"
+      export EDITOR='nvim'
+      export LD_LIBRARY_PATH="/usr/local/opt/gettext/lib:$LD_LIBRARY_PATH"
 
 
-# Use yazi from system path or homebrew path if available
-if type -q yazi
-    alias fe="yazi"
-else if test -f /opt/homebrew/bin/yazi
-    alias fe="/opt/homebrew/bin/yazi"
-end
-# alias cat=bat
-# Cloud SQL aliases (if cloud-sql-proxy is available)
-if type -q cloud-sql-proxy
-    alias pdb="cloud-sql-proxy aftershoot-co:us-central1:editing-uploader -p 5434"
-    alias sdb="cloud-sql-proxy aftershoot-stage:us-central1:aftershoot-stage-db -p 5436"
-end
-alias jbuild="cd ./secret/jarvis && cargo build --release && cd - && mv ./secret/jarvis/target/release/jarvis ."
+      # Aliases
 
-# Nvim configs
-# alias nvim="/Users/illusion/nvim/bin/nvim"
-alias nv="nvim -u ~/.config/nvim/init.lua"
-alias nvi="nvim -u ~/.config/nvim_dt/init.lua"
-alias nvrc="cd ~/.config/nvim && nv"
-
-# Game alias
-# Game alias - macOS specific path
-if test -f ~/Documents/Games/minecraft/TLauncher-2.885.jar
-    alias minecraft="sudo java -jar ~/Documents/Games/minecraft/TLauncher-2.885.jar"
-end
-
-# Tmux envs
-# Platform-specific paths
-alias sessions="~/dotfiles/scripts/sessions.sh"
-alias long_training_jobs="/Users/illusion/Documents/Work/Editing/DebugHelpers/long_training/long_training_jobs"
-alias gcp_stage="source /Users/illusion/Documents/Work/Creds/gcp_stage.sh"
-alias gcp_prod="source /Users/illusion/Documents/Work/Creds/gcp_prod.sh"
-
-starship init fish | source
-
-# Brew (macOS only)
-if test -f /opt/homebrew/bin/brew
-    eval "$(/opt/homebrew/bin/brew shellenv)"
-else if test -f /usr/local/bin/brew
-    eval "$(/usr/local/bin/brew shellenv)"
-end
+      alias zshconfig="nvim ~/.zshrc"
+      alias ohmyzsh="nvim ~/.oh-my-zsh"
+      alias push="git add -A && git commit -m 'Update' && git push"
+      alias work="cd ~/Documents/Work/"
+      alias rc="cd ~/Documents/randomCodes/"
+      alias mis="cd ~/Documents/Work/MIS/"
+      alias todo="cd ~/Documents/Work/todos"
+      alias kb="uv run ~/Documents/Notes/kanban.py"
+      alias nve="nvim ~/Documents/Notes/Everyday.md"
+      alias editing="cd ~/Documents/Work/Editing/"
+      alias ep="editing && cd Editing-Preprocesser"
+      alias et="editing && cd Editing-Trainer"
+      alias dh="editing && cd EditingDebugHelper"
+      alias sc="editing && cd Scripts"
+      alias ms="editing && cd DebugHelpers/model_sharing"
+      alias fishrc="nv ~/.config/fish/config.fish"
+      alias source_fishrc="source ~/.config/fish/config.fish"
+      alias ls="lsd"
+      alias l="ls"
+      alias geeqie="geeqie --disable-clutter"
+      alias chutes="uv run --project ~/Documents/projects/chutes-tui ~/Documents/projects/chutes-tui/main.py"
+      alias easyeffects="QT_QPA_PLATFORM=xcb command easyeffects"
 
 
-# zoxide
-zoxide init fish | source
-alias cd="z"
+      # Use yazi from system path or homebrew path if available
+      if type -q yazi
+          alias fe="yazi"
+      else if test -f /opt/homebrew/bin/yazi
+          alias fe="/opt/homebrew/bin/yazi"
+      end
+      # alias cat=bat
+      # Cloud SQL aliases (if cloud-sql-proxy is available)
+      if type -q cloud-sql-proxy
+          alias pdb="cloud-sql-proxy aftershoot-co:us-central1:editing-uploader -p 5434"
+          alias sdb="cloud-sql-proxy aftershoot-stage:us-central1:aftershoot-stage-db -p 5436"
+      end
+      alias jbuild="cd ./secret/jarvis && cargo build --release && cd - && mv ./secret/jarvis/target/release/jarvis ."
 
-# For vi key bindings in terminal
-fish_vi_key_bindings
+      # Nvim configs
+      # alias nvim="/Users/illusion/nvim/bin/nvim"
+      alias nv="nvim -u ~/.config/nvim/init.lua"
+      alias nvi="nvim -u ~/.config/nvim_dt/init.lua"
+      alias nvrc="cd ~/.config/nvim && nv"
 
-# Fix binding warning by using the new style for atuin
-# atuin
-atuin init fish --disable-up-arrow | source
+      # Game alias
+      # Game alias - macOS specific path
+      if test -f ~/Documents/Games/minecraft/TLauncher-2.885.jar
+          alias minecraft="sudo java -jar ~/Documents/Games/minecraft/TLauncher-2.885.jar"
+      end
 
-# Rust
-export PATH="$HOME/.cargo/bin:$PATH"
+      # Tmux envs
+      # Platform-specific paths
+      alias sessions="~/dotfiles/scripts/sessions.sh"
+      alias long_training_jobs="/Users/illusion/Documents/Work/Editing/DebugHelpers/long_training/long_training_jobs"
+      alias gcp_stage="source /Users/illusion/Documents/Work/Creds/gcp_stage.sh"
+      alias gcp_prod="source /Users/illusion/Documents/Work/Creds/gcp_prod.sh"
 
-# npm
-export PATH="$HOME/.npm-global/bin:$PATH"
+      starship init fish | source
 
-# Doom emacs
-export PATH="$HOME/.config/emacs/bin:$PATH"
-
-# opam configuration (platform specific)
-if test -f /Users/illusion/.opam/opam-init/init.fish
-    source /Users/illusion/.opam/opam-init/init.fish > /dev/null 2> /dev/null; or true
-else if test -f ~/.opam/opam-init/init.fish
-    source ~/.opam/opam-init/init.fish > /dev/null 2> /dev/null; or true
-end
-
-# GOLANG
-export GOPATH=$HOME/go
-export PATH="$GOPATH/bin:$PATH"
-# export GOTRACEBACK=all
-
-# Zellij (use $HOME for cross-platform compatibility)
-export ZELLIJ_CONFIG_DIR=$HOME/.config/zellij
-export ZELLIJ_CONFIG_FILE=$HOME/.config/zellij/config.kdl
-
-# vcpkg (platform specific)
-if test (uname) = "Darwin"
-    export VCPKG_ROOT="/Users/illusion/Documents/Work/Editing/vcpkg"
-    export PATH="$VCPKG_ROOT:$PATH"
-    export CMAKE_TOOLCHAIN_FILE="$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake"
-    export CMAKE_MAKE_PROGRAM=/usr/bin/make
-else
-    # Linux paths (adjust if needed)
-    if test -d "$HOME/Documents/Work/Editing/vcpkg"
-        export VCPKG_ROOT="$HOME/Documents/Work/Editing/vcpkg"
-        export PATH="$VCPKG_ROOT:$PATH"
-        export CMAKE_TOOLCHAIN_FILE="$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake"
-    end
-    export CMAKE_MAKE_PROGRAM=/usr/bin/make
-end
-# export HOME_MANAGER_CONFIG="~/.config/nixpkgs/"
-
-# Aichat
-function _aichat_fish
-    set -l _old (commandline)
-    if test -n $_old
-        echo -n "⌛"
-        commandline -f repaint
-        commandline (aichat -e $_old)
-    end
-end
-bind --mode insert \cx _aichat_fish
-# function _aichat_fish
-#     # Save the current command line content to a variable
-#     set _old (commandline)
-#
-#     # If the current command line is not empty
-#     if test -n "$_old"
-#         # Print an indicator to show that processing is happening
-#         echo -n "⌛"
-#
-#         # Force a repaint of the command line interface to show the indicator
-#         commandline -f repaint
-#
-#         # Call `aichat` with the current command line content and replace the content with the result
-#         set _new (aichat -e "$_old")
-#
-#         # Replace the command line with the output of the `aichat` command
-#         commandline -r "$_new"
-#     end
-# end
+      # Brew (macOS only)
+      if test -f /opt/homebrew/bin/brew
+          eval "$(/opt/homebrew/bin/brew shellenv)"
+      else if test -f /usr/local/bin/brew
+          eval "$(/usr/local/bin/brew shellenv)"
+      end
 
 
+      # zoxide
+      zoxide init fish | source
+      alias cd="z"
 
-# tmux fzf window
-# function tmux_fzf_window
-#     set -l window_list (tmux list-windows -F '#{window_index} #{window_name}')
-#     set -l window_index (echo "$window_list" | fzf | awk '{ print $1 }')
-#     tmux select-window -t $window_index
-# end
+      # For vi key bindings in terminal
+      fish_vi_key_bindings
 
-# # Conda stuff
-#
-# # >>> conda initialize >>>
-# # !! Contents within this block are managed by 'conda init' !!
-# if test -f /Users/illusion/miniconda3/bin/conda
-#     eval /Users/illusion/miniconda3/bin/conda "shell.fish" "hook" $argv | source
-# else
-#     if test -f "/Users/illusion/miniconda3/etc/fish/conf.d/conda.fish"
-#         . "/Users/illusion/miniconda3/etc/fish/conf.d/conda.fish"
-#     else
-#         set -x PATH "/Users/illusion/miniconda3/bin" $PATH
-#     end
-# end
-# # <<< conda initialize <<<
-#
-# # conda deactivate
-# # conda activate
-#
-# set -x CONDA_PATH /data/miniconda3/bin/conda $HOME/miniconda3/bin/conda
-#
-# function conda
-#     echo "Lazy loading conda upon first invocation..."
-#     functions --erase conda
-#     for conda_path in $CONDA_PATH
-#         if test -f $conda_path
-#             echo "Using Conda installation found in $conda_path"
-#             eval $conda_path "shell.fish" "hook" | source
-#             conda $argv
-#             return
-#         end
-#     end
-#     echo "No conda installation found in $CONDA_PATH"
-# end
-#
-# function ce
-#     conda activate (conda info --envs \
-#         | grep -v '^#' \
-#         | grep -v '^Using Conda' \
-#         | grep -v '^Lazy loading' \
-#         | grep -v '^[[:space:]]*$' \
-#         | fzf \
-#         | awk '{print $1}')
-# end
-#
-# # Conda stuff end
+      # Fix binding warning by using the new style for atuin
+      # atuin
+      atuin init fish --disable-up-arrow | source
+
+      # Rust
+      export PATH="$HOME/.cargo/bin:$PATH"
+
+      # npm
+      export PATH="$HOME/.npm-global/bin:$PATH"
+
+      # Doom emacs
+      export PATH="$HOME/.config/emacs/bin:$PATH"
+
+      # opam configuration (platform specific)
+      if test -f /Users/illusion/.opam/opam-init/init.fish
+          source /Users/illusion/.opam/opam-init/init.fish > /dev/null 2> /dev/null; or true
+      else if test -f ~/.opam/opam-init/init.fish
+          source ~/.opam/opam-init/init.fish > /dev/null 2> /dev/null; or true
+      end
+
+      # GOLANG
+      export GOPATH=$HOME/go
+      export PATH="$GOPATH/bin:$PATH"
+      # export GOTRACEBACK=all
+
+      # Zellij (use $HOME for cross-platform compatibility)
+      export ZELLIJ_CONFIG_DIR=$HOME/.config/zellij
+      export ZELLIJ_CONFIG_FILE=$HOME/.config/zellij/config.kdl
+
+      # vcpkg (platform specific)
+      if test (uname) = "Darwin"
+          export VCPKG_ROOT="/Users/illusion/Documents/Work/Editing/vcpkg"
+          export PATH="$VCPKG_ROOT:$PATH"
+          export CMAKE_TOOLCHAIN_FILE="$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake"
+          export CMAKE_MAKE_PROGRAM=/usr/bin/make
+      else
+          # Linux paths (adjust if needed)
+          if test -d "$HOME/Documents/Work/Editing/vcpkg"
+              export VCPKG_ROOT="$HOME/Documents/Work/Editing/vcpkg"
+              export PATH="$VCPKG_ROOT:$PATH"
+              export CMAKE_TOOLCHAIN_FILE="$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake"
+          end
+          export CMAKE_MAKE_PROGRAM=/usr/bin/make
+      end
+      # export HOME_MANAGER_CONFIG="~/.config/nixpkgs/"
+
+      # Aichat
+      function _aichat_fish
+          set -l _old (commandline)
+          if test -n $_old
+              echo -n "⌛"
+              commandline -f repaint
+              commandline (aichat -e $_old)
+          end
+      end
+      bind --mode insert \cx _aichat_fish
+      # function _aichat_fish
+      #     # Save the current command line content to a variable
+      #     set _old (commandline)
+      #
+      #     # If the current command line is not empty
+      #     if test -n "$_old"
+      #         # Print an indicator to show that processing is happening
+      #         echo -n "⌛"
+      #
+      #         # Force a repaint of the command line interface to show the indicator
+      #         commandline -f repaint
+      #
+      #         # Call `aichat` with the current command line content and replace the content with the result
+      #         set _new (aichat -e "$_old")
+      #
+      #         # Replace the command line with the output of the `aichat` command
+      #         commandline -r "$_new"
+      #     end
+      # end
 
 
-# API keys and endpoints
-# export OPENAI_API_BASE="http://100.95.18.138:42069/v1"
-export OPENAI_API_BASE="http://100.85.231.84:8080/api"
-export AIDER_MODEL="hf:Qwen/Qwen2.5-Coder-32B-Instruct"
-export OLLAMA_HOST="0.0.0.0"
-export SEARXNG_API_URL="http://raspberrypi:8081"
 
-# Safely load API keys if files exist
-if test -f $HOME/Documents/Creds/owui.txt
-    export OPENAI_API_KEY=$(cat $HOME/Documents/Creds/owui.txt)
-end
-if test -f $HOME/Documents/Creds/gemini.txt
-    export GEMINI_API_KEY=$(cat $HOME/Documents/Creds/gemini.txt)
-end
-if test -f $HOME/Documents/Creds/openrouter.txt
-    export OPENROUTER_API_KEY=$(cat $HOME/Documents/Creds/openrouter.txt)
-end
-if test -f $HOME/Documents/Creds/chutes.txt
-    export CHUTES_API_KEY=$(cat $HOME/Documents/Creds/chutes.txt)
-end
-if test -f $HOME/Documents/Creds/huggingface.txt
-    export HF_TOKEN=$(cat $HOME/Documents/Creds/huggingface.txt)
-end
-if test -f $HOME/Documents/Work/Creds/github-mcp.txt
-    export GITHUB_MCP_TOKEN=$(cat $HOME/Documents/Work/Creds/github-mcp.txt)
-end
+      # tmux fzf window
+      # function tmux_fzf_window
+      #     set -l window_list (tmux list-windows -F '#{window_index} #{window_name}')
+      #     set -l window_index (echo "$window_list" | fzf | awk '{ print $1 }')
+      #     tmux select-window -t $window_index
+      # end
 
-direnv hook fish | source
+      # # Conda stuff
+      #
+      # # >>> conda initialize >>>
+      # # !! Contents within this block are managed by 'conda init' !!
+      # if test -f /Users/illusion/miniconda3/bin/conda
+      #     eval /Users/illusion/miniconda3/bin/conda "shell.fish" "hook" $argv | source
+      # else
+      #     if test -f "/Users/illusion/miniconda3/etc/fish/conf.d/conda.fish"
+      #         . "/Users/illusion/miniconda3/etc/fish/conf.d/conda.fish"
+      #     else
+      #         set -x PATH "/Users/illusion/miniconda3/bin" $PATH
+      #     end
+      # end
+      # # <<< conda initialize <<<
+      #
+      # # conda deactivate
+      # # conda activate
+      #
+      # set -x CONDA_PATH /data/miniconda3/bin/conda $HOME/miniconda3/bin/conda
+      #
+      # function conda
+      #     echo "Lazy loading conda upon first invocation..."
+      #     functions --erase conda
+      #     for conda_path in $CONDA_PATH
+      #         if test -f $conda_path
+      #             echo "Using Conda installation found in $conda_path"
+      #             eval $conda_path "shell.fish" "hook" | source
+      #             conda $argv
+      #             return
+      #         end
+      #     end
+      #     echo "No conda installation found in $CONDA_PATH"
+      # end
+      #
+      # function ce
+      #     conda activate (conda info --envs \
+      #         | grep -v '^#' \
+      #         | grep -v '^Using Conda' \
+      #         | grep -v '^Lazy loading' \
+      #         | grep -v '^[[:space:]]*$' \
+      #         | fzf \
+      #         | awk '{print $1}')
+      # end
+      #
+      # # Conda stuff end
+
+
+      # API keys and endpoints
+      # export OPENAI_API_BASE="http://100.95.18.138:42069/v1"
+      export OPENAI_API_BASE="http://100.85.231.84:8080/api"
+      export AIDER_MODEL="hf:Qwen/Qwen2.5-Coder-32B-Instruct"
+      export OLLAMA_HOST="0.0.0.0"
+      export SEARXNG_API_URL="http://raspberrypi:8081"
+
+      # Safely load API keys if files exist
+      if test -f $HOME/Documents/Creds/owui.txt
+          export OPENAI_API_KEY=$(cat $HOME/Documents/Creds/owui.txt)
+      end
+      if test -f $HOME/Documents/Creds/gemini.txt
+          export GEMINI_API_KEY=$(cat $HOME/Documents/Creds/gemini.txt)
+      end
+      if test -f $HOME/Documents/Creds/openrouter.txt
+          export OPENROUTER_API_KEY=$(cat $HOME/Documents/Creds/openrouter.txt)
+      end
+      if test -f $HOME/Documents/Creds/chutes.txt
+          export CHUTES_API_KEY=$(cat $HOME/Documents/Creds/chutes.txt)
+      end
+      if test -f $HOME/Documents/Creds/huggingface.txt
+          export HF_TOKEN=$(cat $HOME/Documents/Creds/huggingface.txt)
+      end
+      if test -f $HOME/Documents/Work/Creds/github-mcp.txt
+          export GITHUB_MCP_TOKEN=$(cat $HOME/Documents/Work/Creds/github-mcp.txt)
+      end
+      if test -f $HOME/Documents/Work/Creds/linear.txt
+          export LINEAR_API_KEY=$(cat $HOME/Documents/Work/Creds/linear.txt)
+      end
+
+      direnv hook fish | source
     '';
   };
 }
