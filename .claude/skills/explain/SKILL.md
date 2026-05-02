@@ -1,14 +1,14 @@
 ---
 name: explain
-description: Write a 1-page .flow/<slug>/EXPLAIN.md summarizing the named task — problem, solution, why-it-works, when-it-won't, files changed, decisions worth remembering. Argument is the task slug. Run after /audit returns SHIP.
+description: Write a 1-page ~/.flow/<slug>/EXPLAIN.md summarizing the named task — problem, solution, why-it-works, when-it-won't, files changed, decisions worth remembering. Argument is the task slug. Run after /audit returns SHIP.
 argument-hint: <task-slug>
 ---
 
 # /explain
 
-Produce a 1-page `.flow/<slug>/EXPLAIN.md` that captures, in one place, what to tell anyone who later asks **"why did we do this?"** or **"why so much code for that?"**.
+Produce a 1-page `~/.flow/<slug>/EXPLAIN.md` that captures, in one place, what to tell anyone who later asks **"why did we do this?"** or **"why so much code for that?"**.
 
-Only runs inside `~/Documents/Work/Editing/`. If cwd is elsewhere, say so and stop.
+Runs from any cwd. Resolves repo paths relative to the task root saved in `~/.flow/<slug>/ROOT`.
 
 ## Step 0 — Validate slug
 
@@ -22,9 +22,11 @@ Then stop.
 
 ```bash
 SLUG="$ARGUMENTS"
-DIR="$HOME/Documents/Work/Editing/.flow/$SLUG"
+DIR="$HOME/.flow/$SLUG"
+ROOT=$(cat "$DIR/ROOT" 2>/dev/null) || ROOT="$(pwd)"
 [[ -f "$DIR/PLAN.md"   ]] && echo "PLAN=yes"   || echo "PLAN=no"
 [[ -f "$DIR/REVIEW.md" ]] && echo "REVIEW=yes" || echo "REVIEW=no"
+echo "ROOT=$ROOT"
 ```
 
 - `PLAN=no` → tell user no plan for slug `<slug>` — run `/draft <slug> <mode>` and `/build <slug>` first. Stop.
@@ -39,10 +41,10 @@ If REVIEW.md exists, read its `## Verdict`:
 
 Read PLAN.md fully. If REVIEW.md exists, read it too — its findings inform "When it WON'T work" and "Decisions".
 
-Capture diff stats by running, for each touched repo (per PLAN's `## Changes`):
+Capture diff stats by running, for each touched repo (per PLAN's `## Changes`). To find each repo: take each unique first path component; if `$ROOT/<component>/.git` exists, that's a repo. If no components are git repos, use `$ROOT` itself.
 
 ```bash
-cd "$HOME/Documents/Work/Editing/<repo>"
+cd "$REPO_DIR"
 git diff --stat HEAD
 ```
 
@@ -96,10 +98,10 @@ Rules:
 
 Output **only**:
 
-> EXPLAIN.md written at `.flow/<slug>/EXPLAIN.md`.
+> EXPLAIN.md written at `~/.flow/<slug>/EXPLAIN.md`.
 > Diff: \<+X / -Y\> across \<N\> files.
 >
-> Paste into the PR description. The task directory `.flow/<slug>/` keeps the full
+> Paste into the PR description. The task directory `~/.flow/<slug>/` keeps the full
 > record (PLAN, REVIEW, EXPLAIN) until you delete it.
 
 Stop.

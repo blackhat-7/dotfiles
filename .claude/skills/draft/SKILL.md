@@ -1,14 +1,14 @@
 ---
 name: draft
-description: Draft a plan to .flow/<slug>/PLAN.md for the named task. Two arguments — task slug (kebab-case, must match a /understand task) and mode (patch | clean | refactor). Run after /understand.
+description: Draft a plan to ~/.flow/<slug>/PLAN.md for the named task. Two arguments — task slug (kebab-case, must match a /understand task) and mode (patch | clean | refactor). Run after /understand.
 argument-hint: <task-slug> <patch|clean|refactor>
 ---
 
 # /draft
 
-Draft `~/Documents/Work/Editing/.flow/<slug>/PLAN.md` for the problem just discussed in chat. Stop after writing — do not implement.
+Draft `~/.flow/<slug>/PLAN.md` for the problem just discussed in chat. Stop after writing — do not implement.
 
-Only runs inside `~/Documents/Work/Editing/`. If cwd is elsewhere, say so and stop.
+Runs from any cwd. The task directory was set up by `/understand`; this step requires it to exist.
 
 ## Step 0 — Validate args
 
@@ -22,7 +22,7 @@ Then stop.
 
 ```bash
 read SLUG MODE <<< "$ARGUMENTS"
-DIR="$HOME/Documents/Work/Editing/.flow/$SLUG"
+DIR="$HOME/.flow/$SLUG"
 [[ -d "$DIR" ]] || { echo "NO_TASK"; exit 0; }
 [[ -f "$DIR/PLAN.md" ]] && echo "EXISTS" || echo "NEW"
 ```
@@ -75,13 +75,13 @@ If you can't answer all three for a piece, drop it.
 
 ## Step 4 — Write `.flow/<slug>/PLAN.md`
 
-Write `$HOME/Documents/Work/Editing/.flow/<slug>/PLAN.md`. Header line:
+Write `$HOME/.flow/<slug>/PLAN.md`. Header line:
 
 ```
 # Plan: <slug> — mode: <patch|clean|refactor>
 ```
 
-Then the sections below for the chosen mode. ≤1 page rendered (≤2 for refactor). Bullets > prose. File:line precision in `## Changes` is required for all modes — vague targets ("the auth module") are forbidden. Use full paths from the work folder (e.g. `editing-trainer/src/foo.py:42`).
+Then the sections below for the chosen mode. ≤1 page rendered (≤2 for refactor). Bullets > prose. File:line precision in `## Changes` is required for all modes — vague targets ("the auth module") are forbidden. Use paths relative to the task root recorded in `~/.flow/<slug>/ROOT` (e.g. `editing-trainer/src/foo.py:42` for a multi-repo parent, or `src/foo.py:42` for a single repo).
 
 ### Sections — `patch`
 
@@ -100,8 +100,8 @@ if you've actually convinced yourself.
 What's hacky. Why hacky-but-correct beats cleaner alternatives here.
 
 ## Changes
-file:line — what changes, in 1 line. One bullet per hunk. Use full paths from
-the work folder.
+file:line — what changes, in 1 line. One bullet per hunk. Paths relative to the
+task root.
 
 ## Edge cases verified
 For each edge case from PROBLEM, how this plan addresses it.
@@ -133,7 +133,7 @@ downgrade to patch.
 Bullets.
 
 ## Changes
-file:line — one line per hunk. Group by file. Full paths.
+file:line — one line per hunk. Group by file. Paths relative to the task root.
 
 ## New helper   [include only if adding one file]
 Path. One-line purpose. Math: removes ~N lines from <file>, adds ~M lines in

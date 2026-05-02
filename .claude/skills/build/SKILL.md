@@ -1,14 +1,14 @@
 ---
 name: build
-description: Implement strictly according to .flow/<slug>/PLAN.md for the named task. Halt on any deviation — append "## Build notes" to PLAN.md, stop, and ask. Argument is the task slug. Run after /draft.
+description: Implement strictly according to ~/.flow/<slug>/PLAN.md for the named task. Halt on any deviation — append "## Build notes" to PLAN.md, stop, and ask. Argument is the task slug. Run after /draft.
 argument-hint: <task-slug>
 ---
 
 # /build
 
-Implement **strictly** according to `~/Documents/Work/Editing/.flow/<slug>/PLAN.md`. Every diff hunk must trace to a PLAN.md line. **Halt on any deviation**: stop, write what you found, ask. Do not paper over snags. Do not expand scope.
+Implement **strictly** according to `~/.flow/<slug>/PLAN.md`. Every diff hunk must trace to a PLAN.md line. **Halt on any deviation**: stop, write what you found, ask. Do not paper over snags. Do not expand scope.
 
-Only runs inside `~/Documents/Work/Editing/`. If cwd is elsewhere, say so and stop.
+Runs from any cwd. Resolves repo paths relative to the task root saved in `~/.flow/<slug>/ROOT` (set by `/understand`).
 
 ## Step 0 — Validate slug
 
@@ -22,11 +22,15 @@ Then stop.
 
 ```bash
 SLUG="$ARGUMENTS"
-PLAN="$HOME/Documents/Work/Editing/.flow/$SLUG/PLAN.md"
-[[ -f "$PLAN" ]] && echo "OK" || echo "MISSING"
+DIR="$HOME/.flow/$SLUG"
+PLAN="$DIR/PLAN.md"
+ROOT=$(cat "$DIR/ROOT" 2>/dev/null) || ROOT="$(pwd)"
+[[ -f "$PLAN" ]] && echo "OK root=$ROOT" || echo "MISSING"
 ```
 
 If `MISSING`: tell user no plan exists for slug `<slug>` — run `/draft <slug> <mode>` first. Stop.
+
+`ROOT` is the directory the user was in at `/understand` time. All `## Changes` paths in PLAN.md are relative to it.
 
 ## Step 2 — Read the plan once, fully
 
@@ -66,7 +70,7 @@ When you hit one:
 
 After the last planned change:
 
-1. Run `git diff HEAD` in each touched repo. Read the actual diff, all of it.
+1. Run `git diff HEAD` in each touched repo. To find the repos, take each unique first path component from PLAN's `## Changes`; if `$ROOT/<component>/.git` exists, treat it as a repo and `cd "$ROOT/<component>"`. If no components are git repos (single-repo task), `cd "$ROOT"` and diff there. Read the actual diff, all of it.
 2. Cross-check yourself:
    - Every hunk traces to a PLAN.md line?
    - Every PLAN.md `## Changes` line has a corresponding hunk?

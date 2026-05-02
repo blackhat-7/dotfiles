@@ -1,6 +1,6 @@
 ---
 name: understand
-description: Start a flow task by reading code, asking sharp questions, and outputting a bulleted PROBLEM summary in chat. Argument is a kebab-case task slug (e.g. fix-jpeg-corrupt). Creates .flow/<slug>/ as the task directory. PROBLEM stays in chat — no file is written.
+description: Start a flow task by reading code, asking sharp questions, and outputting a bulleted PROBLEM summary in chat. Argument is a kebab-case task slug (e.g. fix-jpeg-corrupt). Creates ~/.flow/<slug>/ as the task directory and saves the cwd as ROOT. PROBLEM stays in chat — no file is written.
 argument-hint: <task-slug>
 ---
 
@@ -8,7 +8,7 @@ argument-hint: <task-slug>
 
 Start a flow task. Deeply understand the problem before any code or plan exists. Output is bullets in chat — **no PROBLEM.md file is written**. You **do not** propose solutions, suggest approaches, or sketch fixes.
 
-Only runs inside `~/Documents/Work/Editing/`. If cwd is elsewhere, say so and stop.
+Runs from any cwd. The task directory lives at `~/.flow/<slug>/` and remembers the cwd at start time so later steps (`/build`, `/audit`, `/explain`) know where to diff.
 
 ## Step 0 — Validate slug
 
@@ -24,10 +24,13 @@ Then stop.
 
 ```bash
 SLUG="$ARGUMENTS"
-DIR="$HOME/Documents/Work/Editing/.flow/$SLUG"
+DIR="$HOME/.flow/$SLUG"
 mkdir -p "$DIR"
+pwd > "$DIR/ROOT"
 [[ -f "$DIR/PLAN.md" ]] && echo "EXISTS_WITH_PLAN" || echo "OK"
 ```
+
+`ROOT` records the cwd so later flow steps can resolve repo paths even from a different terminal.
 
 If `EXISTS_WITH_PLAN`: a previous plan exists for this slug. Tell the user and ask whether they want to extend the existing task (re-run `/draft <slug> <mode>` to overwrite) or pick a different slug. Stop.
 
@@ -45,7 +48,7 @@ Read aggressively. Do **not** guess.
 
 - Bug: trace symptom to code, find where it actually originates.
 - Feature: find the seams it would attach to; understand the surrounding contracts.
-- Multi-repo: search across `editing-preprocesser`, `editing-trainer`, `editing-ml`, `aftershoot-cloud`, plus `-2`/`-3` clones.
+- Multi-repo: if cwd is a parent of repos, search across each relevant repo.
 
 One short sentence at the start ("reading X to find Y") and a brief signal when you find the relevant code. Don't narrate every file.
 
@@ -64,8 +67,9 @@ Root cause traced to code. Cite file:line. The actual mechanism, not a guess.
 What must not change. APIs, data shapes, perf budgets, callers, on-disk formats. Bullets.
 
 ## Affected surface
-Files (across all repos) the change will likely touch. Full paths from the work
-folder (e.g. editing-trainer/src/foo.py). Bullets.
+Files (across all repos) the change will likely touch. Paths relative to the
+task root, the cwd when /understand was run (e.g. `editing-trainer/src/foo.py`
+in a multi-repo parent, or `src/foo.py` in a single repo). Bullets.
 
 ## Edge cases
 Cases the solution must not break. Concrete inputs/states, not "handles errors".
@@ -93,7 +97,7 @@ Stop. Do not start planning.
 ## Forbidden
 
 - Proposing solutions, fixes, or approaches anywhere
-- Writing any file (PROBLEM stays in chat; only the empty `.flow/<slug>/` dir is created)
+- Writing any file (PROBLEM stays in chat; only `~/.flow/<slug>/` and its `ROOT` marker are created)
 - Editing application code
 - Walls of text — bullets only
 - Running `/draft` on the user's behalf
