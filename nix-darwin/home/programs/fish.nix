@@ -73,23 +73,6 @@
           git push
           popd >/dev/null
         '';
-        mcp-on = ''
-          jq --argjson e (jq -c --arg n $argv[1] '.mcpServers[$n]' $HOME/.config/mcp/mcp.catalog.json) --arg n $argv[1] '.mcpServers[$n] = $e' $HOME/.config/mcp/mcp.json | sponge $HOME/.config/mcp/mcp.json
-        '';
-        mcp-off = ''
-          jq --arg n $argv[1] 'del(.mcpServers[$n])' $HOME/.config/mcp/mcp.json | sponge $HOME/.config/mcp/mcp.json
-        '';
-        mcp-list = ''
-          set -l catalog $HOME/.config/mcp/mcp.catalog.json
-          set -l active $HOME/.config/mcp/mcp.json
-          for name in (jq -r '.mcpServers | keys[]' $catalog)
-              if jq -e --arg n $name '.mcpServers | has($n)' $active >/dev/null
-                  echo "✓ $name"
-              else
-                  echo "✗ $name"
-              end
-          end
-        '';
     };
     shellInit = ''
 if status is-interactive
@@ -138,10 +121,7 @@ alias pdb="cloud-sql-proxy aftershoot-co:us-central1:editing-uploader -p 5434"
 alias sdb="cloud-sql-proxy aftershoot-stage:us-central1:aftershoot-stage-db -p 5436"
 alias jbuild="cd ./secret/jarvis && cargo build --release && cd - && mv ./secret/jarvis/target/release/jarvis ."
 alias initflake="~/dotfiles/scripts/init-direnv-flake.sh"
-alias ccr-local="ccr code --model local,Qwen3.5-9B-Q4_K_M.gguf"
 alias chutes="uv run --project ~/Documents/projects/chutes-tui ~/Documents/projects/chutes-tui/main.py"
-        alias ccr-glm="ccr code --model chutes,zai-org/GLM-5.1-TEE"
-alias ccr-kimi="ccr code --model chutes,moonshotai/Kimi-K2.5-TEE"
 
 # Nvim configs
 alias nv="nvim -u ~/.config/nvim/init.lua"

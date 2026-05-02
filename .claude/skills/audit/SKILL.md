@@ -1,12 +1,12 @@
 ---
 name: audit
-description: Run an independent fresh-context review of the named task. Spawns the reviewer subagent with ~/.flow/<slug>/PLAN.md and the actual git diffs from touched repos. Reviewer writes ~/.flow/<slug>/REVIEW.md. Argument is the task slug. Run after /build.
+description: Run an independent review of the named flow task. Reviews ~/.flow/<slug>/PLAN.md against actual git diffs from touched repos and writes ~/.flow/<slug>/REVIEW.md. Uses reviewer subagent when available in Claude Code/opencode; falls back to inline review in Pi or harnesses without subagents. Argument is the task slug. Run after /build.
 argument-hint: <task-slug>
 ---
 
 # /audit
 
-Run an **independent** review for the named task. The review runs in a fresh-context subagent with no memory of the build — it sees only the plan and the actual diff. Catches drift between PLAN and reality, bloat, missed edge cases, and bugs.
+Run an independent review for the named task. The review sees only the plan and the actual diff. Catches drift between PLAN and reality, bloat, missed edge cases, and bugs.
 
 Runs from any cwd. Resolves repo paths relative to the task root saved in `~/.flow/<slug>/ROOT`.
 
@@ -50,9 +50,17 @@ If a repo has uncommitted changes that aren't in PLAN.md (e.g., unrelated WIP), 
 
 If `git diff HEAD` is empty everywhere — likely the build was already committed. Tell the user to either run `/audit` before committing next time, or to specify the base ref.
 
-## Step 4 — Dispatch the reviewer subagent
+## Step 4 — Review dispatch
 
-Spawn the `reviewer` subagent (foreground) with this prompt. Do not paste diff contents — the subagent will read fresh from disk and from `git diff` itself.
+Use the strongest available review path:
+
+1. **Claude Code**: spawn the `reviewer` subagent in foreground with the prompt below. Use `subagent_type: "reviewer"`.
+2. **opencode with reviewer agent/subagent available**: dispatch the generated `reviewer` subagent with the same prompt.
+3. **Pi or no usable subagent**: perform the review inline using the same procedure and output format below. Note in `REVIEW.md` under `## Mode-specific` that the review was inline, not fresh-context.
+
+Do not paste diff contents into chat. The reviewer path reads from disk and from `git diff` itself.
+
+Prompt for subagent paths:
 
 ```
 Audit a flow task against its plan. You have NO prior context.
@@ -71,12 +79,67 @@ what code does. Plan-build trace is the contract.
 
 Be skeptical. Be specific. Cite file:line.
 
-Output to ~/.flow/<slug>/REVIEW.md using the format in your agent
-definition. End your reply with one line:
+Output to ~/.flow/<slug>/REVIEW.md using the format below. End your reply with one line:
 "REVIEW.md written. Verdict: <SHIP | NEEDS-FIXES | RE-PLAN>."
 ```
 
-Use `subagent_type: "reviewer"`.
+## Reviewer procedure and output format
+
+Whether subagent or inline:
+
+1. Read PLAN.md fully.
+2. Run `git diff HEAD` in each touched repo and read every hunk.
+3. Cross-check:
+   - Every diff hunk maps to a PLAN line; untraceable hunks are bloat.
+   - Every PLAN `## Changes` line has a matching hunk; missing hunks are missing work.
+   - Every PLAN `## Edge cases verified` item is supported by real changed lines.
+   - Surrounding code has no logic errors, missed cases, type/contract mismatches, races, broken file formats, or bad generated config.
+   - Mode budget and new-file rules are satisfied.
+
+Write `~/.flow/<slug>/REVIEW.md` with exactly:
+
+```markdown
+# Audit: <slug>
+
+Mode: <patch | clean | refactor>
+Repos: <repo1>, <repo2>, ...
+
+## Plan-build drift
+Concrete deviations between PLAN.md and the diff. For each: PLAN reference, diff reference, what differs, severity (blocker / minor).
+Or: "None."
+
+## Bugs
+Logic errors, missed edge cases, off-by-one, races, type/contract mismatches.
+For each: file:line, what's wrong, what would happen at runtime.
+Or: "None."
+
+## Bloat
+Diff hunks that don't trace to a PLAN line, OR violate the rules.
+For each: file:line, why it shouldn't be there, suggested removal.
+Or: "None."
+
+## Missing
+PLAN.md `## Changes` lines with no corresponding diff. PLAN edge cases not handled in the diff.
+For each: PLAN reference, what's missing, what should exist.
+Or: "None."
+
+## Mode-specific
+patch: actual diff size vs ≤100; new files (must be 0).
+clean: diff size vs ≤300; new files (≤1, net-negative); is the result actually simpler than before?
+refactor: each new file justified (why exists / what considered / why won)? architecture matches diff? migration plan present?
+Mention "inline review" here if no subagent was used.
+Or: "None."
+
+## Verdict
+One of: SHIP / NEEDS-FIXES / RE-PLAN
+
+One sentence why.
+```
+
+Verdicts:
+- `SHIP` — no blockers. Minor findings can be left or fixed before merge.
+- `NEEDS-FIXES` — bugs, drift, or bloat that must be fixed; the plan is right, the build is wrong.
+- `RE-PLAN` — the build is faithful but the plan itself doesn't solve the problem, or the architecture is wrong.
 
 ## Step 5 — Surface the verdict
 
@@ -95,7 +158,7 @@ Do **not** start fixing things yourself. Do not run `/explain` or `/build`.
 
 ## Forbidden
 
-- Doing the review yourself instead of dispatching the subagent — fresh context is the point.
-- Pasting diff or plan contents into chat — they're on disk.
 - Fixing issues found by the audit — that's a separate pass after the user reviews.
 - Running this without `~/.flow/<slug>/PLAN.md` — there's no contract to audit against.
+- Pasting full diffs into chat.
+- In subagent-capable harnesses, doing inline review when a `reviewer` subagent is available.

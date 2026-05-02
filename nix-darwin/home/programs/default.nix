@@ -112,47 +112,6 @@
     bun.enable = true;
   };
 
-  home.activation.writeCcrConfig = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-    mkdir -p "$HOME/.claude-code-router"
-    cat > "$HOME/.claude-code-router/config.json" <<'EOF'
-{
-  "Providers": [
-    {
-      "name": "local",
-      "api_base_url": "http://100.64.0.1:6868/v1/messages",
-      "api_key": "none",
-      "models": [
-        "Qwen3.5-9B-Q4_K_M.gguf"
-      ],
-      "transformer": {
-        "use": [
-          "Anthropic"
-        ]
-      }
-    },
-    {
-      "name": "chutes",
-      "api_base_url": "https://llm.chutes.ai/v1/chat/completions",
-      "api_key": "$CHUTES_API_KEY",
-      "models": [
-        "zai-org/GLM-5-Turbo",
-        "moonshotai/Kimi-K2.5-TEE"
-      ],
-      "transformer": {
-        "use": [
-          "deepseek"
-        ]
-      }
-    }
-  ],
-  "Router": {
-    "default": "chutes,zai-org/GLM-5-Turbo",
-    "background": "local,Qwen3.5-9B-Q4_K_M.gguf"
-  }
-}
-EOF
-  '';
-
   home.activation.install-uv-tools = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
     tools="
       basedpyright
@@ -172,31 +131,5 @@ EOF
     "$npm_bin/pi" install npm:pi-mcp-adapter || true
     "$npm_bin/pi" install npm:permission-pi || true
 
-    # permission-pi plays /System/Library/Sounds/Funk.aiff (or terminal bell) for prompts.
-    # Replace that with a silent macOS notification banner, similar to Claude Code alerts.
-    permission_ext="${config.home.homeDirectory}/.npm-global/lib/node_modules/permission-pi/permission.ts"
-    if [[ -f "$permission_ext" ]]; then
-      ${pkgs.python313}/bin/python - <<'PY'
-import re
-from pathlib import Path
-
-path = Path.home() / ".npm-global/lib/node_modules/permission-pi/permission.ts"
-text = path.read_text()
-new = """function playPermissionSound(): void {
-  if (process.platform !== "darwin") return;
-
-  exec('${pkgs.terminal-notifier}/bin/terminal-notifier -title "Pi" -message "Permission required" -group "pi-permission" 2>/dev/null || true');
-}"""
-patched = re.sub(
-    r"function playPermissionSound\(\): void \{.*?\n\}",
-    new,
-    text,
-    count=1,
-    flags=re.S,
-)
-if patched != text:
-    path.write_text(patched)
-PY
-    fi
   '';
 }
