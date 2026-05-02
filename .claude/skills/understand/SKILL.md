@@ -1,36 +1,40 @@
 ---
 name: understand
-description: Start a flow task by reading code, asking sharp questions, and outputting a bulleted PROBLEM summary in chat. Argument is a kebab-case task slug (e.g. fix-jpeg-corrupt). Creates ~/.flow/<slug>/ as the task directory and saves the cwd as ROOT. PROBLEM stays in chat — no file is written.
-argument-hint: <task-slug>
+description: Start a flow task by reading code, asking sharp questions, and outputting a bulleted PROBLEM summary in chat. Optional argument is a kebab-case task slug (e.g. fix-jpeg-corrupt); if omitted, derive one from the user's request. Creates ~/.flow/<slug>/ as the task directory and marks it as the current flow task for this terminal/session context. PROBLEM stays in chat — no file is written.
+argument-hint: "[task-slug]"
 ---
 
 # /understand
 
 Start a flow task. Deeply understand the problem before any code or plan exists. Output is bullets in chat — **no PROBLEM.md file is written**. You **do not** propose solutions, suggest approaches, or sketch fixes.
 
-Runs from any cwd. The task directory lives at `~/.flow/<slug>/` and remembers the cwd at start time so later steps (`/build`, `/audit`, `/explain`) know where to diff.
+The task directory lives at `~/.flow/<slug>/`.
 
 ## Step 0 — Validate slug
 
 Slug: `$ARGUMENTS`
 
-Must match `[a-z0-9][a-z0-9-]*` (kebab-case, no spaces, no slashes, no uppercase). If empty or invalid, reply:
+Must match `[a-z0-9][a-z0-9-]*` (kebab-case, no spaces, no slashes, no uppercase). If empty and the invoking message has enough detail, derive a short kebab-case slug from the user's request (3–6 words; e.g. "fix JPEG corrupt" → `fix-jpeg-corrupt`) and use it. If empty and the invoking message does not have enough detail, ask the Step 2 one-line-description question first, then derive the slug from the answer and continue setup. If invalid, reply:
 
-> Task slug required. Usage: `/understand <kebab-case-slug>` (e.g. `/understand fix-jpeg-corrupt`).
+> Usage: `/understand [kebab-case-slug]` (e.g. `/understand fix-jpeg-corrupt`).
 
 Then stop.
 
 ## Step 1 — Set up task directory
 
 ```bash
-SLUG="$ARGUMENTS"
+SLUG="$ARGUMENTS"  # if empty, use the derived slug from Step 0
 DIR="$HOME/.flow/$SLUG"
-mkdir -p "$DIR"
-pwd > "$DIR/ROOT"
-[[ -f "$DIR/PLAN.md" ]] && echo "EXISTS_WITH_PLAN" || echo "OK"
+CURRENT_KEY="${PI_FLOW_SESSION_KEY:-${STARSHIP_SESSION_KEY:-${ATUIN_SESSION:-${KITTY_PID:-$(pwd | shasum | cut -c1-12)}}}}"
+CURRENT_FILE="$HOME/.flow/current/$CURRENT_KEY"
+if [[ -f "$DIR/PLAN.md" ]]; then
+  echo "EXISTS_WITH_PLAN"
+else
+  mkdir -p "$DIR" "$(dirname "$CURRENT_FILE")"
+  printf '%s\n' "$SLUG" > "$CURRENT_FILE"
+  echo "OK"
+fi
 ```
-
-`ROOT` records the cwd so later flow steps can resolve repo paths even from a different terminal.
 
 If `EXISTS_WITH_PLAN`: a previous plan exists for this slug. Tell the user and ask whether they want to extend the existing task (re-run `/draft <slug> <mode>` to overwrite) or pick a different slug. Stop.
 
@@ -68,8 +72,7 @@ What must not change. APIs, data shapes, perf budgets, callers, on-disk formats.
 
 ## Affected surface
 Files (across all repos) the change will likely touch. Paths relative to the
-task root, the cwd when /understand was run (e.g. `editing-trainer/src/foo.py`
-in a multi-repo parent, or `src/foo.py` in a single repo). Bullets.
+current workspace (e.g. `editing-trainer/src/foo.py` in a multi-repo parent, or `src/foo.py` in a single repo). Bullets.
 
 ## Edge cases
 Cases the solution must not break. Concrete inputs/states, not "handles errors".
@@ -90,14 +93,15 @@ Rules:
 After the bulleted output, end with one short line:
 
 > Task `<slug>` started. Open questions: \<N\>. Answer them in chat, then run one of:
-> `/draft <slug> patch` · `/draft <slug> clean` · `/draft <slug> refactor`
+> `/draft patch` · `/draft clean` · `/draft refactor`
+> (`<slug>` is now the current flow task for this terminal/session context; explicit `/draft <slug> patch` still works.)
 
 Stop. Do not start planning.
 
 ## Forbidden
 
 - Proposing solutions, fixes, or approaches anywhere
-- Writing any file (PROBLEM stays in chat; only `~/.flow/<slug>/` and its `ROOT` marker are created)
+- Writing any file (PROBLEM stays in chat; only `~/.flow/<slug>/` and `~/.flow/current/<context-key>` are created)
 - Editing application code
 - Walls of text — bullets only
 - Running `/draft` on the user's behalf

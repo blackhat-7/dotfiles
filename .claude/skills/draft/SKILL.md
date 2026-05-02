@@ -1,7 +1,7 @@
 ---
 name: draft
-description: Draft a plan to ~/.flow/<slug>/PLAN.md for the named task. Two arguments — task slug (kebab-case, must match a /understand task) and mode (patch | clean | refactor). Run after /understand.
-argument-hint: <task-slug> <patch|clean|refactor>
+description: Draft a plan to ~/.flow/<slug>/PLAN.md for the named task. Arguments are either `<slug> <mode>` or just `<mode>`; when slug is omitted, use the current flow task for this terminal/session context. Mode is patch | clean | refactor. Run after /understand.
+argument-hint: "[task-slug] <patch|clean|refactor>"
 ---
 
 # /draft
@@ -12,22 +12,45 @@ Runs from any cwd. The task directory was set up by `/understand`; this step req
 
 ## Step 0 — Validate args
 
-`$ARGUMENTS` must be `<slug> <mode>` (whitespace-separated). Slug must match `[a-z0-9][a-z0-9-]*`. Mode must be exactly one of `patch`, `clean`, `refactor`. If anything is missing or invalid, reply:
+`$ARGUMENTS` may be either `<slug> <mode>` or just `<mode>` (whitespace-separated). Slug must match `[a-z0-9][a-z0-9-]*`. Mode must be exactly one of `patch`, `clean`, `refactor`.
 
-> Usage: `/draft <slug> <patch|clean|refactor>` (e.g. `/draft fix-jpeg-corrupt patch`).
+If only `<mode>` is provided, resolve slug from the current-flow file for this terminal/session context: `$HOME/.flow/current/<context-key>`. If it is missing, empty, or points to a missing task directory, ask for an explicit slug.
+
+If anything is missing or invalid, reply:
+
+> Usage: `/draft [task-slug] <patch|clean|refactor>` (e.g. `/draft patch` or `/draft fix-jpeg-corrupt patch`).
 
 Then stop.
 
 ## Step 1 — Locate state
 
 ```bash
-read SLUG MODE <<< "$ARGUMENTS"
+CURRENT_KEY="${PI_FLOW_SESSION_KEY:-${STARSHIP_SESSION_KEY:-${ATUIN_SESSION:-${KITTY_PID:-$(pwd | shasum | cut -c1-12)}}}}"
+CURRENT_FILE="$HOME/.flow/current/$CURRENT_KEY"
+FROM_CURRENT=0
+set -- $ARGUMENTS
+if [[ $# -eq 1 ]]; then
+  FROM_CURRENT=1
+  MODE="$1"
+  SLUG=$(cat "$CURRENT_FILE" 2>/dev/null)
+elif [[ $# -eq 2 ]]; then
+  SLUG="$1"
+  MODE="$2"
+else
+  echo "BAD_ARGS"; exit 0
+fi
+[[ "$MODE" =~ ^(patch|clean|refactor)$ ]] || { echo "BAD_ARGS"; exit 0; }
+[[ "$SLUG" =~ ^[a-z0-9][a-z0-9-]*$ ]] || { echo "BAD_ARGS"; exit 0; }
 DIR="$HOME/.flow/$SLUG"
-[[ -d "$DIR" ]] || { echo "NO_TASK"; exit 0; }
+[[ -d "$DIR" ]] || { echo "NO_TASK from_current=$FROM_CURRENT"; exit 0; }
+mkdir -p "$(dirname "$CURRENT_FILE")"
+printf '%s\n' "$SLUG" > "$CURRENT_FILE"
 [[ -f "$DIR/PLAN.md" ]] && echo "EXISTS" || echo "NEW"
 ```
 
-- `NO_TASK`: tell user to run `/understand <slug>` first. Stop.
+- `BAD_ARGS`: show the usage from Step 0. Stop.
+- `NO_TASK from_current=1`: tell user no current flow task exists for this terminal/session context and ask for `/draft <slug> <mode>` or `/understand [slug]`. Stop.
+- `NO_TASK from_current=0`: tell user to run `/understand <slug>` first. Stop.
 - `EXISTS`: read the file, summarize its mode and approach in 3 bullets, ask whether to replace it. Stop unless the user says replace.
 
 ## Step 2 — Confirm problem context
@@ -81,7 +104,7 @@ Write `$HOME/.flow/<slug>/PLAN.md`. Header line:
 # Plan: <slug> — mode: <patch|clean|refactor>
 ```
 
-Then the sections below for the chosen mode. ≤1 page rendered (≤2 for refactor). Bullets > prose. File:line precision in `## Changes` is required for all modes — vague targets ("the auth module") are forbidden. Use paths relative to the task root recorded in `~/.flow/<slug>/ROOT` (e.g. `editing-trainer/src/foo.py:42` for a multi-repo parent, or `src/foo.py:42` for a single repo).
+Then the sections below for the chosen mode. ≤1 page rendered (≤2 for refactor). Bullets > prose. File:line precision in `## Changes` is required for all modes — vague targets ("the auth module") are forbidden. Use paths relative to the cwd where `/draft` is invoked (e.g. `editing-trainer/src/foo.py:42` for a multi-repo parent, or `src/foo.py:42` for a single repo).
 
 ### Sections — `patch`
 
@@ -199,7 +222,7 @@ For each edge case from PROBLEM.
 Output **only**:
 
 > PLAN.md drafted at `.flow/<slug>/PLAN.md` (mode: \<mode\>). Budget: \<X\> lines. New files: \<count\>.
-> Review and run `/build <slug>` when ready, or push back in chat.
+> Review and run `/build` when ready, or push back in chat.
 
 Stop. Do not implement.
 

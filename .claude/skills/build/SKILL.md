@@ -1,36 +1,47 @@
 ---
 name: build
-description: Implement strictly according to ~/.flow/<slug>/PLAN.md for the named task. Halt on any deviation — append "## Build notes" to PLAN.md, stop, and ask. Argument is the task slug. Run after /draft.
-argument-hint: <task-slug>
+description: Implement strictly according to ~/.flow/<slug>/PLAN.md for the named task. Halt on any deviation — append "## Build notes" to PLAN.md, stop, and ask. Optional argument is the task slug; if omitted, use the current flow task for this terminal/session context. Run after /draft.
+argument-hint: "[task-slug]"
 ---
 
 # /build
 
 Implement **strictly** according to `~/.flow/<slug>/PLAN.md`. Every diff hunk must trace to a PLAN.md line. **Halt on any deviation**: stop, write what you found, ask. Do not paper over snags. Do not expand scope.
 
-Runs from any cwd. Resolves repo paths relative to the task root saved in `~/.flow/<slug>/ROOT` (set by `/understand`).
+Run from the repo/workspace root used for `/draft`.
 
 ## Step 0 — Validate slug
 
-Slug: `$ARGUMENTS`. Must match `[a-z0-9][a-z0-9-]*`. If empty or invalid, reply:
+Slug: `$ARGUMENTS`. If empty, resolve slug from the current-flow file for this terminal/session context: `$HOME/.flow/current/<context-key>`. Slug must match `[a-z0-9][a-z0-9-]*`. If missing or invalid, reply:
 
-> Usage: `/build <task-slug>` (e.g. `/build fix-jpeg-corrupt`).
+> Usage: `/build [task-slug]` (e.g. `/build` or `/build fix-jpeg-corrupt`).
 
 Then stop.
 
 ## Step 1 — Locate the plan
 
 ```bash
-SLUG="$ARGUMENTS"
+CURRENT_KEY="${PI_FLOW_SESSION_KEY:-${STARSHIP_SESSION_KEY:-${ATUIN_SESSION:-${KITTY_PID:-$(pwd | shasum | cut -c1-12)}}}}"
+CURRENT_FILE="$HOME/.flow/current/$CURRENT_KEY"
+FROM_CURRENT=0
+if [[ -z "$ARGUMENTS" ]]; then
+  FROM_CURRENT=1
+  SLUG=$(cat "$CURRENT_FILE" 2>/dev/null)
+else
+  SLUG="$ARGUMENTS"
+fi
+[[ "$SLUG" =~ ^[a-z0-9][a-z0-9-]*$ ]] || { echo "BAD_ARGS"; exit 0; }
 DIR="$HOME/.flow/$SLUG"
 PLAN="$DIR/PLAN.md"
-ROOT=$(cat "$DIR/ROOT" 2>/dev/null) || ROOT="$(pwd)"
-[[ -f "$PLAN" ]] && echo "OK root=$ROOT" || echo "MISSING"
+ROOT="$(pwd)"
+[[ -f "$PLAN" ]] && { mkdir -p "$(dirname "$CURRENT_FILE")"; printf '%s\n' "$SLUG" > "$CURRENT_FILE"; echo "OK root=$ROOT"; } || echo "MISSING from_current=$FROM_CURRENT"
 ```
 
-If `MISSING`: tell user no plan exists for slug `<slug>` — run `/draft <slug> <mode>` first. Stop.
+If `BAD_ARGS`: show the usage from Step 0. Stop.
+If `MISSING from_current=1`: tell user no current flow plan exists for this terminal/session context — run `/draft <slug> <mode>` first or pass a slug. Stop.
+If `MISSING from_current=0`: tell user no plan exists for slug `<slug>` — run `/draft <slug> <mode>` first. Stop.
 
-`ROOT` is the directory the user was in at `/understand` time. All `## Changes` paths in PLAN.md are relative to it.
+All `## Changes` paths in PLAN.md are relative to the current cwd; if you are in the wrong directory, stop and ask the user to rerun from the task root.
 
 ## Step 2 — Read the plan once, fully
 
@@ -63,7 +74,7 @@ A deviation is **anything**:
 When you hit one:
 1. **Stop editing.** Do not press on. Do not "make it work."
 2. Append a `## Build notes` section to `.flow/<slug>/PLAN.md` describing exactly what you found (1–3 bullets).
-3. Tell the user, one short message: "Hit a deviation: \<one line\>. Notes appended to PLAN.md. Update the plan and re-run `/build <slug>`, or tell me how to proceed."
+3. Tell the user, one short message: "Hit a deviation: \<one line\>. Notes appended to PLAN.md. Update the plan and re-run `/build`, or tell me how to proceed."
 4. Stop.
 
 ## Step 4 — Self-check before declaring done
@@ -83,7 +94,7 @@ After the last planned change:
 If self-check passed, output **only**:
 
 > Build done for `<slug>`. Diff: \<+X / -Y\> across \<N\> files in \<repos\>.
-> Run `/audit <slug>` for an independent review.
+> Run `/audit` for an independent review.
 
 Stop. Do not run `/audit` yourself.
 

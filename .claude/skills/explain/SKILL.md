@@ -1,36 +1,47 @@
 ---
 name: explain
-description: Write a 1-page ~/.flow/<slug>/EXPLAIN.md summarizing the named task — problem, solution, why-it-works, when-it-won't, files changed, decisions worth remembering. Argument is the task slug. Run after /audit returns SHIP.
-argument-hint: <task-slug>
+description: Write a 1-page ~/.flow/<slug>/EXPLAIN.md summarizing the named task — problem, solution, why-it-works, when-it-won't, files changed, decisions worth remembering. Optional argument is the task slug; if omitted, use the current flow task for this terminal/session context. Run after /audit returns SHIP.
+argument-hint: "[task-slug]"
 ---
 
 # /explain
 
 Produce a 1-page `~/.flow/<slug>/EXPLAIN.md` that captures, in one place, what to tell anyone who later asks **"why did we do this?"** or **"why so much code for that?"**.
 
-Runs from any cwd. Resolves repo paths relative to the task root saved in `~/.flow/<slug>/ROOT`.
+Run from the repo/workspace root used for `/draft` and `/build`.
 
 ## Step 0 — Validate slug
 
-Slug: `$ARGUMENTS`. Must match `[a-z0-9][a-z0-9-]*`. If empty or invalid, reply:
+Slug: `$ARGUMENTS`. If empty, resolve slug from the current-flow file for this terminal/session context: `$HOME/.flow/current/<context-key>`. Must match `[a-z0-9][a-z0-9-]*`. If missing or invalid, reply:
 
-> Usage: `/explain <task-slug>` (e.g. `/explain fix-jpeg-corrupt`).
+> Usage: `/explain [task-slug]` (e.g. `/explain` or `/explain fix-jpeg-corrupt`).
 
 Then stop.
 
 ## Step 1 — Locate state
 
 ```bash
-SLUG="$ARGUMENTS"
+CURRENT_KEY="${PI_FLOW_SESSION_KEY:-${STARSHIP_SESSION_KEY:-${ATUIN_SESSION:-${KITTY_PID:-$(pwd | shasum | cut -c1-12)}}}}"
+CURRENT_FILE="$HOME/.flow/current/$CURRENT_KEY"
+FROM_CURRENT=0
+if [[ -z "$ARGUMENTS" ]]; then
+  FROM_CURRENT=1
+  SLUG=$(cat "$CURRENT_FILE" 2>/dev/null)
+else
+  SLUG="$ARGUMENTS"
+fi
+[[ "$SLUG" =~ ^[a-z0-9][a-z0-9-]*$ ]] || { echo "BAD_ARGS"; exit 0; }
 DIR="$HOME/.flow/$SLUG"
-ROOT=$(cat "$DIR/ROOT" 2>/dev/null) || ROOT="$(pwd)"
-[[ -f "$DIR/PLAN.md"   ]] && echo "PLAN=yes"   || echo "PLAN=no"
+ROOT="$(pwd)"
+[[ -f "$DIR/PLAN.md"   ]] && { mkdir -p "$(dirname "$CURRENT_FILE")"; printf '%s\n' "$SLUG" > "$CURRENT_FILE"; echo "PLAN=yes"; } || echo "PLAN=no from_current=$FROM_CURRENT"
 [[ -f "$DIR/REVIEW.md" ]] && echo "REVIEW=yes" || echo "REVIEW=no"
 echo "ROOT=$ROOT"
 ```
 
-- `PLAN=no` → tell user no plan for slug `<slug>` — run `/draft <slug> <mode>` and `/build <slug>` first. Stop.
-- `REVIEW=no` → ask user to confirm an audit isn't needed before continuing. If they decline, tell them to run `/audit <slug>`.
+- `BAD_ARGS`: show the usage from Step 0. Stop.
+- `PLAN=no from_current=1` → tell user no current flow plan exists for this terminal/session context — run `/draft <slug> <mode>` and `/build <slug>` first or pass a slug. Stop.
+- `PLAN=no from_current=0` → tell user no plan for slug `<slug>` — run `/draft <slug> <mode>` and `/build <slug>` first. Stop.
+- `REVIEW=no` → ask user to confirm an audit isn't needed before continuing. If they decline, tell them to run `/audit`.
 
 If REVIEW.md exists, read its `## Verdict`:
 - `SHIP` → continue.

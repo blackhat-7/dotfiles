@@ -1,34 +1,45 @@
 ---
 name: audit
-description: Run an independent review of the named flow task. Reviews ~/.flow/<slug>/PLAN.md against actual git diffs from touched repos and writes ~/.flow/<slug>/REVIEW.md. Uses reviewer subagent when available in Claude Code/opencode; falls back to inline review in Pi or harnesses without subagents. Argument is the task slug. Run after /build.
-argument-hint: <task-slug>
+description: Run an independent review of the named flow task. Reviews ~/.flow/<slug>/PLAN.md against actual git diffs from touched repos and writes ~/.flow/<slug>/REVIEW.md. Uses reviewer subagent when available in Claude Code/opencode; falls back to inline review in Pi or harnesses without subagents. Optional argument is the task slug; if omitted, use the current flow task for this terminal/session context. Run after /build.
+argument-hint: "[task-slug]"
 ---
 
 # /audit
 
 Run an independent review for the named task. The review sees only the plan and the actual diff. Catches drift between PLAN and reality, bloat, missed edge cases, and bugs.
 
-Runs from any cwd. Resolves repo paths relative to the task root saved in `~/.flow/<slug>/ROOT`.
+Run from the repo/workspace root used for `/draft` and `/build`.
 
 ## Step 0 — Validate slug
 
-Slug: `$ARGUMENTS`. Must match `[a-z0-9][a-z0-9-]*`. If empty or invalid, reply:
+Slug: `$ARGUMENTS`. If empty, resolve slug from the current-flow file for this terminal/session context: `$HOME/.flow/current/<context-key>`. Must match `[a-z0-9][a-z0-9-]*`. If missing or invalid, reply:
 
-> Usage: `/audit <task-slug>` (e.g. `/audit fix-jpeg-corrupt`).
+> Usage: `/audit [task-slug]` (e.g. `/audit` or `/audit fix-jpeg-corrupt`).
 
 Then stop.
 
 ## Step 1 — Locate the plan
 
 ```bash
-SLUG="$ARGUMENTS"
+CURRENT_KEY="${PI_FLOW_SESSION_KEY:-${STARSHIP_SESSION_KEY:-${ATUIN_SESSION:-${KITTY_PID:-$(pwd | shasum | cut -c1-12)}}}}"
+CURRENT_FILE="$HOME/.flow/current/$CURRENT_KEY"
+FROM_CURRENT=0
+if [[ -z "$ARGUMENTS" ]]; then
+  FROM_CURRENT=1
+  SLUG=$(cat "$CURRENT_FILE" 2>/dev/null)
+else
+  SLUG="$ARGUMENTS"
+fi
+[[ "$SLUG" =~ ^[a-z0-9][a-z0-9-]*$ ]] || { echo "BAD_ARGS"; exit 0; }
 DIR="$HOME/.flow/$SLUG"
 PLAN="$DIR/PLAN.md"
-ROOT=$(cat "$DIR/ROOT" 2>/dev/null) || ROOT="$(pwd)"
-[[ -f "$PLAN" ]] && echo "OK root=$ROOT" || echo "MISSING"
+ROOT="$(pwd)"
+[[ -f "$PLAN" ]] && { mkdir -p "$(dirname "$CURRENT_FILE")"; printf '%s\n' "$SLUG" > "$CURRENT_FILE"; echo "OK root=$ROOT"; } || echo "MISSING from_current=$FROM_CURRENT"
 ```
 
-If `MISSING`: tell user no plan for slug `<slug>` — run `/draft <slug> <mode>` and `/build <slug>` first. Stop.
+If `BAD_ARGS`: show the usage from Step 0. Stop.
+If `MISSING from_current=1`: tell user no current flow plan exists for this terminal/session context — run `/draft <slug> <mode>` and `/build <slug>` first or pass a slug. Stop.
+If `MISSING from_current=0`: tell user no plan for slug `<slug>` — run `/draft <slug> <mode>` and `/build <slug>` first. Stop.
 
 ## Step 2 — Identify touched repos
 
@@ -67,7 +78,7 @@ Audit a flow task against its plan. You have NO prior context.
 
 Task slug: <slug>
 Plan: ~/.flow/<slug>/PLAN.md
-Task root: <ROOT>   (paths in PLAN's ## Changes are relative to this)
+Task root: <ROOT>   (current cwd; paths in PLAN's ## Changes are relative to this)
 Touched repos (run `git diff HEAD` in each — absolute paths):
   - <abs path repo1>
   - <abs path repo2>
@@ -150,9 +161,9 @@ Read `.flow/<slug>/REVIEW.md`. Output **only**:
 > See `~/.flow/<slug>/REVIEW.md` for details.
 >
 > Next:
-> - SHIP → run `/explain <slug>` to write the 1-page summary.
-> - NEEDS-FIXES → fix the listed items, re-run `/audit <slug>`.
-> - RE-PLAN → revise via `/draft <slug> <mode>`.
+> - SHIP → run `/explain` to write the 1-page summary.
+> - NEEDS-FIXES → fix the listed items, re-run `/audit`.
+> - RE-PLAN → revise via `/draft <mode>` (or `/draft <slug> <mode>`).
 
 Do **not** start fixing things yourself. Do not run `/explain` or `/build`.
 
