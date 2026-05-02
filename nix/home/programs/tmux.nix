@@ -1,19 +1,20 @@
-{ pkgs, ... }: 
-  let tmux-fzf-pane-switch = pkgs.tmuxPlugins.mkTmuxPlugin
-    {
-      name = "tmux-fzf-pane-switch";
-      pluginName = "tmux-fzf-pane-switch";
-      # version = "1.0";
-      version = "unstable-2021-08-02";
-      src = pkgs.fetchFromGitHub {
-        owner = "Kristijan";
-        repo = "tmux-fzf-pane-switch";
-        rev = "0b8586ef41c45edfbd10bf2e5cefdda1b217f728";
-        hash = "sha256-Kwvj92yUVRUbr0zHQQO5eoQwDtkqaLosWA4Q/nJ/+Mw=";
-      };
-      rtpFilePath = "select_pane.tmux";
+{ pkgs, ... }:
+let
+  tmux-fzf-pane-switch = pkgs.tmuxPlugins.mkTmuxPlugin {
+    name = "tmux-fzf-pane-switch";
+    pluginName = "tmux-fzf-pane-switch";
+    # version = "1.0";
+    version = "unstable-2021-08-02";
+    src = pkgs.fetchFromGitHub {
+      owner = "Kristijan";
+      repo = "tmux-fzf-pane-switch";
+      rev = "0b8586ef41c45edfbd10bf2e5cefdda1b217f728";
+      hash = "sha256-Kwvj92yUVRUbr0zHQQO5eoQwDtkqaLosWA4Q/nJ/+Mw=";
     };
-  in {
+    rtpFilePath = "select_pane.tmux";
+  };
+in
+{
   programs.tmux = {
     enable = true;
     # shell = "${pkgs.fish}/bin/fish";
@@ -22,42 +23,44 @@
     mouse = true;
     escapeTime = 0;
     plugins = with pkgs; [
-        tmuxPlugins.sensible
-        tmuxPlugins.yank
-        tmuxPlugins.tmux-thumbs
-        tmuxPlugins.battery
-        # tmuxPlugins.tmux-floax
-        tmuxPlugins.vim-tmux-navigator
-        # tmuxPlugins.tmux-fzf
-        {
-            plugin = tmuxPlugins.catppuccin;
-            extraConfig = ''
-                set -g @catppuccin_flavor "mocha"
-                set -g @catppuccin_status_background "none"
-                set -g @catppuccin_window_status_style "none"
-                set -g @catppuccin_pane_status_enabled "off"
-                set -g @catppuccin_pane_border_status "off"
-            '';
-        }
-        {
-            plugin = tmuxPlugins.online-status;
-            extraConfig = ''
-                set -g @online_icon "ok"
-                set -g @offline_icon "nok"
-            '';
-        }
-        {
-            plugin = tmux-fzf-pane-switch;
-            extraConfig = ''
-                set -g @fzf_pane_switch_bind-key "M-f"
-            '';
-        }
+      tmuxPlugins.sensible
+      tmuxPlugins.yank
+      tmuxPlugins.tmux-thumbs
+      tmuxPlugins.battery
+      # tmuxPlugins.tmux-floax
+      tmuxPlugins.vim-tmux-navigator
+      # tmuxPlugins.tmux-fzf
+      {
+        plugin = tmuxPlugins.catppuccin;
+        extraConfig = ''
+          set -g @catppuccin_flavor "mocha"
+          set -g @catppuccin_status_background "none"
+          set -g @catppuccin_window_status_style "none"
+          set -g @catppuccin_pane_status_enabled "off"
+          set -g @catppuccin_pane_border_status "off"
+        '';
+      }
+      {
+        plugin = tmuxPlugins.online-status;
+        extraConfig = ''
+          set -g @online_icon "ok"
+          set -g @offline_icon "nok"
+        '';
+      }
+      {
+        plugin = tmux-fzf-pane-switch;
+        extraConfig = ''
+          set -g @fzf_pane_switch_bind-key "M-f"
+        '';
+      }
     ];
 
     extraConfig = ''
       set-option -g default-shell "/usr/bin/fish"
       set -g default-command "/usr/bin/fish -l"
 
+      set -g extended-keys on
+      set -g extended-keys-format csi-u
       set -g set-clipboard on
 
       # Increase scroll speed to 5 lines per wheel notch in vi copy mode
