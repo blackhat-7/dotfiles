@@ -311,6 +311,11 @@
         compaction = { enabled = true; };
       };
 
+      piKeybindings = builtins.toJSON {
+        "tui.input.newLine" = [ "shift+enter" "alt+enter" ];
+        "app.message.followUp" = [ "shift+alt+enter" ];
+      };
+
       opencodePackageJson = ''
         {
           "private": true,
@@ -366,6 +371,11 @@
       fi
       mv "$HOME/.pi/agent/settings.json.tmp" "$HOME/.pi/agent/settings.json"
       rm -f "$pi_settings_tmp"
+
+      rm -f "$HOME/.pi/agent/keybindings.json"
+      cat <<'EOF' > "$HOME/.pi/agent/keybindings.json"
+      ${piKeybindings}
+      EOF
 
       rm -f "$HOME/.config/mcp/mcp.catalog.json"
       cat <<'EOF' > "$HOME/.config/mcp/mcp.catalog.json"

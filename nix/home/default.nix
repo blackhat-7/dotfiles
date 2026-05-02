@@ -204,9 +204,15 @@ EOF
         [ -n "$session_id" ] && args+=(-h "string:x-dunst-stack-tag:claude-$session_id")
         notify-send "''${args[@]}" "$title" "$message"
       '';
+
+      piKeybindings = builtins.toJSON {
+        "tui.input.newLine" = [ "shift+enter" "alt+enter" ];
+        "app.message.followUp" = [ "shift+alt+enter" ];
+      };
     in
     lib.hm.dag.entryAfter [ "writeBoundary" ] ''
       mkdir -p "$HOME/.claude"
+      mkdir -p "$HOME/.pi/agent"
 
       rm -f "$HOME/.claude/statusline-command.sh"
       cat <<'EOF' > "$HOME/.claude/statusline-command.sh"
@@ -219,6 +225,11 @@ EOF
       ${notifyScript}
       EOF
       chmod +x "$HOME/.claude/notify.sh"
+
+      rm -f "$HOME/.pi/agent/keybindings.json"
+      cat <<'EOF' > "$HOME/.pi/agent/keybindings.json"
+      ${piKeybindings}
+      EOF
 
       rm -f "$HOME/.claude/settings.json"
       cat <<'EOF' > "$HOME/.claude/settings.json"
