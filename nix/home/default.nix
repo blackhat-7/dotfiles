@@ -55,7 +55,16 @@
     mongodb-compass
     # element-desktop
     gitleaks
+    libnotify # notify-send for Claude/Pi hook notifications
   ];
+
+  home.sessionPath = [
+    "$HOME/.npm-global/bin"
+  ];
+
+  home.sessionVariables = {
+    NPM_CONFIG_PREFIX = "$HOME/.npm-global";
+  };
 
   # Git configuration
   programs.git = {

@@ -105,4 +105,15 @@
       ${pkgs.uv}/bin/uv tool install $tool
     done
   '';
+
+  home.activation.install-pi = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    export PATH="${pkgs.nodejs_24}/bin:$PATH"
+    export npm_config_prefix="${config.home.homeDirectory}/.npm-global"
+    npm_bin="$npm_config_prefix/bin"
+    mkdir -p "$npm_bin"
+
+    npm i -g @mariozechner/pi-coding-agent env-cmd || true
+    "$npm_bin/pi" install npm:pi-mcp-adapter || true
+    "$npm_bin/pi" install npm:permission-pi || true
+  '';
 }
