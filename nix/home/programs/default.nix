@@ -115,5 +115,6 @@
     npm i -g @mariozechner/pi-coding-agent env-cmd || true
     "$npm_bin/pi" install npm:pi-mcp-adapter || true
     "$npm_bin/pi" install npm:permission-pi || true
+    "$npm_bin/pi" install npm:pi-web-access || true
   '';
 }
