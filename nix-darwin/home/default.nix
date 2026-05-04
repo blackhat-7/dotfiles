@@ -42,6 +42,7 @@
     pkgs.gitleaks
     pkgs.monitorcontrol
     pkgs.terminal-notifier
+    pkgs.pandoc
   ];
 
   launchd.agents.turn-on-night-shift = {

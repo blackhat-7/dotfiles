@@ -127,10 +127,26 @@
   home.activation.install-pi = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
     export PATH="${pkgs.nodejs_24}/bin:$PATH"
     npm_bin="${config.home.homeDirectory}/.npm-global/bin"
-    npm i -g @mariozechner/pi-coding-agent || true
-    "$npm_bin/pi" install npm:pi-mcp-adapter || true
-    "$npm_bin/pi" install npm:permission-pi || true
-    "$npm_bin/pi" install npm:pi-web-access || true
+    packages="
+      npm:pi-mcp-adapter
+      npm:permission-pi
+      npm:pi-web-access
+      npm:pi-subagents
+      npm:pi-mermaid
+      npm:@juicesharp/rpiv-todo
+      npm:@ifi/oh-pi-themes
+    "
 
+    npm i -g @mariozechner/pi-coding-agent beautiful-mermaid || true
+
+    settings="${config.home.homeDirectory}/.pi/agent/settings.json"
+    if [ -f "$settings" ]; then
+      desired_json=$(printf '%s\n' $packages | ${pkgs.jq}/bin/jq -R . | ${pkgs.jq}/bin/jq -s .)
+      ${pkgs.jq}/bin/jq --argjson packages "$desired_json" '.packages = $packages' "$settings" > "$settings.tmp" && mv "$settings.tmp" "$settings"
+    fi
+
+    for package in $packages; do
+      "$npm_bin/pi" install "$package" || true
+    done
   '';
 }

@@ -111,10 +111,23 @@
     export npm_config_prefix="${config.home.homeDirectory}/.npm-global"
     npm_bin="$npm_config_prefix/bin"
     mkdir -p "$npm_bin"
+    packages="
+      npm:pi-mcp-adapter
+      npm:permission-pi
+      npm:pi-web-access
+      npm:pi-subagents
+    "
 
-    npm i -g @mariozechner/pi-coding-agent env-cmd || true
-    "$npm_bin/pi" install npm:pi-mcp-adapter || true
-    "$npm_bin/pi" install npm:permission-pi || true
-    "$npm_bin/pi" install npm:pi-web-access || true
+    npm i -g @mariozechner/pi-coding-agent env-cmd beautiful-mermaid || true
+
+    settings="${config.home.homeDirectory}/.pi/agent/settings.json"
+    if [ -f "$settings" ]; then
+      desired_json=$(printf '%s\n' $packages | ${pkgs.jq}/bin/jq -R . | ${pkgs.jq}/bin/jq -s .)
+      ${pkgs.jq}/bin/jq --argjson packages "$desired_json" '.packages = $packages' "$settings" > "$settings.tmp" && mv "$settings.tmp" "$settings"
+    fi
+
+    for package in $packages; do
+      "$npm_bin/pi" install "$package" || true
+    done
   '';
 }
