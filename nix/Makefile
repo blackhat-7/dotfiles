@@ -3,7 +3,7 @@ NIX_BIN := /nix/var/nix/profiles/default/bin
 NIX := $(NIX_BIN)/nix
 NIX_STORE := $(NIX_BIN)/nix-store
 
-.PHONY: switch darwin linux home update repair index rollback darwin-rollback linux-rollback
+.PHONY: switch darwin linux home-manager update repair index rollback darwin-rollback linux-rollback
 
 # Default target
 switch:
@@ -14,7 +14,7 @@ switch:
 		echo "Detected Linux, applying configuration..."; \
 		$(MAKE) linux; \
 	fi
-	$(MAKE) home
+	$(MAKE) home-manager
 
 # macOS-specific target
 darwin:
@@ -31,7 +31,7 @@ linux:
 	fi
 
 # Home Manager target for Linux
-home:
+home-manager:
 	@if [ "$$(uname -m)" = "aarch64" ]; then \
 		echo "Detected ARM64 architecture, using aarch64 home configuration..."; \
 		PATH="$(NIX_BIN):$$PATH" $(NIX) run home-manager/master -- switch --flake .#illusion-aarch64 -b hm-backup-$(shell date +%Y%m%d%H%M%S); \
