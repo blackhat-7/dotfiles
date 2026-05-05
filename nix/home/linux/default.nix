@@ -8,8 +8,12 @@
     # Add other Linux-specific packages here
   ];
 
-  # Enable the generic Linux target
-  targets.genericLinux.enable = true;
+  # Enable the generic Linux target. Disable Home Manager's generic GPU
+  # integration on ARM; it pulls x86-only Intel driver packages.
+  targets.genericLinux = {
+    enable = true;
+    gpu.enable = false;
+  };
 
   # Linux-specific configurations
   xdg = {
