@@ -2,7 +2,8 @@
 NIX_BIN := /nix/var/nix/profiles/default/bin
 NIX := $(NIX_BIN)/nix
 NIX_STORE := $(NIX_BIN)/nix-store
-NIX_BUILD_DIR := $(HOME)/.cache/nix-builds
+USER_NIX_BUILD_DIR := $(HOME)/.cache/nix-builds
+SYSTEM_NIX_BUILD_DIR := /var/lib/nix-builds
 SYSTEM_MANAGER := .\#system-manager
 HOME_MANAGER := .\#home-manager
 
@@ -25,24 +26,26 @@ darwin:
 
 # Linux-specific target
 linux:
+	@sudo mkdir -p "$(SYSTEM_NIX_BUILD_DIR)"
+	@sudo chmod 0755 "$(SYSTEM_NIX_BUILD_DIR)"
 	@if [ "$$(uname -m)" = "aarch64" ]; then \
 		echo "Detected ARM64 architecture, using aarch64 configuration..."; \
-		sudo env PATH="$(NIX_BIN):$$PATH" $(NIX) run $(SYSTEM_MANAGER) -- switch --flake .#illusion-aarch64; \
+		sudo env PATH="$(NIX_BIN):$$PATH" $(NIX) --option build-dir "$(SYSTEM_NIX_BUILD_DIR)" run $(SYSTEM_MANAGER) -- --nix-option build-dir "$(SYSTEM_NIX_BUILD_DIR)" switch --flake .#illusion-aarch64; \
 	else \
 		echo "Detected x86_64 architecture, using default configuration..."; \
-		sudo env PATH="$(NIX_BIN):$$PATH" $(NIX) run $(SYSTEM_MANAGER) -- switch --flake .#illusion; \
+		sudo env PATH="$(NIX_BIN):$$PATH" $(NIX) --option build-dir "$(SYSTEM_NIX_BUILD_DIR)" run $(SYSTEM_MANAGER) -- --nix-option build-dir "$(SYSTEM_NIX_BUILD_DIR)" switch --flake .#illusion; \
 	fi
 
 # Home Manager target for Linux
 home-manager:
-	@mkdir -p "$(NIX_BUILD_DIR)"
-	@chmod 0755 "$(NIX_BUILD_DIR)"
+	@mkdir -p "$(USER_NIX_BUILD_DIR)"
+	@chmod 0755 "$(USER_NIX_BUILD_DIR)"
 	@if [ "$$(uname -m)" = "aarch64" ]; then \
 		echo "Detected ARM64 architecture, using aarch64 home configuration..."; \
-		PATH="$(NIX_BIN):$$PATH" $(NIX) --option build-dir "$(NIX_BUILD_DIR)" run $(HOME_MANAGER) -- switch --flake .#illusion-aarch64 -b hm-backup-$(shell date +%Y%m%d%H%M%S); \
+		PATH="$(NIX_BIN):$$PATH" $(NIX) --option build-dir "$(USER_NIX_BUILD_DIR)" run $(HOME_MANAGER) -- switch --flake .#illusion-aarch64 -b hm-backup-$(shell date +%Y%m%d%H%M%S); \
 	else \
 		echo "Detected x86_64 architecture, using default home configuration..."; \
-		PATH="$(NIX_BIN):$$PATH" $(NIX) --option build-dir "$(NIX_BUILD_DIR)" run $(HOME_MANAGER) -- switch --flake .#illusion -b hm-backup-$(shell date +%Y%m%d%H%M%S); \
+		PATH="$(NIX_BIN):$$PATH" $(NIX) --option build-dir "$(USER_NIX_BUILD_DIR)" run $(HOME_MANAGER) -- switch --flake .#illusion -b hm-backup-$(shell date +%Y%m%d%H%M%S); \
 	fi
 
 # Update flake inputs
