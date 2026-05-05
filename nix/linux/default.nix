@@ -12,7 +12,7 @@
   users.users.illusion = {
     name = "illusion";
     home = "/home/illusion";
-    shell = "usr/bin/fish";
+    shell = pkgs.fish;
     # Don't set isNormalUser, description, or groups as they already exist
   };
 

@@ -167,6 +167,15 @@
         ];
       };
 
+      # Expose the same pinned system-manager CLI that this flake's
+      # systemConfigs are built with. Do not use github:numtide/system-manager
+      # directly in the Makefile, because that floats to latest and can expect a
+      # different profile layout than the locked system-manager.lib produces.
+      packages = nixpkgs.lib.genAttrs [ "x86_64-linux" "aarch64-linux" ] (system: {
+        system-manager = system-manager.packages.${system}.default;
+        default = system-manager.packages.${system}.default;
+      });
+
       # Development shells
       devShells = forAllSystems (system: {
         default = nixpkgsFor.${system}.mkShell {

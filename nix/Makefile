@@ -2,6 +2,7 @@
 NIX_BIN := /nix/var/nix/profiles/default/bin
 NIX := $(NIX_BIN)/nix
 NIX_STORE := $(NIX_BIN)/nix-store
+SYSTEM_MANAGER := .\#system-manager
 
 .PHONY: switch darwin linux home-manager update repair index rollback darwin-rollback linux-rollback
 
@@ -24,10 +25,10 @@ darwin:
 linux:
 	@if [ "$$(uname -m)" = "aarch64" ]; then \
 		echo "Detected ARM64 architecture, using aarch64 configuration..."; \
-		sudo $(NIX) run github:numtide/system-manager -- switch --flake .#illusion-aarch64; \
+		sudo env PATH="$(NIX_BIN):$$PATH" $(NIX) run $(SYSTEM_MANAGER) -- switch --flake .#illusion-aarch64; \
 	else \
 		echo "Detected x86_64 architecture, using default configuration..."; \
-		sudo $(NIX) run github:numtide/system-manager -- switch --flake .#illusion; \
+		sudo env PATH="$(NIX_BIN):$$PATH" $(NIX) run $(SYSTEM_MANAGER) -- switch --flake .#illusion; \
 	fi
 
 # Home Manager target for Linux
@@ -68,4 +69,4 @@ darwin-rollback:
 
 # Linux rollback
 linux-rollback:
-	sudo $(NIX) run github:numtide/system-manager -- rollback
+	sudo env PATH="$(NIX_BIN):$$PATH" $(NIX) run $(SYSTEM_MANAGER) -- rollback
