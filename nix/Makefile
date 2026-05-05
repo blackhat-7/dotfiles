@@ -3,7 +3,7 @@ NIX_BIN := /nix/var/nix/profiles/default/bin
 NIX := $(NIX_BIN)/nix
 NIX_STORE := $(NIX_BIN)/nix-store
 USER_NIX_BUILD_DIR := $(HOME)/.cache/nix-builds
-SYSTEM_NIX_BUILD_DIR := /var/lib/nix-builds
+SYSTEM_NIX_BUILD_DIR := /root/.cache/nix-builds
 SYSTEM_MANAGER := .\#system-manager
 HOME_MANAGER := .\#home-manager
 
