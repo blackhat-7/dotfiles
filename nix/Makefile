@@ -35,6 +35,7 @@ linux:
 		echo "Detected x86_64 architecture, using default configuration..."; \
 		sudo env PATH="$(NIX_BIN):$$PATH" $(NIX) --option build-dir "$(SYSTEM_NIX_BUILD_DIR)" run $(SYSTEM_MANAGER) -- --nix-option build-dir "$(SYSTEM_NIX_BUILD_DIR)" switch --flake .#illusion; \
 	fi
+	@sudo systemctl try-restart nix-daemon.service 2>/dev/null || true
 
 # Home Manager target for Linux
 home-manager:
