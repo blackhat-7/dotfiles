@@ -17,6 +17,7 @@ in
 {
   programs.tmux = {
     enable = true;
+    terminal = "tmux-256color";
     # shell = "${pkgs.fish}/bin/fish";
     # shell = "/run/current-system/sw/bin/fish";
     prefix = "C-b";
@@ -62,6 +63,9 @@ in
       set -g extended-keys on
       set -g extended-keys-format csi-u
       set -g set-clipboard on
+
+      # Tell tmux Kitty supports truecolor/RGB so colors match outside tmux.
+      set -as terminal-features ",xterm-kitty:RGB"
 
       # Increase scroll speed to 5 lines per wheel notch in vi copy mode
       bind-key -T copy-mode-vi WheelUpPane send-keys -X -N 5 scroll-up
@@ -127,7 +131,6 @@ in
       # Image preview
       set -g allow-passthrough on
 
-      set -ga update-environment TERM
       set -ga update-environment TERM_PROGRAM
 
       # Binds

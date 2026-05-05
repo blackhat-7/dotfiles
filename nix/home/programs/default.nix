@@ -113,7 +113,7 @@
     mkdir -p "$npm_bin"
     packages="
       npm:pi-mcp-adapter
-      npm:permission-pi
+      npm:pi-permission-system
       npm:pi-web-access
       npm:pi-subagents
     "
@@ -129,5 +129,34 @@
     for package in $packages; do
       "$npm_bin/pi" install "$package" || true
     done
+
+    subagents_root="${config.home.homeDirectory}/.npm-global/lib/node_modules/pi-subagents"
+    if [ -d "$subagents_root" ]; then
+      ${pkgs.python3}/bin/python3 - "$subagents_root" <<'PY'
+import pathlib
+import sys
+
+root = pathlib.Path(sys.argv[1])
+
+def patch(path, old, new):
+    text = path.read_text()
+    if new in text:
+        return
+    if old not in text:
+        raise SystemExit(f"Could not apply pi-subagents safety patch to {path}")
+    path.write_text(text.replace(old, new))
+
+patch(
+    root / "src/runs/shared/pi-args.ts",
+    '\tconst env: Record<string, string | undefined> = {};\n\tenv[SUBAGENT_CHILD_ENV] = "1";',
+    '\tconst env: Record<string, string | undefined> = {};\n\tenv[SUBAGENT_CHILD_ENV] = "1";\n\tenv.PI_IS_SUBAGENT = "1";',
+)
+patch(
+    root / "src/extension/index.ts",
+    '\tconst resetSessionState = (ctx: ExtensionContext) => {\n\t\tstate.baseCwd = ctx.cwd;\n\t\tstate.currentSessionId = resolveCurrentSessionId(ctx.sessionManager);\n\t\tstate.lastUiContext = ctx;',
+    '\tconst resetSessionState = (ctx: ExtensionContext) => {\n\t\tstate.baseCwd = ctx.cwd;\n\t\tstate.currentSessionId = resolveCurrentSessionId(ctx.sessionManager);\n\t\tprocess.env.PI_AGENT_ROUTER_PARENT_SESSION_ID = ctx.sessionManager.getSessionId() ?? "";\n\t\tstate.lastUiContext = ctx;',
+)
+PY
+    fi
   '';
 }
