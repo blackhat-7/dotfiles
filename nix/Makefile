@@ -2,7 +2,9 @@
 NIX_BIN := /nix/var/nix/profiles/default/bin
 NIX := $(NIX_BIN)/nix
 NIX_STORE := $(NIX_BIN)/nix-store
+NIX_BUILD_DIR := $(HOME)/.cache/nix-builds
 SYSTEM_MANAGER := .\#system-manager
+HOME_MANAGER := .\#home-manager
 
 .PHONY: switch darwin linux home-manager update repair index rollback darwin-rollback linux-rollback
 
@@ -33,12 +35,14 @@ linux:
 
 # Home Manager target for Linux
 home-manager:
+	@mkdir -p "$(NIX_BUILD_DIR)"
+	@chmod 0755 "$(NIX_BUILD_DIR)"
 	@if [ "$$(uname -m)" = "aarch64" ]; then \
 		echo "Detected ARM64 architecture, using aarch64 home configuration..."; \
-		PATH="$(NIX_BIN):$$PATH" $(NIX) run home-manager/master -- switch --flake .#illusion-aarch64 -b hm-backup-$(shell date +%Y%m%d%H%M%S); \
+		PATH="$(NIX_BIN):$$PATH" $(NIX) --option build-dir "$(NIX_BUILD_DIR)" run $(HOME_MANAGER) -- switch --flake .#illusion-aarch64 -b hm-backup-$(shell date +%Y%m%d%H%M%S); \
 	else \
 		echo "Detected x86_64 architecture, using default home configuration..."; \
-		PATH="$(NIX_BIN):$$PATH" $(NIX) run home-manager/master -- switch --flake .#illusion -b hm-backup-$(shell date +%Y%m%d%H%M%S); \
+		PATH="$(NIX_BIN):$$PATH" $(NIX) --option build-dir "$(NIX_BUILD_DIR)" run $(HOME_MANAGER) -- switch --flake .#illusion -b hm-backup-$(shell date +%Y%m%d%H%M%S); \
 	fi
 
 # Update flake inputs

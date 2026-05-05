@@ -65,8 +65,17 @@
     settings = {
       auto-optimise-store = true;
       experimental-features = [ "nix-command" "flakes" ];
+
+      # Nix 2.30+ defaults build-dir to /nix/var/nix/builds and rejects it
+      # if any parent is world-writable or a symlink. Raspberry Pi installs can
+      # trip that check, so use a root-owned path under /var/lib instead.
+      build-dir = "/var/lib/nix-builds";
     };
   };
+
+  systemd.tmpfiles.rules = [
+    "d /var/lib/nix-builds 0755 root root - -"
+  ];
 
   # Configure OpenSSH via systemd service
   systemd.services.openssh = {

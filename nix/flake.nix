@@ -167,12 +167,11 @@
         ];
       };
 
-      # Expose the same pinned system-manager CLI that this flake's
-      # systemConfigs are built with. Do not use github:numtide/system-manager
-      # directly in the Makefile, because that floats to latest and can expect a
-      # different profile layout than the locked system-manager.lib produces.
+      # Expose pinned CLIs used by the Makefile. Do not use floating GitHub refs
+      # there, because the CLI and library/profile layout need to match the lock.
       packages = nixpkgs.lib.genAttrs [ "x86_64-linux" "aarch64-linux" ] (system: {
         system-manager = system-manager.packages.${system}.default;
+        home-manager = home-manager.packages.${system}.home-manager;
         default = system-manager.packages.${system}.default;
       });
 
