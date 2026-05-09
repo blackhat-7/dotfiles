@@ -29,6 +29,7 @@ draw_minimal_borders yes
 window_padding_width 10
 window_margin_width 0
 macos_titlebar_color background
+macos_option_as_alt yes
 
 # black
 color0   #19181a

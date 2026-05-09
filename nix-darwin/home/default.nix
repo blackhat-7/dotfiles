@@ -23,6 +23,7 @@
     pkgs.raycast
     pkgs.google-cloud-sql-proxy
     pkgs.dbeaver-bin
+    pkgs.jetbrains.datagrip
     pkgs.gopls
     pkgs.rustup
     pkgs.mongodb-compass

@@ -136,6 +136,7 @@
       npm:@juicesharp/rpiv-todo
       npm:@ifi/oh-pi-themes
       npm:pi-rewind
+      npm:pi-intercom
     "
 
     npm i -g @mariozechner/pi-coding-agent beautiful-mermaid || true
