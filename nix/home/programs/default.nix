@@ -116,6 +116,11 @@
       npm:pi-permission-system
       npm:pi-web-access
       npm:pi-subagents
+      npm:pi-mermaid
+      npm:@juicesharp/rpiv-todo
+      npm:@ifi/oh-pi-themes
+      npm:pi-rewind
+      npm:pi-intercom
     "
 
     npm i -g @mariozechner/pi-coding-agent env-cmd beautiful-mermaid || true
