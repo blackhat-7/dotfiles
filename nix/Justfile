@@ -59,15 +59,15 @@ _rollback_os:
 
 # macOS-specific target
 darwin:
-    sudo darwin-rebuild switch --flake .#illusion
+    sudo darwin-rebuild switch --flake .#illusion --impure --refresh
 
 # Linux-specific target (uses patched system-manager from this flake)
 linux:
-    sudo env PATH="$PATH" {{NIX}} run .#system-manager -- switch --flake .#illusionPC
+    sudo env PATH="$PATH" {{NIX}} run --impure --refresh .#system-manager -- switch --flake .#illusionPC --impure --refresh
 
 # Home Manager target
 home:
-    {{NIX}} run home-manager/master -- switch --flake .#illusion -b hm-backup-`date +%Y%m%d%H%M%S`
+    {{NIX}} run --impure --refresh home-manager/master -- switch --flake .#illusion --impure --refresh -b hm-backup-`date +%Y%m%d%H%M%S`
 
 # macOS rollback
 darwin-rollback:

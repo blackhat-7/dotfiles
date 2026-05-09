@@ -1,5 +1,5 @@
 run:
-    sudo darwin-rebuild switch --flake .#illusion
+    sudo darwin-rebuild switch --flake .#illusion --impure --refresh
 
 update:
     nix flake update
