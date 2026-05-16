@@ -7,13 +7,8 @@
       "docker"
       "linear-linear"
       "chromium"
-      "krisp"
       "wine-stable"
-      "whisky"
-      "ollama"
       "zed"
-      "element"
-      "obs"
     ];
   };
 }
