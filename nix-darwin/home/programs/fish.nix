@@ -23,14 +23,13 @@
           set -l prompt "Your task is to generate a concise and informative commit message based on the provided diff. Use the conventional commit format (type: subject). The message should be in the imperative mood and under 200 chars. Don't include additional text. The diff is:
           $diff_output"
 
-          # 5. Pick best Chutes model and call aichat
-          set -l model_id (chutes-tui --best-model-id 2>/dev/null)
-          if test -z "$model_id"
-              echo "❌ Failed to resolve Chutes model. Run: go install github.com/blackhat-7/chutes-tui@latest"
+          # 5. Call pi with thinking disabled
+          if test -z "$GCM_MODEL"
+              echo "❌ GCM_MODEL is not set."
               return 1
           end
 
-          set -l ai_msg (echo "$prompt" | aichat -m "chutes:$model_id")
+          set -l ai_msg (printf "%s\n" "$prompt" | pi -p --no-tools --no-session --no-context-files --no-skills --no-prompt-templates --thinking off --model "$GCM_MODEL" --system-prompt "Generate exactly one conventional commit message. No explanation. No markdown.")
 
           # 6. Process the output
           if test -n "$ai_msg"
@@ -198,6 +197,7 @@ bind -M insert \cx _aichat_fish
 
 export OPENAI_API_BASE="http://100.85.231.84:8080/api"
 export AIDER_MODEL="hf:Qwen/Qwen2.5-Coder-32B-Instruct"
+export GCM_MODEL="chutes/moonshotai/Kimi-K2.6-TEE"
 export OPENAI_API_KEY=$(cat $HOME/Documents/Creds/owui.txt)
 export GEMINI_API_KEY=$(cat $HOME/Documents/Creds/gemini.txt)
 export OLLAMA_HOST="0.0.0.0"
