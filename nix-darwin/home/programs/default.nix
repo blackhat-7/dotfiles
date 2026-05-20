@@ -23,7 +23,7 @@
     aichat = {
       enable = true;
       settings = {
-        model = "chutes:openai/gpt-oss-120b-TEE";
+        model = "chutes:moonshotai/Kimi-K2.6-TEE";
         clients = [
           # {
           #   type = "openai-compatible";

@@ -71,6 +71,8 @@ Use the strongest available review path:
 
 Do not paste diff contents into chat. The reviewer path reads from disk and from `git diff` itself.
 
+Subagent output contract: parent saves reviewer final markdown to `~/.flow/<slug>/REVIEW.md` (use `output` when available); reviewer does not write files.
+
 Prompt for subagent paths:
 
 ```
@@ -88,9 +90,11 @@ The user values: minimal code, 100% correctness, no out-of-scope changes,
 no defensive code, no "while I'm here" cleanup, no comments explaining
 what code does. Plan-build trace is the contract.
 
-Be skeptical. Be specific. Cite file:line.
+Be skeptical. Be specific. Cite file:line. For each non-None finding, include only the smallest useful line-numbered code snippet.
 
-Output to ~/.flow/<slug>/REVIEW.md using the format below. End your reply with one line:
+Review destination: ~/.flow/<slug>/REVIEW.md
+
+Return the review markdown using the format below. Do not write files yourself. End your reply with one line:
 "REVIEW.md written. Verdict: <SHIP | NEEDS-FIXES | RE-PLAN>."
 ```
 
@@ -107,7 +111,7 @@ Whether subagent or inline:
    - Surrounding code has no logic errors, missed cases, type/contract mismatches, races, broken file formats, or bad generated config.
    - Mode budget and new-file rules are satisfied.
 
-Write `~/.flow/<slug>/REVIEW.md` with exactly:
+Return exactly:
 
 ```markdown
 # Audit: <slug>

@@ -132,6 +132,8 @@ Use the strongest available review path:
 
 Do not paste full diffs into chat. The reviewer reads from disk and runs `git diff` itself.
 
+Subagent output contract: parent saves reviewer final markdown to `$REVIEW` (use `output` when available); reviewer does not write files.
+
 Prompt for subagent paths:
 
 ```text
@@ -142,15 +144,15 @@ Plan source: <PR URL | explicit file | pasted text | other>
 Repo root: <absolute path to repo>
 Diff command to review: <exact git diff command/range>
 Status command: git status --porcelain
-Output file: <absolute path to $REVIEW>
+Review destination: <absolute path to $REVIEW>
 
 The user values: minimal code, 100% correctness, no out-of-scope changes,
 no defensive code, no "while I'm here" cleanup, no comments explaining
 what code does. The PR description/plan to diff trace is the contract.
 
-Be skeptical. Be specific. Cite file:line.
+Be skeptical. Be specific. Cite file:line. For each non-None finding, include only the smallest useful line-numbered code snippet.
 
-Write the review to the output file using the required format below. End your reply with one line:
+Return the review markdown using the required format below. Do not write files yourself. End your reply with one line:
 "REVIEW.md written. Verdict: <SHIP | NEEDS-FIXES | RE-PLAN>."
 ```
 
@@ -168,7 +170,7 @@ Whether subagent or inline:
    - Surrounding code has no logic errors, missed cases, type/contract mismatches, races, broken file formats, config mistakes, generated-file mistakes, or test gaps that would make the PR unsafe.
    - Diff size, new files, and abstraction choices are justified by the stated PR scope.
 
-Write `$REVIEW` with exactly:
+Return exactly:
 
 ```markdown
 # PR Audit: <repo or PR identifier>
