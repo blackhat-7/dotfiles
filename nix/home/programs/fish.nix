@@ -156,6 +156,7 @@
       # Tmux envs
       # Platform-specific paths
       alias sessions="~/dotfiles/scripts/sessions.sh"
+      alias cleanup-space="~/dotfiles/scripts/cleanup-space.sh"
       alias long_training_jobs="/Users/illusion/Documents/Work/Editing/DebugHelpers/long_training/long_training_jobs"
       alias gcp_stage="source /Users/illusion/Documents/Work/Creds/gcp_stage.sh"
       alias gcp_prod="source /Users/illusion/Documents/Work/Creds/gcp_prod.sh"
