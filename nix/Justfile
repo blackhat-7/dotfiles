@@ -63,7 +63,7 @@ darwin:
 
 # Linux-specific target (uses patched system-manager from this flake)
 linux:
-    sudo env PATH="$PATH" {{NIX}} run --impure --refresh .#system-manager -- switch --flake .#illusionPC --impure --refresh
+    sudo env PATH="$PATH" {{NIX}} run --impure --refresh .#system-manager -- switch --flake .#illusionPC
 
 # Home Manager target
 home:
