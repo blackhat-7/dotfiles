@@ -1,6 +1,7 @@
 { pkgs, ...}: {
   programs.kitty = {
     enable = true;
+    package = null;
     extraConfig = ''
 # Monokai-pro for Kitty
 # Based on https://www.monokai.pro/

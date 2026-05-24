@@ -9,6 +9,7 @@
       "chromium"
       "wine-stable"
       "zed"
+      "kitty"
     ];
   };
 }
