@@ -1,7 +1,7 @@
 # Define paths to Nix executables
 NIX_BIN := /nix/var/nix/profiles/default/bin
 NIX := $(NIX_BIN)/nix
-NIX_STORE := $(NIX_BIN)/nix-store
+NIX_STORE_BIN := $(NIX_BIN)/nix-store
 SYSTEM_MANAGER := .\#system-manager
 HOME_MANAGER := .\#home-manager
 
@@ -52,7 +52,7 @@ index:
 
 # Repair nix store
 repair:
-	sudo $(NIX_STORE) --verify --check-contents --repair
+	sudo $(NIX_STORE_BIN) --verify --check-contents --repai
 
 # Rollback to previous configuration
 rollback:
