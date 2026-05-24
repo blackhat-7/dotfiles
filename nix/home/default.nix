@@ -12,7 +12,6 @@
   home.packages = with pkgs; [
     neofetch
     exiftool
-    tailscale
     python311
     python311Packages.pip
     opentofu

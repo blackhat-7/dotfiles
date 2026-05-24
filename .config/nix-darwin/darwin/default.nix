@@ -20,10 +20,6 @@
     zsh.enable = true;
   };
 
-  services = {
-    tailscale.enable = true;
-  };
-
   nix.enable = false;
   # nix.package = pkgs.nix;
   # nix.gc = {

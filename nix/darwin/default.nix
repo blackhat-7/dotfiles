@@ -36,7 +36,6 @@
   ];
 
   services = {
-    tailscale.enable = true;
     # skhd = {
     #   enable = true;
     #   skhdConfig = ''

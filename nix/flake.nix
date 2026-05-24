@@ -78,9 +78,6 @@
         # Development
         go
         python3
-
-        # Networking
-        tailscale
       ];
 
     in {

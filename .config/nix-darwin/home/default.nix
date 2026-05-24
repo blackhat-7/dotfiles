@@ -12,7 +12,6 @@
     # pkgs.docker
     # pkgs.docker-compose
     pkgs.exiftool
-    pkgs.tailscale
     pkgs.python311
     pkgs.opentofu
     pkgs.terragrunt
