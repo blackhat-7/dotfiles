@@ -184,6 +184,19 @@
   xdg.enable = true;
 
   # Systemd user services
+  systemd.user.services.opencode-web = {
+    Unit.Description = "OpenCode Web";
+
+    Service = {
+      ExecStart = "${config.home.homeDirectory}/.npm-global/bin/opencode web --hostname 0.0.0.0";
+      WorkingDirectory = config.home.homeDirectory;
+      Restart = "always";
+      RestartSec = "3s";
+    };
+
+    Install.WantedBy = [ "default.target" ];
+  };
+
   systemd.user.services.vicinae = {
     Unit = {
       Description = "Vicinae Launcher Server";
