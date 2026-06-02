@@ -29,7 +29,7 @@
               return 1
           end
 
-          set -l ai_msg (printf "%s\n" "$prompt" | pi -p --no-tools --no-session --no-context-files --no-skills --no-prompt-templates --thinking off --model "$GCM_MODEL" --system-prompt "Generate exactly one conventional commit message. No explanation. No markdown.")
+          set -l ai_msg (printf "%s\n" "$prompt" | pi -p --no-tools --no-session --thinking off --model "$GCM_MODEL")
 
           # 6. Process the output
           if test -n "$ai_msg"
@@ -198,7 +198,7 @@ bind -M insert \cx _aichat_fish
 
 export OPENAI_API_BASE="http://100.85.231.84:8080/api"
 export AIDER_MODEL="hf:Qwen/Qwen2.5-Coder-32B-Instruct"
-export GCM_MODEL="chutes/moonshotai/Kimi-K2.6-TEE"
+export GCM_MODEL="openai-codex/gpt-5.3-codex-spark"
 export OPENAI_API_KEY=$(cat $HOME/Documents/Creds/owui.txt)
 export GEMINI_API_KEY=$(cat $HOME/Documents/Creds/gemini.txt)
 export OLLAMA_HOST="0.0.0.0"
