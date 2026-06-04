@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Open Kitty file links in $EDITOR inside a tmux horizontal split."""
+"""Open Kitty file links in $EDITOR inside a tmux vertical split."""
 
 from __future__ import annotations
 
@@ -8,7 +8,6 @@ import shlex
 import shutil
 import subprocess
 import sys
-from pathlib import Path
 from urllib.parse import unquote, urlparse
 
 
@@ -18,30 +17,25 @@ def add_shell_path() -> None:
     paths = [
         f"{home}/.local/bin",
         f"{home}/.nix-profile/bin",
-        f"{home}/.npm-global/bin",
-        f"{home}/go/bin",
-        f"{home}/.cargo/bin",
         f"/etc/profiles/per-user/{user}/bin",
         "/run/current-system/sw/bin",
         "/opt/homebrew/bin",
         "/usr/local/bin",
         "/usr/bin",
         "/bin",
+        os.environ.get("PATH", ""),
     ]
-    os.environ["PATH"] = os.pathsep.join([p for p in paths if p and Path(p).exists()] + [os.environ.get("PATH", "")])
+    os.environ["PATH"] = os.pathsep.join(p for p in paths if p)
 
 
-def parse_link(raw_url: str) -> tuple[str, str | None, str | None]:
-    url = urlparse(raw_url)
-    if url.scheme == "nvim" and url.netloc == "file":
-        path = unquote(url.path)
-    elif url.scheme == "file":
-        path = unquote(url.path)
-    else:
-        raise ValueError(f"unsupported URL: {raw_url}")
+def parse_url(raw: str) -> tuple[str, str | None, str | None]:
+    url = urlparse(raw)
+    if not ((url.scheme == "nvim" and url.netloc == "file") or url.scheme == "file"):
+        raise ValueError(f"unsupported URL: {raw}")
 
+    path = unquote(url.path)
     if url.fragment.isdigit():
-        path = f"{path}:{url.fragment}"
+        return path, url.fragment, None
 
     parts = path.rsplit(":", 2)
     if len(parts) == 3 and parts[1].isdigit() and parts[2].isdigit():
@@ -51,9 +45,9 @@ def parse_link(raw_url: str) -> tuple[str, str | None, str | None]:
     return path, None, None
 
 
-def editor_command(path: str, line: str | None, col: str | None) -> list[str]:
+def editor_cmd(path: str, line: str | None, col: str | None) -> list[str]:
     cmd = shlex.split(os.environ.get("EDITOR", "nvim")) or ["nvim"]
-    if Path(cmd[0]).name == "nvim":
+    if os.path.basename(cmd[0]) == "nvim":
         cmd += ["--cmd", "lua vim.deprecate=function() end"]
     if line:
         cmd.append(f"+{line}")
@@ -62,7 +56,7 @@ def editor_command(path: str, line: str | None, col: str | None) -> list[str]:
     return cmd + ["--", path]
 
 
-def active_tmux_pane(tmux: str) -> str | None:
+def active_pane(tmux: str) -> str | None:
     if pane := os.environ.get("TMUX_PANE"):
         return pane
 
@@ -75,7 +69,7 @@ def active_tmux_pane(tmux: str) -> str | None:
     if clients.returncode != 0 or not clients.stdout.strip():
         return None
 
-    client = max((line.split("\t", 1) for line in clients.stdout.splitlines()), key=lambda x: int(x[0]))[1]
+    client = max((line.split("\t", 1) for line in clients.stdout.splitlines()), key=lambda p: int(p[0]))[1]
     pane = subprocess.run(
         [tmux, "display-message", "-c", client, "-p", "#{pane_id}"],
         text=True,
@@ -85,39 +79,34 @@ def active_tmux_pane(tmux: str) -> str | None:
     return pane.stdout.strip() if pane.returncode == 0 else None
 
 
-def open_in_tmux(cmd: list[str]) -> bool:
-    tmux = shutil.which("tmux")
-    target = active_tmux_pane(tmux) if tmux else None
-    if not tmux or not target:
-        return False
-
-    return subprocess.run([
-        tmux,
-        "split-window",
-        "-v",  # top/bottom split
-        "-p", "35",
-        "-t", target,
-        "-c", "#{pane_current_path}",
-        shlex.join(cmd),
-    ]).returncode == 0
-
-
 def main() -> int:
     if len(sys.argv) != 2:
         print("usage: open-editor-url URL", file=sys.stderr)
         return 2
 
     add_shell_path()
+    tmux = shutil.which("tmux")
+    pane = active_pane(tmux) if tmux else None
+    if not tmux or not pane:
+        print("tmux pane not found", file=sys.stderr)
+        return 1
+
     try:
-        path, line, col = parse_link(sys.argv[1])
+        cmd = editor_cmd(*parse_url(sys.argv[1]))
     except ValueError as exc:
         print(exc, file=sys.stderr)
         return 2
 
-    cmd = editor_command(path, line, col)
-    if open_in_tmux(cmd):
-        return 0
-    return subprocess.call(cmd)
+    return subprocess.run([
+        tmux,
+        "split-window",
+        "-h",
+        "-p", "40",
+        "-t", pane,
+        "-c", "#{pane_current_path}",
+        "-e", f"PATH={os.environ['PATH']}",
+        shlex.join(cmd),
+    ]).returncode
 
 
 if __name__ == "__main__":
