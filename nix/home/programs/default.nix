@@ -5,6 +5,20 @@
   config,
   ...
 }:
+let
+  osc8wrap = pkgs.buildGoModule {
+    pname = "osc8wrap";
+    version = "0.9.0";
+    src = pkgs.fetchFromGitHub {
+      owner = "mash";
+      repo = "osc8wrap";
+      rev = "c8311621f62ea3be8d8e35ba0b3ed18b62120cb8";
+      hash = "sha256-m6do+vjnOHQPFuKiBg1OxfsVRmHSOYa5YpiSquKri4s=";
+    };
+    vendorHash = "sha256-zp5cgIEHAeG4JDSOBsqipera43jBmxUC8SSlUuofxCQ=";
+    doCheck = false;
+  };
+in
 {
 
   imports = [
@@ -14,6 +28,8 @@
     ./starship.nix
     inputs.nix-index-database.homeModules.nix-index
   ];
+
+  home.packages = [ osc8wrap ];
 
   programs = {
     bash.enable = true;

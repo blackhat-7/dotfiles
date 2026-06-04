@@ -66,6 +66,8 @@ in
 
       # Tell tmux Kitty supports truecolor/RGB so colors match outside tmux.
       set -as terminal-features ",xterm-kitty:RGB"
+      # Preserve OSC-8 hyperlinks for Kitty Alt-click.
+      set -as terminal-features ",*:hyperlinks"
 
       # Increase scroll speed to 5 lines per wheel notch in vi copy mode
       bind-key -T copy-mode-vi WheelUpPane send-keys -X -N 5 scroll-up

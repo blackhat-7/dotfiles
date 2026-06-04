@@ -1,4 +1,4 @@
-{ pkgs, ...}: {
+{ pkgs, config, ... }: {
   programs.kitty = {
     enable = true;
     extraConfig = ''
@@ -6,6 +6,11 @@
       include ${../../../kitty/themes/oxocarbon-dark.conf}
 
       shell /usr/bin/fish
+
+      # Alt-click opens OSC-8 hyperlinks (file links from osc8wrap).
+      mouse_map alt+left release grabbed,ungrabbed mouse_click_url
+      mouse_map alt+left press grabbed mouse_discard_event
+
       hide_window_decorations      titlebar-only
       cursor_trail 3
 
@@ -23,4 +28,9 @@
       # END_KITTY_FONTS
     '';
   };
+
+  xdg.configFile."kitty/open-actions.conf".text = ''
+    protocol nvim
+    action launch --type=overlay --cwd=current -- ${pkgs.python3}/bin/python3 ${config.home.homeDirectory}/dotfiles/scripts/open-editor-url ''${URL}
+  '';
 }

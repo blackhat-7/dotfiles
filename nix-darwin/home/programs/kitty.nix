@@ -1,4 +1,4 @@
-{ pkgs, ...}: {
+{ pkgs, config, ... }: {
   programs.kitty = {
     enable = true;
     package = null;
@@ -18,6 +18,10 @@
       window_margin_width 0
       macos_option_as_alt yes
 
+      # Option-click opens OSC-8 hyperlinks (file links from osc8wrap).
+      mouse_map alt+left release grabbed,ungrabbed mouse_click_url
+      mouse_map alt+left press grabbed mouse_discard_event
+
       hide_window_decorations      titlebar-only
       cursor_trail 3
       background_opacity 0.9
@@ -29,4 +33,9 @@
       bold_italic_font auto
     '';
   };
+
+  xdg.configFile."kitty/open-actions.conf".text = ''
+    protocol nvim
+    action launch --type=overlay --cwd=current -- ${pkgs.python3}/bin/python3 ${config.home.homeDirectory}/dotfiles/scripts/open-editor-url ''${URL}
+  '';
 }

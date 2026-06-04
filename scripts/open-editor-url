@@ -1,0 +1,68 @@
+#!/usr/bin/env python3
+"""Open nvim://file/... links emitted by osc8wrap."""
+
+import os
+import shlex
+import subprocess
+import sys
+from pathlib import Path
+from urllib.parse import unquote, urlparse
+
+
+def add_shell_path() -> None:
+    home = os.environ.get("HOME", "")
+    user = os.environ.get("USER", "")
+    paths = [
+        f"{home}/.local/bin",
+        f"{home}/.nix-profile/bin",
+        f"{home}/.npm-global/bin",
+        f"{home}/go/bin",
+        f"{home}/.cargo/bin",
+        f"/etc/profiles/per-user/{user}/bin",
+        "/run/current-system/sw/bin",
+        "/opt/homebrew/bin",
+        "/usr/local/bin",
+        "/usr/bin",
+        "/bin",
+    ]
+    paths = [p for p in paths if p and Path(p).exists()]
+    os.environ["PATH"] = os.pathsep.join([*paths, os.environ.get("PATH", "")])
+
+
+def split_location(path: str) -> tuple[str, str | None, str | None]:
+    parts = path.rsplit(":", 2)
+    if len(parts) == 3 and parts[1].isdigit() and parts[2].isdigit():
+        return parts[0], parts[1], parts[2]
+    if len(parts) >= 2 and parts[-1].isdigit():
+        return ":".join(parts[:-1]), parts[-1], None
+    return path, None, None
+
+
+def main() -> int:
+    if len(sys.argv) != 2:
+        print("usage: open-editor-url URL", file=sys.stderr)
+        return 2
+
+    url = urlparse(sys.argv[1])
+    if url.scheme != "nvim" or url.netloc != "file":
+        print(f"unsupported URL: {sys.argv[1]}", file=sys.stderr)
+        return 2
+
+    add_shell_path()
+    path, line, col = split_location(unquote(url.path))
+    editor = shlex.split(os.environ.get("EDITOR", "nvim")) or ["nvim"]
+
+    cmd = editor[:]
+    if Path(cmd[0]).name == "nvim":
+        cmd += ["--cmd", "lua vim.deprecate=function() end"]
+    if line:
+        cmd.append(f"+{line}")
+    if col:
+        cmd.append(f"+normal! {col}|")
+    cmd += ["--", path]
+
+    return subprocess.call(cmd)
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

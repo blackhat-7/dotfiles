@@ -49,6 +49,8 @@
 
       # Tell tmux Kitty supports truecolor/RGB so colors match outside tmux.
       set -as terminal-features ",xterm-kitty:RGB"
+      # Preserve OSC-8 hyperlinks for Kitty Option-click.
+      set -as terminal-features ",*:hyperlinks"
 
       # tmux scroll speed
       bind-key -T copy-mode-vi WheelUpPane send -N1 -X scroll-up

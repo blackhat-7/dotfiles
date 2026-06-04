@@ -55,6 +55,39 @@ end
 vim.api.nvim_create_user_command('MarkdownPreview', markdown_preview, {})
 vim.keymap.set('n', '<space>mp', markdown_preview, { desc = 'Markdown preview' })
 
+local open_file_under_cursor = function()
+  local token = vim.fn.expand('<cWORD>')
+    :gsub([=[^[`'"({%[<]+]=], '')
+    :gsub([=[[`'"),.;}%]>]+$]=], '')
+  local path, row, col = token:match('^(.+):(%d+):(%d+)$')
+  if not path then
+    path, row = token:match('^(.+):(%d+)$')
+  end
+
+  if path then
+    local roots = { vim.fn.getcwd() }
+    for _, line in ipairs(vim.api.nvim_buf_get_lines(0, 0, -1, false)) do
+      local repo = line:match('^Repos:%s*(.+)$')
+      if repo then
+        table.insert(roots, repo)
+        break
+      end
+    end
+
+    for _, root in ipairs(roots) do
+      local file = vim.startswith(path, '/') and path or vim.fs.normalize(root .. '/' .. path)
+      if vim.fn.filereadable(file) == 1 then
+        vim.cmd.edit(vim.fn.fnameescape(file))
+        vim.api.nvim_win_set_cursor(0, { tonumber(row), math.max((tonumber(col) or 1) - 1, 0) })
+        return
+      end
+    end
+  end
+
+  vim.ui.open(vim.fn.expand('<cfile>'))
+end
+vim.keymap.set('n', 'gx', open_file_under_cursor, { desc = 'Open file:line or URI under cursor' })
+
 -- Remap for dealing with word wrap
 vim.keymap.set('n', 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
 vim.keymap.set('n', 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })

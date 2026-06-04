@@ -52,7 +52,7 @@
         end
       '';
       ocn = ''
-        set -l cmd opencode
+        set -l cmd "osc8wrap --scheme=nvim --no-symbol-links -- opencode"
 
         if test (count $argv) -gt 0
             set cmd "$cmd "(string join ' ' (string escape -- $argv))
@@ -62,6 +62,13 @@
             tmux new-window -n opencode -c "$PWD" "$cmd"
         else
             eval $cmd
+        end
+      '';
+      pi = ''
+        if isatty stdout
+            command osc8wrap --scheme=nvim --no-symbol-links -- pi $argv
+        else
+            command pi $argv
         end
       '';
       notes-sync = ''
