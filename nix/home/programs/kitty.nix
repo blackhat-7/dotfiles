@@ -1,20 +1,16 @@
 { pkgs, ...}: {
   programs.kitty = {
     enable = true;
-    themeFile = "rose-pine";
     extraConfig = ''
+      # Oxocarbon is not in pkgs.kitty-themes, so keep it vendored.
+      include ${../../../kitty/themes/oxocarbon-dark.conf}
+
       shell /usr/bin/fish
       hide_window_decorations      titlebar-only
       cursor_trail 3
 
       background_opacity 0.5
       background_blur 5
-
-
-      # # BEGIN_KITTY_THEME
-      # # Catppuccin-Mocha
-      # include current-theme.conf
-      # # END_KITTY_THEME
 
 
       # BEGIN_KITTY_FONTS
