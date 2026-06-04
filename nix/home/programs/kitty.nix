@@ -30,7 +30,7 @@
   };
 
   xdg.configFile."kitty/open-actions.conf".text = ''
-    protocol nvim
-    action launch --type=overlay --cwd=current -- ${pkgs.python3}/bin/python3 ${config.home.homeDirectory}/dotfiles/scripts/open-editor-url ''${URL}
+    protocol nvim,file
+    action launch --type=background --cwd=current -- ${pkgs.python3}/bin/python3 ${config.home.homeDirectory}/dotfiles/scripts/open-editor-url ''${URL}
   '';
 }

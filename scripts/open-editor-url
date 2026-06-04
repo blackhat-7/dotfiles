@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
-"""Open nvim://file/... links emitted by osc8wrap."""
+"""Open Kitty file links in $EDITOR inside a tmux horizontal split."""
+
+from __future__ import annotations
 
 import os
 import shlex
+import shutil
 import subprocess
 import sys
 from pathlib import Path
@@ -25,11 +28,21 @@ def add_shell_path() -> None:
         "/usr/bin",
         "/bin",
     ]
-    paths = [p for p in paths if p and Path(p).exists()]
-    os.environ["PATH"] = os.pathsep.join([*paths, os.environ.get("PATH", "")])
+    os.environ["PATH"] = os.pathsep.join([p for p in paths if p and Path(p).exists()] + [os.environ.get("PATH", "")])
 
 
-def split_location(path: str) -> tuple[str, str | None, str | None]:
+def parse_link(raw_url: str) -> tuple[str, str | None, str | None]:
+    url = urlparse(raw_url)
+    if url.scheme == "nvim" and url.netloc == "file":
+        path = unquote(url.path)
+    elif url.scheme == "file":
+        path = unquote(url.path)
+    else:
+        raise ValueError(f"unsupported URL: {raw_url}")
+
+    if url.fragment.isdigit():
+        path = f"{path}:{url.fragment}"
+
     parts = path.rsplit(":", 2)
     if len(parts) == 3 and parts[1].isdigit() and parts[2].isdigit():
         return parts[0], parts[1], parts[2]
@@ -38,29 +51,72 @@ def split_location(path: str) -> tuple[str, str | None, str | None]:
     return path, None, None
 
 
-def main() -> int:
-    if len(sys.argv) != 2:
-        print("usage: open-editor-url URL", file=sys.stderr)
-        return 2
-
-    url = urlparse(sys.argv[1])
-    if url.scheme != "nvim" or url.netloc != "file":
-        print(f"unsupported URL: {sys.argv[1]}", file=sys.stderr)
-        return 2
-
-    add_shell_path()
-    path, line, col = split_location(unquote(url.path))
-    editor = shlex.split(os.environ.get("EDITOR", "nvim")) or ["nvim"]
-
-    cmd = editor[:]
+def editor_command(path: str, line: str | None, col: str | None) -> list[str]:
+    cmd = shlex.split(os.environ.get("EDITOR", "nvim")) or ["nvim"]
     if Path(cmd[0]).name == "nvim":
         cmd += ["--cmd", "lua vim.deprecate=function() end"]
     if line:
         cmd.append(f"+{line}")
     if col:
         cmd.append(f"+normal! {col}|")
-    cmd += ["--", path]
+    return cmd + ["--", path]
 
+
+def active_tmux_pane(tmux: str) -> str | None:
+    if pane := os.environ.get("TMUX_PANE"):
+        return pane
+
+    clients = subprocess.run(
+        [tmux, "list-clients", "-F", "#{client_activity}\t#{client_name}"],
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.DEVNULL,
+    )
+    if clients.returncode != 0 or not clients.stdout.strip():
+        return None
+
+    client = max((line.split("\t", 1) for line in clients.stdout.splitlines()), key=lambda x: int(x[0]))[1]
+    pane = subprocess.run(
+        [tmux, "display-message", "-c", client, "-p", "#{pane_id}"],
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.DEVNULL,
+    )
+    return pane.stdout.strip() if pane.returncode == 0 else None
+
+
+def open_in_tmux(cmd: list[str]) -> bool:
+    tmux = shutil.which("tmux")
+    target = active_tmux_pane(tmux) if tmux else None
+    if not tmux or not target:
+        return False
+
+    return subprocess.run([
+        tmux,
+        "split-window",
+        "-v",  # top/bottom split
+        "-p", "35",
+        "-t", target,
+        "-c", "#{pane_current_path}",
+        shlex.join(cmd),
+    ]).returncode == 0
+
+
+def main() -> int:
+    if len(sys.argv) != 2:
+        print("usage: open-editor-url URL", file=sys.stderr)
+        return 2
+
+    add_shell_path()
+    try:
+        path, line, col = parse_link(sys.argv[1])
+    except ValueError as exc:
+        print(exc, file=sys.stderr)
+        return 2
+
+    cmd = editor_command(path, line, col)
+    if open_in_tmux(cmd):
+        return 0
     return subprocess.call(cmd)
 
 
