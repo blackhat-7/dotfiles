@@ -13,9 +13,18 @@ default: switch
 # Apply the system configuration, then the home configuration
 switch: _switch_os home
 
-# Update flake inputs
+# Safe default: update only nixpkgs
 update:
+    {{NIX}} flake update nixpkgs
+
+# Risky: update every input
+update-all:
     {{NIX}} flake update
+
+# Build without switching
+check:
+    {{NIX}} build .#homeConfigurations.illusion.activationPackage --no-link --impure
+    {{NIX}} run --impure .#system-manager -- build --flake .#illusionPC
 
 # Run nix-index
 index:
@@ -63,11 +72,11 @@ darwin:
 
 # Linux-specific target (uses patched system-manager from this flake)
 linux:
-    sudo env PATH="$PATH" {{NIX}} run --impure --refresh .#system-manager -- switch --flake .#illusionPC
+    sudo env PATH="$PATH" {{NIX}} run --impure .#system-manager -- switch --flake .#illusionPC
 
 # Home Manager target
 home:
-    {{NIX}} run --impure --refresh home-manager/master -- switch --flake .#illusion --impure --refresh -b hm-backup-`date +%Y%m%d%H%M%S`
+    {{NIX}} run .#home-manager -- switch --flake .#illusion --impure -b hm-backup-`date +%Y%m%d%H%M%S`
 
 # macOS rollback
 darwin-rollback:

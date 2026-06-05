@@ -2,7 +2,7 @@
   description = "Linux Nix configuration";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
     nixpkgs-gcloud.url = "github:NixOS/nixpkgs/6dedf69f94d03cbe7bdde106f2d4c23ae2a853bf";
 
@@ -81,7 +81,10 @@
         ];
       };
 
-      packages.x86_64-linux.system-manager = system-manager.packages.x86_64-linux.default;
+      packages.x86_64-linux = {
+        system-manager = system-manager.packages.x86_64-linux.default;
+        home-manager = home-manager.packages.x86_64-linux.home-manager;
+      };
 
       # Development shells
       devShells = forAllSystems (system: {
