@@ -13,9 +13,9 @@ default: switch
 # Apply the system configuration, then the home configuration
 switch: _switch_os home
 
-# Safe default: update only nixpkgs
+# Safe default: update nixpkgs and readonly-bash
 update:
-    {{NIX}} flake update nixpkgs
+    {{NIX}} flake update nixpkgs readonly-bash
 
 # Risky: update every input
 update-all:

@@ -6,6 +6,11 @@
 
     nixpkgs-gcloud.url = "github:NixOS/nixpkgs/6dedf69f94d03cbe7bdde106f2d4c23ae2a853bf";
 
+    readonly-bash = {
+      url = "github:blackhat-7/readonly-bash/main";
+      flake = false;
+    };
+
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";

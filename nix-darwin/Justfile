@@ -2,7 +2,7 @@ run:
     sudo darwin-rebuild switch --flake .#illusion --impure
 
 update:
-    nix flake update nixpkgs
+    nix flake update nixpkgs readonly-bash
 
 update-all:
     nix flake update

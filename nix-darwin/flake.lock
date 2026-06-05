@@ -76,12 +76,30 @@
         "type": "github"
       }
     },
+    "readonly-bash": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1780573318,
+        "narHash": "sha256-Ue0nO2r01fAHc5fFryG4kpUv4yruc6ZCYDUe+/0/+HY=",
+        "owner": "blackhat-7",
+        "repo": "readonly-bash",
+        "rev": "0a9ae77db21b7dc8573a953fce7c71cfe0c7f299",
+        "type": "github"
+      },
+      "original": {
+        "owner": "blackhat-7",
+        "ref": "main",
+        "repo": "readonly-bash",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "home-manager": "home-manager",
         "nix-darwin": "nix-darwin",
         "nix-index-database": "nix-index-database",
-        "nixpkgs": "nixpkgs"
+        "nixpkgs": "nixpkgs",
+        "readonly-bash": "readonly-bash"
       }
     }
   },
