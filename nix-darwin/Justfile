@@ -1,8 +1,14 @@
 run:
-    sudo darwin-rebuild switch --flake .#illusion --impure --refresh
+    sudo darwin-rebuild switch --flake .#illusion --impure
 
 update:
+    nix flake update nixpkgs
+
+update-all:
     nix flake update
+
+check:
+    darwin-rebuild build --flake .#illusion --impure
 
 index:
     nix run 'nixpkgs#nix-index' --extra-experimental-features 'nix-command flakes'
