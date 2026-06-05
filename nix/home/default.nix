@@ -2,6 +2,7 @@
   pkgs,
   config,
   lib,
+  gcloudPkgs,
   ...
 }:
 
@@ -36,9 +37,9 @@
     firefox
     cowsay
     wine
-    (google-cloud-sdk.withExtraComponents [
-      google-cloud-sdk.components.kubectl
-      google-cloud-sdk.components.gke-gcloud-auth-plugin
+    (gcloudPkgs.google-cloud-sdk.withExtraComponents [
+      gcloudPkgs.google-cloud-sdk.components.kubectl
+      gcloudPkgs.google-cloud-sdk.components.gke-gcloud-auth-plugin
     ])
     docker
     just

@@ -3,61 +3,59 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
-    
+
+    nixpkgs-gcloud.url = "github:NixOS/nixpkgs/6dedf69f94d03cbe7bdde106f2d4c23ae2a853bf";
+
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    
-    system-manager = {
-      url = "github:numtide/system-manager";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    
+
+    system-manager.url = "github:numtide/system-manager";
+
     nix-index-database = {
       url = "github:Mic92/nix-index-database";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, system-manager, ... }@inputs:
+  outputs =
+    {
+      self,
+      nixpkgs,
+      home-manager,
+      system-manager,
+      ...
+    }@inputs:
     let
-      supportedSystems = [ "x86_64-linux" "aarch64-linux" ];
+      supportedSystems = [
+        "x86_64-linux"
+        "aarch64-linux"
+      ];
 
       forAllSystems = nixpkgs.lib.genAttrs supportedSystems;
 
-      nixpkgsFor = forAllSystems (system: import nixpkgs {
-        inherit system;
+      nixpkgsFor = forAllSystems (
+        system:
+        import nixpkgs {
+          inherit system;
+          config.allowUnfree = true;
+        }
+      );
+
+      gcloudPkgs = import inputs.nixpkgs-gcloud {
+        system = "x86_64-linux";
         config.allowUnfree = true;
-      });
+      };
 
       username = "illusion";
 
-      # Upstream's cargo check runs `nix eval`, which tries to write to
-      # $HOME/.cache/nix. The Nix sandbox sets HOME=/homeless-shelter
-      # (unwritable), so patch the source to redirect HOME to $TMPDIR.
-      # Remove once upstream sets HOME in its own preCheck.
-      patchedSystemManagerSrc = nixpkgsFor.x86_64-linux.applyPatches {
-        name = "system-manager-src-patched";
-        src = system-manager;
-        postPatch = ''
-          substituteInPlace package.nix \
-            --replace-fail \
-              'export NIX_STATE_DIR=$TMPDIR' \
-              'export NIX_STATE_DIR=$TMPDIR
-              export HOME=$TMPDIR'
-        '';
-      };
-
-      patchedSystemManagerLib = import "${patchedSystemManagerSrc}/nix/lib.nix" {
-        inherit nixpkgs;
-        userborn = system-manager.inputs.userborn;
-      };
-    in {
+    in
+    {
       # Home Manager configuration for Linux
       homeConfigurations.${username} = home-manager.lib.homeManagerConfiguration {
         pkgs = nixpkgsFor.x86_64-linux;
-        extraSpecialArgs = { inherit inputs; };
+        extraSpecialArgs = { inherit inputs gcloudPkgs; };
         modules = [
           ./home
           {
@@ -68,8 +66,8 @@
         ];
       };
 
-      # System configuration with system-manager (patched source)
-      systemConfigs.illusionPC = patchedSystemManagerLib.makeSystemConfig {
+      # System configuration with system-manager
+      systemConfigs.illusionPC = system-manager.lib.makeSystemConfig {
         modules = [
           ./linux
           {
@@ -83,11 +81,7 @@
         ];
       };
 
-      packages.x86_64-linux.system-manager =
-        nixpkgsFor.x86_64-linux.callPackage "${patchedSystemManagerSrc}/nix/packages/wrapper.nix" {
-          system-manager-unwrapped =
-            nixpkgsFor.x86_64-linux.callPackage "${patchedSystemManagerSrc}/package.nix" { };
-        };
+      packages.x86_64-linux.system-manager = system-manager.packages.x86_64-linux.default;
 
       # Development shells
       devShells = forAllSystems (system: {
