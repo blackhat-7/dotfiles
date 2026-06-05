@@ -18,6 +18,9 @@
       window_margin_width 0
       macos_option_as_alt yes
 
+      # Avoid Kitty 0.47.x recursively watching Nix/Home Manager symlink trees.
+      auto_reload_config -1
+
       # Option-click opens OSC-8 hyperlinks (file links from osc8wrap).
       mouse_map alt+left release grabbed,ungrabbed mouse_click_url
       mouse_map alt+left press grabbed mouse_discard_event

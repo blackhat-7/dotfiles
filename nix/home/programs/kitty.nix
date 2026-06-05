@@ -7,6 +7,9 @@
 
       shell /usr/bin/fish
 
+      # Avoid Kitty 0.47.x recursively watching Nix/Home Manager symlink trees.
+      auto_reload_config -1
+
       # Alt-click opens OSC-8 hyperlinks (file links from osc8wrap).
       mouse_map alt+left release grabbed,ungrabbed mouse_click_url
       mouse_map alt+left press grabbed mouse_discard_event

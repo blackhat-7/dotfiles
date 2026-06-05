@@ -52,7 +52,7 @@
         end
       '';
       ocn = ''
-        set -l cmd "osc8wrap --scheme=nvim --no-symbol-links -- opencode"
+        set -l cmd "osc8wrap --scheme=nvim --no-symbol-links --no-resolve-basename -- opencode"
 
         if test (count $argv) -gt 0
             set cmd "$cmd "(string join ' ' (string escape -- $argv))
@@ -66,7 +66,7 @@
       '';
       pi = ''
         if isatty stdout
-            command osc8wrap --scheme=nvim --no-symbol-links -- pi $argv
+            command osc8wrap --scheme=nvim --no-symbol-links --no-resolve-basename -- pi $argv
         else
             command pi $argv
         end
