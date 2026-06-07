@@ -178,14 +178,14 @@ Recommended sizes:
 
 ```css
 .hero-title {
-  font-size: clamp(1.7rem, 3vw, 3.2rem);
-  line-height: 1.05;
-  letter-spacing: -0.04em;
+  font-size: clamp(1.35rem, 2.4vw, 2.6rem);
+  line-height: 1.08;
+  letter-spacing: -0.035em;
 }
 
 .hero-subtitle {
-  font-size: clamp(0.92rem, 1.4vw, 1.05rem);
-  line-height: 1.6;
+  font-size: clamp(0.88rem, 1.15vw, 1.0rem);
+  line-height: 1.5;
   color: var(--muted);
 }
 
@@ -205,21 +205,31 @@ Recommended sizes:
 Default SVG viewBox:
 
 ```html
-<svg viewBox="0 0 1200 675" role="img" aria-labelledby="diagram-title diagram-desc">
+<svg viewBox="0 0 1600 900" role="img" aria-labelledby="diagram-title diagram-desc">
 ```
 
-Use a 16px or 24px spacing rhythm. Keep key objects away from edges.
+Use the viewport generously. Do **not** artificially cap the diagram at 1120px wide for normal desktop screens; the stage should usually be between 1600px and 1800px wide on large displays, e.g. `width: min(1720px, calc(100vw - 32px));`, and the SVG should take most of the visible page. Use a 16px or 24px spacing rhythm. Keep key objects away from edges.
 
 Common coordinate zones:
 
 ```text
-Header text: outside SVG, above diagram
-SVG safe area: x=80..1120, y=70..600
-Main center: 600, 337
-Left lane: x=180..360
-Middle lane: x=460..740
-Right lane: x=840..1020
+Header text: outside SVG, above diagram, usually <= 15-18vh
+SVG safe area: x=110..1490, y=90..810
+Main center: 800, 450
+Left lane: x=220..470
+Middle lane: x=600..1000
+Right lane: x=1130..1380
 ```
+
+Space and anti-overlap rules:
+
+- Expand the canvas/viewBox before shrinking text or allowing clutter.
+- For dense diagrams, upgrade to `1800x1000`, `2000x1125`, or a taller full-page SVG if needed.
+- Prefer a slightly scrollable full-page diagram over tiny labels or crowded cards.
+- Keep at least 24px between unrelated objects, 32-48px between cards and connector labels, and 12-16px internal padding around text.
+- Route connectors around cards; never let labels sit under boxes, edges, or arrowheads.
+- If a label needs more than 1-4 words, wrap it inside a wider card or move details into a subtitle/note outside the SVG.
+- Before finalizing, scan the SVG for text/card overlaps and fix them by increasing spacing, moving lanes, or reducing object count.
 
 ---
 
@@ -526,8 +536,9 @@ Then generate the file.
 9. **Run QA**
    - Check visual balance.
    - Check reduced motion.
-   - Check that the diagram works at 800px wide and 1400px wide.
-   - Check that labels do not overlap.
+   - Check that the diagram uses most of the available viewport on desktop instead of floating in a small 1120px island.
+   - Check that the diagram works at 800px wide and 1600px+ wide.
+   - Check that labels do not overlap cards, connectors, arrowheads, badges, or other text.
    - Check that the animation tells the story even without reading every label.
 
 ---
@@ -892,7 +903,7 @@ Then:
 
 ## Full starter template
 
-Use this as the base for most generated diagrams. Replace the title, subtitle, nodes, paths, and labels for the requested concept.
+Use this as the base for most generated diagrams. Replace the title, subtitle, nodes, paths, and labels for the requested concept. The template intentionally uses a large canvas and a compact title area so diagrams can breathe on wide screens.
 
 ```html
 <!doctype html>
@@ -945,16 +956,20 @@ Use this as the base for most generated diagrams. Replace the title, subtitle, n
     }
 
     .stage {
-      width: min(1120px, calc(100vw - 32px));
-      padding: 28px;
+      width: min(1720px, calc(100vw - 32px));
+      min-height: 100vh;
+      display: grid;
+      grid-template-rows: auto minmax(0, 1fr);
+      align-content: center;
+      padding: clamp(16px, 2vw, 28px);
     }
 
     .hero {
       display: flex;
       justify-content: space-between;
-      gap: 20px;
+      gap: clamp(16px, 2vw, 28px);
       align-items: end;
-      margin: 0 0 18px;
+      margin: 0 0 clamp(12px, 1.4vh, 18px);
     }
 
     .eyebrow {
@@ -968,18 +983,18 @@ Use this as the base for most generated diagrams. Replace the title, subtitle, n
 
     h1 {
       margin: 0;
-      max-width: 760px;
-      font-size: clamp(1.8rem, 4vw, 3.8rem);
-      line-height: 1.02;
-      letter-spacing: -0.055em;
+      max-width: 980px;
+      font-size: clamp(1.45rem, 2.6vw, 2.7rem);
+      line-height: 1.08;
+      letter-spacing: -0.04em;
     }
 
     .subtitle {
-      margin: 12px 0 0;
-      max-width: 720px;
+      margin: 10px 0 0;
+      max-width: 920px;
       color: var(--muted);
-      font-size: clamp(0.95rem, 1.5vw, 1.08rem);
-      line-height: 1.65;
+      font-size: clamp(0.9rem, 1.15vw, 1.02rem);
+      line-height: 1.55;
     }
 
     .motion-toggle {
@@ -1075,7 +1090,7 @@ Use this as the base for most generated diagrams. Replace the title, subtitle, n
     .packet {
       fill: var(--accent);
       opacity: 0;
-      offset-path: path("M 240 337 C 410 245, 520 245, 600 337 S 790 430, 960 337");
+      offset-path: path("M 320 450 C 545 325, 690 325, 800 450 S 1055 575, 1280 450");
       offset-rotate: 0deg;
       animation: travel 4400ms var(--ease-standard) infinite;
       filter: drop-shadow(0 0 12px rgba(125, 211, 252, 0.58));
@@ -1211,7 +1226,7 @@ Use this as the base for most generated diagrams. Replace the title, subtitle, n
     </section>
 
     <section class="canvas">
-      <svg class="diagram" viewBox="0 0 1200 675" role="img" aria-labelledby="diagram-title diagram-desc">
+      <svg class="diagram" viewBox="0 0 1600 900" role="img" aria-labelledby="diagram-title diagram-desc">
         <title id="diagram-title">Animated concept diagram</title>
         <desc id="diagram-desc">
           A minimal dark-mode animated diagram showing a concept flowing through three stages.
@@ -1223,7 +1238,7 @@ Use this as the base for most generated diagrams. Replace the title, subtitle, n
             <path d="M 0 0 L 10 5 L 0 10 z" fill="rgba(148, 163, 184, 0.55)" />
           </marker>
 
-          <linearGradient id="edge-gradient" x1="180" y1="0" x2="1020" y2="0" gradientUnits="userSpaceOnUse">
+          <linearGradient id="edge-gradient" x1="240" y1="0" x2="1360" y2="0" gradientUnits="userSpaceOnUse">
             <stop offset="0%" stop-color="#7dd3fc" stop-opacity="0.22" />
             <stop offset="50%" stop-color="#c084fc" stop-opacity="0.50" />
             <stop offset="100%" stop-color="#86efac" stop-opacity="0.22" />
@@ -1231,39 +1246,39 @@ Use this as the base for most generated diagrams. Replace the title, subtitle, n
         </defs>
 
         <g class="grid" aria-hidden="true">
-          <line x1="120" y1="120" x2="1080" y2="120" />
-          <line x1="120" y1="337" x2="1080" y2="337" />
-          <line x1="120" y1="555" x2="1080" y2="555" />
-          <line x1="240" y1="90" x2="240" y2="585" />
-          <line x1="600" y1="90" x2="600" y2="585" />
-          <line x1="960" y1="90" x2="960" y2="585" />
+          <line x1="160" y1="160" x2="1440" y2="160" />
+          <line x1="160" y1="450" x2="1440" y2="450" />
+          <line x1="160" y1="740" x2="1440" y2="740" />
+          <line x1="320" y1="120" x2="320" y2="780" />
+          <line x1="800" y1="120" x2="800" y2="780" />
+          <line x1="1280" y1="120" x2="1280" y2="780" />
         </g>
 
         <path class="edge reveal" pathLength="1"
               marker-end="url(#arrow)"
-              d="M 322 337 C 410 245, 520 245, 600 337 S 790 430, 878 337" />
+              d="M 410 450 C 545 325, 690 325, 800 450 S 1055 575, 1190 450" />
         <path class="edge" stroke="url(#edge-gradient)" opacity="0.55"
-              d="M 240 337 C 410 245, 520 245, 600 337 S 790 430, 960 337" />
+              d="M 320 450 C 545 325, 690 325, 800 450 S 1055 575, 1280 450" />
 
-        <g class="node" transform="translate(240 337)" style="--i: 0">
+        <g class="node" transform="translate(320 450)" style="--i: 0">
           <rect class="node-shell" x="-88" y="-40" width="176" height="80" rx="18" />
           <text class="node-title" x="0" y="-5" text-anchor="middle">Input</text>
           <text class="node-caption" x="0" y="18" text-anchor="middle">what starts it</text>
         </g>
 
-        <g class="node active" transform="translate(600 337)" style="--i: 1">
+        <g class="node active" transform="translate(800 450)" style="--i: 1">
           <rect class="node-shell" x="-92" y="-42" width="184" height="84" rx="20" />
           <text class="node-title" x="0" y="-5" text-anchor="middle">Mechanism</text>
           <text class="node-caption" x="0" y="18" text-anchor="middle">what changes it</text>
         </g>
 
-        <g class="node" transform="translate(960 337)" style="--i: 2">
+        <g class="node" transform="translate(1280 450)" style="--i: 2">
           <rect class="node-shell" x="-88" y="-40" width="176" height="80" rx="18" />
           <text class="node-title" x="0" y="-5" text-anchor="middle">Output</text>
           <text class="node-caption" x="0" y="18" text-anchor="middle">what you get</text>
         </g>
 
-        <g class="badge" transform="translate(600 112)">
+        <g class="badge" transform="translate(800 150)">
           <rect x="-92" y="-17" width="184" height="34" rx="17" />
           <text x="0" y="5" text-anchor="middle">cause → effect</text>
         </g>
