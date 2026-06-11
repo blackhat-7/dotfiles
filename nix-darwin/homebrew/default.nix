@@ -4,8 +4,8 @@
     global.autoUpdate = true;
     casks = [
       "zen"
-      "docker"
-      "linear-linear"
+      "docker-desktop"
+      "linear"
       "chromium"
       "wine-stable"
       "zed"
