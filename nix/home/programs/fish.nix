@@ -347,6 +347,9 @@
       if test -f $HOME/Documents/Work/Creds/github-mcp.txt
           export GITHUB_MCP_TOKEN=$(cat $HOME/Documents/Work/Creds/github-mcp.txt)
       end
+      if test -f $HOME/Documents/Work/Creds/aftershoot-mcp.txt
+          export AFTERSHOOT_MCP_API_KEY=$(cat $HOME/Documents/Work/Creds/aftershoot-mcp.txt)
+      end
       if test -f $HOME/Documents/Work/Creds/linear.txt
           export LINEAR_API_KEY=$(cat $HOME/Documents/Work/Creds/linear.txt)
       end
