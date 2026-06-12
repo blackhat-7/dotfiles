@@ -1,8 +1,8 @@
-{ pkgs, lib, config, ... }:
+{ pkgs, lib, config, inputs, ... }:
 {
   imports = [
     ./programs
-    ../../ai-harnesses
+    inputs.ai-harnesses.homeManagerModules.default
   ];
   home.stateVersion = "23.11";
   home.packages = [

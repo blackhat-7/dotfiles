@@ -13,9 +13,9 @@ default: switch
 # Apply the system configuration, then the home configuration
 switch: _switch_os home
 
-# Safe default: update nixpkgs and readonly-bash
+# Safe default: update nixpkgs, readonly-bash, and shared harness config
 update:
-    {{NIX}} flake update nixpkgs readonly-bash
+    {{NIX}} flake update nixpkgs readonly-bash ai-harnesses
 
 # Risky: update every input
 update-all:

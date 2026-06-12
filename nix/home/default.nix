@@ -3,13 +3,14 @@
   config,
   lib,
   gcloudPkgs,
+  inputs,
   ...
 }:
 
 {
   imports = [
     ./programs
-    ../../ai-harnesses
+    inputs.ai-harnesses.homeManagerModules.default
   ];
 
   home.stateVersion = "23.11";

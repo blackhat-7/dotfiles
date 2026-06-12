@@ -11,6 +11,11 @@
       flake = false;
     };
 
+    ai-harnesses = {
+      url = "github:blackhat-7/ai-harnesses/main";
+      inputs.readonly-bash.follows = "readonly-bash";
+    };
+
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
