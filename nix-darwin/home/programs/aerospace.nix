@@ -6,7 +6,7 @@
       let
         sticky-pip-script = pkgs.writeShellScriptBin "sticky-pip" ''
           current_workspace=$(${pkgs.aerospace}/bin/aerospace list-workspaces --focused)
-          ${pkgs.aerospace}/bin/aerospace list-windows --all | grep -E "(Picture-in-Picture|Picture in Picture)" | awk '{print $1}' | while read window_id; do
+          ${pkgs.aerospace}/bin/aerospace list-windows --all | awk -F' *\\| *' '$3 ~ /Picture[- ]in[- ]Picture/ || ($2 == "Discord" && $3 !~ / - Discord$/) { print $1 }' | while read window_id; do
             [ -n "$window_id" ] && ${pkgs.aerospace}/bin/aerospace move-node-to-workspace --window-id "$window_id" "$current_workspace"
           done
         '';
