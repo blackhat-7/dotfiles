@@ -11,6 +11,22 @@ A compact reference of durable system-design rules. The goal is not to memorize 
 
 No catalog can literally contain every good rule ever written. This is a curated, high-signal compilation from distributed-systems papers, SRE books, cloud architecture catalogs, API design guides, integration pattern catalogs, security guidance, and production case studies.
 
+## Common system shapes
+
+Most backend systems are some mix of:
+
+- **State machine:** entity lifecycle with allowed transitions.
+- **Workflow:** multi-step long-running process.
+- **Saga:** cross-service workflow with compensations.
+- **Queue worker:** async work with retries/leases.
+- **Event-driven system:** publish facts, consumers react.
+- **Reconciler/controller:** repair actual state toward desired state.
+- **CRUD/resource service:** basic resource APIs and persistence.
+- **Ledger:** append-only auditable records.
+- **Materialized view/cache:** derived fast-read copy, rebuildable.
+- **Scheduler/timer:** runs work at a time/interval; avoid overlap.
+- **Request-response API:** synchronous REST/gRPC calls with deadlines/auth/idempotency.
+
 ## Legend
 
 - **[Any]**: useful in almost every system.
