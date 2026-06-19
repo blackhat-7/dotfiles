@@ -26,6 +26,7 @@
     python313Packages.pip
     golangci-lint
     nodejs_24
+    opencode-desktop
     tree-sitter
     gopls
     tmux

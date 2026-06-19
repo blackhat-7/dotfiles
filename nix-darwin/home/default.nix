@@ -16,6 +16,7 @@
     pkgs.golangci-lint
     pkgs.nightlight
     pkgs.nodejs_24
+    pkgs.opencode-desktop
     pkgs.tree-sitter
     pkgs.spotify
     pkgs.slack
