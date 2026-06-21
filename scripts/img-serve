@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+tmp_base="/tmp/img-${USER:-user}"
+image_dir="${AI_IMAGE_DIR:-$tmp_base/images}"
+port="${IMG_SERVE_PORT:-8765}"
+host="${IMG_SERVE_HOST:-127.0.0.1}"
+
+mkdir -p "$image_dir"
+
+cat <<EOF
+Serving images:
+  directory: $image_dir
+  local URL: http://$host:$port
+
+For phone viewing over Tailscale, run in another terminal:
+  tailscale serve --bg localhost:$port
+  tailscale serve status
+EOF
+
+exec python3 -m http.server "$port" --bind "$host" --directory "$image_dir"

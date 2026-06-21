@@ -1,0 +1,231 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+usage() {
+  cat <<'EOF'
+Usage: img [--cloud|--local] "prompt"
+
+Generate one image and save it under AI_IMAGE_DIR.
+
+Backends:
+  cloud (default)  genmedia/fal
+  local            stable-diffusion.cpp sd-server OpenAI-compatible API
+
+Environment:
+  IMG_BACKEND=cloud|local
+  IMG_LOCAL_URL=http://127.0.0.1:1234
+  AI_IMAGE_DIR=/tmp/img-$USER/images
+  AI_IMAGE_LOG_DIR=/tmp/img-$USER/logs
+  AI_IMAGE_MODEL=openai/gpt-image-2
+  AI_IMAGE_QUALITY=medium
+  AI_IMAGE_FORMAT=png
+  AI_IMAGE_WIDTH=1024
+  AI_IMAGE_HEIGHT=1024
+  AI_IMAGE_STEPS=8
+  AI_IMAGE_CFG=1.0
+EOF
+}
+
+backend="${IMG_BACKEND:-cloud}"
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --cloud)
+      backend="cloud"
+      shift
+      ;;
+    --local)
+      backend="local"
+      shift
+      ;;
+    --backend)
+      [[ $# -ge 2 ]] || { echo "img: --backend needs cloud or local" >&2; exit 2; }
+      backend="$2"
+      shift 2
+      ;;
+    -h|--help)
+      usage
+      exit 0
+      ;;
+    --)
+      shift
+      break
+      ;;
+    -*)
+      echo "img: unknown option: $1" >&2
+      usage >&2
+      exit 2
+      ;;
+    *)
+      break
+      ;;
+  esac
+done
+
+prompt="$*"
+if [[ -z "$prompt" ]]; then
+  usage >&2
+  exit 2
+fi
+
+case "$backend" in
+  cloud|local) ;;
+  *) echo "img: IMG_BACKEND must be cloud or local, got: $backend" >&2; exit 2 ;;
+esac
+
+tmp_base="/tmp/img-${USER:-user}"
+image_dir="${AI_IMAGE_DIR:-$tmp_base/images}"
+log_dir="${AI_IMAGE_LOG_DIR:-$tmp_base/logs}"
+model="${AI_IMAGE_MODEL:-openai/gpt-image-2}"
+quality="${AI_IMAGE_QUALITY:-medium}"
+format="${AI_IMAGE_FORMAT:-png}"
+width="${AI_IMAGE_WIDTH:-1024}"
+height="${AI_IMAGE_HEIGHT:-1024}"
+steps="${AI_IMAGE_STEPS:-8}"
+cfg="${AI_IMAGE_CFG:-1.0}"
+local_url="${IMG_LOCAL_URL:-http://127.0.0.1:1234}"
+local_url="${local_url%/}"
+
+mkdir -p "$image_dir" "$log_dir"
+
+slug=$(
+  printf '%s' "$prompt" \
+    | tr '[:upper:]' '[:lower:]' \
+    | tr -cs '[:alnum:]' '-' \
+    | sed 's/^-//; s/-$//' \
+    | cut -c1-60
+)
+[[ -n "$slug" ]] || slug="image"
+id="$(date +%Y%m%d-%H%M%S)-$slug"
+
+need_cmd() {
+  if ! command -v "$1" >/dev/null 2>&1; then
+    echo "img: missing dependency: $1" >&2
+    return 1
+  fi
+}
+
+json_get() {
+  local filter=$1 file=$2
+  jq -r "$filter" "$file" 2>/dev/null || true
+}
+
+decode_base64() {
+  if printf '' | base64 --decode >/dev/null 2>&1; then
+    base64 --decode
+  elif printf '' | base64 -d >/dev/null 2>&1; then
+    base64 -d
+  else
+    base64 -D
+  fi
+}
+
+run_cloud() {
+  need_cmd genmedia || {
+    echo "Install/apply Home Manager, then run: genmedia setup" >&2
+    exit 127
+  }
+  need_cmd jq >/dev/null || exit 127
+
+  local log_path="$log_dir/$id.json"
+  local download_pattern="$image_dir/{request_id}_{index}.{ext}"
+  local image_size
+  image_size=$(jq -cn --argjson width "$width" --argjson height "$height" '{width:$width,height:$height}')
+
+  if ! genmedia run "$model" \
+    --prompt "$prompt" \
+    --quality "$quality" \
+    --image_size "$image_size" \
+    --num_images 1 \
+    --output_format "$format" \
+    --download "$download_pattern" \
+    --json > "$log_path"; then
+    echo "img: genmedia failed. If this is first use, run: genmedia setup" >&2
+    echo "IMAGE_LOG=$log_path"
+    exit 1
+  fi
+
+  local image_path image_url
+  image_path=$(json_get '.downloaded_files[0].path // empty' "$log_path")
+  image_url=$(json_get '.downloaded_files[0].url // .images[0].url? // .data[0].url? // empty' "$log_path")
+
+  [[ -n "$image_path" ]] && echo "IMAGE_PATH=$image_path"
+  [[ -n "$image_url" ]] && echo "IMAGE_URL=$image_url"
+  echo "IMAGE_LOG=$log_path"
+}
+
+run_local() {
+  need_cmd curl >/dev/null || exit 127
+  need_cmd jq >/dev/null || exit 127
+  need_cmd base64 >/dev/null || exit 127
+
+  local endpoint="$local_url/v1/images/generations"
+  local response_tmp log_path image_path extra_args api_prompt body http_code b64
+  response_tmp=$(mktemp)
+  trap 'rm -f "$response_tmp"' RETURN
+
+  log_path="$log_dir/$id.local.json"
+  image_path="$image_dir/$id.$format"
+
+  # stable-diffusion.cpp's OpenAI-compatible API only accepts the standard
+  # image fields directly. Per-request sampler settings are passed through the
+  # sd_cpp_extra_args prompt extension and stripped by sd-server before inference.
+  extra_args=$(jq -cn --argjson steps "$steps" --argjson cfg "$cfg" \
+    '{sample_params:{sample_steps:$steps,guidance:{txt_cfg:$cfg}}}')
+  api_prompt="$prompt<sd_cpp_extra_args>$extra_args</sd_cpp_extra_args>"
+
+  body=$(jq -cn \
+    --arg prompt "$api_prompt" \
+    --arg size "${width}x${height}" \
+    --arg format "$format" \
+    '{prompt:$prompt,size:$size,n:1,output_format:$format}')
+
+  if ! http_code=$(curl -sS -o "$response_tmp" -w '%{http_code}' \
+    -X POST "$endpoint" \
+    -H 'Content-Type: application/json' \
+    -d "$body"); then
+    jq -n --arg backend local --arg endpoint "$endpoint" --argjson request "$body" \
+      --arg error "curl failed; is img-local-server running?" \
+      '{backend:$backend,endpoint:$endpoint,request:$request,error:$error}' > "$log_path"
+    echo "img: local request failed. Run: img-local-setup, then img-local-server" >&2
+    echo "IMAGE_LOG=$log_path"
+    exit 1
+  fi
+
+  jq -n \
+    --arg backend local \
+    --arg endpoint "$endpoint" \
+    --arg http_code "$http_code" \
+    --argjson request "$body" \
+    --slurpfile response "$response_tmp" \
+    '{backend:$backend,endpoint:$endpoint,http_code:($http_code|tonumber),request:$request,response:($response[0] // null)}' \
+    > "$log_path"
+
+  if [[ ! "$http_code" =~ ^2 ]]; then
+    echo "img: local server returned HTTP $http_code" >&2
+    echo "IMAGE_LOG=$log_path"
+    exit 1
+  fi
+
+  b64=$(json_get '.data[0].b64_json // empty' "$response_tmp")
+  if [[ -z "$b64" ]]; then
+    echo "img: local response did not include data[0].b64_json" >&2
+    echo "IMAGE_LOG=$log_path"
+    exit 1
+  fi
+
+  if ! printf '%s' "$b64" | decode_base64 > "$image_path"; then
+    echo "img: failed to decode local image response" >&2
+    echo "IMAGE_LOG=$log_path"
+    exit 1
+  fi
+
+  echo "IMAGE_PATH=$image_path"
+  echo "IMAGE_LOG=$log_path"
+}
+
+if [[ "$backend" == "cloud" ]]; then
+  run_cloud
+else
+  run_local
+fi

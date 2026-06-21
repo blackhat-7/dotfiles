@@ -7,6 +7,13 @@
   ...
 }:
 
+let
+  genmedia =
+    if pkgs ? genmedia then
+      pkgs.genmedia
+    else
+      pkgs.callPackage ../../pkgs/genmedia.nix { };
+in
 {
   imports = [
     ./programs
@@ -34,6 +41,10 @@
     git
     ffmpeg_6-headless
     exempi
+    jq
+    curl
+    uv
+    genmedia
 
     # Linux-specific packages
     firefox
@@ -62,11 +73,42 @@
   ];
 
   home.sessionPath = [
+    "$HOME/.local/bin"
     "$HOME/.npm-global/bin"
   ];
 
   home.sessionVariables = {
     NPM_CONFIG_PREFIX = "$HOME/.npm-global";
+  };
+
+  home.file.".local/bin/img" = {
+    source = ../../scripts/img;
+    executable = true;
+  };
+
+  home.file.".local/bin/img-local-setup" = {
+    source = ../../scripts/img-local-setup;
+    executable = true;
+  };
+
+  home.file.".local/bin/img-local-server" = {
+    source = ../../scripts/img-local-server;
+    executable = true;
+  };
+
+  home.file.".local/bin/img-serve" = {
+    source = ../../scripts/img-serve;
+    executable = true;
+  };
+
+  home.file.".local/bin/anime_vid_setup" = {
+    source = ../../scripts/anime_vid_setup;
+    executable = true;
+  };
+
+  home.file.".local/bin/anime_vid_server" = {
+    source = ../../scripts/anime_vid_server;
+    executable = true;
   };
 
   # Git configuration

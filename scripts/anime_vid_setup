@@ -1,0 +1,178 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+root="${ANIME_VID_DIR:-$HOME/.img/anime_vid}"
+comfy="$root/ComfyUI"
+python_version="${ANIME_VID_PYTHON:-3.12}"
+
+usage() {
+  cat <<EOF
+Usage: anime_vid_setup
+
+Install/update the local anime_vid ComfyUI + AnimateDiff stack under:
+  $root
+
+Stack:
+  ComfyUI
+  ComfyUI-AnimateDiff-Evolved
+  ComfyUI-VideoHelperSuite
+  ComfyUI_IPAdapter_plus
+  AOM3 SD1.5 anime checkpoint
+  AnimateDiff SD1.5 v2 motion module
+  SD1.5 IP-Adapter Plus for image-to-video conditioning
+
+Environment:
+  ANIME_VID_DIR=$root
+  ANIME_VID_PYTHON=$python_version
+EOF
+}
+
+case "${1:-}" in
+  -h|--help)
+    usage
+    exit 0
+    ;;
+  "") ;;
+  *)
+    echo "anime_vid_setup: unknown argument: $1" >&2
+    usage >&2
+    exit 2
+    ;;
+esac
+
+need_cmd() {
+  if ! command -v "$1" >/dev/null 2>&1; then
+    echo "anime_vid_setup: missing dependency: $1" >&2
+    exit 127
+  fi
+}
+
+need_cmd git
+need_cmd curl
+need_cmd uv
+
+mkdir -p "$root"
+
+clone_or_update() {
+  local url=$1
+  local dest=$2
+  if [[ -d "$dest/.git" ]]; then
+    echo "UPDATE $(basename "$dest")"
+    git -C "$dest" pull --ff-only
+  else
+    echo "CLONE $(basename "$dest")"
+    git clone --depth 1 "$url" "$dest"
+  fi
+}
+
+download_one() {
+  local url=$1
+  local dest=$2
+  local name
+  name=$(basename "$dest")
+  mkdir -p "$(dirname "$dest")"
+
+  if [[ -s "$dest" ]]; then
+    echo "SKIP $name (already exists)"
+    return 0
+  fi
+
+  echo "DOWNLOAD $name"
+  curl -L --fail --continue-at - --output "$dest.part" "$url"
+  mv "$dest.part" "$dest"
+}
+
+clone_or_update "https://github.com/comfyanonymous/ComfyUI.git" "$comfy"
+
+venv_python="$comfy/.venv/bin/python"
+if [[ ! -x "$venv_python" ]]; then
+  echo "CREATE VENV python $python_version"
+  uv python install "$python_version"
+  uv venv --python "$python_version" "$comfy/.venv"
+fi
+
+# Install CUDA PyTorch first so ComfyUI does not accidentally get a CPU-only torch.
+echo "INSTALL PyTorch CUDA wheels"
+uv pip install --python "$venv_python" --index-url https://download.pytorch.org/whl/cu128 \
+  torch torchvision torchaudio
+
+echo "INSTALL ComfyUI requirements"
+uv pip install --python "$venv_python" -r "$comfy/requirements.txt"
+
+mkdir -p "$comfy/custom_nodes"
+clone_or_update "https://github.com/Kosinkadink/ComfyUI-AnimateDiff-Evolved.git" \
+  "$comfy/custom_nodes/ComfyUI-AnimateDiff-Evolved"
+clone_or_update "https://github.com/Kosinkadink/ComfyUI-VideoHelperSuite.git" \
+  "$comfy/custom_nodes/ComfyUI-VideoHelperSuite"
+clone_or_update "https://github.com/cubiq/ComfyUI_IPAdapter_plus.git" \
+  "$comfy/custom_nodes/ComfyUI_IPAdapter_plus"
+clone_or_update "https://github.com/ltdrdata/ComfyUI-Manager.git" \
+  "$comfy/custom_nodes/ComfyUI-Manager"
+
+for req in "$comfy"/custom_nodes/*/requirements.txt; do
+  [[ -f "$req" ]] || continue
+  echo "INSTALL node requirements: $req"
+  uv pip install --python "$venv_python" -r "$req"
+done
+
+mkdir -p \
+  "$comfy/models/checkpoints" \
+  "$comfy/models/animatediff_models" \
+  "$comfy/models/animatediff_motion_lora" \
+  "$comfy/models/ipadapter" \
+  "$comfy/models/clip_vision" \
+  "$comfy/output"
+
+# Proven SD1.5 anime checkpoint that works with AnimateDiff SD1.5 motion modules.
+download_one \
+  "https://huggingface.co/WarriorMama777/OrangeMixs/resolve/main/Models/AbyssOrangeMix3/AOM3_orangemixs.safetensors" \
+  "$comfy/models/checkpoints/anime_vid_AOM3.safetensors"
+
+# FP16/safetensors version of the standard AnimateDiff SD1.5 v2 motion module.
+download_one \
+  "https://huggingface.co/conrevo/AnimateDiff-A1111/resolve/main/motion_module/mm_sd15_v2.safetensors" \
+  "$comfy/models/animatediff_models/mm_sd15_v2.safetensors"
+
+# Useful optional v2 motion LoRAs for simple camera movement.
+download_one \
+  "https://huggingface.co/conrevo/AnimateDiff-A1111/resolve/main/lora_v2/mm_sd15_v2_lora_ZoomIn.safetensors" \
+  "$comfy/models/animatediff_motion_lora/mm_sd15_v2_lora_ZoomIn.safetensors"
+download_one \
+  "https://huggingface.co/conrevo/AnimateDiff-A1111/resolve/main/lora_v2/mm_sd15_v2_lora_PanLeft.safetensors" \
+  "$comfy/models/animatediff_motion_lora/mm_sd15_v2_lora_PanLeft.safetensors"
+download_one \
+  "https://huggingface.co/conrevo/AnimateDiff-A1111/resolve/main/lora_v2/mm_sd15_v2_lora_PanRight.safetensors" \
+  "$comfy/models/animatediff_motion_lora/mm_sd15_v2_lora_PanRight.safetensors"
+
+# IP-Adapter lets the workflow preserve/style from an input image while AnimateDiff adds motion.
+download_one \
+  "https://huggingface.co/h94/IP-Adapter/resolve/main/models/ip-adapter-plus_sd15.safetensors" \
+  "$comfy/models/ipadapter/ip-adapter-plus_sd15.safetensors"
+download_one \
+  "https://huggingface.co/h94/IP-Adapter/resolve/main/models/image_encoder/model.safetensors" \
+  "$comfy/models/clip_vision/ipadapter_sd15_image_encoder.safetensors"
+
+# ComfyUI_IPAdapter_plus auto-detects CLIP Vision by filename pattern.
+# Keep a compatible name even if an older setup downloaded the same file with underscores.
+if [[ -s "$comfy/models/clip_vision/ip_adapter_sd15_image_encoder.safetensors" && ! -e "$comfy/models/clip_vision/ipadapter_sd15_image_encoder.safetensors" ]]; then
+  ln -s "ip_adapter_sd15_image_encoder.safetensors" "$comfy/models/clip_vision/ipadapter_sd15_image_encoder.safetensors"
+fi
+
+cat <<EOF
+DONE
+
+anime_vid is installed at:
+  $root
+
+Start it with:
+  anime_vid_server
+
+Then open:
+  http://127.0.0.1:8188
+
+In ComfyUI, use:
+  checkpoint: anime_vid_AOM3.safetensors
+  motion model: mm_sd15_v2.safetensors
+  image conditioning: ip-adapter-plus_sd15.safetensors + ipadapter_sd15_image_encoder.safetensors
+  output: VideoHelperSuite combine/video nodes
+EOF

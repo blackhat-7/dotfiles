@@ -1,0 +1,244 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+usage() {
+  cat <<'EOF'
+Usage: img-local-server [profile]
+
+Start stable-diffusion.cpp sd-server.
+
+Profiles:
+  z-image-turbo       Default starter model
+  z-image-uncensored  Z-Image Turbo GGUF Q4_K + uncensored Qwen3 text encoder
+  anime               WAI Illustrious SDXL anime checkpoint
+  kontext             FLUX.1 Kontext image editing model
+
+Environment:
+  IMG_LOCAL_HOST=0.0.0.0
+  IMG_LOCAL_PORT=1234
+  AI_IMAGE_CFG=1.0                    # Z-Image default; use ~7 for anime
+  AI_IMAGE_LOCAL_PROFILE=z-image-turbo|z-image-uncensored|anime|kontext
+  AI_IMAGE_LOCAL_MODEL_DIR=/custom/profile/dir
+  AI_IMAGE_DIFFUSION_MODEL=/path/to/model.gguf
+  AI_IMAGE_VAE=/path/to/vae.safetensors
+  AI_IMAGE_LLM=/path/to/text-encoder.gguf
+  AI_IMAGE_MODEL_PATH=/path/to/checkpoint.safetensors  # full SD/SDXL checkpoint profiles
+  AI_IMAGE_CLIP_L=/path/to/clip_l.safetensors          # FLUX/Kontext profiles
+  AI_IMAGE_T5XXL=/path/to/t5xxl.safetensors            # FLUX/Kontext profiles
+EOF
+}
+
+profile="${AI_IMAGE_LOCAL_PROFILE:-z-image-turbo}"
+if [[ $# -gt 0 ]]; then
+  case "$1" in
+    -h|--help)
+      usage
+      exit 0
+      ;;
+    *)
+      profile="$1"
+      ;;
+  esac
+fi
+
+port="${IMG_LOCAL_PORT:-1234}"
+host="${IMG_LOCAL_HOST:-0.0.0.0}"
+cfg="${AI_IMAGE_CFG:-1.0}"
+server_kind="z-image"
+
+case "$profile" in
+  z-image-turbo|turbo)
+    profile="z-image-turbo"
+    default_dir="$HOME/.img/models/z-image-turbo"
+    diffusion_file="z_image_turbo-Q4_K.gguf"
+    llm_file="Qwen3-4B-Instruct-2507-Q4_K_M.gguf"
+    vae_file="ae.safetensors"
+    ;;
+  z-image-uncensored|uncensored)
+    profile="z-image-uncensored"
+    default_dir="$HOME/.img/models/z-image-uncensored"
+    diffusion_file="z_image_turbo-Q4_K.gguf"
+    llm_file="Qwen3-4b-Uncensored-Z-Image-Engineer-V4-Q8_0.gguf"
+    vae_file="ae.safetensors"
+    ;;
+  anime|illustrious|wai)
+    profile="anime"
+    server_kind="checkpoint"
+    default_dir="$HOME/.img/models/anime-illustrious"
+    checkpoint_file="wai-illustrious-v15.safetensors"
+    cfg="${AI_IMAGE_CFG:-7.0}"
+    ;;
+  kontext|flux-kontext|edit)
+    profile="kontext"
+    server_kind="kontext"
+    default_dir="$HOME/.img/models/flux-kontext"
+    diffusion_file="flux1-kontext-dev-Q4_K_M.gguf"
+    vae_file="ae.safetensors"
+    clip_l_file="clip_l.safetensors"
+    t5xxl_file="t5xxl_fp8_e4m3fn.safetensors"
+    cfg="${AI_IMAGE_CFG:-1.0}"
+    ;;
+  *)
+    echo "img-local-server: unknown profile: $profile" >&2
+    usage >&2
+    exit 2
+    ;;
+esac
+
+model_dir="${AI_IMAGE_LOCAL_MODEL_DIR:-$default_dir}"
+if [[ "$server_kind" == "checkpoint" ]]; then
+  checkpoint_model="${AI_IMAGE_MODEL_PATH:-$model_dir/$checkpoint_file}"
+elif [[ "$server_kind" == "kontext" ]]; then
+  diffusion_model="${AI_IMAGE_DIFFUSION_MODEL:-$model_dir/$diffusion_file}"
+  vae_model="${AI_IMAGE_VAE:-$model_dir/$vae_file}"
+  clip_l_model="${AI_IMAGE_CLIP_L:-$model_dir/$clip_l_file}"
+  t5xxl_model="${AI_IMAGE_T5XXL:-$model_dir/$t5xxl_file}"
+else
+  diffusion_model="${AI_IMAGE_DIFFUSION_MODEL:-$model_dir/$diffusion_file}"
+  vae_model="${AI_IMAGE_VAE:-$model_dir/$vae_file}"
+  llm_model="${AI_IMAGE_LLM:-$model_dir/$llm_file}"
+fi
+
+find_sd_server() {
+  local candidates=(sd-server stable-diffusion-server stable-diffusion-cpp-server)
+  local c
+  for c in "${candidates[@]}"; do
+    if command -v "$c" >/dev/null 2>&1; then
+      command -v "$c"
+      return 0
+    fi
+  done
+
+  # Some packaging layouts put example binaries in the same directory with
+  # slightly different names. Prefer anything that looks like an sd server.
+  local dir match
+  IFS=':' read -r -a path_dirs <<< "${PATH:-}"
+  shopt -s nullglob
+  for dir in "${path_dirs[@]}"; do
+    for match in "$dir"/sd-server "$dir"/*sd*server* "$dir"/*stable*diffusion*server*; do
+      if [[ -x "$match" ]]; then
+        printf '%s\n' "$match"
+        return 0
+      fi
+    done
+  done
+  shopt -u nullglob
+
+  return 1
+}
+
+require_file() {
+  if [[ ! -s "$1" ]]; then
+    echo "img-local-server: missing model file: $1" >&2
+    echo "Run: img-local-setup $profile" >&2
+    exit 1
+  fi
+}
+
+if [[ "$server_kind" == "checkpoint" ]]; then
+  require_file "$checkpoint_model"
+elif [[ "$server_kind" == "kontext" ]]; then
+  require_file "$diffusion_model"
+  require_file "$vae_model"
+  require_file "$clip_l_model"
+  require_file "$t5xxl_model"
+else
+  require_file "$diffusion_model"
+  require_file "$vae_model"
+  require_file "$llm_model"
+fi
+
+if ! sd_server=$(find_sd_server); then
+  cat >&2 <<'EOF'
+img-local-server: could not find sd-server.
+
+Expected stable-diffusion.cpp's server binary (usually `sd-server`) on PATH.
+On this Arch/NVIDIA machine, install the CUDA build with:
+  yay -S stable-diffusion.cpp-cublas-git
+
+Then open a new shell, or ensure the installed binary directory is on PATH.
+`img --local` also works with any compatible sd-server already listening at IMG_LOCAL_URL.
+EOF
+  exit 127
+fi
+
+cat <<EOF
+Starting stable-diffusion.cpp server:
+  profile: $profile
+  binary:  $sd_server
+  listen:  http://$host:$port
+  local:   http://127.0.0.1:$port
+EOF
+
+if [[ "$server_kind" == "checkpoint" ]]; then
+  cat <<EOF
+  model:   $checkpoint_model
+  cfg:     $cfg
+
+Anime usage tip:
+  AI_IMAGE_STEPS=30 AI_IMAGE_CFG=$cfg IMG_BACKEND=local img "masterpiece, best quality, anime illustration, ..."
+EOF
+elif [[ "$server_kind" == "kontext" ]]; then
+  cat <<EOF
+  diffusion: $diffusion_model
+  vae:       $vae_model
+  clip_l:    $clip_l_model
+  t5xxl:     $t5xxl_model
+  cfg:       $cfg
+
+Editing tip:
+  Use the web UI with an init/reference image, or use native edit/img2img APIs.
+  Keep strength/denoise low for subtle preservation edits.
+EOF
+else
+  cat <<EOF
+  diffusion: $diffusion_model
+  vae:       $vae_model
+  llm:       $llm_model
+EOF
+fi
+
+cat <<EOF
+
+For another machine on your LAN/Tailscale, use this machine's IP:
+  http://<this-machine-ip>:$port
+
+Security note: sd-server has no auth here. Only expose this on trusted networks.
+
+In another terminal on this machine:
+  IMG_BACKEND=local img "a cinematic robot fox in a snowy forest"
+EOF
+
+if [[ "$server_kind" == "checkpoint" ]]; then
+  exec "$sd_server" \
+    -m "$checkpoint_model" \
+    --offload-to-cpu \
+    -v \
+    --cfg-scale "$cfg" \
+    --listen-ip "$host" \
+    --listen-port "$port"
+elif [[ "$server_kind" == "kontext" ]]; then
+  exec "$sd_server" \
+    --diffusion-model "$diffusion_model" \
+    --vae "$vae_model" \
+    --clip_l "$clip_l_model" \
+    --t5xxl "$t5xxl_model" \
+    --diffusion-fa \
+    --offload-to-cpu \
+    -v \
+    --cfg-scale "$cfg" \
+    --sampling-method euler \
+    --listen-ip "$host" \
+    --listen-port "$port"
+else
+  exec "$sd_server" \
+    --diffusion-model "$diffusion_model" \
+    --vae "$vae_model" \
+    --llm "$llm_model" \
+    --diffusion-fa \
+    --offload-to-cpu \
+    -v \
+    --cfg-scale "$cfg" \
+    --listen-ip "$host" \
+    --listen-port "$port"
+fi

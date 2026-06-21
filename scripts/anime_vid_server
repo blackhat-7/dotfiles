@@ -1,0 +1,61 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+root="${ANIME_VID_DIR:-$HOME/.img/anime_vid}"
+comfy="$root/ComfyUI"
+host="${ANIME_VID_HOST:-0.0.0.0}"
+port="${ANIME_VID_PORT:-8188}"
+venv_python="$comfy/.venv/bin/python"
+
+usage() {
+  cat <<EOF
+Usage: anime_vid_server
+
+Start the anime_vid ComfyUI server.
+
+Environment:
+  ANIME_VID_DIR=$root
+  ANIME_VID_HOST=$host
+  ANIME_VID_PORT=$port
+EOF
+}
+
+case "${1:-}" in
+  -h|--help)
+    usage
+    exit 0
+    ;;
+  "") ;;
+  *)
+    echo "anime_vid_server: unknown argument: $1" >&2
+    usage >&2
+    exit 2
+    ;;
+esac
+
+if [[ ! -x "$venv_python" || ! -f "$comfy/main.py" ]]; then
+  echo "anime_vid_server: anime_vid is not set up yet." >&2
+  echo "Run: anime_vid_setup" >&2
+  exit 1
+fi
+
+cat <<EOF
+Starting anime_vid ComfyUI:
+  root:   $root
+  listen: http://$host:$port
+  local:  http://127.0.0.1:$port
+
+For another machine on your LAN/Tailscale:
+  http://<this-machine-ip>:$port
+
+Security note: ComfyUI has no auth here. Only expose this on trusted networks.
+
+Loaded model files should include:
+  checkpoint: anime_vid_AOM3.safetensors
+  motion:     mm_sd15_v2.safetensors
+  ipadapter:  ip-adapter-plus_sd15.safetensors
+  clip vision: ipadapter_sd15_image_encoder.safetensors
+EOF
+
+cd "$comfy"
+exec "$venv_python" main.py --listen "$host" --port "$port"

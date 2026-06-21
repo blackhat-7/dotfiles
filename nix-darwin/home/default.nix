@@ -1,4 +1,12 @@
 { pkgs, lib, config, inputs, ... }:
+
+let
+  genmedia =
+    if pkgs ? genmedia then
+      pkgs.genmedia
+    else
+      pkgs.callPackage ../../pkgs/genmedia.nix { };
+in
 {
   imports = [
     ./programs
@@ -31,6 +39,9 @@
     pkgs.brave
     pkgs.ffmpeg_6-headless
     pkgs.exempi
+    pkgs.jq
+    pkgs.curl
+    genmedia
     pkgs.sqlc
     pkgs.github-copilot-cli
     pkgs.p7zip
@@ -46,6 +57,30 @@
     pkgs.terminal-notifier
     pkgs.pandoc
   ];
+
+  home.sessionPath = [
+    "$HOME/.local/bin"
+  ];
+
+  home.file.".local/bin/img" = {
+    source = ../../scripts/img;
+    executable = true;
+  };
+
+  home.file.".local/bin/img-local-setup" = {
+    source = ../../scripts/img-local-setup;
+    executable = true;
+  };
+
+  home.file.".local/bin/img-local-server" = {
+    source = ../../scripts/img-local-server;
+    executable = true;
+  };
+
+  home.file.".local/bin/img-serve" = {
+    source = ../../scripts/img-serve;
+    executable = true;
+  };
 
   launchd.agents.turn-on-night-shift = {
     enable = true;

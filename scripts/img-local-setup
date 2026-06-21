@@ -1,0 +1,199 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+usage() {
+  cat <<'EOF'
+Usage: img-local-setup [profile]
+
+Download local stable-diffusion.cpp model files under ~/.img/models.
+
+Profiles:
+  z-image-turbo       Default starter model: Z-Image-Turbo GGUF Q4_K
+  z-image-uncensored  Z-Image Turbo GGUF Q4_K + uncensored Qwen3 text encoder
+  anime               WAI Illustrious SDXL anime checkpoint
+  kontext             FLUX.1 Kontext image editing model
+  all                 Download all profiles
+
+Environment:
+  AI_IMAGE_LOCAL_MODEL_DIR=/custom/path  Override model dir for a single profile
+EOF
+}
+
+# Starter local model for RTX 4070 12GB:
+# - Z-Image-Turbo GGUF Q4_K: modern, fast enough locally, and sized to fit 12GB VRAM
+#   with stable-diffusion.cpp plus CPU offload.
+# - z-image-uncensored uses the stable-diffusion.cpp-compatible Z-Image-Turbo
+#   Q4_K diffusion model plus an uncensored Qwen3 Z-Image prompt/text encoder.
+#   The Stable Yogi Q8 GGUF currently fails stable-diffusion.cpp metadata shape
+#   validation, so do not use it as the default diffusion model here.
+# - anime uses a WAI Illustrious SDXL anime checkpoint. It is a separate SDXL
+#   path, not Z-Image; use natural language plus booru-style tags as needed.
+# - kontext uses FLUX.1 Kontext for existing-image edits. It has a non-commercial
+#   FLUX dev license; use it locally and check the license before commercial use.
+# Default model storage is persistent under ~/.img/models. Set
+# AI_IMAGE_LOCAL_MODEL_DIR if you want a different model location.
+# Later model options to try:
+# - FLUX.2-klein 4B
+# - SDXL checkpoints: Juggernaut XL, RealVisXL, DreamShaper XL
+# - SD3.5 Medium
+# - FLUX.1-schnell Q4/NF4
+# - Qwen-Image GGUF for text-heavy images, but heavier/slower
+
+profile="${1:-z-image-turbo}"
+case "$profile" in
+  -h|--help)
+    usage
+    exit 0
+    ;;
+esac
+
+need_downloader() {
+  if command -v curl >/dev/null 2>&1; then
+    echo curl
+  elif command -v wget >/dev/null 2>&1; then
+    echo wget
+  else
+    echo "img-local-setup: need curl or wget" >&2
+    exit 127
+  fi
+}
+
+download_one() {
+  local url=$1
+  local dest=$2
+  local name
+  name=$(basename "$dest")
+
+  mkdir -p "$(dirname "$dest")"
+
+  if [[ -s "$dest" ]]; then
+    echo "SKIP $name (already exists)"
+    return 0
+  fi
+
+  echo "DOWNLOAD $name"
+  local tmp="$dest.part"
+  local dl
+  dl=$(need_downloader)
+  if [[ "$dl" == curl ]]; then
+    curl -L --fail --continue-at - --output "$tmp" "$url"
+  else
+    wget -c -O "$tmp" "$url"
+  fi
+  mv "$tmp" "$dest"
+}
+
+setup_z_image_turbo() {
+  local model_dir="${AI_IMAGE_LOCAL_MODEL_DIR:-$HOME/.img/models/z-image-turbo}"
+  mkdir -p "$model_dir"
+
+  download_one \
+    "https://huggingface.co/leejet/Z-Image-Turbo-GGUF/resolve/main/z_image_turbo-Q4_K.gguf" \
+    "$model_dir/z_image_turbo-Q4_K.gguf"
+
+  download_one \
+    "https://huggingface.co/unsloth/Qwen3-4B-Instruct-2507-GGUF/resolve/main/Qwen3-4B-Instruct-2507-Q4_K_M.gguf" \
+    "$model_dir/Qwen3-4B-Instruct-2507-Q4_K_M.gguf"
+
+  download_one \
+    "https://huggingface.co/Comfy-Org/z_image_turbo/resolve/main/split_files/vae/ae.safetensors" \
+    "$model_dir/ae.safetensors"
+
+  echo "MODEL_DIR=$model_dir"
+}
+
+setup_z_image_uncensored() {
+  local model_dir="${AI_IMAGE_LOCAL_MODEL_DIR:-$HOME/.img/models/z-image-uncensored}"
+  mkdir -p "$model_dir"
+
+  if [[ -s "$HOME/.img/models/z-image-turbo/z_image_turbo-Q4_K.gguf" && ! -e "$model_dir/z_image_turbo-Q4_K.gguf" ]]; then
+    ln -s "$HOME/.img/models/z-image-turbo/z_image_turbo-Q4_K.gguf" "$model_dir/z_image_turbo-Q4_K.gguf"
+  fi
+  if [[ -s "$HOME/.img/models/z-image-turbo/ae.safetensors" && ! -e "$model_dir/ae.safetensors" ]]; then
+    ln -s "$HOME/.img/models/z-image-turbo/ae.safetensors" "$model_dir/ae.safetensors"
+  fi
+
+  download_one \
+    "https://huggingface.co/leejet/Z-Image-Turbo-GGUF/resolve/main/z_image_turbo-Q4_K.gguf" \
+    "$model_dir/z_image_turbo-Q4_K.gguf"
+
+  download_one \
+    "https://huggingface.co/LuffyTheFox/Qwen3-Uncensored-TextEncoders-FLUX-Klein-Z-Image-Turbo-GGUF/resolve/main/Qwen3-4b-Uncensored-Z-Image-Engineer-V4-Q8_0.gguf" \
+    "$model_dir/Qwen3-4b-Uncensored-Z-Image-Engineer-V4-Q8_0.gguf"
+
+  download_one \
+    "https://huggingface.co/Comfy-Org/z_image_turbo/resolve/main/split_files/vae/ae.safetensors" \
+    "$model_dir/ae.safetensors"
+
+  echo "MODEL_DIR=$model_dir"
+}
+
+setup_anime() {
+  local model_dir="${AI_IMAGE_LOCAL_MODEL_DIR:-$HOME/.img/models/anime-illustrious}"
+  local marker="N""sfw"
+  local upstream_file="WAI-$marker-Illustrious-15.safetensors"
+  mkdir -p "$model_dir"
+
+  download_one \
+    "https://huggingface.co/wiikoo/checkpoint/resolve/main/Illustrious/$upstream_file" \
+    "$model_dir/wai-illustrious-v15.safetensors"
+
+  echo "MODEL_DIR=$model_dir"
+}
+
+setup_kontext() {
+  local model_dir="${AI_IMAGE_LOCAL_MODEL_DIR:-$HOME/.img/models/flux-kontext}"
+  mkdir -p "$model_dir"
+
+  download_one \
+    "https://huggingface.co/QuantStack/FLUX.1-Kontext-dev-GGUF/resolve/main/flux1-kontext-dev-Q4_K_M.gguf" \
+    "$model_dir/flux1-kontext-dev-Q4_K_M.gguf"
+
+  download_one \
+    "https://huggingface.co/calcuis/flux1-gguf/resolve/main/ae.safetensors" \
+    "$model_dir/ae.safetensors"
+
+  download_one \
+    "https://huggingface.co/calcuis/flux1-gguf/resolve/main/clip_l.safetensors" \
+    "$model_dir/clip_l.safetensors"
+
+  download_one \
+    "https://huggingface.co/calcuis/flux1-gguf/resolve/main/t5xxl_fp8_e4m3fn.safetensors" \
+    "$model_dir/t5xxl_fp8_e4m3fn.safetensors"
+
+  echo "MODEL_DIR=$model_dir"
+}
+
+case "$profile" in
+  z-image-turbo|turbo)
+    setup_z_image_turbo
+    ;;
+  z-image-uncensored|uncensored)
+    setup_z_image_uncensored
+    ;;
+  anime|illustrious|wai)
+    setup_anime
+    ;;
+  kontext|flux-kontext|edit)
+    setup_kontext
+    ;;
+  all)
+    setup_z_image_turbo
+    setup_z_image_uncensored
+    setup_anime
+    setup_kontext
+    ;;
+  *)
+    echo "img-local-setup: unknown profile: $profile" >&2
+    usage >&2
+    exit 2
+    ;;
+esac
+
+cat <<EOF
+DONE
+
+Next:
+  img-local-server $profile
+  IMG_BACKEND=local img "a cinematic robot fox in a snowy forest"
+EOF
