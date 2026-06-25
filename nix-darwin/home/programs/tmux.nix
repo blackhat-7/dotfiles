@@ -1,5 +1,7 @@
-{ pkgs, ... }: 
-  let tmux-fzf-pane-switch = pkgs.tmuxPlugins.mkTmuxPlugin
+{ pkgs, inputs, ... }:
+  let
+    tmux-agent-radar = inputs.tmux-agent-radar.packages.${pkgs.stdenv.hostPlatform.system}.default;
+    tmux-fzf-pane-switch = pkgs.tmuxPlugins.mkTmuxPlugin
     {
       name = "tmux-fzf-pane-switch";
       pluginName = "tmux-fzf-pane-switch";
@@ -31,6 +33,13 @@
         tmuxPlugins.vim-tmux-navigator
         # tmuxPlugins.tmux-fzf
         # tmuxPlugins.online-status
+        {
+            plugin = tmux-agent-radar;
+            extraConfig = ''
+                set -g @agent-radar-key "C-f"
+                set -g @agent-radar-watch "on"
+            '';
+        }
         {
             plugin = tmux-fzf-pane-switch;
             extraConfig = ''
@@ -103,7 +112,7 @@
       # Status right
       set-option -g status-right "\
 #[fg=$LIGHT_GRAY,bg=default]$TRIANGLE_OPEN\
-#[bg=$LIGHT_GRAY,fg=$YELLOW] #($HOME/projects/tmux-agent-radar/bin/tmux-agent-radar status) \
+#[bg=$LIGHT_GRAY,fg=$YELLOW] #(${tmux-agent-radar}/bin/tmux-agent-radar status) \
 #[bg=$LIGHT_GRAY,fg=$CYAN]#h\
 #[fg=$LIGHT_GRAY,bg=default]$HALF_ROUND_CLOSE\
 "
@@ -146,11 +155,6 @@
       bind k select-pane -U
       bind l select-pane -R
       bind C-e run-shell "$HOME/dotfiles/scripts/tmux-toggle-popup-terminal.sh '#{client_name}' '#{pane_current_path}' '#{session_name}' '#{window_id}'"
-
-      # Agent cockpit: passive coding-agent discovery, labels, previews, and permission alerts.
-      set -g @agent-radar-key "C-f"
-      set -g @agent-radar-watch "on"
-      run-shell "$HOME/projects/tmux-agent-radar/radar.tmux"
 
       # Set status bar on/off
       bind C-s set-option -g status

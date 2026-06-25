@@ -121,7 +121,29 @@
         "nix-darwin": "nix-darwin",
         "nix-index-database": "nix-index-database",
         "nixpkgs": "nixpkgs",
-        "readonly-bash": "readonly-bash"
+        "readonly-bash": "readonly-bash",
+        "tmux-agent-radar": "tmux-agent-radar"
+      }
+    },
+    "tmux-agent-radar": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1782419932,
+        "narHash": "sha256-tle7SdEG82zVCiXNVw8caKkDICMwqKT3VRbvzD+YWX4=",
+        "owner": "blackhat-7",
+        "repo": "tmux-agent-radar",
+        "rev": "672205ae0e8d97ac18bb591a4c4e5dca12d02eb0",
+        "type": "github"
+      },
+      "original": {
+        "owner": "blackhat-7",
+        "ref": "main",
+        "repo": "tmux-agent-radar",
+        "type": "github"
       }
     }
   },
