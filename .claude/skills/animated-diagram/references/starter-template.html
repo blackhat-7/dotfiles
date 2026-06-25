@@ -1,0 +1,327 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Animated Diagram</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg-0: #050815;
+      --bg-1: #090d1b;
+      --panel: rgba(13, 20, 38, 0.74);
+      --panel-purple: rgba(30, 22, 58, 0.66);
+      --panel-green: rgba(7, 45, 36, 0.58);
+      --panel-amber: rgba(44, 31, 15, 0.62);
+      --stroke: rgba(110, 132, 190, 0.30);
+      --stroke-blue: rgba(134, 168, 255, 0.52);
+      --stroke-purple: rgba(167, 139, 250, 0.52);
+      --stroke-green: rgba(57, 211, 159, 0.62);
+      --stroke-amber: rgba(245, 183, 89, 0.56);
+      --text: #eef3ff;
+      --muted: #aab7d4;
+      --faint: #667397;
+      --blue: #86a8ff;
+      --purple: #a78bfa;
+      --teal: #47e0b2;
+      --amber: #ffc464;
+      --radius-xl: 44px;
+      --shadow-soft: 0 24px 90px rgba(0, 0, 0, 0.42);
+      --mono: "SFMono-Regular", "Cascadia Code", "Liberation Mono", Menlo, Consolas, monospace;
+      --ease-standard: cubic-bezier(0.2, 0, 0.38, 0.9);
+      --ease-soft: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      overflow-x: hidden;
+      background: #030611;
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    .stage {
+      position: relative;
+      width: min(2000px, calc(100vw - 4px));
+      min-height: calc(100vh - 4px);
+      overflow: hidden;
+      padding: clamp(28px, 3vw, 58px);
+      border: 1px solid rgba(92, 116, 180, 0.34);
+      border-radius: var(--radius-xl);
+      background:
+        radial-gradient(circle at 50% 20%, rgba(135, 165, 255, 0.10), transparent 30%),
+        radial-gradient(circle at 82% 35%, rgba(71, 224, 178, 0.08), transparent 28%),
+        radial-gradient(circle at 18% 70%, rgba(167, 139, 250, 0.08), transparent 30%),
+        radial-gradient(circle, rgba(110, 132, 190, 0.14) 0 1.3px, transparent 1.4px) 0 0 / 50px 50px,
+        linear-gradient(180deg, var(--bg-1), var(--bg-0));
+      box-shadow: var(--shadow-soft), inset 0 1px 0 rgba(255, 255, 255, 0.035);
+    }
+
+    .hero {
+      text-align: center;
+      max-width: 1200px;
+      margin: 0 auto clamp(18px, 2.4vh, 34px);
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      margin: 0 0 18px;
+      padding: 11px 24px;
+      border: 1px solid rgba(116, 142, 212, 0.42);
+      border-radius: 999px;
+      background: rgba(16, 24, 48, 0.72);
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: clamp(0.78rem, 1vw, 1.05rem);
+      letter-spacing: 0.12em;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 11px;
+      height: 11px;
+      border-radius: 999px;
+      background: var(--teal);
+      box-shadow: 0 0 18px rgba(71, 224, 178, 0.48);
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2.7rem, 6.2vw, 6.2rem);
+      line-height: 0.98;
+      font-weight: 850;
+      letter-spacing: -0.055em;
+      text-wrap: balance;
+      background: linear-gradient(90deg, #8fb4ff 0%, #b79cff 43%, #59e0b7 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .subtitle {
+      margin: 14px auto 0;
+      max-width: 980px;
+      color: #c5cee3;
+      font-size: clamp(1rem, 1.35vw, 1.35rem);
+      line-height: 1.45;
+      font-weight: 520;
+    }
+
+    .motion-toggle {
+      position: absolute;
+      right: clamp(22px, 3vw, 54px);
+      top: clamp(20px, 3vw, 48px);
+      border: 1px solid var(--stroke);
+      border-radius: 999px;
+      background: rgba(13, 20, 38, 0.72);
+      color: var(--muted);
+      padding: 10px 14px;
+      font: inherit;
+      font-size: 0.85rem;
+      cursor: pointer;
+    }
+
+    svg { display: block; width: 100%; height: auto; }
+
+    .boundary {
+      fill: rgba(8, 13, 28, 0.28);
+      stroke: rgba(116, 142, 212, 0.34);
+      stroke-width: 2;
+      stroke-dasharray: 12 16;
+    }
+
+    .boundary-label,
+    .edge-label,
+    .caption,
+    .chip text { font-family: var(--mono); }
+
+    .boundary-label {
+      fill: var(--faint);
+      font-size: 14px;
+      font-weight: 750;
+      letter-spacing: 0.18em;
+    }
+
+    .card {
+      fill: var(--panel);
+      stroke: var(--stroke-blue);
+      stroke-width: 1.6;
+      filter: drop-shadow(0 14px 32px rgba(0, 0, 0, 0.16));
+    }
+    .card.purple { fill: var(--panel-purple); stroke: var(--stroke-purple); }
+    .card.green { fill: var(--panel-green); stroke: var(--stroke-green); filter: drop-shadow(0 0 20px rgba(71, 224, 178, 0.14)); }
+    .card.amber { fill: var(--panel-amber); stroke: var(--stroke-amber); }
+
+    .dot { fill: var(--blue); }
+    .dot.purple { fill: var(--purple); }
+    .dot.green { fill: var(--teal); }
+    .dot.amber { fill: var(--amber); }
+
+    .title {
+      fill: var(--text);
+      font-size: 25px;
+      font-weight: 820;
+      letter-spacing: -0.02em;
+    }
+
+    .caption {
+      fill: var(--muted);
+      font-size: 14px;
+      font-weight: 650;
+      letter-spacing: 0.08em;
+    }
+
+    .edge {
+      fill: none;
+      stroke: rgba(116, 142, 212, 0.46);
+      stroke-width: 3;
+      stroke-linecap: round;
+    }
+
+    .edge.active { stroke: url(#edge-gradient); stroke-width: 4; }
+
+    .edge-label {
+      fill: var(--teal);
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.13em;
+    }
+
+    .packet {
+      fill: var(--teal);
+      filter: drop-shadow(0 0 14px rgba(71, 224, 178, 0.62));
+      offset-path: path("M 500 528 C 650 528, 690 528, 780 528 C 970 528, 1080 528, 1300 528");
+      offset-rotate: 0deg;
+      animation: travel 4200ms var(--ease-standard) infinite;
+    }
+    .packet.two { fill: var(--purple); animation-delay: -1400ms; opacity: 0.7; }
+    .packet.three { fill: var(--blue); animation-delay: -2800ms; opacity: 0.55; }
+
+    .chip rect {
+      fill: rgba(16, 24, 48, 0.72);
+      stroke: rgba(116, 142, 212, 0.36);
+      stroke-width: 1.4;
+    }
+    .chip text {
+      fill: var(--muted);
+      font-size: 14px;
+      font-weight: 750;
+      letter-spacing: 0.08em;
+    }
+
+    @keyframes travel {
+      0% { offset-distance: 0%; opacity: 0; transform: scale(0.72); }
+      8% { opacity: 1; transform: scale(1); }
+      88% { opacity: 1; }
+      100% { offset-distance: 100%; opacity: 0; transform: scale(0.72); }
+    }
+
+    .motion-paused * { animation-play-state: paused !important; }
+
+    @media (max-width: 760px) {
+      .stage { padding: 18px; border-radius: 28px; }
+      .hero { text-align: left; padding-top: 54px; }
+      .motion-toggle { right: 18px; top: 18px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+        scroll-behavior: auto !important;
+      }
+      .motion-toggle { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <main class="stage">
+    <button class="motion-toggle" type="button" aria-pressed="false">Pause motion</button>
+
+    <section class="hero" aria-label="Diagram introduction">
+      <p class="eyebrow">diagram · animated explainer</p>
+      <h1>One clear visual story</h1>
+      <p class="subtitle">Replace this with one sentence that explains what moves, what changes, and why it matters.</p>
+    </section>
+
+    <svg class="diagram" viewBox="0 0 1800 980" role="img" aria-labelledby="diagram-title diagram-desc">
+      <title id="diagram-title">Animated concept diagram</title>
+      <desc id="diagram-desc">A dark-mode animated diagram with three visible cards connected by a clear flow.</desc>
+
+      <defs>
+        <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="rgba(71, 224, 178, 0.76)" />
+        </marker>
+        <linearGradient id="edge-gradient" x1="380" y1="0" x2="1420" y2="0" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="#86a8ff" stop-opacity="0.30" />
+          <stop offset="50%" stop-color="#a78bfa" stop-opacity="0.56" />
+          <stop offset="100%" stop-color="#47e0b2" stop-opacity="0.72" />
+        </linearGradient>
+      </defs>
+
+      <!-- Hard safe area: x=120..1680, y=80..900. Diagram zone: y=330..780. -->
+      <rect class="boundary" x="170" y="335" width="1460" height="430" rx="34" />
+      <text class="boundary-label" x="220" y="385">SYSTEM BOUNDARY</text>
+
+      <path class="edge active" marker-end="url(#arrow)" d="M 500 528 C 650 528, 690 528, 780 528 C 970 528, 1080 528, 1300 528" />
+      <text class="edge-label" x="900" y="488" text-anchor="middle">cause · effect</text>
+
+      <!-- Top-left card geometry avoids accidental clipping. -->
+      <g class="node">
+        <rect class="card" x="260" y="470" width="240" height="116" rx="22" />
+        <circle class="dot" cx="292" cy="506" r="7" />
+        <text class="title" x="316" y="514">Input</text>
+        <text class="caption" x="292" y="552">what starts it</text>
+      </g>
+
+      <g class="node">
+        <rect class="card purple" x="780" y="470" width="240" height="116" rx="22" />
+        <circle class="dot purple" cx="812" cy="506" r="7" />
+        <text class="title" x="836" y="514">Mechanism</text>
+        <text class="caption" x="812" y="552">what changes</text>
+      </g>
+
+      <g class="node">
+        <rect class="card green" x="1300" y="470" width="240" height="116" rx="22" />
+        <circle class="dot green" cx="1332" cy="506" r="7" />
+        <text class="title" x="1356" y="514">Output</text>
+        <text class="caption" x="1332" y="552">what returns</text>
+      </g>
+
+      <circle class="packet" r="6" cx="0" cy="0" />
+      <circle class="packet two" r="5" cx="0" cy="0" />
+      <circle class="packet three" r="4" cx="0" cy="0" />
+
+      <g class="chip" transform="translate(550 855)">
+        <rect x="0" y="0" width="210" height="40" rx="20" />
+        <text x="105" y="26" text-anchor="middle">simple</text>
+      </g>
+      <g class="chip" transform="translate(795 855)">
+        <rect x="0" y="0" width="210" height="40" rx="20" />
+        <text x="105" y="26" text-anchor="middle">bounded</text>
+      </g>
+      <g class="chip" transform="translate(1040 855)">
+        <rect x="0" y="0" width="210" height="40" rx="20" />
+        <text x="105" y="26" text-anchor="middle">readable</text>
+      </g>
+    </svg>
+  </main>
+
+  <script>
+    const button = document.querySelector(".motion-toggle");
+    button?.addEventListener("click", () => {
+      const paused = document.documentElement.classList.toggle("motion-paused");
+      button.textContent = paused ? "Resume motion" : "Pause motion";
+      button.setAttribute("aria-pressed", String(paused));
+    });
+  </script>
+</body>
+</html>

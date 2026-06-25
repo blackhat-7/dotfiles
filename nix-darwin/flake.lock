@@ -100,11 +100,11 @@
     "readonly-bash": {
       "flake": false,
       "locked": {
-        "lastModified": 1781282803,
-        "narHash": "sha256-DZJy6NyCi61Cl9Sa0M/tQnyz4JfCsTU4UPZIr4nfS5U=",
+        "lastModified": 1782303061,
+        "narHash": "sha256-7FdfmH9f3DwUvpcPa/LetTo7pEmEFhAqyqJ8xpOUfIc=",
         "owner": "blackhat-7",
         "repo": "readonly-bash",
-        "rev": "ff238510ef7e5a7dc9bcde82f0ed37ede2c4cf2e",
+        "rev": "fd773a6e01000406a3b2ba54416740afca62943f",
         "type": "github"
       },
       "original": {
