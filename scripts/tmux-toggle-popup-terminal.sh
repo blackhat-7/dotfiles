@@ -1,37 +1,59 @@
 #!/bin/sh
+# Toggle a per-tmux-window persistent popup shell.
 #
-# tmux-toggle-popup-terminal.sh - Toggle a per-window persistent popup terminal
-#
-# Called from tmux binding:
-#   run-shell "tmux-toggle-popup-terminal.sh '#{client_name}' '#{pane_current_path}' '#{session_name}' '#{window_id}'"
-#
-# Each outer window gets its own popup session (popup-w<N>).
-# Inside a popup session, C-b-e detaches (closes popup) instead of nesting.
-#
+# The popup itself is just a shell attached with dtach (not a nested tmux
+# session). Each tmux window gets its own dtach socket, created in that
+# window's current directory the first time it is opened.
 
 caller_client="$1"
-current_dir="$2"
-current_session="$3"
-window_id="$4"  # e.g. @2
+current_dir="${2:-$HOME}"
+window_id="$4" # e.g. @2
 
-# Strip the @ prefix so the session name has no special tmux characters
-popup_session="popup-w${window_id#@}"
+uid=$(id -u 2>/dev/null || printf unknown)
+runtime_dir="/tmp/tmux-popup-$uid"
+mkdir -p "$runtime_dir" || exit 1
+chmod 700 "$runtime_dir" 2>/dev/null || true
 
-# If we're inside any popup-terminal session, just detach to close the popup.
-# We check the prefix rather than an exact match because the inner session's
-# window_id differs from the outer window's id that named this session.
-case "$current_session" in
-    popup-w*)
-        tmux detach-client 2>/dev/null
-        exit 0
-        ;;
-esac
+server_socket=$(tmux display-message -p '#{socket_path}' 2>/dev/null || printf '%s' "${TMUX%%,*}")
+server_id=$(printf '%s' "$server_socket" | cksum | awk '{print $1}')
+window_key=${window_id#@}
 
-# Create the session for this window if it doesn't exist yet
-if ! tmux has-session -t "=$popup_session" 2>/dev/null; then
-    tmux new-session -d -s "$popup_session" -c "$current_dir"
+socket="$runtime_dir/$server_id-$window_key.sock"
+visible="$runtime_dir/$server_id-$window_key.visible"
+shell=${SHELL:-/bin/sh}
+script_dir=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+client_script="$script_dir/tmux-popup-dtach-client.py"
+
+# If this window's popup is already open, close the tmux popup only. The
+# dtach shell keeps running and will be reattached next time.
+if [ -e "$visible" ]; then
+    rm -f "$visible"
+    tmux display-popup -c "$caller_client" -C
+    exit 0
 fi
 
-# Open popup attached to this window's persistent session
-tmux display-popup -c "$caller_client" -w 85% -h 85% -E \
-    "tmux attach-session -t =$popup_session"
+dtach=$(command -v dtach)
+python=$(command -v python3)
+if [ -z "$dtach" ] || [ -z "$python" ]; then
+    tmux display-message 'dtach and python3 are required for persistent non-tmux popups'
+    exit 1
+fi
+
+if [ -S "$socket" ] && ! "$dtach" -p "$socket" </dev/null 2>/dev/null; then
+    rm -f "$socket"
+fi
+if [ ! -S "$socket" ]; then
+    (cd "$current_dir" && "$dtach" -n "$socket" "$shell" -l) || exit 1
+fi
+
+touch "$visible" || exit 1
+tmux display-popup \
+    -c "$caller_client" \
+    -w 85% \
+    -h 85% \
+    -e "POPUP_PYTHON=$python" \
+    -e "POPUP_CLIENT=$client_script" \
+    -e "POPUP_DTACH=$dtach" \
+    -e "POPUP_SOCKET=$socket" \
+    -E sh -c 'exec "$POPUP_PYTHON" "$POPUP_CLIENT" "$POPUP_DTACH" "$POPUP_SOCKET"'
+rm -f "$visible"

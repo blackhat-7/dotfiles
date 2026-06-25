@@ -42,6 +42,7 @@ in
     pkgs.exempi
     pkgs.jq
     pkgs.curl
+    pkgs.dtach
     genmedia
     pkgs.sqlc
     pkgs.github-copilot-cli

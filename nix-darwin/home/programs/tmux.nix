@@ -103,7 +103,8 @@
       # Status right
       set-option -g status-right "\
 #[fg=$LIGHT_GRAY,bg=default]$TRIANGLE_OPEN\
-#[bg=$LIGHT_GRAY,fg=$CYAN] #h\
+#[bg=$LIGHT_GRAY,fg=$YELLOW] #($HOME/projects/tmux-agent-radar/bin/tmux-agent-radar status) \
+#[bg=$LIGHT_GRAY,fg=$CYAN]#h\
 #[fg=$LIGHT_GRAY,bg=default]$HALF_ROUND_CLOSE\
 "
 
@@ -146,7 +147,10 @@
       bind l select-pane -R
       bind C-e run-shell "$HOME/dotfiles/scripts/tmux-toggle-popup-terminal.sh '#{client_name}' '#{pane_current_path}' '#{session_name}' '#{window_id}'"
 
-      bind C-f run-shell "$HOME/dotfiles/scripts/tmux-open-jump.sh '#{client_name}' '#{session_name}'"
+      # Agent cockpit: passive coding-agent discovery, labels, previews, and permission alerts.
+      set -g @agent-radar-key "C-f"
+      set -g @agent-radar-watch "on"
+      run-shell "$HOME/projects/tmux-agent-radar/radar.tmux"
 
       # Set status bar on/off
       bind C-s set-option -g status

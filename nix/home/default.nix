@@ -43,6 +43,7 @@ in
     exempi
     jq
     curl
+    dtach
     uv
     genmedia
 
