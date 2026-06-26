@@ -27,7 +27,12 @@ in
     pkgs.nodejs_24
     pkgs.opencode-desktop
     pkgs.tree-sitter
-    pkgs.spotify
+    (pkgs.spotify.overrideAttrs (_: {
+      src = pkgs.fetchurl {
+        url = "https://download.scdn.co/SpotifyARM64.dmg";
+        hash = "sha256-EVdZUczAtvrHvkNSE4mUhY4vHwBZJPYgNJBM3M1Ksa4=";
+      };
+    }))
     pkgs.slack
     pkgs.discord
     pkgs.raycast
@@ -48,7 +53,7 @@ in
     pkgs.github-copilot-cli
     pkgs.p7zip
     pkgs.vi-mongo
-    pkgs.tabiew
+    # pkgs.tabiew
     pkgs.just
     pkgs.lazysql
     pkgs.packer
