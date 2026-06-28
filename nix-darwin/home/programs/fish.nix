@@ -73,17 +73,6 @@
               command pi $argv
           end
         '';
-        notes-sync = ''
-          # single command to save notes to remote
-          set -l notes_dir "$HOME/Documents/Notes"
-          pushd $notes_dir >/dev/null
-          git add -A
-          if not git diff --cached --quiet
-              git commit -m "notes"
-          end
-          git push
-          popd >/dev/null
-        '';
     };
     shellInit = ''
 if status is-interactive
