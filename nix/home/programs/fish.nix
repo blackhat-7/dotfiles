@@ -30,7 +30,7 @@
             return 1
         end
 
-        set -l ai_msg (printf "%s\n" "$prompt" | pi -p --no-tools --no-session --thinking off --model "$GCM_MODEL")
+        set -l ai_msg (printf "%s\n" "$prompt" | pi -p --no-extensions --no-skills --no-context-files --no-tools --no-session --thinking off --model "$GCM_MODEL")
 
         # 6. Process the output
         if test -n "$ai_msg"
