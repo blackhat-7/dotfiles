@@ -7,11 +7,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1782656154,
-        "narHash": "sha256-YUeGzAeu46nI2EoQM462gNnkm6QEvbz+XRQhX5BCyHI=",
+        "lastModified": 1782903516,
+        "narHash": "sha256-gRXPI8i/7yEbbn7PTnpTf8X91uUj39pQJ7YnhFE29fc=",
         "owner": "blackhat-7",
         "repo": "ai-harnesses",
-        "rev": "ea0c5484047711448db8d12644304952830a6bcc",
+        "rev": "48e08cea6f0f713f20fa03804f54d04b800541e7",
         "type": "github"
       },
       "original": {
@@ -132,11 +132,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1782541517,
-        "narHash": "sha256-j2/KGGTSzNmCUDQ1o8yvXAQV0dUlCkb50eppD/8ORo4=",
+        "lastModified": 1782844433,
+        "narHash": "sha256-GTN5id7tTHQgheM+Ns7QKL2xWuo2tqIg0vsdRAgT8fc=",
         "owner": "blackhat-7",
         "repo": "tmux-agent-radar",
-        "rev": "3c52b8778bed90d666d298fd856bdce67685f1f6",
+        "rev": "e50ec6cfe6cfe0882f24a627a1de4bc6d02f26d9",
         "type": "github"
       },
       "original": {
