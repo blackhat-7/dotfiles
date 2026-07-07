@@ -2,6 +2,10 @@
 
 {
   nix.enable = false;
+  # nix-darwin a1fa429 still passes the removed --toc-depth flag to
+  # nixos-render-docs from current nixpkgs. Skip local Darwin manual output.
+  documentation.enable = false;
+  system.tools.darwin-uninstaller.enable = false;
   system.stateVersion = 4;
   system.primaryUser = "illusion";
   system.defaults = {

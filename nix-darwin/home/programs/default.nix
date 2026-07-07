@@ -94,7 +94,10 @@ in
     lsd.enable = true;
     jq.enable = true;
     bat.enable = true;
-    fzf.enable = true;
+    fzf = {
+      enable = true;
+      historyWidget.command = "";
+    };
     ripgrep.enable = true;
     # zed-editor.enable = true;
     vscode = {
