@@ -61,7 +61,6 @@ in
     pkgs.moonlight-qt
     pkgs.gitleaks
     pkgs.monitorcontrol
-    pkgs.terminal-notifier
     pkgs.pandoc
   ];
 
