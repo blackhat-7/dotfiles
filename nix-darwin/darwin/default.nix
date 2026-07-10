@@ -25,6 +25,9 @@
     zsh.enable = true;
   };
 
+  # Keep fish listed as an acceptable login shell via a stable nix-darwin path.
+  environment.shells = [ pkgs.fish ];
+
   fonts.packages = [
     pkgs.nerd-fonts.fira-code
   ];
