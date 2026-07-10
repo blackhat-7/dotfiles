@@ -1,6 +1,12 @@
 { pkgs, ... }: {
   programs.starship = {
     enable = true;
+    package = pkgs.starship.overrideAttrs (old: {
+      nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ pkgs.llvmPackages.lld ];
+      env = (old.env or { }) // {
+        NIX_CFLAGS_LINK = "-fuse-ld=lld";
+      };
+    });
     settings = {
       format = "$directory$git_branch$git_state$git_status$python$cmd_duration$line_break$character";
       add_newline = true;

@@ -7,6 +7,14 @@ let
     else
       pkgs.callPackage ../../pkgs/genmedia.nix { };
 
+  # Work around the current nixpkgs ld64 hardening crash on Darwin.
+  moonlight = pkgs.moonlight-qt.overrideAttrs (old: {
+    nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ pkgs.llvmPackages.lld ];
+    env = (old.env or { }) // {
+      NIX_CFLAGS_LINK = "-fuse-ld=lld";
+    };
+  });
+
 in
 {
   imports = [
@@ -18,8 +26,8 @@ in
     pkgs.neovim
     pkgs.fastfetch
     pkgs.exiftool
-    pkgs.python313
-    pkgs.python313Packages.pip
+    (pkgs.lib.hiPrio pkgs.python313)
+    (pkgs.lib.hiPrio pkgs.python313Packages.pip)
     pkgs.opentofu
     (pkgs.google-cloud-sdk.withExtraComponents [pkgs.google-cloud-sdk.components.kubectl pkgs.google-cloud-sdk.components.gke-gcloud-auth-plugin])
     pkgs.golangci-lint
@@ -27,12 +35,7 @@ in
     pkgs.nodejs_24
     pkgs.opencode-desktop
     pkgs.tree-sitter
-    (pkgs.spotify.overrideAttrs (_: {
-      src = pkgs.fetchurl {
-        url = "https://download.scdn.co/SpotifyARM64.dmg";
-        hash = "sha256-EVdZUczAtvrHvkNSE4mUhY4vHwBZJPYgNJBM3M1Ksa4=";
-      };
-    }))
+    pkgs.spotify
     pkgs.slack
     pkgs.discord
     pkgs.raycast
@@ -58,7 +61,7 @@ in
     pkgs.lazysql
     pkgs.packer
     pkgs.webtorrent_desktop
-    pkgs.moonlight-qt
+    moonlight
     pkgs.gitleaks
     pkgs.monitorcontrol
     pkgs.pandoc
