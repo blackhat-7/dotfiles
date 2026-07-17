@@ -66,6 +66,7 @@ in
     pkgs.gitleaks
     pkgs.monitorcontrol
     pkgs.pandoc
+    pkgs.chatgpt
   ];
 
   home.sessionPath = [
