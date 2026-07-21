@@ -21,7 +21,7 @@ in
     ./programs
     inputs.ai-harnesses.homeManagerModules.default
   ];
-  aiHarnesses.pi.disabledPackages = [ "npm:pi-claude-style-tools" ];
+  # aiHarnesses.pi.disabledPackages = [ "npm:pi-claude-style-tools" ];
   home.stateVersion = "23.11";
   home.packages = [
     pkgs.neovim
