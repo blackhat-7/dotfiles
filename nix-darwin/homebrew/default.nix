@@ -2,6 +2,9 @@
   homebrew = {
     enable = true;
     global.autoUpdate = true;
+    taps = [
+      "stablyai/orca"
+    ];
     casks = [
       "zen"
       "docker-desktop"
@@ -10,6 +13,7 @@
       "wine-stable"
       "zed"
       "kitty"
+      "stablyai/orca/orca"
     ];
   };
 }
