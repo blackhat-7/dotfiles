@@ -274,10 +274,25 @@ require('lazy').setup({
   -- Git related plugins
   'lewis6991/gitsigns.nvim',
   {
+    'esmuellert/codediff.nvim',
+    cmd = 'CodeDiff',
+    opts = {
+      diff = {
+        layout = 'side-by-side',
+        compact = true,
+        disable_inlay_hints = true,
+      },
+      explorer = {
+        position = 'left',
+        width = 35,
+        view_mode = 'tree',
+      },
+    },
+  },
+  {
     "NeogitOrg/neogit",
     dependencies = {
       "nvim-lua/plenary.nvim",         -- required
-      "sindrets/diffview.nvim",        -- optional - Diff integration
       "nvim-telescope/telescope.nvim", -- optional
     },
     config = true

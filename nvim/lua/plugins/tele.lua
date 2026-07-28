@@ -52,12 +52,12 @@ vim.keymap.set('n', '<leader>fw', require('telescope.builtin').live_grep, { desc
 vim.keymap.set('n', '<leader>fr', require('telescope.builtin').resume, { desc = '[F]ind [R]esume' })
 vim.keymap.set('n', '<leader>fd', require('telescope.builtin').diagnostics, { desc = '[F]ind [D]iagnostics' })
 vim.keymap.set('n', '<leader>fb', require('telescope.builtin').buffers, { desc = '[F]ind existing [B]uffers' })
-vim.keymap.set('n', '<leader>gt', require('telescope.builtin').git_status, { desc = '' })
+vim.keymap.set('n', '<leader>gt', '<cmd>CodeDiff<cr>', { desc = '[G]it uncommitted diff' })
 vim.keymap.set('n', '<leader>cm', require('telescope.builtin').git_commits, { desc = '' })
 vim.keymap.set('n', '<leader>th', ":Telescope colorscheme<CR>", { desc = 'Select [TH]eme' })
 vim.keymap.set('n', '<leader>fm', ":lua vim.lsp.buf.format({async = true})<CR>", { desc = 'LSP [F]or[M]at' })
 
--- DiffviewOpen picker: list branches + special refs and open with DiffviewOpen
+-- CodeDiff picker: list branches + special refs and open with CodeDiff
 vim.keymap.set('n', '<leader>dv', function()
   local pickers = require('telescope.pickers')
   local finders = require('telescope.finders')
@@ -77,7 +77,7 @@ vim.keymap.set('n', '<leader>dv', function()
   end
 
   pickers.new({}, {
-    prompt_title = 'DiffviewOpen',
+    prompt_title = 'CodeDiff',
     finder = finders.new_table { results = entries },
     sorter = require('telescope.config').values.generic_sorter({}),
     attach_mappings = function(prompt_bufnr)
@@ -85,10 +85,10 @@ vim.keymap.set('n', '<leader>dv', function()
         local selection = action_state.get_selected_entry()
         actions.close(prompt_bufnr)
         if selection then
-          vim.cmd('DiffviewOpen ' .. selection[1])
+          vim.cmd('CodeDiff ' .. vim.fn.fnameescape(selection[1]))
         end
       end)
       return true
     end,
   }):find()
-end, { desc = '[D]iff[V]iew open branch' })
+end, { desc = '[D]iff [V]iew revision' })
