@@ -85,10 +85,7 @@ in
     lsd.enable = true;
     jq.enable = true;
     bat.enable = true;
-    fzf = {
-      enable = true;
-      historyWidget.command = "";
-    };
+    fzf.enable = true;
     ripgrep.enable = true;
     zed-editor.enable = true;
     vscode.enable = true;
@@ -101,7 +98,6 @@ in
       enable = true;
       enableFishIntegration = true;
     };
-    hyprpanel.enable = true;
     yazi = {
       enable = true;
       shellWrapperName = "y";
@@ -110,6 +106,8 @@ in
     # opencode.enable = true;
     claude-code.enable = true;
   };
+
+  services.wayle.enable = true;
 
   home.activation.install-uv-tools = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
     # A list of Python packages to install with 'uv tool install'

@@ -2,7 +2,10 @@
 {
   programs.fish = {
     enable = true;
-    generateCompletions = true;
+    # Disabled: Home Manager currently calls fish's removed
+    # share/fish/tools/create_manpage_completions.py with fish 4.8.0.
+    # Use vendor completions instead.
+    generateCompletions = false;
     functions = {
       gcm = ''
         # 1. Stage all changes

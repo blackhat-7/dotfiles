@@ -29,7 +29,7 @@ in
     fastfetch
     exiftool
     tailscale
-    python313
+    (lib.hiPrio python313)
     python313Packages.pip
     golangci-lint
     nodejs_24
@@ -67,7 +67,7 @@ in
     vi-mongo
     vicinae
     wl-clipboard
-    mongodb-compass
+    gcloudPkgs.mongodb-compass
     # element-desktop
     gitleaks
     libnotify # notify-send for Claude/Pi hook notifications
