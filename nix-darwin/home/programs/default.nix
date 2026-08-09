@@ -94,7 +94,11 @@ in
     lsd.enable = true;
     jq.enable = true;
     bat.enable = true;
-    fzf.enable = true;
+    fzf = {
+      enable = true;
+      # atuin owns Ctrl-R for history search
+      historyWidget.command = "";
+    };
     ripgrep.enable = true;
     # zed-editor.enable = true;
     vscode = {
