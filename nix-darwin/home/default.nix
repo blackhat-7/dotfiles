@@ -67,6 +67,7 @@ in
     pkgs.monitorcontrol
     pkgs.pandoc
     pkgs.chatgpt
+    pkgs.slackdump
   ];
 
   home.sessionPath = [
@@ -101,6 +102,29 @@ in
         "on"
       ];
       RunAtLoad = true;
+    };
+  };
+
+  # Incremental top-up of the local Slack archive (read-only mirror of what
+  # the user's account can see). Creates no data of its own until the first
+  # `slackdump archive` has been run manually.
+  launchd.agents.slackdump-resume = {
+    enable = true;
+    config = {
+      ProgramArguments = [
+        "${pkgs.slackdump}/bin/slackdump"
+        "resume"
+        "/Users/illusion/.slack-archive"
+      ];
+      EnvironmentVariables = {
+        HOME = "/Users/illusion";
+      };
+      StartCalendarInterval = {
+        Hour = 8;
+        Minute = 0;
+      };
+      StandardOutPath = "/Users/illusion/.slack-archive/resume.log";
+      StandardErrorPath = "/Users/illusion/.slack-archive/resume.err.log";
     };
   };
 
