@@ -135,6 +135,8 @@
       alias geeqie="geeqie --disable-clutter"
       alias chutes="chutes-tui"
       alias easyeffects="QT_QPA_PLATFORM=xcb command easyeffects"
+      alias monitor-off="XDG_RUNTIME_DIR=/run/user/\$(id -u) hyprctl --instance 0 dispatch dpms off"
+      alias monitor-on="XDG_RUNTIME_DIR=/run/user/\$(id -u) hyprctl --instance 0 dispatch dpms on"
 
 
       # Use yazi from system path or homebrew path if available
