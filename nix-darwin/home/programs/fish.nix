@@ -1,6 +1,12 @@
 { pkgs, ... }: {
   programs.fish = {
     enable = true;
+    plugins = [
+      {
+        name = "nvm";
+        src = pkgs.fishPlugins.nvm.src;
+      }
+    ];
     # Disabled: Home Manager currently calls fish's removed
     # share/fish/tools/create_manpage_completions.py with fish 4.8.0.
     # Program-specific integrations below (carapace, nix-index, etc.) still work.

@@ -8,7 +8,7 @@ let
       pkgs.callPackage ../../pkgs/genmedia.nix { };
 
   # Work around the current nixpkgs ld64 hardening crash on Darwin.
-  moonlight = (pkgs.moonlight-qt.override { ffmpeg = pkgs.ffmpeg_6; }).overrideAttrs (old: {
+  moonlight = pkgs.moonlight-qt.overrideAttrs (old: {
     nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ pkgs.llvmPackages.lld ];
     env = (old.env or { }) // {
       NIX_CFLAGS_LINK = "-fuse-ld=lld";
