@@ -2,6 +2,7 @@
   homebrew = {
     enable = true;
     global.autoUpdate = true;
+    onActivation.autoUpdate = true;
     taps = [
       "stablyai/orca"
     ];
