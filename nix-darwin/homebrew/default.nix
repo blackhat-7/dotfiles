@@ -14,6 +14,7 @@
       "wine-stable"
       "zed"
       "kitty"
+      "chatgpt"
       "stablyai/orca/orca"
     ];
   };

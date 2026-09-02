@@ -21,6 +21,7 @@ in
     ./programs
     inputs.ai-harnesses.homeManagerModules.default
   ];
+  aiHarnesses.mode = "auto";
   # aiHarnesses.pi.disabledPackages = [ "npm:pi-claude-style-tools" ];
   home.stateVersion = "23.11";
   home.packages = [
@@ -66,7 +67,6 @@ in
     pkgs.gitleaks
     pkgs.monitorcontrol
     pkgs.pandoc
-    pkgs.chatgpt
   ];
 
   home.sessionPath = [
