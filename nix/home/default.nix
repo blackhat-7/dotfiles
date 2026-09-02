@@ -20,6 +20,7 @@ in
     inputs.ai-harnesses.homeManagerModules.default
   ];
 
+  aiHarnesses.mode = "auto";
   home.stateVersion = "23.11";
 
   # All packages consolidated
