@@ -236,35 +236,21 @@
       end
       # export HOME_MANAGER_CONFIG="~/.config/nixpkgs/"
 
-      # Aichat
-      function _aichat_fish
-          set -l _old (commandline)
-          if test -n $_old
+      # Generate a command for review; never execute it automatically.
+      function _pi_fish
+          set -l request (commandline | string collect)
+          if test -n "$request"
               echo -n "⌛"
               commandline -f repaint
-              commandline (aichat -e $_old)
+              set -l generated "$(printf '%s\n' "$request" | pi -p --no-extensions --no-skills --no-context-files --no-prompt-templates --no-tools --no-session --thinking off --models 'openai-codex/*' --model openai-codex/gpt-5.6-luna --system-prompt 'Translate the request into a fish shell command. Output only the command, without Markdown fences or explanation. Do not execute anything.')"
+              if test $status -eq 0; and test -n "$(string trim -- "$generated")"
+                  commandline -r -- "$generated"
+              end
+              commandline -f repaint
           end
       end
-      bind --mode insert \cx _aichat_fish
-      # function _aichat_fish
-      #     # Save the current command line content to a variable
-      #     set _old (commandline)
-      #
-      #     # If the current command line is not empty
-      #     if test -n "$_old"
-      #         # Print an indicator to show that processing is happening
-      #         echo -n "⌛"
-      #
-      #         # Force a repaint of the command line interface to show the indicator
-      #         commandline -f repaint
-      #
-      #         # Call `aichat` with the current command line content and replace the content with the result
-      #         set _new (aichat -e "$_old")
-      #
-      #         # Replace the command line with the output of the `aichat` command
-      #         commandline -r "$_new"
-      #     end
-      # end
+      bind --mode insert \cx _pi_fish
+      bind --mode default \cx _pi_fish
 
 
 
