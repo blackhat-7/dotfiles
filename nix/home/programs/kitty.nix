@@ -17,7 +17,7 @@
       hide_window_decorations      titlebar-only
       cursor_trail 3
 
-      background_opacity 0.5
+      background_opacity 0.85
       background_blur 5
 
 

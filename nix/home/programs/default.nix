@@ -29,7 +29,7 @@ in
     inputs.nix-index-database.homeModules.nix-index
   ];
 
-  home.packages = [ osc8wrap ];
+  home.packages = [ osc8wrap pkgs.dms-shell pkgs.quickshell ];
 
   programs = {
     bash.enable = true;
@@ -106,8 +106,6 @@ in
     # opencode.enable = true;
     claude-code.enable = true;
   };
-
-  services.wayle.enable = true;
 
   home.activation.install-uv-tools = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
     # A list of Python packages to install with 'uv tool install'
