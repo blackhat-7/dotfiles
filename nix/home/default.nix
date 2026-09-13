@@ -21,6 +21,7 @@ in
   ];
 
   aiHarnesses.mode = "auto";
+  aiHarnesses.pi.disabledPackages = [ "npm:pi-lean-ctx" ];
   home.stateVersion = "23.11";
 
   # All packages consolidated
