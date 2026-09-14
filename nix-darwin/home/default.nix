@@ -47,7 +47,6 @@ in
     pkgs.gopls
     pkgs.rustup
     pkgs.mongodb-compass
-    pkgs.brave
     pkgs.ffmpeg_6-headless
     pkgs.exempi
     pkgs.jq
