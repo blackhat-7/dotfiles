@@ -1,6 +1,7 @@
 { pkgs, inputs, ... }:
   let
     tmux-agent-radar = inputs.tmux-agent-radar.packages.${pkgs.stdenv.hostPlatform.system}.default;
+    tmux-claude-usage = inputs.tmux-claude-usage.packages.${pkgs.stdenv.hostPlatform.system}.default;
     tmux-fzf-pane-switch = pkgs.tmuxPlugins.mkTmuxPlugin
     {
       name = "tmux-fzf-pane-switch";
@@ -112,7 +113,8 @@
       # Status right
       set-option -g status-right "\
 #[fg=$LIGHT_GRAY,bg=default]$TRIANGLE_OPEN\
-#[bg=$LIGHT_GRAY,fg=$YELLOW] #(${tmux-agent-radar}/bin/tmux-agent-radar status) \
+#[bg=$LIGHT_GRAY] #(${tmux-claude-usage}/bin/tmux-claude-usage status) \
+#[bg=$LIGHT_GRAY,fg=$YELLOW]#(${tmux-agent-radar}/bin/tmux-agent-radar status) \
 #[bg=$LIGHT_GRAY,fg=$CYAN]#h\
 #[fg=$LIGHT_GRAY,bg=default]$HALF_ROUND_CLOSE\
 "

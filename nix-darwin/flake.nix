@@ -17,6 +17,10 @@
       url = "github:blackhat-7/tmux-agent-radar/main";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    tmux-claude-usage = {
+      url = "github:blackhat-7/tmux-claude-usage/main";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     nix-index-database = {
