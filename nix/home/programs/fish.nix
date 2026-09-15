@@ -24,16 +24,25 @@
         echo "🤖 Generating commit message..."
 
         # 4. Construct the prompt
-        set -l prompt "Your task is to generate a concise and informative commit message based on the provided diff. Use the conventional commit format (type: subject). The message should be in the imperative mood and under 200 chars. Don't include additional text. The diff is:
+        set -l system_prompt "You write git commit messages. Reply with only the commit message text: one line, conventional commit format (type: subject), imperative mood, under 200 chars. No code fences, no quotes, no explanation, no trailers, no Co-Authored-By line."
+        set -l prompt "Generate a commit message for this diff:
         $diff_output"
 
-        # 5. Call pi with thinking disabled
+        # 5. Call claude, skipping everything a one-shot completion cannot use:
+        # MCP servers, skills, session files, and the default Claude Code preset.
         if test -z "$GCM_MODEL"
             echo "❌ GCM_MODEL is not set."
             return 1
         end
 
-        set -l ai_msg (printf "%s\n" "$prompt" | pi -p --no-extensions --no-skills --no-context-files --no-tools --no-session --thinking off --model "$GCM_MODEL")
+        set -l ai_msg (printf "%s\n" "$prompt" | claude -p --model "$GCM_MODEL" --system-prompt "$system_prompt" --settings '{"includeCoAuthoredBy":false}' --strict-mcp-config --disable-slash-commands --no-session-persistence)
+
+        # claude reports failures (bad model, auth) on stdout and they would
+        # otherwise sail through as the commit message.
+        if test $status -ne 0
+            echo "❌ claude failed: $ai_msg"
+            return 1
+        end
 
         # 6. Process the output
         if test -n "$ai_msg"
@@ -312,7 +321,7 @@
       # export OPENAI_API_BASE="http://100.95.18.138:42069/v1"
       export OPENAI_API_BASE="http://100.85.231.84:8080/api"
       export AIDER_MODEL="hf:Qwen/Qwen2.5-Coder-32B-Instruct"
-      export GCM_MODEL="openai-codex/gpt-5.3-codex-spark"
+      export GCM_MODEL="haiku"
       export OLLAMA_HOST="0.0.0.0"
       export SEARXNG_API_URL="http://raspberrypi:8081"
 

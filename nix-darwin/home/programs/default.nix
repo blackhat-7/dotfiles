@@ -129,7 +129,6 @@ in
       shellWrapperName = "y";
     };
     # opencode.enable = true;
-    claude-code.enable = true;
     bun.enable = true;
   };
 
