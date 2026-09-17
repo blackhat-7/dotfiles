@@ -83,16 +83,16 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1789286504,
-        "narHash": "sha256-eiEK7cKZORNEvX0GeF3RtNEF/JXhgf2RqSp3230q13E=",
+        "lastModified": 1789370336,
+        "narHash": "sha256-6RSEDHIWQtesQKWSu5qRai8L2h4KgCgMEfJHstW99G4=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "ef34387ddd751e1ab8857adf4676492d32eb24ec",
+        "rev": "c7def046b9a883d46974757852106483d741586f",
         "type": "github"
       },
       "original": {
         "owner": "NixOS",
-        "ref": "nixos-unstable",
+        "ref": "nixpkgs-unstable",
         "repo": "nixpkgs",
         "type": "github"
       }
@@ -154,11 +154,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1789501406,
-        "narHash": "sha256-LJOtaqpWZ1kaCDntFHQ6KmMOtE9dhUgG3eX+mcnk3Bo=",
+        "lastModified": 1789585838,
+        "narHash": "sha256-1vN4OndXoKJT7yIXPDogIgnIUQ3aYok7jlN7HH466Cw=",
         "owner": "blackhat-7",
         "repo": "tmux-claude-usage",
-        "rev": "269dd3e22553da9d1a3fc156673f782a33e0db81",
+        "rev": "0038379b3837e605d235a5c0d3940def4e4a5abf",
         "type": "github"
       },
       "original": {
