@@ -1,24 +1,21 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-monitor="DP-1"
+# Match the display by EDID description, not connector name: DP-N numbering
+# shifts across kernel upgrades and port changes. Must match hyprland.conf.
+desc="GIGA-BYTE TECHNOLOGY CO. LTD. AORUS FO27Q3 25150B002212"
+monitor="$({ hyprctl monitors all -j || true; } | python -c 'import json, sys
+print(next((m["name"] for m in json.load(sys.stdin)
+            if sys.argv[1] in m.get("description", "")), ""))' "$desc")"
 mode="${1:-toggle}"
 config="${XDG_CONFIG_HOME:-$HOME/.config}/hypr/hyprland.conf"
-
-refresh_wallpaper_engine() {
-  if systemctl --user list-unit-files | rg -q "^wallpaperengine@\.service"; then
-    systemctl --user restart "wallpaperengine@${monitor}.service" || true
-  fi
-  pkill -x swww-daemon || true
-  pkill -x hyprpaper || true
-}
 
 set_mode_in_config() {
   local cm="$1"
   local sdrbrightness="$2"
   local sdrsaturation="$3"
 
-  python - "$config" "$monitor" "$cm" "$sdrbrightness" "$sdrsaturation" <<'PY'
+  python - "$config" "desc:$desc" "$cm" "$sdrbrightness" "$sdrsaturation" <<'PY'
 import pathlib
 import re
 import sys
@@ -73,13 +70,11 @@ apply_mode() {
     srgb)
       set_mode_in_config srgb 1.0 1.0
       hyprctl reload >/dev/null
-      refresh_wallpaper_engine
       notify-send "Display mode" "Coding mode (sRGB)"
       ;;
     hdr)
       set_mode_in_config hdr 1.1 1.0
       hyprctl reload >/dev/null
-      refresh_wallpaper_engine
       notify-send "Display mode" "Media mode (HDR)"
       ;;
     *)
