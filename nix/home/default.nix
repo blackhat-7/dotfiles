@@ -73,6 +73,7 @@ in
     # element-desktop
     gitleaks
     libnotify # notify-send for Claude/Pi hook notifications
+    ddcutil # DDC/CI control for external monitor brightness
   ];
 
   home.sessionPath = [
@@ -111,6 +112,11 @@ in
 
   home.file.".local/bin/anime_vid_server" = {
     source = ../../scripts/anime_vid_server;
+    executable = true;
+  };
+
+  home.file.".local/bin/monitor-brightness" = {
+    source = ../../scripts/monitor-brightness;
     executable = true;
   };
 

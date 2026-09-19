@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+# Step the external monitor's brightness over DDC/CI, via the DMS OSD.
+# Usage: monitor-brightness up|down [step]
+
+set -euo pipefail
+
+step=${2:-5}
+cache="${XDG_RUNTIME_DIR:-/tmp}/monitor-brightness.bus"
+
+# /dev/i2c-N numbering shifts across boots, but the adapter's name does not,
+# so cache the name and resolve it back to a number on each run. Falling back
+# to `ddcutil detect` is correct but takes ~4s, too slow for a keypress.
+bus_for_name() {
+  local dev
+  for dev in /sys/bus/i2c/devices/i2c-*; do
+    if [[ $(< "$dev/name") == "$1" ]]; then
+      echo "${dev##*/i2c-}"
+      return 0
+    fi
+  done
+  return 1
+}
+
+bus=""
+[[ -r $cache ]] && bus=$(bus_for_name "$(< "$cache")" || true)
+
+if [[ -z $bus ]]; then
+  bus=$(ddcutil detect --brief | sed -n 's#.*I2C bus:.*/dev/i2c-##p' | head -1)
+  if [[ -z $bus ]]; then
+    notify-send -u critical "Brightness" "No DDC/CI monitor detected"
+    exit 1
+  fi
+  cat "/sys/bus/i2c/devices/i2c-$bus/name" > "$cache"
+fi
+
+case ${1:-} in
+  up)   dms ipc call brightness increment "$step" "ddc:i2c-$bus" ;;
+  down) dms ipc call brightness decrement "$step" "ddc:i2c-$bus" ;;
+  *)    echo "usage: ${0##*/} up|down [step]" >&2; exit 2 ;;
+esac
