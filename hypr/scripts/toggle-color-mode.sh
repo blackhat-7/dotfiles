@@ -2,20 +2,21 @@
 set -euo pipefail
 
 # Match the display by EDID description, not connector name: DP-N numbering
-# shifts across kernel upgrades and port changes. Must match hyprland.conf.
+# shifts across kernel upgrades and port changes. Must match the `aorus`
+# hl.monitor block in hyprland.lua.
 desc="GIGA-BYTE TECHNOLOGY CO. LTD. AORUS FO27Q3 25150B002212"
 monitor="$({ hyprctl monitors all -j || true; } | python -c 'import json, sys
 print(next((m["name"] for m in json.load(sys.stdin)
             if sys.argv[1] in m.get("description", "")), ""))' "$desc")"
 mode="${1:-toggle}"
-config="${XDG_CONFIG_HOME:-$HOME/.config}/hypr/hyprland.conf"
+config="${XDG_CONFIG_HOME:-$HOME/.config}/hypr/hyprland.lua"
 
 set_mode_in_config() {
   local cm="$1"
   local sdrbrightness="$2"
   local sdrsaturation="$3"
 
-  python - "$config" "desc:$desc" "$cm" "$sdrbrightness" "$sdrsaturation" <<'PY'
+  python - "$config" "aorus" "$cm" "$sdrbrightness" "$sdrsaturation" <<'PY'
 import pathlib
 import re
 import sys
@@ -33,24 +34,24 @@ updated = False
 
 while i < len(lines):
     line = lines[i]
-    if re.match(r"^\s*monitorv2\s*\{\s*$", line):
+    if re.match(r"^\s*hl\.monitor\(\{\s*$", line):
         block = [line]
         i += 1
         while i < len(lines):
             block.append(lines[i])
-            if re.match(r"^\s*\}\s*$", lines[i]):
+            if re.match(r"^\s*\}\)\s*$", lines[i]):
                 break
             i += 1
 
         block_text = "\n".join(block)
-        if re.search(rf"^\s*output\s*=\s*{re.escape(monitor)}\s*$", block_text, re.M):
+        if re.search(rf"^\s*output\s*=\s*{re.escape(monitor)}\s*,\s*$", block_text, re.M):
             for j, bline in enumerate(block):
                 if re.match(r"^\s*cm\s*=", bline):
-                    block[j] = re.sub(r"=.*$", f"={cm}", bline)
+                    block[j] = re.sub(r"=.*$", f'= "{cm}",', bline)
                 elif re.match(r"^\s*sdrbrightness\s*=", bline):
-                    block[j] = re.sub(r"=.*$", f"={sdrbrightness}", bline)
+                    block[j] = re.sub(r"=.*$", f"= {sdrbrightness},", bline)
                 elif re.match(r"^\s*sdrsaturation\s*=", bline):
-                    block[j] = re.sub(r"=.*$", f"={sdrsaturation}", bline)
+                    block[j] = re.sub(r"=.*$", f"= {sdrsaturation},", bline)
             updated = True
 
         out.extend(block)
@@ -59,7 +60,7 @@ while i < len(lines):
     i += 1
 
 if not updated:
-    raise SystemExit(f"Could not find monitorv2 block for {monitor} in {config_path}")
+    raise SystemExit(f"Could not find hl.monitor block for {monitor} in {config_path}")
 
 config_path.write_text("\n".join(out) + "\n")
 PY
