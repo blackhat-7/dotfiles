@@ -22,7 +22,7 @@ in
     inputs.ai-harnesses.homeManagerModules.default
   ];
   aiHarnesses.mode = "auto";
-  # aiHarnesses.pi.disabledPackages = [ "npm:pi-claude-style-tools" ];
+  aiHarnesses.pi.disabledPackages = [ "npm:pi-lean-ctx" ];
   home.stateVersion = "23.11";
   home.packages = [
     pkgs.neovim
