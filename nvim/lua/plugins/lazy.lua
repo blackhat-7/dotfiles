@@ -363,6 +363,14 @@ require('lazy').setup({
     end
   },
 
+  -- Markdown preview: live render beside the buffer, mermaid as images
+  {
+    "blackhat-7/vellum.nvim",
+    ft = "markdown",
+    keys = { { "<leader>mp", "<cmd>Vellum<cr>", desc = "Markdown preview" } },
+    opts = {},
+  },
+
   -- Note taking
   {
     "epwalsh/obsidian.nvim",

@@ -59,6 +59,9 @@
 
       # Tell tmux Kitty supports truecolor/RGB so colors match outside tmux.
       set -as terminal-features ",xterm-kitty:RGB"
+      # Over ssh the client arrives as xterm-256color without COLORTERM, so
+      # tmux would drop to 256 colors (and vellum.nvim images vanish).
+      set -as terminal-features ",xterm-256color:RGB"
       # Preserve OSC-8 hyperlinks for Kitty Option-click.
       set -as terminal-features ",*:hyperlinks"
 
