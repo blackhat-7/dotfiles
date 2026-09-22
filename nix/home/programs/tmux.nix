@@ -1,5 +1,7 @@
-{ pkgs, ... }:
+{ pkgs, inputs, ... }:
 let
+  tmux-agent-radar = inputs.tmux-agent-radar.packages.${pkgs.stdenv.hostPlatform.system}.default;
+  tmux-claude-usage = inputs.tmux-claude-usage.packages.${pkgs.stdenv.hostPlatform.system}.default;
   tmux-fzf-pane-switch = pkgs.tmuxPlugins.mkTmuxPlugin {
     name = "tmux-fzf-pane-switch";
     pluginName = "tmux-fzf-pane-switch";
@@ -46,6 +48,13 @@ in
         extraConfig = ''
           set -g @online_icon "ok"
           set -g @offline_icon "nok"
+        '';
+      }
+      {
+        plugin = tmux-agent-radar;
+        extraConfig = ''
+          set -g @agent-radar-key "C-f"
+          set -g @agent-radar-watch "on"
         '';
       }
       {
@@ -102,8 +111,12 @@ in
       set -ga status-left "#[bg=#{@thm_bg},fg=#{@thm_yellow}]#{?window_zoomed_flag,  zoom ,}"
 
       ## Status Bar - Right Look and Feel
-      set -g status-right-length 100
+      set -g status-right-length 200
       set -g status-right ""
+      set -ga status-right "#[bg=#{@thm_bg}] #(${tmux-claude-usage}/bin/tmux-claude-usage status) "
+      set -ga status-right "#[bg=#{@thm_bg},fg=#{@thm_overlay_0},none]│"
+      set -ga status-right "#[bg=#{@thm_bg},fg=#{@thm_yellow}] #(${tmux-agent-radar}/bin/tmux-agent-radar status) "
+      set -ga status-right "#[bg=#{@thm_bg},fg=#{@thm_overlay_0},none]│"
       set -ga status-right "#{?#{e|>=:10,#{battery_percentage}},#{#[bg=#{@thm_red},fg=#{@thm_bg}]},#{#[bg=#{@thm_bg},fg=#{@thm_pink}]}} #{battery_icon} #{battery_percentage} "
       set -ga status-right "#[bg=#{@thm_bg},fg=#{@thm_overlay_0}, none]│"
       set -ga status-right "#[bg=#{@thm_bg}]#{?#{==:#{online_status},ok},#[fg=#{@thm_mauve}] 󰖩 on ,#[fg=#{@thm_red},bold]#[reverse] 󰖪 off }"
@@ -142,7 +155,7 @@ in
       bind l select-pane -R
       bind C-e run-shell "$HOME/dotfiles/scripts/tmux-toggle-popup-terminal.sh '#{client_name}' '#{pane_current_path}' '#{session_name}' '#{window_id}'"
       bind C-p run-shell "$HOME/dotfiles/scripts/tmux-toggle-scratchpad.sh '#{client_name}' '#{session_name}'"
-      bind C-f run-shell "$HOME/dotfiles/scripts/tmux-open-jump.sh '#{client_name}' '#{session_name}'"
+      bind C-g run-shell "$HOME/dotfiles/scripts/tmux-open-jump.sh '#{client_name}' '#{session_name}'"
 
       # Set status bar on/off
       bind C-s set-option -g status

@@ -7,11 +7,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1789854865,
-        "narHash": "sha256-ix15sbT/Zy7FJ6N4L24NnF0apz8XLj8VifJhGU/ETK0=",
+        "lastModified": 1790019178,
+        "narHash": "sha256-uhN0I7HTnjNZm85z9rPXbGlzYFo6B5UBDP7DtX1zXBE=",
         "owner": "blackhat-7",
         "repo": "ai-harnesses",
-        "rev": "14bbd050b83e0360853bca8d0e0ce67e0e5da674",
+        "rev": "afa1d247d727584ceb77247a6e1e6a5b0b739ed9",
         "type": "github"
       },
       "original": {
@@ -124,11 +124,11 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1789785513,
-        "narHash": "sha256-B44WL6h0XoLjJ41bUPJk0X5SDinLCII//6EcBLXKiJ0=",
+        "lastModified": 1789921291,
+        "narHash": "sha256-Ft/BRnIqw1MywFoXydKobjjWmDFgDdYtSpJliE8+yUw=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "20b1ddd1aa5ace70c9468305030aa4f9ef79671b",
+        "rev": "44a91898084f46797b5fac650c7e8c9ac38c43d4",
         "type": "github"
       },
       "original": {
@@ -223,7 +223,9 @@
         "nixpkgs": "nixpkgs",
         "nixpkgs-gcloud": "nixpkgs-gcloud",
         "readonly-bash": "readonly-bash",
-        "system-manager": "system-manager"
+        "system-manager": "system-manager",
+        "tmux-agent-radar": "tmux-agent-radar",
+        "tmux-claude-usage": "tmux-claude-usage"
       }
     },
     "system-manager": {
@@ -258,6 +260,48 @@
       "original": {
         "owner": "nix-systems",
         "repo": "default",
+        "type": "github"
+      }
+    },
+    "tmux-agent-radar": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1789930134,
+        "narHash": "sha256-Kq6+SXTiHACjZIL2ubfAivFTNv4SqvZU53b2oH595m0=",
+        "owner": "blackhat-7",
+        "repo": "tmux-agent-radar",
+        "rev": "12a2062c37ddae97b19d87fc4668d60a6305d836",
+        "type": "github"
+      },
+      "original": {
+        "owner": "blackhat-7",
+        "ref": "main",
+        "repo": "tmux-agent-radar",
+        "type": "github"
+      }
+    },
+    "tmux-claude-usage": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1789928360,
+        "narHash": "sha256-Qy6jyYExW3yVL9D+5JVWEA2Jl15ilnfB0tGWQJtjTFY=",
+        "owner": "blackhat-7",
+        "repo": "tmux-claude-usage",
+        "rev": "1ab331f6a5821e296e497c7c2b9fb1af9d006c58",
+        "type": "github"
+      },
+      "original": {
+        "owner": "blackhat-7",
+        "ref": "main",
+        "repo": "tmux-claude-usage",
         "type": "github"
       }
     },

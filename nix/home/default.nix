@@ -227,8 +227,15 @@ in
   };
 
   # Linux-specific activation
+  # sudo without a terminal cannot prompt, and PAM counts that as a failed
+  # attempt -- three non-interactive switches in a row trip faillock and lock
+  # the account out. Skip instead, and note it.
   home.activation.noisetorch-caps = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-    /usr/bin/sudo ${pkgs.libcap}/bin/setcap 'CAP_SYS_RESOURCE+ep' "${pkgs.noisetorch}/bin/noisetorch"
+    if [ -t 0 ]; then
+      /usr/bin/sudo ${pkgs.libcap}/bin/setcap 'CAP_SYS_RESOURCE+ep' "${pkgs.noisetorch}/bin/noisetorch"
+    else
+      echo "noisetorch-caps: no terminal for sudo, skipping setcap"
+    fi
   '';
 
   # Enable generic Linux target

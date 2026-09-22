@@ -1,15 +1,16 @@
 #!/usr/bin/env bash
-# Step the external monitor's brightness over DDC/CI, via the DMS OSD.
+# Step the focused monitor's brightness over DDC/CI, via the DMS OSD.
 # Usage: monitor-brightness up|down [step]
 
 set -euo pipefail
 
 step=${2:-5}
-cache="${XDG_RUNTIME_DIR:-/tmp}/monitor-brightness.bus"
+cache="${XDG_RUNTIME_DIR:-/tmp}/monitor-brightness.map"
 
 # /dev/i2c-N numbering shifts across boots, but the adapter's name does not,
-# so cache the name and resolve it back to a number on each run. Falling back
-# to `ddcutil detect` is correct but takes ~4s, too slow for a keypress.
+# so cache "<connector>\t<adapter name>" per monitor and resolve the name
+# back to a number on each run. Falling back to `ddcutil detect` is correct
+# but takes ~4s, too slow for a keypress.
 bus_for_name() {
   local dev
   for dev in /sys/bus/i2c/devices/i2c-*; do
@@ -21,16 +22,35 @@ bus_for_name() {
   return 1
 }
 
+build_cache() {
+  ddcutil detect --brief | awk -v RS= '
+    match($0, /I2C bus:[^\n]*\/dev\/i2c-[0-9]+/) {
+      bus = substr($0, RSTART, RLENGTH); sub(/.*i2c-/, "", bus)
+      if (match($0, /DRM connector:[^\n]*card[0-9]+-[^ \n]+/)) {
+        conn = substr($0, RSTART, RLENGTH); sub(/.*card[0-9]+-/, "", conn)
+        name = ""
+        while ((getline line < ("/sys/bus/i2c/devices/i2c-" bus "/name")) > 0) name = line
+        print conn "\t" name
+      }
+    }' > "$cache"
+}
+
+focused=$(hyprctl monitors -j | jq -r '.[] | select(.focused) | .name')
+
 bus=""
-[[ -r $cache ]] && bus=$(bus_for_name "$(< "$cache")" || true)
+if [[ -r $cache ]]; then
+  name=$(awk -F'\t' -v c="$focused" '$1 == c { print $2 }' "$cache")
+  [[ -n $name ]] && bus=$(bus_for_name "$name" || true)
+fi
 
 if [[ -z $bus ]]; then
-  bus=$(ddcutil detect --brief | sed -n 's#.*I2C bus:.*/dev/i2c-##p' | head -1)
+  build_cache
+  name=$(awk -F'\t' -v c="$focused" '$1 == c { print $2 }' "$cache")
+  [[ -n $name ]] && bus=$(bus_for_name "$name" || true)
   if [[ -z $bus ]]; then
-    notify-send -u critical "Brightness" "No DDC/CI monitor detected"
+    notify-send -u critical "Brightness" "No DDC/CI monitor found for $focused"
     exit 1
   fi
-  cat "/sys/bus/i2c/devices/i2c-$bus/name" > "$cache"
 fi
 
 case ${1:-} in
