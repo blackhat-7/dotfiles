@@ -8,3 +8,4 @@ nix/result
 nix-darwin/result
 *aftershoot*
 .claude/skills/synced/
+.claude/skills/.trash/
