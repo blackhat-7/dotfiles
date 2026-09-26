@@ -124,6 +124,9 @@ in
       set -g pane-border-lines single
       set -g pane-border-style "fg=$BLACK4"
       set -g pane-active-border-style "fg=$DIM"
+      # Title bar above each pane; agents (Claude, pi) set it to the session topic
+      set -g pane-border-status top
+      set -g pane-border-format " #{?pane_active,#[fg=$ORANGE bold],#[fg=$ASH]}#{pane_title} "
       set -g message-style "bg=default,fg=$OLDWHITE,bold"
       set -g message-command-style "bg=default,fg=$TEXT"
       set -g mode-style "bg=$SELECTION,fg=$OLDWHITE"

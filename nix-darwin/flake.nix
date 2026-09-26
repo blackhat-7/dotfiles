@@ -21,6 +21,10 @@
       url = "github:blackhat-7/tmux-claude-usage/main";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    braid = {
+      url = "github:xatuke/braid";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     nix-index-database = {
