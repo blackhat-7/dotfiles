@@ -36,7 +36,13 @@ in
   programs = {
     bash.enable = true;
     # zsh.enable = true;
-    atuin.enable = true;
+    atuin = {
+      enable = true;
+      settings = {
+        enter_accept = true;
+        sync.records = true;
+      };
+    };
     aichat = {
       enable = true;
       settings = {
@@ -88,12 +94,20 @@ in
       });
       nix-direnv.enable = true;
     };
-    btop.enable = true;
+    btop = {
+      enable = true;
+      # Use the terminal's 16 colours, so it follows the kitty theme.
+      settings.color_theme = "TTY";
+    };
     zoxide.enable = true;
     tmux.enable = true;
     lsd.enable = true;
     jq.enable = true;
-    bat.enable = true;
+    bat = {
+      enable = true;
+      # Use the terminal's 16 colours, so it follows the kitty theme.
+      config.theme = "ansi";
+    };
     fzf = {
       enable = true;
       # atuin owns Ctrl-R for history search

@@ -79,12 +79,20 @@ in
     };
     direnv.enable = true;
     direnv.nix-direnv.enable = true;
-    btop.enable = true;
+    btop = {
+      enable = true;
+      # Use the terminal's 16 colours, so it follows the kitty theme.
+      settings.color_theme = "TTY";
+    };
     zoxide.enable = true;
     tmux.enable = true;
     lsd.enable = true;
     jq.enable = true;
-    bat.enable = true;
+    bat = {
+      enable = true;
+      # Use the terminal's 16 colours, so it follows the kitty theme.
+      config.theme = "ansi";
+    };
     fzf.enable = true;
     ripgrep.enable = true;
     zed-editor.enable = true;

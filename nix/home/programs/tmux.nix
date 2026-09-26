@@ -34,16 +34,6 @@ in
       tmuxPlugins.vim-tmux-navigator
       # tmuxPlugins.tmux-fzf
       {
-        plugin = tmuxPlugins.catppuccin;
-        extraConfig = ''
-          set -g @catppuccin_flavor "mocha"
-          set -g @catppuccin_status_background "none"
-          set -g @catppuccin_window_status_style "none"
-          set -g @catppuccin_pane_status_enabled "off"
-          set -g @catppuccin_pane_border_status "off"
-        '';
-      }
-      {
         plugin = tmuxPlugins.online-status;
         extraConfig = ''
           set -g @online_icon "ok"
@@ -93,53 +83,61 @@ in
       bind '"' split-window -v -c "#{pane_current_path}"
       bind % split-window -h -c "#{pane_current_path}"
 
-      # set status-bg default
-      # set -g status-position top
-      # set -g pane-active-border-style 'fg=magenta,bg=default'
-      # set -g pane-border-style 'fg=brightblack,bg=default'
-
       # Use vi keys
       set -gw mode-keys vi
       set -g status-keys vi
 
-      # Status Bar
+      # Styling: kanagawa dragon, transparent top bar
+      %hidden TEXT="#c5c9c5"
+      %hidden OLDWHITE="#c8c093"
+      %hidden GRAY="#a6a69c"
+      %hidden ASH="#737c73"
+      %hidden DIM="#625e5a"
+      %hidden BLACK5="#393836"
+      %hidden BLACK4="#282727"
+      %hidden BG="#181616"
+      %hidden ORANGE="#b6927b"
+      %hidden RED="#c4746e"
+      %hidden YELLOW="#c4b28a"
+      %hidden SELECTION="#2d4f67"
 
-      ## status left look and feel
-      set -g status-left-length 100
-      set -g status-left ""
-      set -ga status-left "#{?client_prefix,#{#[bg=#{@thm_red},fg=#{@thm_bg},bold]  #S },#{#[bg=#{@thm_bg},fg=#{@thm_green}]  #S }}"
-      set -ga status-left "#[bg=#{@thm_bg},fg=#{@thm_overlay_0},none]│"
-      set -ga status-left "#[bg=#{@thm_bg},fg=#{@thm_blue}]  #{=/-32/...:#{s|$USER|~|:#{b:pane_current_path}}} "
-      set -ga status-left "#[bg=#{@thm_bg},fg=#{@thm_overlay_0},none]#{?window_zoomed_flag,│,}"
-      set -ga status-left "#[bg=#{@thm_bg},fg=#{@thm_yellow}]#{?window_zoomed_flag,  zoom ,}"
+      # Status bar on top, with a blank second line as a spacer above panes
+      set -g status 2
+      set -g 'status-format[1]' ""
+      set -g status-position top
+      set -g status-justify left
+      set -g status-style "bg=default,fg=$GRAY"
+      set -g status-left-length 60
+      set -g status-right-length 160
 
-      ## Status Bar - Right Look and Feel
-      set -g status-right-length 200
-      set -g status-right ""
-      set -ga status-right "#[bg=#{@thm_bg}] #(${tmux-claude-usage}/bin/tmux-claude-usage status) "
-      set -ga status-right "#[bg=#{@thm_bg},fg=#{@thm_overlay_0},none]│"
-      set -ga status-right "#[bg=#{@thm_bg},fg=#{@thm_yellow}] #(${tmux-agent-radar}/bin/tmux-agent-radar status) "
-      set -ga status-right "#[bg=#{@thm_bg},fg=#{@thm_overlay_0},none]│"
-      set -ga status-right "#{?#{e|>=:10,#{battery_percentage}},#{#[bg=#{@thm_red},fg=#{@thm_bg}]},#{#[bg=#{@thm_bg},fg=#{@thm_pink}]}} #{battery_icon} #{battery_percentage} "
-      set -ga status-right "#[bg=#{@thm_bg},fg=#{@thm_overlay_0}, none]│"
-      set -ga status-right "#[bg=#{@thm_bg}]#{?#{==:#{online_status},ok},#[fg=#{@thm_mauve}] 󰖩 on ,#[fg=#{@thm_red},bold]#[reverse] 󰖪 off }"
+      # Session name turns red while prefix is held
+      set -g status-left "#{?client_prefix,#[fg=$RED],#[fg=$ORANGE]}#[bold] #S  "
+      # Battery turns red at 10% or less; the network shows only while offline
+      set -g status-right "#(${tmux-claude-usage}/bin/tmux-claude-usage status)#[fg=$BLACK5]  ·  #[fg=$GRAY]#(${tmux-agent-radar}/bin/tmux-agent-radar status)#[fg=$BLACK5]  ·  #{?#{e|<=:#{battery_percentage},10},#[fg=$RED],#[fg=$GRAY]}#{battery_icon} #{battery_percentage}#{?#{==:#{online_status},ok},,#[fg=$RED]  󰖪 offline}#[fg=$BLACK5]  ·  #[fg=$GRAY]%H:%M "
 
-      ## General Status Bar Appearance
-      set -g status-position bottom
-      set -g status-style "bg=#{@thm_bg}"
-      set -g status-justify "absolute-centre"
+      set -g window-status-separator ""
+      set -g window-status-format "#[fg=$DIM]#I #[fg=$ASH]#W#{?window_zoomed_flag, 󰊓,}   "
+      set -g window-status-current-format "#[fg=$ORANGE]#I #[fg=$TEXT,bold]#W#{?window_zoomed_flag,#[fg=$YELLOW] 󰊓,}   "
+      set -g window-status-bell-style "fg=$RED,bold"
 
-      # Window and Pane Styles
-      set -wg automatic-rename on
-      set -g automatic-rename-format "#{pane_current_command}"
-      set -g window-status-format " #I#{?#{!=:#{window_name},Window},: #W,} "
-      set -g window-status-style "bg=#{@thm_bg},fg=#{@thm_rosewater}"
-      set -g window-status-last-style "bg=#{@thm_bg},fg=#{@thm_peach}"
-      set -g window-status-activity-style "bg=#{@thm_red},fg=#{@thm_bg}"
-      set -g window-status-bell-style "bg=#{@thm_red},fg=#{@thm_bg},bold"
-      set -gF window-status-separator "#[bg=#{@thm_bg},fg=#{@thm_overlay_0}]│"
-      set -g window-status-current-format " #I#{?#{!=:#{window_name},Window},: #W,} "
-      set -g window-status-current-style "bg=#{@thm_peach},fg=#{@thm_bg},bold"
+      # Panes, messages, copy mode, popups
+      set -g pane-border-lines single
+      set -g pane-border-style "fg=$BLACK4"
+      set -g pane-active-border-style "fg=$DIM"
+      set -g message-style "bg=default,fg=$OLDWHITE,bold"
+      set -g message-command-style "bg=default,fg=$TEXT"
+      set -g mode-style "bg=$SELECTION,fg=$OLDWHITE"
+      set -g copy-mode-match-style "bg=$BLACK5,fg=$YELLOW"
+      set -g copy-mode-current-match-style "bg=$ORANGE,fg=$BG"
+      set -g popup-border-lines rounded
+      set -g popup-border-style "fg=$DIM"
+      set -g menu-border-lines rounded
+      set -g menu-style "bg=default,fg=$TEXT"
+      set -g menu-border-style "fg=$BLACK5"
+      set -g menu-selected-style "bg=$BLACK4,fg=$ORANGE,bold"
+      set -g display-panes-colour "$BLACK5"
+      set -g display-panes-active-colour "$ORANGE"
+      set -g clock-mode-colour "$ORANGE"
 
 
       # Pane and Window Automatic Rename

@@ -394,6 +394,12 @@ require('lazy').setup({
   },
 
   -- Theme
+  {
+    "rebelot/kanagawa.nvim",
+    config = function()
+      require("kanagawa").setup({ theme = "dragon", background = { dark = "dragon" } })
+    end,
+  },
   { "ellisonleao/gruvbox.nvim" },
   {
     "loctvl842/monokai-pro.nvim",

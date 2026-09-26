@@ -2,10 +2,8 @@
   programs.kitty = {
     enable = true;
     package = null;
+    themeFile = "kanagawa_dragon";
     extraConfig = ''
-      # Oxocarbon is not in pkgs.kitty-themes, so keep it vendored.
-      include ${../../../kitty/themes/oxocarbon-dark.conf}
-
       active_tab_font_style   bold
       inactive_tab_font_style normal
       tab_fade 0.1 0.2 0.8 1

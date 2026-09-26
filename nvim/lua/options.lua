@@ -23,7 +23,7 @@ vim.o.updatetime = 250
 vim.wo.signcolumn = 'yes'
 
 -- Set colorscheme
-vim.cmd("colorscheme gruvbox")
+vim.cmd("colorscheme kanagawa-dragon")
 
 
 --vim.cmd()

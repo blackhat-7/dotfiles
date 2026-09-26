@@ -1,10 +1,8 @@
 { pkgs, config, ... }: {
   programs.kitty = {
     enable = true;
+    themeFile = "kanagawa_dragon";
     extraConfig = ''
-      # Oxocarbon is not in pkgs.kitty-themes, so keep it vendored.
-      include ${../../../kitty/themes/oxocarbon-dark.conf}
-
       shell /usr/bin/fish
 
       # Avoid Kitty 0.47.x recursively watching Nix/Home Manager symlink trees.

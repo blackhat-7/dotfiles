@@ -81,69 +81,56 @@
       set -gw mode-keys vi
       set -g status-keys vi
 
-      # Styling
-      # gruvbox material colorscheme
-      RED="#ea6962"
-      GREEN="#a9b665"
-      YELLOW="#d8a657"
-      BLUE="#7daea3"
-      MAGENTA="#d3869b"
-      CYAN="#89b482"
-      BLACK="#1d2021"
-      DARK_GRAY="#32302F"
-      LIGHT_GRAY="#4F4946"
-      BG="#32302F"
-      FG="#d4be98"
+      # Styling: kanagawa dragon, transparent top bar
+      %hidden TEXT="#c5c9c5"
+      %hidden OLDWHITE="#c8c093"
+      %hidden GRAY="#a6a69c"
+      %hidden ASH="#737c73"
+      %hidden DIM="#625e5a"
+      %hidden BLACK5="#393836"
+      %hidden BLACK4="#282727"
+      %hidden BG="#181616"
+      %hidden ORANGE="#b6927b"
+      %hidden RED="#c4746e"
+      %hidden YELLOW="#c4b28a"
+      %hidden SELECTION="#2d4f67"
 
-      # Nerdfont characters
-      HALF_ROUND_OPEN="#(printf '\uE0B6')"
-      HALF_ROUND_CLOSE="#(printf '\uE0B4')"
-      TRIANGLE_OPEN="#(printf '\uE0B2')"
-      TRIANGLE_CLOSE="#(printf '\uE0B0')"
+      # Status bar on top, with a blank second line as a spacer above panes
+      set -g status 2
+      set -g 'status-format[1]' ""
+      set -g status-position top
+      set -g status-justify left
+      set -g status-style "bg=default,fg=$GRAY"
+      set -g status-left-length 60
+      set -g status-right-length 160
 
-      # Status Bar
-      set-option -g status-position bottom
-      set-option -g status-style bg=$BG,fg=$FG
-      set-option -g status-justify centre
+      # Session name turns red while prefix is held
+      set -g status-left "#{?client_prefix,#[fg=$RED],#[fg=$ORANGE]}#[bold] #S  "
+      set -g status-right "#(${tmux-claude-usage}/bin/tmux-claude-usage status)#[fg=$BLACK5]  ·  #[fg=$GRAY]#(${tmux-agent-radar}/bin/tmux-agent-radar status)#[fg=$BLACK5]  ·  #[fg=$GRAY]%H:%M "
 
-      # Status left
-      set-option -g status-left "\
-#[fg=$LIGHT_GRAY,bg=default]$HALF_ROUND_OPEN\
-#[bg=$LIGHT_GRAY,fg=$YELLOW]#S \
-#[fg=$LIGHT_GRAY,bg=default]$TRIANGLE_CLOSE\
-"
+      set -g window-status-separator ""
+      set -g window-status-format "#[fg=$DIM]#I #[fg=$ASH]#W#{?window_zoomed_flag, 󰊓,}   "
+      set -g window-status-current-format "#[fg=$ORANGE]#I #[fg=$TEXT,bold]#W#{?window_zoomed_flag,#[fg=$YELLOW] 󰊓,}   "
+      set -g window-status-bell-style "fg=$RED,bold"
 
-      # Status right
-      set-option -g status-right "\
-#[fg=$LIGHT_GRAY,bg=default]$TRIANGLE_OPEN\
-#[bg=$LIGHT_GRAY] #(${tmux-claude-usage}/bin/tmux-claude-usage status) \
-#[bg=$LIGHT_GRAY,fg=$YELLOW]#(${tmux-agent-radar}/bin/tmux-agent-radar status) \
-#[bg=$LIGHT_GRAY,fg=$CYAN]#h\
-#[fg=$LIGHT_GRAY,bg=default]$HALF_ROUND_CLOSE\
-"
-
-      set-option -g status-left-length 100
-      set-option -g status-right-length 100
-
-      # Window status - inactive
-      set-option -g window-status-format "\
- \
-#I\
-#[fg=$MAGENTA]:\
-#[fg=default]#W\
- \
-"
-
-      # Window status - active
-      set-option -g window-status-current-format "\
-#[fg=$LIGHT_GRAY,bg=default]$HALF_ROUND_OPEN\
-#[bg=$LIGHT_GRAY,fg=default]#I\
-#[fg=$RED]:\
-#[fg=default]#W\
-#[fg=$LIGHT_GRAY,bg=default]$HALF_ROUND_CLOSE\
-"
-
-      set-option -g window-status-separator ""
+      # Panes, messages, copy mode, popups
+      set -g pane-border-lines single
+      set -g pane-border-style "fg=$BLACK4"
+      set -g pane-active-border-style "fg=$DIM"
+      set -g message-style "bg=default,fg=$OLDWHITE,bold"
+      set -g message-command-style "bg=default,fg=$TEXT"
+      set -g mode-style "bg=$SELECTION,fg=$OLDWHITE"
+      set -g copy-mode-match-style "bg=$BLACK5,fg=$YELLOW"
+      set -g copy-mode-current-match-style "bg=$ORANGE,fg=$BG"
+      set -g popup-border-lines rounded
+      set -g popup-border-style "fg=$DIM"
+      set -g menu-border-lines rounded
+      set -g menu-style "bg=default,fg=$TEXT"
+      set -g menu-border-style "fg=$BLACK5"
+      set -g menu-selected-style "bg=$BLACK4,fg=$ORANGE,bold"
+      set -g display-panes-colour "$BLACK5"
+      set -g display-panes-active-colour "$ORANGE"
+      set -g clock-mode-colour "$ORANGE"
 
       # Pane and Window Automatic Rename
       set -wg automatic-rename on
