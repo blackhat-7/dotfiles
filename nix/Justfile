@@ -15,7 +15,7 @@ switch: _switch_os home
 
 # Safe default: update nixpkgs, readonly-bash, and shared harness config
 update:
-    {{NIX}} flake update nixpkgs readonly-bash ai-harnesses
+    {{NIX}} flake update nixpkgs readonly-bash ai-harnesses braid
 
 # Risky: update every input
 update-all:
