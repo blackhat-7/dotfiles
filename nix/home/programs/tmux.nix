@@ -158,6 +158,7 @@ in
       bind k select-pane -U
       bind l select-pane -R
       bind C-e run-shell "$HOME/dotfiles/scripts/tmux-toggle-popup-terminal.sh '#{client_name}' '#{pane_current_path}' '#{session_name}' '#{window_id}'"
+      bind C-p previous-window
       bind C-g run-shell "$HOME/dotfiles/scripts/tmux-open-jump.sh '#{client_name}' '#{session_name}'"
 
       # Set status bar on/off
