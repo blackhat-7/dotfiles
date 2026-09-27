@@ -34,13 +34,14 @@
           $diff_output"
 
           # 5. Call claude, skipping everything a one-shot completion cannot use:
-          # MCP servers, skills, session files, and the default Claude Code preset.
+          # MCP servers, skills, tools, session files, the default Claude Code preset,
+          # extended thinking (~5s), and telemetry/connector fetches (~1s).
           if test -z "$GCM_MODEL"
               echo "❌ GCM_MODEL is not set."
               return 1
           end
 
-          set -l ai_msg (printf "%s\n" "$prompt" | claude -p --model "$GCM_MODEL" --system-prompt "$system_prompt" --settings '{"includeCoAuthoredBy":false}' --strict-mcp-config --disable-slash-commands --no-session-persistence)
+          set -l ai_msg (printf "%s\n" "$prompt" | MAX_THINKING_TOKENS=0 CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1 claude -p --model "$GCM_MODEL" --system-prompt "$system_prompt" --settings '{"includeCoAuthoredBy":false}' --strict-mcp-config --disable-slash-commands --no-session-persistence --tools "")
 
           # claude reports failures (bad model, auth) on stdout and they would
           # otherwise sail through as the commit message.
