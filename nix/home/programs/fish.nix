@@ -344,6 +344,12 @@
       if test -f $HOME/Documents/Creds/huggingface.txt
           export HF_TOKEN=$(cat $HOME/Documents/Creds/huggingface.txt)
       end
+      if test -f $HOME/Documents/Creds/reddit_id.txt
+          export REDDIT_CLIENT_ID=$(cat $HOME/Documents/Creds/reddit_id.txt)
+      end
+      if test -f $HOME/Documents/Creds/reddit_secret.txt
+          export REDDIT_CLIENT_SECRET=$(cat $HOME/Documents/Creds/reddit_secret.txt)
+      end
       if test -f $HOME/Documents/Work/Creds/github-mcp.txt
           export GITHUB_MCP_TOKEN=$(cat $HOME/Documents/Work/Creds/github-mcp.txt)
       end
