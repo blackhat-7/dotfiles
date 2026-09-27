@@ -45,8 +45,9 @@ genmedia setup
 If local generation is not configured, tell the user to run:
 
 ```bash
-img-local-setup
-img-local-server
+cd ~/Documents/projects/argus
+./argus pull <recipe>
+./argus serve <recipe>
 ```
 
-`img-local-server` must keep running while using `img --local`.
+`argus serve` must keep running while using `img --local` (it listens on port 1234).
