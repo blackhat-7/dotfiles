@@ -28,11 +28,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1790035974,
-        "narHash": "sha256-SLUKwD3nc2zHIe81OJ/2oyFXsZMADk0l/PJEvtDdEr4=",
+        "lastModified": 1790508766,
+        "narHash": "sha256-2DxXza13ZX0GC0pwUjb2aVBtiLkB4G8hj0myWSv8Teo=",
         "owner": "xatuke",
         "repo": "braid",
-        "rev": "e49edb32c476a79ddc05249fb2f9bec34adc77aa",
+        "rev": "e7e6907cf9cdd1f74773079d4e1f2e8750f4a3e4",
         "type": "github"
       },
       "original": {
