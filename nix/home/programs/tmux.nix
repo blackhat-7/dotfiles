@@ -31,7 +31,14 @@ in
       tmuxPlugins.tmux-thumbs
       tmuxPlugins.battery
       # tmuxPlugins.tmux-floax
-      tmuxPlugins.vim-tmux-navigator
+      {
+          plugin = tmuxPlugins.vim-tmux-navigator;
+          # also hand ctrl+h/j/k/l to Braid's TUI (it marks its pane and moves
+          # on to the next tmux pane at its own edge, like nvim)
+          extraConfig = ''
+              set -g @vim_navigator_check "[ '#{@braid_navigator}' = 1 ] || ps -o state= -o comm= -t '#{pane_tty}' | grep -iqE '^[^TXZ ]+ +@vim_navigator_pattern$'"
+          '';
+      }
       # tmuxPlugins.tmux-fzf
       {
         plugin = tmuxPlugins.online-status;

@@ -16,6 +16,7 @@
       "kitty"
       "chatgpt"
       "stablyai/orca/orca"
+      "t3-code"
     ];
   };
 }
