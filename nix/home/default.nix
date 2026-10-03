@@ -264,6 +264,23 @@ in
     Install.WantedBy = [ "default.target" ];
   };
 
+  systemd.user.services.paseo = {
+    Unit.Description = "Paseo daemon";
+
+    Service = {
+      ExecStart = "${config.home.homeDirectory}/.npm-global/bin/paseo daemon run";
+      Environment = [
+        "PASEO_LISTEN=0.0.0.0:6767"
+        "PASEO_HOSTNAMES=true"
+      ];
+      WorkingDirectory = config.home.homeDirectory;
+      Restart = "always";
+      RestartSec = "3s";
+    };
+
+    Install.WantedBy = [ "default.target" ];
+  };
+
   systemd.user.services.vicinae = {
     Unit = {
       Description = "Vicinae Launcher Server";
