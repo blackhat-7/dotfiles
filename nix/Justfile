@@ -85,3 +85,8 @@ darwin-rollback:
 # Linux rollback
 linux-rollback:
     sudo env PATH="$PATH" {{NIX}} run .#system-manager -- rollback
+
+# Raspberry Pi system and home configuration (run on the Pi)
+rpi:
+    sudo env PATH="$PATH" NIX_CONFIG="experimental-features = nix-command flakes" {{NIX}} run .#system-manager -- switch --flake .#rpi
+    NIX_CONFIG="experimental-features = nix-command flakes" {{NIX}} run .#home-manager -- switch --flake .#rpi -b hm-backup

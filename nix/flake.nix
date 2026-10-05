@@ -91,6 +91,18 @@
         ];
       };
 
+      # Headless Raspberry Pi
+      homeConfigurations.rpi = home-manager.lib.homeManagerConfiguration {
+        pkgs = nixpkgsFor.aarch64-linux;
+        modules = [
+          ./rpi/home.nix
+          {
+            home.username = username;
+            home.homeDirectory = "/home/${username}";
+          }
+        ];
+      };
+
       # System configuration with system-manager
       systemConfigs.illusionPC = system-manager.lib.makeSystemConfig {
         modules = [
@@ -109,6 +121,21 @@
       packages.x86_64-linux = {
         system-manager = system-manager.packages.x86_64-linux.default;
         home-manager = home-manager.packages.x86_64-linux.home-manager;
+      };
+
+      systemConfigs.rpi = system-manager.lib.makeSystemConfig {
+        modules = [
+          ./rpi/system.nix
+          {
+            nixpkgs.hostPlatform = "aarch64-linux";
+            system-manager.allowAnyDistro = true;
+          }
+        ];
+      };
+
+      packages.aarch64-linux = {
+        system-manager = system-manager.packages.aarch64-linux.default;
+        home-manager = home-manager.packages.aarch64-linux.home-manager;
       };
 
       # Development shells
