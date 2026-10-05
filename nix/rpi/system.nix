@@ -184,6 +184,9 @@ in
         }}";
         GF_PATHS_PROVISIONING = "${grafanaProvisioning}";
         GF_SERVER_HTTP_PORT = "3000";
+        # Only reachable over Tailscale, so skip logins.
+        GF_AUTH_ANONYMOUS_ENABLED = "true";
+        GF_AUTH_DISABLE_LOGIN_FORM = "true";
         GF_ANALYTICS_REPORTING_ENABLED = "false";
         GF_ANALYTICS_CHECK_FOR_UPDATES = "false";
         GF_PLUGINS_PREINSTALL_DISABLED = "true";
