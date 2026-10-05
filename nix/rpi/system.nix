@@ -81,6 +81,13 @@ let
           url = "http://127.0.0.1:9090";
           isDefault = true;
         }
+        {
+          name = "AdGuard";
+          uid = "adguard";
+          type = "yesoreyeram-infinity-datasource";
+          url = "http://127.0.0.1:3001";
+          jsonData.allowedHosts = [ "http://127.0.0.1:3001" ];
+        }
       ];
     };
     "dashboards/dashboards.yaml" = (pkgs.formats.yaml { }).generate "dashboards.yaml" {
@@ -172,12 +179,13 @@ in
       environment = {
         GF_PATHS_DATA = "/var/lib/grafana";
         GF_PATHS_LOGS = "/var/lib/grafana/log";
-        GF_PATHS_PLUGINS = "/var/lib/grafana/plugins";
+        GF_PATHS_PLUGINS = "${pkgs.linkFarm "grafana-plugins" {
+          yesoreyeram-infinity-datasource = pkgs.grafanaPlugins.yesoreyeram-infinity-datasource;
+        }}";
         GF_PATHS_PROVISIONING = "${grafanaProvisioning}";
         GF_SERVER_HTTP_PORT = "3000";
         # Only reachable over Tailscale, so skip logins.
         GF_AUTH_ANONYMOUS_ENABLED = "true";
-        GF_AUTH_ANONYMOUS_ORG_ROLE = "Admin";
         GF_AUTH_DISABLE_LOGIN_FORM = "true";
         GF_ANALYTICS_REPORTING_ENABLED = "false";
         GF_ANALYTICS_CHECK_FOR_UPDATES = "false";

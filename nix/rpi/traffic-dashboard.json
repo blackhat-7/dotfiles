@@ -225,6 +225,200 @@
         },
         "overrides": []
       }
+    },
+    {
+      "id": 7,
+      "title": "Top sites (last 1000 lookups)",
+      "type": "table",
+      "datasource": {
+        "type": "yesoreyeram-infinity-datasource",
+        "uid": "adguard"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 27,
+        "w": 12,
+        "h": 12
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "yesoreyeram-infinity-datasource",
+            "uid": "adguard"
+          },
+          "refId": "A",
+          "type": "json",
+          "source": "url",
+          "parser": "backend",
+          "format": "table",
+          "url": "/control/querylog",
+          "url_options": {
+            "method": "GET",
+            "params": [
+              {
+                "key": "limit",
+                "value": "1000"
+              },
+              {
+                "key": "search",
+                "value": "$device"
+              }
+            ]
+          },
+          "root_selector": "data",
+          "columns": [
+            {
+              "selector": "time",
+              "text": "Time",
+              "type": "timestamp"
+            },
+            {
+              "selector": "client",
+              "text": "Device",
+              "type": "string"
+            },
+            {
+              "selector": "question.name",
+              "text": "Domain",
+              "type": "string"
+            }
+          ],
+          "filterExpression": "\"$device\" == \"\" || Device == \"$device\""
+        }
+      ],
+      "transformations": [
+        {
+          "id": "groupBy",
+          "options": {
+            "fields": {
+              "Domain": {
+                "aggregations": [],
+                "operation": "groupby"
+              },
+              "Time": {
+                "aggregations": [
+                  "count"
+                ],
+                "operation": "aggregate"
+              }
+            }
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "renameByName": {
+              "Time (count)": "Lookups"
+            }
+          }
+        },
+        {
+          "id": "sortBy",
+          "options": {
+            "sort": [
+              {
+                "field": "Lookups",
+                "desc": true
+              }
+            ]
+          }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      }
+    },
+    {
+      "id": 8,
+      "title": "Recent lookups",
+      "type": "table",
+      "datasource": {
+        "type": "yesoreyeram-infinity-datasource",
+        "uid": "adguard"
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 27,
+        "w": 12,
+        "h": 12
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "yesoreyeram-infinity-datasource",
+            "uid": "adguard"
+          },
+          "refId": "A",
+          "type": "json",
+          "source": "url",
+          "parser": "backend",
+          "format": "table",
+          "url": "/control/querylog",
+          "url_options": {
+            "method": "GET",
+            "params": [
+              {
+                "key": "limit",
+                "value": "1000"
+              },
+              {
+                "key": "search",
+                "value": "$device"
+              }
+            ]
+          },
+          "root_selector": "data",
+          "columns": [
+            {
+              "selector": "time",
+              "text": "Time",
+              "type": "timestamp"
+            },
+            {
+              "selector": "client",
+              "text": "Device",
+              "type": "string"
+            },
+            {
+              "selector": "question.name",
+              "text": "Domain",
+              "type": "string"
+            }
+          ],
+          "filterExpression": "\"$device\" == \"\" || Device == \"$device\""
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      }
     }
-  ]
+  ],
+  "templating": {
+    "list": [
+      {
+        "name": "device",
+        "label": "Device (sites)",
+        "type": "query",
+        "datasource": {
+          "type": "prometheus",
+          "uid": "prometheus"
+        },
+        "query": {
+          "query": "tplink_device_download_bytes_per_second",
+          "refId": "device"
+        },
+        "definition": "tplink_device_download_bytes_per_second",
+        "regex": "/ip=\"(?<value>[^\"]+)\".*name=\"(?<text>[^\"]+)\"/",
+        "refresh": 2,
+        "includeAll": true,
+        "allValue": "",
+        "current": {
+          "text": "All",
+          "value": "$__all"
+        }
+      }
+    ]
+  }
 }
