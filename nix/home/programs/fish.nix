@@ -78,6 +78,9 @@
         end
       '';
       pi = ''
+        # Pi's extensions saturate libuv's default 4 threads, so lookups of `pc` queue
+        # past the 10 s connect timeout and local-model requests fail.
+        set -lx UV_THREADPOOL_SIZE 64
         if isatty stdout
             command osc8wrap --scheme=nvim --no-symbol-links --no-resolve-basename -- pi $argv
         else
