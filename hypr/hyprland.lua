@@ -18,10 +18,10 @@ hl.monitor({
   position = "0x0",
   scale = 1,
   bitdepth = 10,
-  cm = "hdr",
+  cm = "srgb",
   supports_hdr = 1,
   supports_wide_color = 1,
-  sdrbrightness = 1.1,
+  sdrbrightness = 1.0,
   sdrsaturation = 1.0,
   -- OLED: map SDR black to true black in HDR mode (default 0.2 nits looks grey).
   sdr_min_luminance = 0,
