@@ -115,9 +115,9 @@
       export PATH="$HOME/.local/bin:$PATH"
 
       # GCP
-      # export PROD_GCP_KEY="/Users/illusion/Documents/Work/Creds/edits_service_account_creds.json"
-      # export STAGE_GCP_KEY="/Users/illusion/Documents/Work/Creds/stage_gcp.json"
-      # export CROSS_GCP_KEY="/Users/illusion/Documents/Work/Creds/cross-accounts-service-account.json"
+      # export PROD_GCP_KEY="/Users/illusion/.config/work/creds/edits_service_account_creds.json"
+      # export STAGE_GCP_KEY="/Users/illusion/.config/work/creds/stage_gcp.json"
+      # export CROSS_GCP_KEY="/Users/illusion/.config/work/creds/cross-accounts-service-account.json"
       # export GOOGLE_APPLICATION_CREDENTIALS=$CROSS_GCP_KEY
 
       export EDITOR='nvim'
@@ -183,8 +183,8 @@
       alias sessions="~/dotfiles/scripts/sessions.sh"
       alias cleanup-space="~/dotfiles/scripts/cleanup-space.sh"
       alias long_training_jobs="/Users/illusion/Documents/Work/Editing/DebugHelpers/long_training/long_training_jobs"
-      alias gcp_stage="source /Users/illusion/Documents/Work/Creds/gcp_stage.sh"
-      alias gcp_prod="source /Users/illusion/Documents/Work/Creds/gcp_prod.sh"
+      alias gcp_stage="source /Users/illusion/.config/work/creds/gcp_stage.sh"
+      alias gcp_prod="source /Users/illusion/.config/work/creds/gcp_prod.sh"
 
       starship init fish | source
 
@@ -250,20 +250,20 @@
       # export HOME_MANAGER_CONFIG="~/.config/nixpkgs/"
 
       # Generate a command for review; never execute it automatically.
-      function _pi_fish
+      function _claude_fish
           set -l request (commandline | string collect)
           if test -n "$request"
               echo -n "⌛"
               commandline -f repaint
-              set -l generated "$(printf '%s\n' "$request" | pi -p --no-extensions --no-skills --no-context-files --no-prompt-templates --no-tools --no-session --thinking off --models 'openai-codex/*' --model openai-codex/gpt-5.6-luna --system-prompt 'Translate the request into a fish shell command. Output only the command, without Markdown fences or explanation. Do not execute anything.')"
+              set -l generated "$(claude -p --model haiku --tools "" --system-prompt 'Translate the request into a fish shell command for Linux. Output only the command, without Markdown fences or explanation. Do not execute anything.' "$request")"
               if test $status -eq 0; and test -n "$(string trim -- "$generated")"
                   commandline -r -- "$generated"
               end
               commandline -f repaint
           end
       end
-      bind --mode insert \cx _pi_fish
-      bind --mode default \cx _pi_fish
+      bind --mode insert \cx _claude_fish
+      bind --mode default \cx _claude_fish
 
 
 
@@ -330,38 +330,38 @@
       export SEARXNG_API_URL="http://raspberrypi:8081"
 
       # Safely load API keys if files exist
-      if test -f $HOME/Documents/Creds/owui.txt
-          export OPENAI_API_KEY=$(cat $HOME/Documents/Creds/owui.txt)
+      if test -f $HOME/.config/creds/owui.txt
+          export OPENAI_API_KEY="$(cat $HOME/.config/creds/owui.txt)"
       end
-      if test -f $HOME/Documents/Creds/gemini.txt
-          export GEMINI_API_KEY=$(cat $HOME/Documents/Creds/gemini.txt)
+      if test -f $HOME/.config/creds/gemini.txt
+          export GEMINI_API_KEY="$(cat $HOME/.config/creds/gemini.txt)"
       end
-      if test -f $HOME/Documents/Creds/openrouter.txt
-          export OPENROUTER_API_KEY=$(cat $HOME/Documents/Creds/openrouter.txt)
+      if test -f $HOME/.config/creds/openrouter.txt
+          export OPENROUTER_API_KEY="$(cat $HOME/.config/creds/openrouter.txt)"
       end
-      if test -f $HOME/Documents/Creds/chutes.txt
-          export CHUTES_API_KEY=$(cat $HOME/Documents/Creds/chutes.txt)
+      if test -f $HOME/.config/creds/chutes.txt
+          export CHUTES_API_KEY="$(cat $HOME/.config/creds/chutes.txt)"
       end
-      if test -f $HOME/Documents/Creds/artificial-analysis.txt
-          export ARTIFICIAL_ANALYSIS_API_KEY=$(cat $HOME/Documents/Creds/artificial-analysis.txt)
+      if test -f $HOME/.config/creds/artificial-analysis.txt
+          export ARTIFICIAL_ANALYSIS_API_KEY="$(cat $HOME/.config/creds/artificial-analysis.txt)"
       end
-      if test -f $HOME/Documents/Creds/huggingface.txt
-          export HF_TOKEN=$(cat $HOME/Documents/Creds/huggingface.txt)
+      if test -f $HOME/.config/creds/huggingface.txt
+          export HF_TOKEN="$(cat $HOME/.config/creds/huggingface.txt)"
       end
-      if test -f $HOME/Documents/Creds/reddit_id.txt
-          export REDDIT_CLIENT_ID=$(cat $HOME/Documents/Creds/reddit_id.txt)
+      if test -f $HOME/.config/creds/reddit_id.txt
+          export REDDIT_CLIENT_ID="$(cat $HOME/.config/creds/reddit_id.txt)"
       end
-      if test -f $HOME/Documents/Creds/reddit_secret.txt
-          export REDDIT_CLIENT_SECRET=$(cat $HOME/Documents/Creds/reddit_secret.txt)
+      if test -f $HOME/.config/creds/reddit_secret.txt
+          export REDDIT_CLIENT_SECRET="$(cat $HOME/.config/creds/reddit_secret.txt)"
       end
-      if test -f $HOME/Documents/Work/Creds/github-mcp.txt
-          export GITHUB_MCP_TOKEN=$(cat $HOME/Documents/Work/Creds/github-mcp.txt)
+      if test -f $HOME/.config/work/creds/github-mcp.txt
+          export GITHUB_MCP_TOKEN="$(cat $HOME/.config/work/creds/github-mcp.txt)"
       end
-      if test -f $HOME/Documents/Work/Creds/aftershoot-mcp.txt
-          export AFTERSHOOT_MCP_API_KEY=$(cat $HOME/Documents/Work/Creds/aftershoot-mcp.txt)
+      if test -f $HOME/.config/work/creds/aftershoot-mcp.txt
+          export AFTERSHOOT_MCP_API_KEY="$(cat $HOME/.config/work/creds/aftershoot-mcp.txt)"
       end
-      if test -f $HOME/Documents/Work/Creds/linear.txt
-          export LINEAR_API_KEY=$(cat $HOME/Documents/Work/Creds/linear.txt)
+      if test -f $HOME/.config/work/creds/linear.txt
+          export LINEAR_API_KEY="$(cat $HOME/.config/work/creds/linear.txt)"
       end
 
       direnv hook fish | source

@@ -591,7 +591,7 @@ $env.HOMEBREW_NO_AUTO_UPDATE = 1
 # $env.PATH = "/usr/local/sbin:$PATH"
 # $env.PATH = "/usr/bin:$PATH"
 # $env.PATH = "$HOME/.local/bin:$PATH"
-$env.GOOGLE_APPLICATION_CREDENTIALS = "/Users/illusion/Documents/Work/Creds/edits_service_account_creds.json"
+$env.GOOGLE_APPLICATION_CREDENTIALS = "/Users/illusion/.config/work/creds/edits_service_account_creds.json"
 $env.EDITOR = 'nvim'
 $env.LD_LIBRARY_PATH = "/usr/local/opt/gettext/lib:$LD_LIBRARY_PATH"
 

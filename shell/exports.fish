@@ -5,6 +5,6 @@ export HOMEBREW_NO_AUTO_UPDATE=1
 export PATH="/usr/local/sbin:$PATH"
 export PATH="/usr/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
-export GOOGLE_APPLICATION_CREDENTIALS="/Users/illusion/Documents/Work/Creds/edits_service_account_creds.json"
+export GOOGLE_APPLICATION_CREDENTIALS="/Users/illusion/.config/work/creds/edits_service_account_creds.json"
 export EDITOR='nvim'
 export LD_LIBRARY_PATH="/usr/local/opt/gettext/lib:$LD_LIBRARY_PATH"

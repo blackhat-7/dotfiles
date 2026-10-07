@@ -151,8 +151,8 @@ alias minecraft="sudo java -jar ~/Documents/Games/minecraft/TLauncher-2.885.jar"
 # Tmux envs
 alias sessions="~/dotfiles/scripts/sessions.sh"
 alias long_training_jobs="/Users/illusion/Documents/Work/Editing/DebugHelpers/long_training/long_training_jobs"
-alias gcp_stage="source /Users/illusion/Documents/Work/Creds/gcp_stage.sh"
-alias gcp_prod="source /Users/illusion/Documents/Work/Creds/gcp_prod.sh"
+alias gcp_stage="source /Users/illusion/.config/work/creds/gcp_stage.sh"
+alias gcp_prod="source /Users/illusion/.config/work/creds/gcp_prod.sh"
 
 starship init fish | source
 
@@ -200,48 +200,52 @@ export PATH="$VCPKG_ROOT:$PATH"
 export CMAKE_TOOLCHAIN_FILE="$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake"
 export CMAKE_MAKE_PROGRAM=/usr/bin/make
 
-# Aichat
-function _aichat_fish
-    set -l _old (commandline)
-    if test -n $_old
+# Natural language to command via Claude Code
+function _claude_fish
+    set -l request (commandline | string collect)
+    if test -n "$request"
         echo -n "⌛"
         commandline -f repaint
-        commandline (aichat -e $_old)
+        set -l generated "$(claude -p --model haiku --tools "" --system-prompt 'Translate the request into a fish shell command for macOS. Output only the command, without Markdown fences or explanation. Do not execute anything.' "$request")"
+        if test $status -eq 0; and test -n "$(string trim -- "$generated")"
+            commandline -r -- "$generated"
+        end
+        commandline -f repaint
     end
 end
-bind -M insert \cx _aichat_fish
+bind -M insert \cx _claude_fish
 
 export OPENAI_API_BASE="http://100.85.231.84:8080/api"
 export AIDER_MODEL="hf:Qwen/Qwen2.5-Coder-32B-Instruct"
 export GCM_MODEL="haiku"
-export OPENAI_API_KEY=$(cat $HOME/Documents/Creds/owui.txt)
-export GEMINI_API_KEY=$(cat $HOME/Documents/Creds/gemini.txt)
+export OPENAI_API_KEY="$(cat $HOME/.config/creds/owui.txt)"
+export GEMINI_API_KEY="$(cat $HOME/.config/creds/gemini.txt)"
 export OLLAMA_HOST="0.0.0.0"
 export SEARXNG_API_URL="http://135.181.228.158:9000"
-export OPENROUTER_API_KEY=$(cat $HOME/Documents/Creds/openrouter.txt)
-if test -f $HOME/Documents/Creds/chutes.txt
-    export CHUTES_API_KEY=$(cat $HOME/Documents/Creds/chutes.txt)
+export OPENROUTER_API_KEY="$(cat $HOME/.config/creds/openrouter.txt)"
+if test -f $HOME/.config/creds/chutes.txt
+    export CHUTES_API_KEY="$(cat $HOME/.config/creds/chutes.txt)"
 end
-if test -f $HOME/Documents/Creds/artificial-analysis.txt
-    export ARTIFICIAL_ANALYSIS_API_KEY=$(cat $HOME/Documents/Creds/artificial-analysis.txt)
+if test -f $HOME/.config/creds/artificial-analysis.txt
+    export ARTIFICIAL_ANALYSIS_API_KEY="$(cat $HOME/.config/creds/artificial-analysis.txt)"
 end
-if test -f $HOME/Documents/Work/Creds/linear.txt
-    export LINEAR_API_KEY=$(cat $HOME/Documents/Work/Creds/linear.txt)
+if test -f $HOME/.config/work/creds/linear.txt
+    export LINEAR_API_KEY="$(cat $HOME/.config/work/creds/linear.txt)"
 end
-if test -f $HOME/Documents/Creds/huggingface.txt
-    export HF_TOKEN=$(cat $HOME/Documents/Creds/huggingface.txt)
+if test -f $HOME/.config/creds/huggingface.txt
+    export HF_TOKEN="$(cat $HOME/.config/creds/huggingface.txt)"
 end
-if test -f $HOME/Documents/Creds/reddit_id.txt
-    export REDDIT_CLIENT_ID=$(cat $HOME/Documents/Creds/reddit_id.txt)
+if test -f $HOME/.config/creds/reddit_id.txt
+    export REDDIT_CLIENT_ID="$(cat $HOME/.config/creds/reddit_id.txt)"
 end
-if test -f $HOME/Documents/Creds/reddit_secret.txt
-    export REDDIT_CLIENT_SECRET=$(cat $HOME/Documents/Creds/reddit_secret.txt)
+if test -f $HOME/.config/creds/reddit_secret.txt
+    export REDDIT_CLIENT_SECRET="$(cat $HOME/.config/creds/reddit_secret.txt)"
 end
-if test -f $HOME/Documents/Work/Creds/github-mcp.txt
-    export GITHUB_MCP_TOKEN=$(cat $HOME/Documents/Work/Creds/github-mcp.txt)
+if test -f $HOME/.config/work/creds/github-mcp.txt
+    export GITHUB_MCP_TOKEN="$(cat $HOME/.config/work/creds/github-mcp.txt)"
 end
-if test -f $HOME/Documents/Work/Creds/aftershoot-mcp.txt
-    export AFTERSHOOT_MCP_API_KEY=$(cat $HOME/Documents/Work/Creds/aftershoot-mcp.txt)
+if test -f $HOME/.config/work/creds/aftershoot-mcp.txt
+    export AFTERSHOOT_MCP_API_KEY="$(cat $HOME/.config/work/creds/aftershoot-mcp.txt)"
 end
 
 direnv hook fish | source
