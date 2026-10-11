@@ -7,11 +7,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1791616730,
-        "narHash": "sha256-exnt548hNfxclUp4tXk8k5yn9ynxrmKkkrJSE4tncgo=",
+        "lastModified": 1791722964,
+        "narHash": "sha256-BiEsxlhk8+5moMYa1pDFxr+zLXQVxGHhPCOIWcVQ53I=",
         "owner": "blackhat-7",
         "repo": "ai-harnesses",
-        "rev": "ac1c86433aa34fa6c85f6523f93aac76cd9ee3e5",
+        "rev": "b37da167bdff2af27d732b692f350491d0c87a36",
         "type": "github"
       },
       "original": {
@@ -103,11 +103,11 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1791366222,
-        "narHash": "sha256-o0N4g6uSOIppU7CGToNvGlMf5vC+B6O6ukFHKY/TKOY=",
+        "lastModified": 1791487292,
+        "narHash": "sha256-tqM7xDEsaeK1p6VvRygeZ9LkQRpUUkbRT02BHv6hnTM=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "39ad350a0602fa0a58a544344e3e9187526ea45c",
+        "rev": "8edc0c72e3a38faf5434e40d1f19431125fe4b30",
         "type": "github"
       },
       "original": {
