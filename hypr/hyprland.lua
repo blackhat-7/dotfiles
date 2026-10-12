@@ -60,8 +60,8 @@ hl.on("hyprland.start", function()
   hl.exec_cmd("dms run")
   hl.exec_cmd("sunshine")
 
-  hl.exec_cmd("dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY XDG_SESSION_TYPE XDG_CURRENT_DESKTOP")
-  hl.exec_cmd("systemctl --user import-environment DISPLAY WAYLAND_DISPLAY XDG_SESSION_TYPE XDG_CURRENT_DESKTOP")
+  hl.exec_cmd("dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY XDG_SESSION_TYPE XDG_CURRENT_DESKTOP _JAVA_AWT_WM_NONREPARENTING")
+  hl.exec_cmd("systemctl --user import-environment DISPLAY WAYLAND_DISPLAY XDG_SESSION_TYPE XDG_CURRENT_DESKTOP _JAVA_AWT_WM_NONREPARENTING")
   hl.exec_cmd("systemctl --user start graphical-session.target")
   hl.exec_cmd("swaybg -i /home/illusion/Pictures/Wallpapers/windows-11-blue-logo.png -m fill")
   hl.exec_cmd("systemctl --user stop xdg-desktop-portal xdg-desktop-portal-hyprland")
@@ -81,6 +81,8 @@ hl.env("ELECTRON_OZONE_PLATFORM_HINT", "auto")
 hl.env("XCURSOR_SIZE", "24")
 hl.env("HYPRCURSOR_SIZE", "24")
 hl.env("QT_QPA_PLATFORM", "wayland")
+-- Java/Swing apps (Ghidra, DBeaver) draw a blank window under a non-reparenting WM.
+hl.env("_JAVA_AWT_WM_NONREPARENTING", "1")
 
 ---------------------
 ---- PERMISSIONS ----
