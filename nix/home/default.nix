@@ -80,6 +80,7 @@ in
     gitleaks
     libnotify # notify-send for Claude/Pi hook notifications
     ddcutil # DDC/CI control for external monitor brightness
+    (ghidra.withExtensions (p: [ p.reva ])) # ReVa: Ghidra MCP server, see ai-harnesses
   ];
 
   home.sessionPath = [
