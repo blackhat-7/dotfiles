@@ -81,6 +81,17 @@
         Type = "oneshot";
       };
     };
+
+    # Strata + an agent's test suite hit 99 C at the stock 95/181 W; 75/125 W keeps long runs cooler.
+    cpuPowerLimit = {
+      enable = true;
+      description = "Cap CPU package power (RAPL PL1 75 W, PL2 125 W)";
+      wantedBy = [ "multi-user.target" ];
+      serviceConfig = {
+        ExecStart = "${pkgs.bash}/bin/sh -c 'echo 75000000 > /sys/class/powercap/intel-rapl:0/constraint_0_power_limit_uw && echo 125000000 > /sys/class/powercap/intel-rapl:0/constraint_1_power_limit_uw'";
+        Type = "oneshot";
+      };
+    };
   };
 
   # SSH configuration
