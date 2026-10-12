@@ -35,6 +35,7 @@ ensure_session "editing-preprocesser" "$HOME/Documents/Work/Editing/Editing-Prep
 ensure_session "editing-ml" "$HOME/Documents/Work/Editing/editing-ml" "code"
 ensure_session "editingdebughelper" "$HOME/Documents/Work/Editing/EditingDebugHelper" "code"
 ensure_session "aftershoot-cloud" "$HOME/Documents/Work/Editing/aftershoot-cloud" "code"
+ensure_session "oncall" "$HOME/Documents/Work/Editing" "code"
 
 if ! tmux has-session -t "services" 2>/dev/null; then
     tmux new-session -d -s "services" -n servers "cd $HOME && pdb"
