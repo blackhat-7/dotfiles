@@ -273,6 +273,8 @@ in
       Environment = [
         "PASEO_LISTEN=0.0.0.0:6767"
         "PASEO_HOSTNAMES=true"
+        # systemd ignores home.sessionPath; agent CLIs like pi live in ~/.npm-global/bin.
+        "PATH=${config.home.homeDirectory}/.npm-global/bin:${config.home.homeDirectory}/.local/bin:${config.home.homeDirectory}/.nix-profile/bin:/usr/local/bin:/usr/bin"
       ];
       WorkingDirectory = config.home.homeDirectory;
       Restart = "always";

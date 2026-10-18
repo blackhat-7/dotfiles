@@ -354,9 +354,6 @@
       if test -f $HOME/.config/creds/reddit_secret.txt
           export REDDIT_CLIENT_SECRET="$(cat $HOME/.config/creds/reddit_secret.txt)"
       end
-      if test -f $HOME/.config/work/creds/github-mcp.txt
-          export GITHUB_MCP_TOKEN="$(cat $HOME/.config/work/creds/github-mcp.txt)"
-      end
       if test -f $HOME/.config/work/creds/aftershoot-mcp.txt
           export AFTERSHOOT_MCP_API_KEY="$(cat $HOME/.config/work/creds/aftershoot-mcp.txt)"
       end
