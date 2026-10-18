@@ -3,8 +3,12 @@
     enable = true;
     global.autoUpdate = true;
     onActivation.autoUpdate = true;
+    onActivation.upgrade = true;
     taps = [
       "stablyai/orca"
+    ];
+    brews = [
+      "atuin"
     ];
     casks = [
       "zen"

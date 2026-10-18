@@ -33,18 +33,16 @@ in
 
   home.packages = [ osc8wrap ];
 
+  # atuin comes from Homebrew: nixpkgs has no cached darwin build, so it would
+  # compile from source on every nixpkgs bump. fish.nix runs `atuin init`.
+  xdg.configFile."atuin/config.toml".source = (pkgs.formats.toml { }).generate "atuin-config" {
+    enter_accept = true;
+    sync.records = true;
+  };
+
   programs = {
     bash.enable = true;
     # zsh.enable = true;
-    atuin = {
-      enable = true;
-      # 18.23.0's PTY-driven e2e tests time out in the darwin build sandbox.
-      package = pkgs.atuin.overrideAttrs { doCheck = false; };
-      settings = {
-        enter_accept = true;
-        sync.records = true;
-      };
-    };
     aichat = {
       enable = true;
       settings = {
