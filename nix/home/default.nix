@@ -42,6 +42,7 @@ in
     golangci-lint
     nodejs_24
     opencode-desktop
+    paseo
     tree-sitter
     gopls
     tmux
@@ -269,7 +270,7 @@ in
     Unit.Description = "Paseo daemon";
 
     Service = {
-      ExecStart = "${config.home.homeDirectory}/.npm-global/bin/paseo daemon run";
+      ExecStart = "${pkgs.paseo}/bin/paseo daemon run";
       Environment = [
         "PASEO_LISTEN=0.0.0.0:6767"
         "PASEO_HOSTNAMES=true"

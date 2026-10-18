@@ -38,6 +38,8 @@ in
     # zsh.enable = true;
     atuin = {
       enable = true;
+      # 18.23.0's PTY-driven e2e tests time out in the darwin build sandbox.
+      package = pkgs.atuin.overrideAttrs { doCheck = false; };
       settings = {
         enter_accept = true;
         sync.records = true;

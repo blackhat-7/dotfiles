@@ -41,6 +41,7 @@ in
     pkgs.nightlight
     pkgs.nodejs_24
     pkgs.opencode-desktop
+    pkgs.paseo
     pkgs.tree-sitter
     pkgs.spotify
     pkgs.slack
@@ -117,7 +118,7 @@ in
         "${pkgs.fish}/bin/fish"
         "-l"
         "-c"
-        "exec paseo daemon run"
+        "exec ${pkgs.paseo}/bin/paseo daemon run"
       ];
       EnvironmentVariables = {
         PASEO_LISTEN = "0.0.0.0:6767";
