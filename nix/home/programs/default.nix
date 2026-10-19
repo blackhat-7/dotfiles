@@ -18,6 +18,15 @@ let
     vendorHash = "sha256-zp5cgIEHAeG4JDSOBsqipera43jBmxUC8SSlUuofxCQ=";
     doCheck = false;
   };
+
+  # DMS keeps its 10 s Wi-Fi auto-scan running after network panels close, and each
+  # scan stalls the rtw88 card for ~100 ms. Panels still scan once when opened.
+  dms-shell = pkgs.dms-shell.overrideAttrs (old: {
+    preBuild = old.preBuild + ''
+      substituteInPlace internal/shellembed/dist/Services/DMSNetworkService.qml \
+        --replace-fail 'running: root.autoScan && root.networkAvailable && root.wifiEnabled' 'running: false'
+    '';
+  });
 in
 {
 
@@ -29,7 +38,7 @@ in
     inputs.nix-index-database.homeModules.nix-index
   ];
 
-  home.packages = [ osc8wrap pkgs.dms-shell pkgs.quickshell ];
+  home.packages = [ osc8wrap dms-shell pkgs.quickshell ];
 
   programs = {
     bash.enable = true;
