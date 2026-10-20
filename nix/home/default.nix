@@ -44,6 +44,7 @@ in
     nodejs_24
     opencode-desktop
     paseo
+    (callPackage ../../pkgs/paseo-desktop.nix { })
     tree-sitter
     gopls
     tmux
