@@ -17,6 +17,7 @@ in
 {
   imports = [
     ./programs
+    ../../home-modules/paseo-plugins.nix
     inputs.ai-harnesses.homeManagerModules.default
     inputs.braid.homeModules.braid
   ];

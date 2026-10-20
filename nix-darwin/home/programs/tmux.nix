@@ -113,7 +113,7 @@
 
       # Session name turns red while prefix is held
       set -g status-left "#{?client_prefix,#[fg=$RED],#[fg=$ORANGE]}#[bold] #S  "
-      set -g status-right "#(${tmux-claude-usage}/bin/tmux-claude-usage status)#[fg=$BLACK5]  ·  #[fg=$GRAY]#(${tmux-agent-radar}/bin/tmux-agent-radar status)#[fg=$BLACK5]  ·  #[fg=$GRAY]%H:%M "
+      set -g status-right "#(CLAUDE_USAGE_TTL=300 ${tmux-claude-usage}/bin/tmux-claude-usage status)#[fg=$BLACK5]  ·  #[fg=$GRAY]#(${tmux-agent-radar}/bin/tmux-agent-radar status)#[fg=$BLACK5]  ·  #[fg=$GRAY]%H:%M "
 
       set -g window-status-separator ""
       set -g window-status-format "#[fg=$DIM]#I #[fg=$ASH]#W#{?window_zoomed_flag, 󰊓,}   "
