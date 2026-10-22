@@ -10,14 +10,6 @@ let
 
   # Plugins with npm dependencies. Paseo runs their manifest `build` steps only
   # for Git/npm installs, so Nix does that work here.
-  beautiful-chat = pkgs.buildNpmPackage {
-    pname = "paseo-beautiful-chat";
-    version = "0.1.0";
-    src = github "ABorakati" "beautiful-chat" "42b61d8301b5400a67821bbbfcf99fa8b681dc37" "sha256-5fqmWmKBgZGEVUiEy4mBA9IqhCvQSYacfaPVORDzp5Q=";
-    npmDepsHash = "sha256-UFLLOCSuY/wVB+a0BDXmlJyj3oE6KOEZ36dq9TysNk0=";
-    dontNpmBuild = true;
-  };
-
   excalidraw = pkgs.buildNpmPackage {
     pname = "paseo-excalidraw";
     version = "0.1.0";
@@ -42,13 +34,11 @@ let
   # Plugin ID (from each paseo-plugin.json) -> directory the daemon loads.
   plugins = {
     progress = "${progress}";
-    beautiful-chat = "${beautiful-chat}/lib/node_modules/beautiful-chat";
     paseo-cafe = "${cafe}/plugin";
     lobby = github "linhmh8" "agent-lobby" "3bb39e70134cc790de8a99fa4602473643912698" "sha256-U8t7QZoGq2JM0ytMQObDLS5E1QirjsmPGeuE2tORYlo=";
     annotations = github "neunzig-zehn" "paseo-annotations" "b921586b52cc2f937cf7814efc83d106310824fe" "sha256-AabTyHZ2FOUYfXMP0pQl7tfAmw9h5VRx8VNxTrdwRQ4=";
     excalidraw = "${excalidraw}/lib/node_modules/paseo-excalidraw";
     firstmate = "${github "gpambrozio" "paseo-plugins" "09509ce55ab06758623262e6aa71522ade6fda0c" "sha256-Ij84pzgakVx6mboHjfq41bu+AL+NljPxZnE7LUPYk98="}/firstmate";
-    paseo-workboard = github "fxbing" "paseo-workboard" "596e4a246e50a963df618988835f9a1d83987f53" "sha256-Xv8CYXdWrDq6eiif8qPwh28a1De9TqSpzCtAf7fPy58=";
   };
 
   pluginSources = lib.mapAttrs (_: path: {
@@ -86,7 +76,8 @@ let
 in
 {
   # The daemon owns config.json (app settings, Cafe installs), so merge our
-  # plugins and providers into it instead of replacing the file.
+  # plugins and providers into it instead of replacing the file. Store-path
+  # plugins are ours, so drop any no longer listed.
   home.activation.paseoPlugins = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
     config="$HOME/.paseo/config.json"
     current='{"version":1}'
@@ -95,7 +86,10 @@ in
     printf '%s' "$current" \
       | ${pkgs.jq}/bin/jq --argjson plugins ${lib.escapeShellArg (builtins.toJSON pluginSources)} \
           --argjson providers ${lib.escapeShellArg (builtins.toJSON providers)} \
-          '.pluginsEnabled = true | .plugins = (.plugins // {}) + $plugins
+          '.pluginsEnabled = true
+           | .plugins = ((.plugins // {})
+               | with_entries(select(.value.path // "" | startswith("/nix/store/") | not)))
+               + $plugins
            | .agents.providers = (.agents.providers // {}) + $providers' \
       > "$config.tmp"
     # Plugin changes need a daemon restart (`paseo reload` skips them), so
