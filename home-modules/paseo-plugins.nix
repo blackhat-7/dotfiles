@@ -1,4 +1,4 @@
-{ pkgs, lib, ... }:
+{ config, pkgs, lib, ... }:
 
 let
   github =
@@ -27,9 +27,21 @@ let
     npmFlags = [ "--legacy-peer-deps" ];
   };
 
+  # build:cli bundles the paseo-progress command into dist/; without it the
+  # command can't find zod.
+  progress = pkgs.buildNpmPackage {
+    pname = "paseo-progress";
+    version = "1.3.1";
+    src = "${stevecastaneda}/progress";
+    npmDepsHash = "sha256-3DuELcaYH+7J/et/fxmAWaE6CASWPtryH3Zaz6HbjJQ=";
+    npmBuildScript = "build:cli";
+    # npm's install step runs the package's postpack, which deletes dist/.
+    installPhase = "cp -r . $out";
+  };
+
   # Plugin ID (from each paseo-plugin.json) -> directory the daemon loads.
   plugins = {
-    progress = "${stevecastaneda}/progress";
+    progress = "${progress}";
     beautiful-chat = "${beautiful-chat}/lib/node_modules/beautiful-chat";
     paseo-cafe = "${cafe}/plugin";
     lobby = github "linhmh8" "agent-lobby" "3bb39e70134cc790de8a99fa4602473643912698" "sha256-U8t7QZoGq2JM0ytMQObDLS5E1QirjsmPGeuE2tORYlo=";
@@ -70,7 +82,7 @@ let
         fi
       ''
     else
-      "run systemctl --user try-restart paseo.service";
+      "run ${config.systemd.user.systemctlPath} --user try-restart paseo.service";
 in
 {
   # The daemon owns config.json (app settings, Cafe installs), so merge our
@@ -93,5 +105,16 @@ in
       ${restartDaemon}
     fi
     rm "$config.tmp"
+
+    # Link the paseo-progress skill where the plugin's Install skill button
+    # would, to the exact path it checks, so each switch keeps the link current
+    # and the panel sees it as installed. Leaves real folders alone.
+    for skills in "$HOME/.agents/skills" "$HOME/.claude/skills" "$HOME/.codex/skills"; do
+      link="$skills/paseo-progress"
+      if [ -L "$link" ] || [ ! -e "$link" ]; then
+        run mkdir -p "$skills"
+        run ln -sfn "${progress}/skills/paseo-progress" "$link"
+      fi
+    done
   '';
 }
