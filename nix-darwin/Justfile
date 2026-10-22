@@ -3,6 +3,7 @@ run:
 
 update:
     nix flake update nixpkgs readonly-bash ai-harnesses tmux-agent-radar tmux-claude-usage braid
+    uv tool upgrade bestiary code-review-graph
 
 update-all:
     nix flake update
