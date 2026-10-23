@@ -19,13 +19,7 @@ in
     ./programs
     ../../home-modules/paseo-plugins.nix
     inputs.ai-harnesses.homeManagerModules.default
-    inputs.braid.homeModules.braid
   ];
-
-  programs.braid = {
-    enable = true;
-    gui.enable = true;
-  };
 
   aiHarnesses.mode = "auto";
   aiHarnesses.pi.disabledPackages = [ "npm:pi-lean-ctx" ];

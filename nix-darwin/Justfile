@@ -2,7 +2,7 @@ run:
     sudo darwin-rebuild switch --flake .#illusion --impure
 
 update:
-    nix flake update nixpkgs readonly-bash ai-harnesses tmux-agent-radar tmux-claude-usage braid
+    nix flake update nixpkgs readonly-bash ai-harnesses tmux-agent-radar tmux-claude-usage
     uv tool upgrade bestiary code-review-graph
 
 update-all:
