@@ -19,6 +19,14 @@ let
     npmFlags = [ "--legacy-peer-deps" ];
   };
 
+  chat-polish = pkgs.buildNpmPackage {
+    pname = "paseo-chat-polish";
+    version = "0.7.1";
+    src = github "lthieu96" "paseo-chat-polish" "c2b0e6bb98adab16e063112758af8aad7175c03f" "sha256-/dqr60yAnNg72p7kfKoQ2790R8ii059O2naWoYpqWdA=";
+    npmDepsHash = "sha256-MwJp3eiCfClMeqv669czq+BLitrYEJzxobsQk9GDwnc=";
+    dontNpmBuild = true;
+  };
+
   # build:cli bundles the paseo-progress command into dist/; without it the
   # command can't find zod.
   progress = pkgs.buildNpmPackage {
@@ -34,6 +42,7 @@ let
   # Plugin ID (from each paseo-plugin.json) -> directory the daemon loads.
   plugins = {
     progress = "${progress}";
+    paseo-chat-polish = "${chat-polish}/lib/node_modules/paseo-chat-polish";
     paseo-cafe = "${cafe}/plugin";
     lobby = github "linhmh8" "agent-lobby" "3bb39e70134cc790de8a99fa4602473643912698" "sha256-U8t7QZoGq2JM0ytMQObDLS5E1QirjsmPGeuE2tORYlo=";
     annotations = github "neunzig-zehn" "paseo-annotations" "b921586b52cc2f937cf7814efc83d106310824fe" "sha256-AabTyHZ2FOUYfXMP0pQl7tfAmw9h5VRx8VNxTrdwRQ4=";
