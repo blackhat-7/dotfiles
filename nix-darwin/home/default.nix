@@ -105,24 +105,4 @@ in
     };
   };
 
-  # launchd starts with a bare PATH; a fish login shell gives the daemon (and
-  # the agent CLIs it spawns) the same PATH as a terminal.
-  launchd.agents.paseo = {
-    enable = true;
-    config = {
-      ProgramArguments = [
-        "${pkgs.fish}/bin/fish"
-        "-l"
-        "-c"
-        "exec ${pkgs.paseo}/bin/paseo daemon run"
-      ];
-      EnvironmentVariables = {
-        PASEO_LISTEN = "0.0.0.0:6767";
-        PASEO_HOSTNAMES = "true";
-      };
-      RunAtLoad = true;
-      KeepAlive = true;
-    };
-  };
-
 }

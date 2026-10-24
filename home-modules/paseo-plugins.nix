@@ -71,22 +71,15 @@ let
     ];
   };
 
-  # Restart the daemon service from home/default.nix if it is running.
-  restartDaemon =
-    if pkgs.stdenv.hostPlatform.isDarwin then
-      ''
-        service="gui/$(id -u)/org.nix-community.home.paseo"
-        if /bin/launchctl print "$service" >/dev/null 2>&1; then
-          run /bin/launchctl kickstart -k "$service"
-        fi
-      ''
-    else
-      "run ${config.systemd.user.systemctlPath} --user try-restart paseo.service";
+  # Restart the daemon service from home/default.nix if it is running. On macOS
+  # the desktop app owns the daemon, so changes apply when the app restarts it.
+  restartDaemon = lib.optionalString pkgs.stdenv.hostPlatform.isLinux
+    "run ${config.systemd.user.systemctlPath} --user try-restart paseo.service";
 in
 {
   # The daemon owns config.json (app settings, Cafe installs), so merge our
-  # plugins and providers into it instead of replacing the file. Store-path
-  # plugins are ours, so drop any no longer listed.
+  # network settings, plugins and providers into it instead of replacing the
+  # file. Store-path plugins are ours, so drop any no longer listed.
   home.activation.paseoPlugins = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
     config="$HOME/.paseo/config.json"
     current='{"version":1}'
@@ -95,7 +88,9 @@ in
     printf '%s' "$current" \
       | ${pkgs.jq}/bin/jq --argjson plugins ${lib.escapeShellArg (builtins.toJSON pluginSources)} \
           --argjson providers ${lib.escapeShellArg (builtins.toJSON providers)} \
-          '.pluginsEnabled = true
+          '.daemon.listen = "0.0.0.0:6767"
+           | .daemon.hostnames = true
+           | .pluginsEnabled = true
            | .plugins = ((.plugins // {})
                | with_entries(select(.value.path // "" | startswith("/nix/store/") | not)))
                + $plugins
