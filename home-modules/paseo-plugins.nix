@@ -70,6 +70,16 @@ let
       }
     ];
   };
+  # The same with Claude Haiku for Claude Code's helper calls and WebSearch, for
+  # when there is internet and Claude usage left (see claude-local).
+  providers.claude-local-haiku = providers.claude-local // {
+    label = "Claude (local + Haiku)";
+    command = [
+      "env"
+      "LOCAL_HELPER_MODEL=claude-haiku-5-5"
+      "claude-local"
+    ];
+  };
 
   # Restart the daemon service from home/default.nix if it is running. On macOS
   # the desktop app owns the daemon, so changes apply when the app restarts it.
