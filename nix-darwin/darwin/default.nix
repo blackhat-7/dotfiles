@@ -3,6 +3,7 @@
 let
   home = config.users.users."illusion".home;
   tsWorkStateDir = "${home}/.local/state/tailscale-work";
+  tsWork = "${pkgs.tailscale}/bin/tailscale --socket=${tsWorkStateDir}/tailscaled.sock";
 in
 {
   nix.enable = false;
@@ -62,6 +63,15 @@ in
       StandardErrorPath = "${home}/Library/Logs/tailscale-work.log";
     };
   };
+
+  # Plain `ssh <host>` reaches work-tailnet hosts: any host the work tailscaled
+  # knows is tunnelled through it; home-headscale and internet hosts don't match.
+  # `tailscale ip` takes a short name or IP as-is, but a MagicDNS FQDN only with
+  # a trailing dot, hence the second lookup.
+  programs.ssh.extraConfig = ''
+    Match exec "${tsWork} ip -4 %h >/dev/null 2>&1 || ${tsWork} ip -4 %h. >/dev/null 2>&1"
+      ProxyCommand ${tsWork} nc %h %p
+  '';
 
   users.users."illusion" = {
     home = "/Users/illusion";
