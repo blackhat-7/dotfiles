@@ -12,6 +12,10 @@
     # Program-specific integrations below (carapace, nix-index, etc.) still work.
     generateCompletions = false;
     functions = {
+      # Tailscale CLI for the second tailscaled (work tailnet, userspace mode).
+      ts-work = ''
+        tailscale --socket=$HOME/.local/state/tailscale-work/tailscaled.sock $argv
+      '';
         gcm = ''
           # 1. Stage all changes
           echo "➕ Staging all changes..."

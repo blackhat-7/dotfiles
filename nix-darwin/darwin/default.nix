@@ -1,5 +1,9 @@
 { config, pkgs, inputs, ... }:
 
+let
+  home = config.users.users."illusion".home;
+  tsWorkStateDir = "${home}/.local/state/tailscale-work";
+in
 {
   nix.enable = false;
   # nix-darwin a1fa429 still passes the removed --toc-depth flag to
@@ -40,7 +44,24 @@
     go
     inputs.nix-darwin
     comma
+    tailscale
   ];
+
+  # Userspace-only tailscaled joined to the work tailnet (official Tailscale),
+  # so the Tailscale app (home headscale: TUN, routes, DNS) stays untouched.
+  # Own state dir, socket and random UDP port; starts with the login session
+  # and rejoins automatically after the one-time browser login (persisted in
+  # the state dir). Work-tailnet apps opt in through its HTTP proxy on
+  # 127.0.0.1:1055. Login once (browser): ts-work up
+  launchd.user.agents.tailscale-work = {
+    command = ''
+      ${pkgs.tailscale}/bin/tailscaled --tun=userspace-networking --statedir=${tsWorkStateDir} --socket=${tsWorkStateDir}/tailscaled.sock --outbound-http-proxy-listen=127.0.0.1:1055 --port=0
+    '';
+    serviceConfig = {
+      KeepAlive = true;
+      StandardErrorPath = "${home}/Library/Logs/tailscale-work.log";
+    };
+  };
 
   users.users."illusion" = {
     home = "/Users/illusion";
