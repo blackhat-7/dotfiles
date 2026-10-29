@@ -36,7 +36,6 @@ in
     python313Packages.pip
     golangci-lint
     nodejs_24
-    opencode-desktop
     paseo
     (callPackage ../../pkgs/paseo-desktop.nix { })
     tree-sitter

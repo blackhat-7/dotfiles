@@ -36,7 +36,6 @@ in
     pkgs.golangci-lint
     pkgs.nightlight
     pkgs.nodejs_24
-    pkgs.opencode-desktop
     pkgs.paseo
     pkgs.tree-sitter
     pkgs.spotify
