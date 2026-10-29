@@ -48,12 +48,14 @@ in
     tailscale
   ];
 
-  # Userspace-only tailscaled joined to the work tailnet (official Tailscale),
-  # so the Tailscale app (home headscale: TUN, routes, DNS) stays untouched.
-  # Own state dir, socket and random UDP port; starts with the login session
-  # and rejoins automatically after the one-time browser login (persisted in
-  # the state dir). Work-tailnet apps opt in through its HTTP proxy on
-  # 127.0.0.1:1055. Login once (browser): ts-work up
+  # Two tailnets at once. Only one tailscaled can own macOS routes/DNS, so:
+  # - Home (headscale): the Tailscale app, full system VPN + DNS.
+  # - Work (official Tailscale): this userspace tailscaled. It never touches
+  #   routes or DNS; work traffic opts in through its HTTP proxy on
+  #   127.0.0.1:1055 (ssh block below, curl -x, Zen via work.pac).
+  # Where Tailscale is blocked (Oman), set the app's exit node to hetzner: this
+  # daemon's control, DERP and WireGuard traffic then leaves from there too.
+  # Login once (browser): ts-work up
   launchd.user.agents.tailscale-work = {
     command = ''
       ${pkgs.tailscale}/bin/tailscaled --tun=userspace-networking --statedir=${tsWorkStateDir} --socket=${tsWorkStateDir}/tailscaled.sock --outbound-http-proxy-listen=127.0.0.1:1055 --port=0
@@ -64,10 +66,26 @@ in
     };
   };
 
-  # Plain `ssh <host>` reaches work-tailnet hosts: any host the work tailscaled
-  # knows is tunnelled through it; home-headscale and internet hosts don't match.
-  # `tailscale ip` takes a short name or IP as-is, but a MagicDNS FQDN only with
-  # a trailing dot, hence the second lookup.
+  # Zen's Work profile loads this PAC (user.js below, read at Zen startup).
+  # Work MagicDNS names and IPs go to the proxy, the rest direct. Work IPs are
+  # 100.64.0.0/10 minus 100.64.0.x, which headscale hands to home hosts.
+  home-manager.users."illusion".home.file.".config/tailscale/work.pac".text = ''
+    function FindProxyForURL(url, host) {
+      if (dnsDomainIs(host, ".komodo-ghost.ts.net") ||
+          (/^100\.(6[4-9]|[7-9]\d|1[01]\d|12[0-7])\.\d+\.\d+$/.test(host) && !/^100\.64\.0\./.test(host)))
+        return "PROXY 127.0.0.1:1055";
+      return "DIRECT";
+    }
+  '';
+  home-manager.users."illusion".home.file."Library/Application Support/zen/Profiles/74lt2431.Work/user.js".text = ''
+    user_pref("network.proxy.type", 2);
+    user_pref("network.proxy.autoconfig_url", "file://${home}/.config/tailscale/work.pac");
+  '';
+
+  # Plain `ssh <host>` reaches work hosts: any host the work tailscaled knows
+  # is tunnelled through it; home and internet hosts don't match and go
+  # direct (home via the app). `tailscale ip` takes a short name or IP as-is,
+  # but a MagicDNS FQDN only with a trailing dot, hence the second lookup.
   programs.ssh.extraConfig = ''
     Match exec "${tsWork} ip -4 %h >/dev/null 2>&1 || ${tsWork} ip -4 %h. >/dev/null 2>&1"
       ProxyCommand ${tsWork} nc %h %p

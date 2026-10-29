@@ -8,6 +8,9 @@ update:
 update-all:
     nix flake update
 
+brew:
+    brew update && brew upgrade
+
 check:
     darwin-rebuild build --flake .#illusion --impure
 
