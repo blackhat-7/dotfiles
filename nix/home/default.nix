@@ -38,6 +38,8 @@ in
     nodejs_24
     paseo
     (callPackage ../../pkgs/paseo-desktop.nix { })
+    (callPackage ../../pkgs/cs2-check.nix { })
+    (callPackage ../../pkgs/game-mode.nix { })
     tree-sitter
     gopls
     tmux
