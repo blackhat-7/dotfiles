@@ -18,7 +18,12 @@
             /usr/bin/pkill -x afplay
             exit
           fi
-          /usr/bin/osascript -e 'tell application "System Events" to keystroke "c" using command down'
+          # Wait for Option (1 << 19) to be released, or the app gets Cmd+Option+C.
+          /usr/bin/osascript -l JavaScript -e '
+            ObjC.import("AppKit");
+            while ($.NSEvent.modifierFlags & 524288) delay(0.02);
+            Application("System Events").keystroke("c", { using: "command down" });
+          '
           sleep 0.2
           /usr/bin/pbpaste | ${pkgs.callPackage ../../../pkgs/read-aloud.nix { }}/bin/read-aloud
         '';
