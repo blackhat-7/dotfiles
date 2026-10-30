@@ -10,8 +10,16 @@
             [ -n "$window_id" ] && ${pkgs.aerospace}/bin/aerospace move-node-to-workspace --window-id "$window_id" "$current_workspace"
           done
         '';
+        # Reads the selected text aloud; pressed again while reading, stops.
+        # Copying the selection replaces the clipboard.
+        speak-selection = pkgs.writeShellScript "speak-selection" ''
+          /usr/bin/pkill -x afplay && exit
+          /usr/bin/osascript -e 'tell application "System Events" to keystroke "c" using command down'
+          sleep 0.2
+          /usr/bin/pbpaste | ${pkgs.callPackage ../../../pkgs/read-aloud.nix { }}/bin/read-aloud
+        '';
       in
-      {
+      pkgs.lib.recursiveUpdate ({
         on-window-detected = [
           {
             "if" = {
@@ -94,6 +102,8 @@
             down = 'volume down'
             up = 'volume up'
             shift-down = ['volume set 0', 'mode main']
-      '';
+      '')
+      # fromTOML can't refer to store paths, so this binding is merged in here.
+      { mode.main.binding.alt-esc = "exec-and-forget ${speak-selection}"; };
   };
 }
