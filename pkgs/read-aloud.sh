@@ -7,7 +7,14 @@ sentences=$(printf '%s' "$text" | perl -e '
   my @p = map { chomp; [split / = /, $_, 2] } <$f>;
   local $/; my $t = <STDIN>;
   $t =~ s/\Q$$_[0]\E/$$_[1]/g for @p;
-  $t =~ s/\s+/ /g;
+  # Markdown: keep link text, drop heading, quote, list and emphasis marks.
+  $t =~ s/\[([^\]]*)\]\([^)]*\)/$1/g;
+  $t =~ s/^[ \t]*(?:#+|>|[-*+]|\d+\.)[ \t]+//mg;
+  $t =~ s/[*`~]//g;
+  $t =~ s/_/ /g;
+  $t =~ s/\|/, /g;
+  # One sentence per line.
+  $t =~ s/[ \t]+/ /g;
   $t =~ s/(?<=[.!?]) /\n/g;
   print $t;
 ')
