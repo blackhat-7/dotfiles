@@ -1,6 +1,6 @@
-# Toggles the CS2 latency tweaks. They hurt the local LLMs (llamacpp-tuner):
-# awake idle cores eat into the 75 W CPU cap, and lavd reschedules the CPU expert pool.
-# All of it resets on reboot.
+# Toggles the CS2 tweaks. They hurt the local LLMs (llamacpp-tuner): awake idle cores eat
+# into the CPU power cap, lavd reschedules the CPU expert pool, and long LLM runs need the
+# cap to stay cool. All of it resets on reboot.
 
 usage() { echo "usage: game-mode on|off|status" >&2; exit 2; }
 
@@ -23,7 +23,17 @@ set_deep_cstates() {
   done
 }
 
+# RAPL PL1/PL2 in W. Off restores the cap set at boot by cpuPowerLimit (nix/linux);
+# on restores the board's stock limits, which only overheated under long LLM runs.
+set_power_limit() {
+  local rapl=/sys/class/powercap/intel-rapl:0
+  echo "${1}000000" | sudo tee "$rapl/constraint_0_power_limit_uw" >/dev/null
+  echo "${2}000000" | sudo tee "$rapl/constraint_1_power_limit_uw" >/dev/null
+}
+
 status() {
+  local rapl=/sys/class/powercap/intel-rapl:0
+  echo "CPU power limit: $(($(cat "$rapl/constraint_0_power_limit_uw") / 1000000))/$(($(cat "$rapl/constraint_1_power_limit_uw") / 1000000)) W"
   echo "scheduler: $(cat /sys/kernel/sched_ext/root/ops 2>/dev/null || echo default)"
   echo "deep C-states disabled on $(cat /sys/devices/system/cpu/cpu*/cpuidle/state[2-9]/disable | grep -c 1) of $(find /sys/devices/system/cpu/cpu*/cpuidle/ -path '*/state[2-9]/disable' | wc -l)"
   for irq in $(irqs); do
@@ -38,6 +48,7 @@ case ${1:-} in
     sudo systemd-run --quiet --unit=game-mode-scx --collect "$SCX_LAVD"
     set_deep_cstates 1
     set_irqs "$e_cores"
+    set_power_limit 95 181
     status
     ;;
   off)
@@ -45,6 +56,7 @@ case ${1:-} in
     sudo systemctl stop game-mode-scx 2>/dev/null || true
     set_deep_cstates 0
     set_irqs "$all_cpus"
+    set_power_limit 75 125
     status
     ;;
   status) status ;;
