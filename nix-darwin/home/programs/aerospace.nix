@@ -13,7 +13,11 @@
         # Reads the selected text aloud; pressed again while reading, stops.
         # Copying the selection replaces the clipboard.
         speak-selection = pkgs.writeShellScript "speak-selection" ''
-          /usr/bin/pkill -x afplay && exit
+          if /usr/bin/pkill -f bin/read-aloud; then
+            /usr/bin/pkill -f sherpa-onnx-offline-tts
+            /usr/bin/pkill -x afplay
+            exit
+          fi
           /usr/bin/osascript -e 'tell application "System Events" to keystroke "c" using command down'
           sleep 0.2
           /usr/bin/pbpaste | ${pkgs.callPackage ../../../pkgs/read-aloud.nix { }}/bin/read-aloud
