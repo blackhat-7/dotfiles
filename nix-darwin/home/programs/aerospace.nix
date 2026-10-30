@@ -11,21 +11,34 @@
           done
         '';
         # Reads the selected text aloud; pressed again while reading, stops.
-        # Copying the selection replaces the clipboard.
+        # The selection is copied, then the clipboard is put back as it was.
         speak-selection = pkgs.writeShellScript "speak-selection" ''
           if /usr/bin/pkill -f bin/read-aloud; then
             /usr/bin/pkill -f sherpa-onnx-offline-tts
             /usr/bin/pkill -x afplay
             exit
           fi
-          # Wait for Option (1 << 19) to be released, or the app gets Cmd+Option+C.
           /usr/bin/osascript -l JavaScript -e '
             ObjC.import("AppKit");
+            const pb = $.NSPasteboard.generalPasteboard;
+            const saved = ObjC.unwrap(pb.pasteboardItems).map((item) => {
+              const copy = $.NSPasteboardItem.alloc.init;
+              ObjC.unwrap(item.types).forEach((type) => copy.setDataForType(item.dataForType(type), type));
+              return copy;
+            });
+            // Wait for Option (1 << 19) to be released, or the app gets Cmd+Option+C.
             while ($.NSEvent.modifierFlags & 524288) delay(0.02);
+            const before = pb.changeCount;
             Application("System Events").keystroke("c", { using: "command down" });
-          '
-          sleep 0.2
-          /usr/bin/pbpaste | ${pkgs.callPackage ../../../pkgs/read-aloud.nix { }}/bin/read-aloud
+            for (let i = 0; i < 50 && pb.changeCount === before; i++) delay(0.02);
+            let text = "";
+            if (pb.changeCount !== before) {
+              text = ObjC.unwrap(pb.stringForType($.NSPasteboardTypeString)) || "";
+              pb.clearContents;
+              pb.writeObjects($(saved));
+            }
+            text;
+          ' | ${pkgs.callPackage ../../../pkgs/read-aloud.nix { }}/bin/read-aloud
         '';
       in
       pkgs.lib.recursiveUpdate ({
