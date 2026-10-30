@@ -31,8 +31,16 @@ set_power_limit() {
   echo "${2}000000" | sudo tee "$rapl/constraint_1_power_limit_uw" >/dev/null
 }
 
+# The 7900 XTX's power cap: on raises it to the board maximum, off restores the default.
+gpu_hwmon=$(dirname "$(echo /sys/class/drm/card*/device/hwmon/hwmon*/power1_cap_max)")
+
+set_gpu_cap() {
+  sudo tee "$gpu_hwmon/power1_cap" >/dev/null <<<"$(cat "$gpu_hwmon/power1_cap_$1")"
+}
+
 status() {
   local rapl=/sys/class/powercap/intel-rapl:0
+  echo "GPU power cap: $(($(cat "$gpu_hwmon/power1_cap") / 1000000)) W (default $(($(cat "$gpu_hwmon/power1_cap_default") / 1000000)), max $(($(cat "$gpu_hwmon/power1_cap_max") / 1000000)))"
   echo "CPU power limit: $(($(cat "$rapl/constraint_0_power_limit_uw") / 1000000))/$(($(cat "$rapl/constraint_1_power_limit_uw") / 1000000)) W"
   echo "scheduler: $(cat /sys/kernel/sched_ext/root/ops 2>/dev/null || echo default)"
   echo "deep C-states disabled on $(cat /sys/devices/system/cpu/cpu*/cpuidle/state[2-9]/disable | grep -c 1) of $(find /sys/devices/system/cpu/cpu*/cpuidle/ -path '*/state[2-9]/disable' | wc -l)"
@@ -49,6 +57,7 @@ case ${1:-} in
     set_deep_cstates 1
     set_irqs "$e_cores"
     set_power_limit 95 181
+    set_gpu_cap max
     status
     ;;
   off)
@@ -57,6 +66,7 @@ case ${1:-} in
     set_deep_cstates 0
     set_irqs "$all_cpus"
     set_power_limit 75 125
+    set_gpu_cap default
     status
     ;;
   status) status ;;
