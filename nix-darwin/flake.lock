@@ -7,11 +7,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1793469050,
-        "narHash": "sha256-m4tM+K67j4zjj6xU7LcWn7D4zuxpuRxLTXVC3RVL4cI=",
+        "lastModified": 1793474482,
+        "narHash": "sha256-y8S7vLcv7sP3QSjXCtmXf/R4lN2mjsL28mdiABl+JyI=",
         "owner": "blackhat-7",
         "repo": "ai-harnesses",
-        "rev": "5dbb263fec5718ba4d41d977597f8d13f80851e3",
+        "rev": "10c1b74a1ef1af8efd648e142536928b7b4145d5",
         "type": "github"
       },
       "original": {
