@@ -50,11 +50,19 @@
             };
             run = "layout floating";
           }
+          # Video pop-ups keep their own small size instead of being tiled across the screen.
+          {
+            "if" = {
+              app-name-regex-substring = "Discord";
+            };
+            run = "layout floating";
+          }
         ];
         exec-on-workspace-change = [
           "/bin/bash"
           "-c"
-          "${sticky-pip-script}/bin/sticky-pip"
+          # Discord windows have no titles for sticky-pip's regex to match, so this helper follows its video pop-ups by window id on every switch (source: ~/Projects/discord-sticky).
+          "${sticky-pip-script}/bin/sticky-pip ; $HOME/.local/bin/discord-sticky"
         ];
         workspace-to-monitor-force-assignment = {
           "1" = "main";
