@@ -47,7 +47,6 @@ let
     lobby = github "linhmh8" "agent-lobby" "3bb39e70134cc790de8a99fa4602473643912698" "sha256-U8t7QZoGq2JM0ytMQObDLS5E1QirjsmPGeuE2tORYlo=";
     annotations = github "neunzig-zehn" "paseo-annotations" "b921586b52cc2f937cf7814efc83d106310824fe" "sha256-AabTyHZ2FOUYfXMP0pQl7tfAmw9h5VRx8VNxTrdwRQ4=";
     excalidraw = "${excalidraw}/lib/node_modules/paseo-excalidraw";
-    firstmate = "${github "gpambrozio" "paseo-plugins" "09509ce55ab06758623262e6aa71522ade6fda0c" "sha256-Ij84pzgakVx6mboHjfq41bu+AL+NljPxZnE7LUPYk98="}/firstmate";
   };
 
   pluginSources = lib.mapAttrs (_: path: {
