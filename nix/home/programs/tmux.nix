@@ -114,6 +114,8 @@ in
       set -g status-left "#{?client_prefix,#[fg=$RED],#[fg=$ORANGE]}#[bold] #S  "
       # Battery turns red at 10% or less; the network shows only while offline
       set -g status-right "#(CLAUDE_USAGE_TTL=300 ${tmux-claude-usage}/bin/tmux-claude-usage status)#[fg=$BLACK5]  ·  #[fg=$GRAY]#(${tmux-agent-radar}/bin/tmux-agent-radar status)#[fg=$BLACK5]  ·  #{?#{e|<=:#{battery_percentage},10},#[fg=$RED],#[fg=$GRAY]}#{battery_icon} #{battery_percentage}#{?#{==:#{online_status},ok},,#[fg=$RED]  󰖪 offline}#[fg=$BLACK5]  ·  #[fg=$GRAY]%H:%M "
+      # prefix + u: what local-model subagents saved, in a popup
+      bind u display-popup -E -w 56 -h 19 "bash -c '${tmux-claude-usage}/bin/tmux-claude-usage savings; read -rsn1'"
 
       set -g window-status-separator ""
       set -g window-status-format "#[fg=$DIM]#I #[fg=$ASH]#W#{?window_zoomed_flag, 󰊓,}   "
