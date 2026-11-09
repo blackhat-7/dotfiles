@@ -92,5 +92,8 @@
       "source": "anthropic-example",
       "updatedAt": "2026-10-14T14:41:49.960676Z"
     }
+  ],
+  "pendingClaims": [
+    "4275:Mon Nov  9 16:54:04 2026/built-in-browser"
   ]
 }
