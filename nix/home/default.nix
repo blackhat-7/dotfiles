@@ -297,5 +297,63 @@ in
     };
   };
 
+  # Minerva learning app (~/Documents/projects/minerva): speech, app, HTTPS on the tailnet.
+  systemd.user.services.speaches = {
+    Unit = {
+      Description = "speaches — local speech-to-text and text-to-speech for Minerva";
+      After = [ "network.target" ];
+    };
+
+    Service = {
+      WorkingDirectory = "%h/.local/share/voice/speaches";
+      EnvironmentFile = "%h/.local/share/voice/speaches.env";
+      ExecStart = "%h/.local/share/voice/speaches/.venv/bin/uvicorn --factory speaches.main:create_app";
+      Restart = "on-failure";
+      Nice = 5;
+    };
+
+    Install.WantedBy = [ "default.target" ];
+  };
+
+  systemd.user.services.minerva = {
+    Unit = {
+      Description = "Minerva — learning app (API + web UI on :8765)";
+      After = [
+        "network.target"
+        "speaches.service"
+      ];
+    };
+
+    Service = {
+      WorkingDirectory = "%h/Documents/projects/minerva/backend";
+      # Minerva runs `claude -p` with your own login, so `claude` and `uv` must be on PATH.
+      Environment = [
+        "PATH=%h/.local/bin:%h/.npm-global/bin:%h/.nix-profile/bin:/usr/local/bin:/usr/bin"
+      ];
+      ExecStart = "uv run --frozen minerva";
+      Restart = "on-failure";
+    };
+
+    Install.WantedBy = [ "default.target" ];
+  };
+
+  systemd.user.services.caddy-minerva = {
+    Unit = {
+      Description = "Caddy — HTTPS for Minerva on the tailnet (https://minerva.immortal.cx:8443)";
+      After = [
+        "network-online.target"
+        "minerva.service"
+      ];
+    };
+
+    Service = {
+      EnvironmentFile = "%h/.config/minerva/cloudflare.env";
+      ExecStart = "%h/.local/bin/caddy run --config %h/Documents/projects/minerva/deploy/Caddyfile --adapter caddyfile";
+      Restart = "on-failure";
+    };
+
+    Install.WantedBy = [ "default.target" ];
+  };
+
   wayland.windowManager.hyprland.systemd.enable = true;
 }
