@@ -84,10 +84,12 @@ let
   providers.claude-hybrid = providers.claude-local // {
     label = "Claude (Opus + local)";
     command = [ "claude-hybrid" ];
+    # A full Claude id, so Paseo offers its effort levels and default as for
+    # plain Claude; an alias such as "opus" gets a generic list defaulting to high.
     models = [
       {
-        id = "opus";
-        label = "Opus";
+        id = "claude-opus-5-5";
+        label = "Opus 5.5";
         isDefault = true;
       }
     ];
