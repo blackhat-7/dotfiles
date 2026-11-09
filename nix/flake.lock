@@ -291,11 +291,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1794238682,
-        "narHash": "sha256-37P/Jv+Uhf8/mYb/c4IsTa+Tr4dnjkZx+84PSNb7Azk=",
+        "lastModified": 1794239080,
+        "narHash": "sha256-OUVne4MpUMTigB0umc95GxkkGqjhXdoOXy2gCwsZUYg=",
         "owner": "blackhat-7",
         "repo": "tmux-claude-usage",
-        "rev": "9c9a02d5aba1ab885313231398b0ce46e762130d",
+        "rev": "df32021cb9541edb222fd506578125f22b47fd3d",
         "type": "github"
       },
       "original": {
