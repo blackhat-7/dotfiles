@@ -79,6 +79,19 @@ let
       "claude-local"
     ];
   };
+  # Opus as the main agent; sonnet and haiku subagents and helper calls run on
+  # the local model (see claude-hybrid).
+  providers.claude-hybrid = providers.claude-local // {
+    label = "Claude (Opus + local)";
+    command = [ "claude-hybrid" ];
+    models = [
+      {
+        id = "opus";
+        label = "Opus";
+        isDefault = true;
+      }
+    ];
+  };
 
   # Restart the daemon service from home/default.nix if it is running. On macOS
   # the desktop app owns the daemon, so changes apply when the app restarts it.
