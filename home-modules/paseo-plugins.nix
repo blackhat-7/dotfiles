@@ -56,10 +56,13 @@ let
 
   # claude-local (from ai-harnesses) in its three modes. Paseo passes the model
   # id as --model: claude-local turns "local" into the model the server serves.
+  # Medium effort, as claude-local picks itself: Paseo's default for a model it
+  # does not know is high, which doubled the local model's time on coding tasks.
   localModel = {
     id = "local";
     label = "Local model";
     isDefault = true;
+    defaultThinkingOptionId = "medium";
   };
   # Local main agent that sends hard calls to Opus, or Opus main agent that gives
   # the work to local subagents. Opus has its full Claude id, so Paseo offers its
