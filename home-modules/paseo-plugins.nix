@@ -54,44 +54,43 @@ let
     path = "${path}";
   }) plugins;
 
-  # claude-local (from ai-harnesses) as its own provider. Paseo would pass its
-  # Anthropic model ids, which a local server does not serve; claude-local maps
-  # the `opus` alias to the model it discovered.
+  # claude-local (from ai-harnesses) in its three modes. Paseo passes the model
+  # id as --model: claude-local turns "local" into the model the server serves.
+  localModel = {
+    id = "local";
+    label = "Local model";
+    isDefault = true;
+  };
+  # Local main agent that sends hard calls to Opus, or Opus main agent that gives
+  # the work to local subagents. Opus has its full Claude id, so Paseo offers its
+  # effort levels and default as for plain Claude.
   providers.claude-local = {
     extends = "claude";
     label = "Claude (local)";
     command = [ "claude-local" ];
     models = [
+      (localModel // { label = "Local main"; })
       {
-        id = "opus";
-        label = "Local model";
-        isDefault = true;
+        id = "claude-opus-5-5";
+        label = "Opus main";
       }
     ];
   };
-  # The same with Claude Haiku for Claude Code's helper calls and WebSearch, for
-  # when there is internet and Claude usage left (see claude-local).
+  # Every agent local; Claude Haiku only for helper calls, WebSearch and safety checks.
   providers.claude-local-haiku = providers.claude-local // {
     label = "Claude (local + Haiku)";
     command = [
-      "env"
-      "LOCAL_HELPER_MODEL=claude-haiku-5-5"
       "claude-local"
+      "--no-opus"
     ];
+    models = [ localModel ];
   };
-  # Opus as the main agent; sonnet and haiku subagents and helper calls run on
-  # the local model (see claude-hybrid).
-  providers.claude-hybrid = providers.claude-local // {
-    label = "Claude (Opus + local)";
-    command = [ "claude-hybrid" ];
-    # A full Claude id, so Paseo offers its effort levels and default as for
-    # plain Claude; an alias such as "opus" gets a generic list defaulting to high.
-    models = [
-      {
-        id = "claude-opus-5-5";
-        label = "Opus 5.5";
-        isDefault = true;
-      }
+  # Everything local, no Claude usage.
+  providers.claude-offline = providers.claude-local-haiku // {
+    label = "Claude (offline)";
+    command = [
+      "claude-local"
+      "--offline"
     ];
   };
 
