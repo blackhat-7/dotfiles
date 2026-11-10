@@ -33,7 +33,6 @@
         # tmuxPlugins.tmux-floax
         tmuxPlugins.vim-tmux-navigator
         # tmuxPlugins.tmux-fzf
-        # tmuxPlugins.online-status
         {
             plugin = tmux-agent-radar;
             extraConfig = ''
@@ -106,7 +105,7 @@
 
       # Session name turns red while prefix is held
       set -g status-left "#{?client_prefix,#[fg=$RED],#[fg=$ORANGE]}#[bold] #S  "
-      set -g status-right "#(CLAUDE_USAGE_TTL=300 ${tmux-claude-usage}/bin/tmux-claude-usage status)  #(${tmux-claude-usage}/bin/tmux-claude-usage savings-status)#[fg=$BLACK5]  ·  #[fg=$GRAY]#(${tmux-agent-radar}/bin/tmux-agent-radar status)#[fg=$BLACK5]  ·  #[fg=$GRAY]%H:%M "
+      set -g status-right "#(CLAUDE_USAGE_TTL=300 ${tmux-claude-usage}/bin/tmux-claude-usage status)  #(${tmux-claude-usage}/bin/tmux-claude-usage savings-status)#[fg=$BLACK5]  ·  #[fg=$GRAY]#(${tmux-agent-radar}/bin/tmux-agent-radar status) "
       # prefix + u: what local-model subagents saved, in a popup
       bind u display-popup -E -w 56 -h 19 "bash -c '${tmux-claude-usage}/bin/tmux-claude-usage savings; read -rsn1'"
 

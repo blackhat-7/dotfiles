@@ -34,13 +34,6 @@ in
       tmuxPlugins.vim-tmux-navigator
       # tmuxPlugins.tmux-fzf
       {
-        plugin = tmuxPlugins.online-status;
-        extraConfig = ''
-          set -g @online_icon "ok"
-          set -g @offline_icon "nok"
-        '';
-      }
-      {
         plugin = tmux-agent-radar;
         extraConfig = ''
           set -g @agent-radar-key "C-f"
@@ -112,8 +105,8 @@ in
 
       # Session name turns red while prefix is held
       set -g status-left "#{?client_prefix,#[fg=$RED],#[fg=$ORANGE]}#[bold] #S  "
-      # Battery turns red at 10% or less; the network shows only while offline
-      set -g status-right "#(CLAUDE_USAGE_TTL=300 ${tmux-claude-usage}/bin/tmux-claude-usage status)  #(${tmux-claude-usage}/bin/tmux-claude-usage savings-status)#[fg=$BLACK5]  ·  #[fg=$GRAY]#(${tmux-agent-radar}/bin/tmux-agent-radar status)#[fg=$BLACK5]  ·  #{?#{e|<=:#{battery_percentage},10},#[fg=$RED],#[fg=$GRAY]}#{battery_icon} #{battery_percentage}#{?#{==:#{online_status},ok},,#[fg=$RED]  󰖪 offline}#[fg=$BLACK5]  ·  #[fg=$GRAY]%H:%M "
+      # Battery turns red at 10% or less
+      set -g status-right "#(CLAUDE_USAGE_TTL=300 ${tmux-claude-usage}/bin/tmux-claude-usage status)  #(${tmux-claude-usage}/bin/tmux-claude-usage savings-status)#[fg=$BLACK5]  ·  #[fg=$GRAY]#(${tmux-agent-radar}/bin/tmux-agent-radar status)#[fg=$BLACK5]  ·  #{?#{e|<=:#{battery_percentage},10},#[fg=$RED],#[fg=$GRAY]}#{battery_icon} #{battery_percentage} "
       # prefix + u: what local-model subagents saved, in a popup
       bind u display-popup -E -w 56 -h 19 "bash -c '${tmux-claude-usage}/bin/tmux-claude-usage savings; read -rsn1'"
 
