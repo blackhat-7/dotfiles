@@ -63,6 +63,9 @@ in
     serviceConfig = {
       KeepAlive = true;
       StandardErrorPath = "${home}/Library/Logs/tailscale-work.log";
+      # Packets must fit inside the home tunnel (1280 bytes) when the hetzner
+      # exit node carries them: 1200 + up to 80 bytes of WireGuard/UDP/IP headers.
+      EnvironmentVariables.TS_DEBUG_MTU = "1200";
     };
   };
 
