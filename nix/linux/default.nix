@@ -70,6 +70,28 @@
       };
     };
     
+    # ./start rebuilds and clears stale sandbox containers, so boot runs it rather than
+    # relying on compose's restart policy. Requires pulls in docker.service, which Arch leaves disabled.
+    birbot = {
+      enable = true;
+      description = "Birbot Discord bot (docker compose stack)";
+      requires = [ "docker.service" ];
+      wants = [ "network-online.target" ];
+      after = [ "docker.service" "network-online.target" ];
+      wantedBy = [ "multi-user.target" ];
+      # The scripts need Arch's bash, docker and compose plugin, matching the system daemon.
+      path = [ "/usr" ];
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+        User = "illusion";
+        ExecStart = "/home/illusion/Documents/projects/birbot/start";
+        ExecStop = "/home/illusion/Documents/projects/birbot/stop";
+        # A cold image build can take minutes.
+        TimeoutStartSec = "15min";
+      };
+    };
+
     wakeOnLan = {
       enable = true;
       description = "Wake on lan";
@@ -89,6 +111,29 @@
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         ExecStart = "${pkgs.bash}/bin/sh -c 'echo 75000000 > /sys/class/powercap/intel-rapl:0/constraint_0_power_limit_uw && echo 125000000 > /sys/class/powercap/intel-rapl:0/constraint_1_power_limit_uw'";
+        Type = "oneshot";
+      };
+    };
+
+    ramRgbOff = {
+      enable = true;
+      description = "Turn off RAM RGB lighting";
+      after = [ "systemd-modules-load.service" ];
+      wantedBy = [ "multi-user.target" ];
+      serviceConfig = {
+        ExecStart = lib.getExe (pkgs.writeShellApplication {
+          name = "ram-rgb-off";
+          runtimeInputs = [ pkgs.openrgb pkgs.gawk ];
+          text = ''
+            # Set every DRAM device OpenRGB finds to black; other RGB devices stay as they are.
+            mapfile -t ids < <(openrgb --list-devices |
+              awk '/^[0-9]+: /{i=$1+0} /Type:[[:space:]]+DRAM/{print i}')
+            if [ ''${#ids[@]} -eq 0 ]; then echo "No RAM RGB device found" >&2; exit 1; fi
+            args=()
+            for id in "''${ids[@]}"; do args+=(-d "$id" -m direct -c 000000); done
+            openrgb "''${args[@]}"
+          '';
+        });
         Type = "oneshot";
       };
     };
