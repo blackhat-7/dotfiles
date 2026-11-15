@@ -51,14 +51,15 @@ in
   # Two tailnets at once. Only one tailscaled can own macOS routes/DNS, so:
   # - Home (headscale): the Tailscale app, full system VPN + DNS.
   # - Work (official Tailscale): this userspace tailscaled. It never touches
-  #   routes or DNS; work traffic opts in through its HTTP proxy on
-  #   127.0.0.1:1055 (ssh block below, curl -x, Zen via work.pac).
+  #   routes or DNS; work traffic opts in through its HTTP + SOCKS5 proxy on
+  #   127.0.0.1:1055 (ssh block below, curl -x, Zen via work.pac, DataGrip
+  #   via driver VM options -DsocksProxyHost=127.0.0.1 -DsocksProxyPort=1055).
   # Where Tailscale is blocked (Oman), set the app's exit node to hetzner: this
   # daemon's control, DERP and WireGuard traffic then leaves from there too.
   # Login once (browser): ts-work up
   launchd.user.agents.tailscale-work = {
     command = ''
-      ${pkgs.tailscale}/bin/tailscaled --tun=userspace-networking --statedir=${tsWorkStateDir} --socket=${tsWorkStateDir}/tailscaled.sock --outbound-http-proxy-listen=127.0.0.1:1055 --port=0
+      ${pkgs.tailscale}/bin/tailscaled --tun=userspace-networking --statedir=${tsWorkStateDir} --socket=${tsWorkStateDir}/tailscaled.sock --outbound-http-proxy-listen=127.0.0.1:1055 --socks5-server=127.0.0.1:1055 --port=0
     '';
     serviceConfig = {
       KeepAlive = true;
