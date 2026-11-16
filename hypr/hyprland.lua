@@ -41,6 +41,11 @@ hl.config({
     direct_scanout = 0,
     send_content_type = true,
   },
+  -- "auto" picks a software cursor on NVIDIA, which redraws the whole frame on every
+  -- mouse move and lagged on the 4070; the hardware cursor works fine on driver 620.
+  cursor = {
+    no_hardware_cursors = 0,
+  },
 })
 
 ---------------------
@@ -83,6 +88,16 @@ hl.env("HYPRCURSOR_SIZE", "24")
 hl.env("QT_QPA_PLATFORM", "wayland")
 -- Java/Swing apps (Ghidra, DBeaver) draw a blank window under a non-reparenting WM.
 hl.env("_JAVA_AWT_WM_NONREPARENTING", "1")
+-- Render on the RTX 4070, which drives the monitors; its x1 link is too slow to copy
+-- every frame from the XTX, and the XTX stays free for LLMs. cardN numbers change
+-- between boots, so resolve them from the PCI address.
+local function drm_card(pci)
+  local f = io.popen("readlink -f /dev/dri/by-path/pci-0000:" .. pci .. "-card")
+  local path = f:read("*l")
+  f:close()
+  return path
+end
+hl.env("AQ_DRM_DEVICES", drm_card("08:00.0") .. ":" .. drm_card("03:00.0"))
 
 ---------------------
 ---- PERMISSIONS ----
