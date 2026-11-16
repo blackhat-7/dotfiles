@@ -137,4 +137,12 @@ in
     done
   '';
 
+  # DMS saves its own settings from the GUI, so set only the keys we pin.
+  home.activation.dms-settings = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    f="${config.xdg.configHome}/DankMaterialShell/settings.json"
+    if [ -f "$f" ]; then
+      ${pkgs.jq}/bin/jq '.barConfigs[].autoHide = true' "$f" > "$f.tmp" && mv "$f.tmp" "$f"
+    fi
+  '';
+
 }
