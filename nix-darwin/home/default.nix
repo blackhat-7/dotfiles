@@ -36,7 +36,6 @@ in
     pkgs.golangci-lint
     pkgs.nightlight
     pkgs.nodejs_24
-    pkgs.paseo
     pkgs.tree-sitter
     pkgs.spotify
     pkgs.slack
@@ -71,6 +70,9 @@ in
 
   home.sessionPath = [
     "$HOME/.local/bin"
+    # Paseo ships its own CLI; use it instead of a nix package so it can never
+    # lag the desktop app that owns the daemon.
+    "/Applications/Paseo.app/Contents/Resources/bin"
   ];
 
   home.file.".local/bin/img" = {
