@@ -6,6 +6,10 @@
 
     nixpkgs-gcloud.url = "github:NixOS/nixpkgs/6dedf69f94d03cbe7bdde106f2d4c23ae2a853bf";
 
+    # Temp pin: reva 7.3.2 fixes the ghidra extension build under openjdk25.
+    # Drop once nixos-unstable carries pkgs/by-name/gh/ghidra/extensions/reva >= 7.3.2.
+    nixpkgs-ghidra.url = "github:NixOS/nixpkgs/f6bf2e76bbfd1fcbd908b2f26a837e81a1674537";
+
     readonly-bash = {
       url = "github:blackhat-7/readonly-bash/main";
       flake = false;
@@ -30,6 +34,8 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    rex.url = "https://pkgs.superlogical.com/rex/nix/preview.tar.gz";
 
     system-manager.url = "github:numtide/system-manager";
 
@@ -60,6 +66,11 @@
         import nixpkgs {
           inherit system;
           config.allowUnfree = true;
+          overlays = [
+            (final: prev: {
+              ghidra = inputs.nixpkgs-ghidra.legacyPackages.${system}.ghidra;
+            })
+          ];
         }
       );
 

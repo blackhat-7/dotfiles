@@ -19,7 +19,17 @@ in
     ./programs
     ../../home-modules/paseo-plugins.nix
     inputs.ai-harnesses.homeManagerModules.default
+    inputs.rex.homeManagerModules.default
   ];
+
+  # Rex server, reachable from the Mac app at https://rex-pc.<tailnet>.ts.net.
+  services.rex = {
+    enable = true;
+    tailscale.enable = true;
+    tailscale.hostname = "rex-pc";
+  };
+  # ~/.ssh/config is hand-managed, so the guard can't be added through programs.ssh.
+  programs.rex.sshGuard = false;
 
   aiHarnesses.mode = "auto";
   aiHarnesses.pi.disabledPackages = [ "npm:pi-lean-ctx" ];
