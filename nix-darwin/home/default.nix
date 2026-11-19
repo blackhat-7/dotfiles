@@ -98,7 +98,7 @@ in
   # The Paseo daemon runs at login without the app, from the app's own CLI so
   # the versions match. The app connects to a running daemon and stops only one
   # it started, so quitting it leaves this one up. After an app update, restart
-  # it: launchctl kickstart -k gui/$(id -u)/org.nix-community.home.paseo
+  # it with `paseo-restart` (fish alias).
   launchd.agents.paseo = {
     enable = true;
     config = {

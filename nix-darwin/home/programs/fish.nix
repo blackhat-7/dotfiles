@@ -143,6 +143,8 @@ alias jbuild="cd ./secret/jarvis && cargo build --release && cd - && mv ./secret
 alias initflake="~/dotfiles/scripts/init-direnv-flake.sh"
 alias cleanup-space="~/dotfiles/scripts/cleanup-space.sh"
 alias chutes="chutes-tui"
+# Restart the Paseo daemon (launchd agent) to run a freshly updated app.
+alias paseo-restart="launchctl kickstart -k gui/(id -u)/org.nix-community.home.paseo"
 
 # Nvim configs
 alias nv="nvim -u ~/.config/nvim/init.lua"
