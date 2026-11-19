@@ -1,4 +1,4 @@
-{ pkgs, inputs, ... }:
+{ config, pkgs, inputs, ... }:
 
 let
   genmedia =
@@ -71,7 +71,7 @@ in
   home.sessionPath = [
     "$HOME/.local/bin"
     # Paseo ships its own CLI; use it instead of a nix package so it can never
-    # lag the desktop app that owns the daemon.
+    # lag the desktop app.
     "/Applications/Paseo.app/Contents/Resources/bin"
   ];
 
@@ -93,6 +93,39 @@ in
   home.file.".local/bin/img-serve" = {
     source = ../../scripts/img-serve;
     executable = true;
+  };
+
+  # The Paseo daemon runs at login without the app, from the app's own CLI so
+  # the versions match. The app connects to a running daemon and stops only one
+  # it started, so quitting it leaves this one up. After an app update, restart
+  # it: launchctl kickstart -k gui/$(id -u)/org.nix-community.home.paseo
+  launchd.agents.paseo = {
+    enable = true;
+    config = {
+      ProgramArguments = [
+        "/Applications/Paseo.app/Contents/Resources/bin/paseo"
+        "daemon"
+        "run"
+      ];
+      RunAtLoad = true;
+      KeepAlive = true;
+      WorkingDirectory = config.home.homeDirectory;
+      StandardErrorPath = "${config.home.homeDirectory}/Library/Logs/paseo-daemon.log";
+      # launchd ignores the shell's PATH; agents need claude, node, git and the like.
+      EnvironmentVariables.PATH = builtins.concatStringsSep ":" [
+        "${config.home.homeDirectory}/.npm-global/bin"
+        "${config.home.homeDirectory}/.local/bin"
+        "/etc/profiles/per-user/${config.home.username}/bin"
+        "/run/current-system/sw/bin"
+        "/nix/var/nix/profiles/default/bin"
+        "/opt/homebrew/bin"
+        "/usr/local/bin"
+        "/usr/bin"
+        "/bin"
+        "/usr/sbin"
+        "/sbin"
+      ];
+    };
   };
 
   launchd.agents.turn-on-night-shift = {

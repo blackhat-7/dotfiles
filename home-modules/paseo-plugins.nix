@@ -97,10 +97,15 @@ let
     ];
   };
 
-  # Restart the daemon service from home/default.nix if it is running. On macOS
-  # the desktop app owns the daemon, so changes apply when the app restarts it.
-  restartDaemon = lib.optionalString pkgs.stdenv.hostPlatform.isLinux
-    "run ${config.systemd.user.systemctlPath} --user try-restart paseo.service";
+  # Restart the daemon service from home/default.nix if it is running.
+  restartDaemon =
+    if pkgs.stdenv.hostPlatform.isDarwin then
+      ''
+        if /bin/launchctl print "gui/$(id -u)/org.nix-community.home.paseo" >/dev/null 2>&1; then
+          run /bin/launchctl kickstart -k "gui/$(id -u)/org.nix-community.home.paseo"
+        fi''
+    else
+      "run ${config.systemd.user.systemctlPath} --user try-restart paseo.service";
 in
 {
   # The daemon owns config.json (app settings, Cafe installs), so merge our
