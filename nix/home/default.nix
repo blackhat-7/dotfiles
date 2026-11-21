@@ -365,5 +365,47 @@ in
     Install.WantedBy = [ "default.target" ];
   };
 
+  # Rootless Docker: the system daemon needs the `docker` group, which is root for any process
+  # running as this user, AI agents included. Docker Desktop stays the default CLI context.
+  systemd.user.services.docker = {
+    Unit.Description = "Docker (rootless)";
+
+    Service = {
+      ExecStart = "${pkgs.docker}/bin/dockerd-rootless";
+      # newuidmap/newgidmap must be the system's setuid binaries.
+      Environment = [ "PATH=/usr/bin" ];
+      Type = "notify";
+      NotifyAccess = "all";
+      Delegate = true;
+      KillMode = "mixed";
+      Restart = "always";
+    };
+
+    Install.WantedBy = [ "default.target" ];
+  };
+
+  # ./start rebuilds and clears stale sandbox containers, so boot runs it rather than
+  # relying on compose's restart policy.
+  systemd.user.services.birbot = {
+    Unit = {
+      Description = "Birbot Discord bot (docker compose stack)";
+      Requires = [ "docker.service" ];
+      After = [ "docker.service" ];
+    };
+
+    Service = {
+      Type = "oneshot";
+      RemainAfterExit = true;
+      # The scripts need Arch's bash, docker CLI and compose plugin.
+      Environment = [ "PATH=/usr/bin" ];
+      ExecStart = "%h/Documents/projects/birbot/start";
+      ExecStop = "%h/Documents/projects/birbot/stop";
+      # A cold image build can take minutes.
+      TimeoutStartSec = "15min";
+    };
+
+    Install.WantedBy = [ "default.target" ];
+  };
+
   wayland.windowManager.hyprland.systemd.enable = true;
 }

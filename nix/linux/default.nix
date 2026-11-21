@@ -70,28 +70,6 @@
       };
     };
     
-    # ./start rebuilds and clears stale sandbox containers, so boot runs it rather than
-    # relying on compose's restart policy. Requires pulls in docker.service, which Arch leaves disabled.
-    birbot = {
-      enable = true;
-      description = "Birbot Discord bot (docker compose stack)";
-      requires = [ "docker.service" ];
-      wants = [ "network-online.target" ];
-      after = [ "docker.service" "network-online.target" ];
-      wantedBy = [ "multi-user.target" ];
-      # The scripts need Arch's bash, docker and compose plugin, matching the system daemon.
-      path = [ "/usr" ];
-      serviceConfig = {
-        Type = "oneshot";
-        RemainAfterExit = true;
-        User = "illusion";
-        ExecStart = "/home/illusion/Documents/projects/birbot/start";
-        ExecStop = "/home/illusion/Documents/projects/birbot/stop";
-        # A cold image build can take minutes.
-        TimeoutStartSec = "15min";
-      };
-    };
-
     wakeOnLan = {
       enable = true;
       description = "Wake on lan";
