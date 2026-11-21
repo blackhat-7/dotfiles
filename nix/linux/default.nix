@@ -119,4 +119,11 @@
       Subsystem sftp ${pkgs.openssh}/libexec/sftp-server
     '';
   };
+
+  # sudo approval from the phone (scripts/sudo-approve). Root-owned and read-only, with a fixed
+  # PATH since it runs as root. ./install adds the PAM line that calls it.
+  environment.etc."sudo-approve".source = pkgs.writeShellScript "sudo-approve" ''
+    export PATH=${lib.makeBinPath (with pkgs; [ coreutils curl jq procps ])}
+    ${builtins.readFile ../../scripts/sudo-approve/sudo-approve}
+  '';
 }

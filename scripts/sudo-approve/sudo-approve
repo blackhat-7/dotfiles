@@ -37,7 +37,7 @@ publish() { # $1 title, $2 priority, $3 actions (JSON array)
     '{topic: "sudo", sequence_id: $id, title: $title, message: $message, priority: $priority, actions: $actions}' |
     curl -sf -m 10 -H "Authorization: Bearer $HOST_TOKEN" -d @- "$NTFY_URL" >/dev/null
 }
-host="on $(hostname) by ${PAM_RUSER:-?}"
+host="on $(uname -n) by ${PAM_RUSER:-?}"
 publish "sudo $host" 5 "[$(button Approve yes), $(button Deny no)]" ||
   { kill "$listener" 2>/dev/null; exit 1; }
 

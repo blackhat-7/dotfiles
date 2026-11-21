@@ -17,11 +17,16 @@ Private ntfy at `https://ntfy.imrtl.dev` (server-stack `ntfy/`), `auth-default-a
 
 Each request carries a random one-time code; only a reply with that code counts.
 
-## Install (per machine)
+## Install
+
+The helper is `/etc/sudo-approve`: Nix-managed (`nix/linux/default.nix`), root-owned, read-only,
+with a fixed PATH. `just linux` installs and updates it. `/etc/pam.d/sudo` stays Arch's own file;
+`./install` adds one line to it, plus the root-only config and the sudoers rule.
 
 ```sh
-sudo ./install ~/.config/sudo-approve.conf   # first time: NTFY_URL=, HOST_TOKEN=, APPROVER_TOKEN=
-sudo ./install                               # later: update the helper
+just linux                                     # from ~/dotfiles/nix: installs /etc/sudo-approve
+sudo ./install ~/.config/sudo-approve.conf     # first time: NTFY_URL=, HOST_TOKEN=, APPROVER_TOKEN=
+sudo ./install                                 # later, if the PAM line or sudoers rule changes
 sudo ./install --uninstall
 ```
 
