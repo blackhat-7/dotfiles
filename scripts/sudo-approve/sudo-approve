@@ -1,22 +1,44 @@
 #!/bin/bash
-# PAM helper: sudo asks your phone (ntfy) to approve the exact command, so no password is typed
-# anywhere an agent could see or fake it. Exit 0 = approved. Deny, timeout or any error falls
-# through to the normal password prompt. Installed root-owned; see README.md.
+# PAM helper: when an AI agent runs sudo, your phone (ntfy) approves the exact command, so no
+# password is typed anywhere an agent could see or fake it. When you run sudo yourself, you just
+# type your password. Runs as root from sudo's PAM stack (see README.md), in two modes:
+#   sudo-approve check   exit 0 if an agent runs this sudo; anything else means the password
+#   sudo-approve [ARGS]  ask the phone; exit 0 = approved. Deny or no answer in 60 s fails sudo.
+# Sudo is the parent. On Linux, its command line and environment come from /proc. On macOS,
+# pam_sudo_approve.c passes the command line as ARGS and the agent markers in the environment.
 set -u
 [ "${PAM_TYPE:-}" = auth ] || exit 1
+
+if [ "${1:-}" = check ]; then
+  # Agent tools run commands without a terminal (Claude Code, pi, opencode), where nobody could
+  # type a password anyway. Agents that do use a terminal set AI_AGENT, or GEMINI_CLI.
+  [ -z "${PAM_TTY:-}" ] && exit 0
+  [ -n "${AI_AGENT+x}${GEMINI_CLI+x}" ] && exit 0
+  [ -r "/proc/$PPID/environ" ] || exit 1
+  mapfile -d '' vars < "/proc/$PPID/environ"
+  for var in "${vars[@]}"; do
+    case $var in AI_AGENT=* | GEMINI_CLI=*) exit 0 ;; esac
+  done
+  exit 1
+fi
+
+# Only fail() talks to the caller, on stdout. Stray errors on the way to an approval would
+# otherwise land in the command's own output.
+exec 2>/dev/null
 # NTFY_URL, HOST_TOKEN (writes `sudo`, reads `sudo-reply`), APPROVER_TOKEN (writes `sudo-reply`).
 . /etc/sudo-approve.conf
 timeout=60
 
-# The parent is sudo itself; %q shows hidden newlines and spaces an argument could carry.
-mapfile -d '' args < "/proc/$PPID/cmdline"
+if [ $# -gt 0 ]; then args=("$@"); else mapfile -d '' args < "/proc/$PPID/cmdline"; fi
+# %q shows hidden newlines and spaces an argument could carry.
 command=$(printf '%q ' "${args[@]}")
-# Who asked, as process names above sudo, e.g. "bash < claude < paseo".
-caller= pid=$PPID
+# Who asked, as process names above sudo, e.g. "bash < claude < Paseo Daemon".
+caller='' pid=$PPID
 for _ in 1 2 3 4; do
   pid=$(ps -o ppid= -p "$pid" | tr -d ' ')
   [ "${pid:-1}" -gt 1 ] || break
-  caller+="${caller:+ < }$(ps -o comm= -p "$pid")"
+  name=$(ps -o comm= -p "$pid")
+  caller+="${caller:+ < }${name##*/}"
 done
 nonce=$(od -An -N16 -tx1 /dev/urandom | tr -d ' \n')
 
@@ -30,25 +52,32 @@ button() {
     --arg auth "Bearer $APPROVER_TOKEN" \
     '{action: "http", label: $label, url: $url, body: $body, headers: {Authorization: $auth}, clear: true}'
 }
-# Every push for this request shares one sequence ID, so the result replaces the push with buttons.
 publish() { # $1 title, $2 priority, $3 actions (JSON array)
-  jq -n --arg title "$1" --argjson priority "$2" --argjson actions "$3" --arg id "$nonce" \
+  jq -n --arg title "$1" --argjson priority "$2" --argjson actions "$3" \
     --arg message "${command:0:1500}"$'\n\nfrom: '"$caller" \
-    '{topic: "sudo", sequence_id: $id, title: $title, message: $message, priority: $priority, actions: $actions}' |
+    '{topic: "sudo", title: $title, message: $message, priority: $priority, actions: $actions}' |
     curl -sf -m 10 -H "Authorization: Bearer $HOST_TOKEN" -d @- "$NTFY_URL" >/dev/null
 }
-host="on $(uname -n) by ${PAM_RUSER:-?}"
-publish "sudo $host" 5 "[$(button Approve yes), $(button Deny no)]" ||
-  { kill "$listener" 2>/dev/null; exit 1; }
+# Sudo shows this line to the agent, then stops: no password try, so no faillock lockout.
+fail() {
+  kill "$listener"
+  echo "sudo-approve: $1. Do not retry; ask the user."
+  exit 1
+}
 
-result=1 status='⌛ No answer, sudo'
+host="on $(uname -n) by ${PAM_RUSER:-?}"
+publish "sudo $host" 5 "[$(button Approve yes), $(button Deny no)]" || fail "could not reach ntfy"
+
 while IFS= read -r line <&3; do
   case $line in
-    *"\"message\":\"$nonce yes\""*) result=0 status='✅ Approved sudo'; break ;;
-    *"\"message\":\"$nonce no\""*) status='❌ Denied sudo'; break ;;
+    *"\"message\":\"$nonce yes\""*)
+      kill "$listener"
+      # The iPhone app can't replace a push, so this is a second, silent one (low priority).
+      # In the background, off stdout: pam_exec waits until stdout closes.
+      publish "✅ Approved: sudo $host" 2 '[]' >/dev/null &
+      exit 0
+      ;;
+    *"\"message\":\"$nonce no\""*) fail "denied on the user's phone" ;;
   esac
 done
-kill "$listener" 2>/dev/null
-# In the background: sudo need not wait for the result push.
-publish "$status $host" 2 '[]' &
-exit "$result"
+fail "no answer on the user's phone in $timeout s"

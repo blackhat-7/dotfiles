@@ -1,16 +1,20 @@
 #!/bin/bash
 # One-time setup next to the Nix-managed helper at /etc/sudo-approve (nix/linux/default.nix):
-# the root-only config, no reuse of a past approval, and one PAM line in Arch's /etc/pam.d/sudo.
+# the root-only config, no reuse of a past approval, and two PAM lines in Arch's /etc/pam.d/sudo.
 # Usage: sudo ./install [CONF]  |  sudo ./install --uninstall
 # CONF holds NTFY_URL, HOST_TOKEN and APPROVER_TOKEN; it is moved, so no user-readable copy stays.
 set -euo pipefail
 [ "$EUID" = 0 ] || { echo 'run with sudo' >&2; exit 1; }
 pam=/etc/pam.d/sudo
 # seteuid: pam_exec would otherwise run it as the calling user, who must not read the tokens.
-line='auth sufficient pam_exec.so quiet seteuid /etc/sudo-approve'
+# Line 1: not an agent (or a broken helper) jumps over line 2, to the normal password prompt.
+# Line 2: for an agent the phone decides. Deny or no answer ends sudo without a password try,
+# which would fail with no terminal and count toward a faillock lockout. stdout shows the reason.
+lines='auth [success=ignore default=1] pam_exec.so quiet quiet_log seteuid /etc/sudo-approve check
+auth [success=done default=die] pam_exec.so quiet stdout seteuid /etc/sudo-approve'
 
-# Also drops the line of the first version, which ran /usr/local/sbin/sudo-approve.
-sed -i '\#pam_exec.so quiet seteuid .*sudo-approve$#d' "$pam"
+# Also drops the lines of earlier versions, including the one that ran /usr/local/sbin/sudo-approve.
+sed -i '\#pam_exec\.so .*sudo-approve#d' "$pam"
 rm -f /usr/local/sbin/sudo-approve
 if [ "${1:-}" = --uninstall ]; then
   rm -f /etc/sudo-approve.conf /etc/sudoers.d/sudo-approve
@@ -29,5 +33,5 @@ echo 'Defaults timestamp_timeout=0' > "$rules"
 visudo -cqf "$rules"
 install -o root -g root -m 0440 "$rules" /etc/sudoers.d/sudo-approve
 rm -f "$rules"
-sed -i "/^#%PAM-1.0/a $line" "$pam"
-echo 'Installed. Deny or no answer in 60 s falls back to the password prompt.'
+sed -i '/^#%PAM-1.0/r /dev/stdin' "$pam" <<<"$lines"
+echo 'Installed. Agents ask your phone; your own sudo asks for the password.'

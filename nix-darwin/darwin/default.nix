@@ -1,9 +1,16 @@
-{ config, pkgs, inputs, ... }:
+{ config, pkgs, lib, inputs, ... }:
 
 let
   home = config.users.users."illusion".home;
   tsWorkStateDir = "${home}/.local/state/tailscale-work";
   tsWork = "${pkgs.tailscale}/bin/tailscale --socket=${tsWorkStateDir}/tailscaled.sock";
+  # macOS has no pam_exec: this module runs /etc/sudo-approve from sudo's PAM stack. It only
+  # needs OpenPAM's headers; it calls nothing in libpam.
+  pamSudoApprove = pkgs.runCommandCC "pam-sudo-approve" { } ''
+    mkdir -p $out/lib/pam
+    $CC -shared -Wall -Werror -I${pkgs.openpam}/include -o $out/lib/pam/pam_sudo_approve.so \
+      ${../../scripts/sudo-approve/pam_sudo_approve.c}
+  '';
 in
 {
   nix.enable = false;
@@ -94,6 +101,17 @@ in
     Match exec "${tsWork} ip -4 %h >/dev/null 2>&1 || ${tsWork} ip -4 %h. >/dev/null 2>&1"
       ProxyCommand ${tsWork} nc %h %p
   '';
+
+  # sudo approval from the phone when an AI agent runs sudo (scripts/sudo-approve, same as Linux).
+  # Root-owned and read-only, with a fixed PATH since it runs as root; ps comes from /bin. The
+  # tokens go in /etc/sudo-approve.conf by hand (README.md).
+  environment.etc."sudo-approve".source = pkgs.writeShellScript "sudo-approve" ''
+    export PATH=${lib.makeBinPath (with pkgs; [ coreutils curl jq ])}:/bin
+    ${builtins.readFile ../../scripts/sudo-approve/sudo-approve}
+  '';
+  security.pam.services.sudo_local.text = "auth sufficient ${pamSudoApprove}/lib/pam/pam_sudo_approve.so";
+  # Otherwise one approved sudo lets the same shell run more sudo commands for 5 minutes unasked.
+  security.sudo.extraConfig = "Defaults timestamp_timeout=0";
 
   users.users."illusion" = {
     home = "/Users/illusion";
