@@ -11,7 +11,13 @@ timeout=60
 # The parent is sudo itself; %q shows hidden newlines and spaces an argument could carry.
 mapfile -d '' args < "/proc/$PPID/cmdline"
 command=$(printf '%q ' "${args[@]}")
-caller=$(ps -o args= -p "$(ps -o ppid= -p "$PPID")")
+# Who asked, as process names above sudo, e.g. "bash < claude < paseo".
+caller= pid=$PPID
+for _ in 1 2 3 4; do
+  pid=$(ps -o ppid= -p "$pid" | tr -d ' ')
+  [ "${pid:-1}" -gt 1 ] || break
+  caller+="${caller:+ < }$(ps -o comm= -p "$pid")"
+done
 nonce=$(od -An -N16 -tx1 /dev/urandom | tr -d ' \n')
 
 # Listen before asking; `since` also returns a reply that lands before the stream connects.
@@ -27,7 +33,7 @@ button() {
 # Every push for this request shares one sequence ID, so the result replaces the push with buttons.
 publish() { # $1 title, $2 priority, $3 actions (JSON array)
   jq -n --arg title "$1" --argjson priority "$2" --argjson actions "$3" --arg id "$nonce" \
-    --arg message "${command:0:1500}"$'\n\nfrom: '"${caller:0:300}" \
+    --arg message "${command:0:1500}"$'\n\nfrom: '"$caller" \
     '{topic: "sudo", sequence_id: $id, title: $title, message: $message, priority: $priority, actions: $actions}' |
     curl -sf -m 10 -H "Authorization: Bearer $HOST_TOKEN" -d @- "$NTFY_URL" >/dev/null
 }
