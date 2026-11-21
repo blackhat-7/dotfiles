@@ -1,6 +1,6 @@
 #!/bin/bash
 # Installs sudo-approve: root-owned helper and config, a PAM line before the password prompt,
-# and no reuse of a past approval. Usage: sudo ./install CONF  |  sudo ./install --uninstall
+# and no reuse of a past approval. Usage: sudo ./install [CONF]  |  sudo ./install --uninstall
 # CONF holds NTFY_URL, HOST_TOKEN and APPROVER_TOKEN; it is moved, so no user-readable copy stays.
 set -euo pipefail
 [ "$EUID" = 0 ] || { echo 'run with sudo' >&2; exit 1; }
@@ -15,10 +15,13 @@ if [ "${1:-}" = --uninstall ]; then
   exit
 fi
 
-conf=${1:?usage: sudo ./install CONF}
+# CONF is needed only the first time; rerun without it to update the helper.
+if [ -n "${1:-}" ]; then
+  install -o root -g root -m 0600 "$1" /etc/sudo-approve.conf
+  rm -f "$1"
+fi
+[ -f /etc/sudo-approve.conf ] || { echo 'usage: sudo ./install CONF' >&2; exit 1; }
 install -o root -g root -m 0755 "$dir/sudo-approve" /usr/local/sbin/sudo-approve
-install -o root -g root -m 0600 "$conf" /etc/sudo-approve.conf
-rm -f "$conf"
 # Otherwise one approved sudo lets the same shell run more sudo commands for 5 minutes unasked.
 rules=$(mktemp)
 echo 'Defaults timestamp_timeout=0' > "$rules"

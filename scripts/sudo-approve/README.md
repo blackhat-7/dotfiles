@@ -20,7 +20,8 @@ Each request carries a random one-time code; only a reply with that code counts.
 ## Install (per machine)
 
 ```sh
-sudo ./install ~/.config/sudo-approve.conf   # NTFY_URL=, HOST_TOKEN=, APPROVER_TOKEN=
+sudo ./install ~/.config/sudo-approve.conf   # first time: NTFY_URL=, HOST_TOKEN=, APPROVER_TOKEN=
+sudo ./install                               # later: update the helper
 sudo ./install --uninstall
 ```
 

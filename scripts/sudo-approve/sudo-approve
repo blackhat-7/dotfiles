@@ -24,19 +24,25 @@ button() {
     --arg auth "Bearer $APPROVER_TOKEN" \
     '{action: "http", label: $label, url: $url, body: $body, headers: {Authorization: $auth}, clear: true}'
 }
-jq -n --arg title "sudo on $(hostname) by ${PAM_RUSER:-?}" \
-  --arg message "${command:0:1500}"$'\n\nfrom: '"${caller:0:300}" \
-  --argjson yes "$(button Approve yes)" --argjson no "$(button Deny no)" \
-  '{topic: "sudo", title: $title, message: $message, priority: 5, actions: [$yes, $no]}' |
-  curl -sf -m 10 -H "Authorization: Bearer $HOST_TOKEN" -d @- "$NTFY_URL" >/dev/null ||
+# Every push for this request shares one sequence ID, so the result replaces the push with buttons.
+publish() { # $1 title, $2 priority, $3 actions (JSON array)
+  jq -n --arg title "$1" --argjson priority "$2" --argjson actions "$3" --arg id "$nonce" \
+    --arg message "${command:0:1500}"$'\n\nfrom: '"${caller:0:300}" \
+    '{topic: "sudo", sequence_id: $id, title: $title, message: $message, priority: $priority, actions: $actions}' |
+    curl -sf -m 10 -H "Authorization: Bearer $HOST_TOKEN" -d @- "$NTFY_URL" >/dev/null
+}
+host="on $(hostname) by ${PAM_RUSER:-?}"
+publish "sudo $host" 5 "[$(button Approve yes), $(button Deny no)]" ||
   { kill "$listener" 2>/dev/null; exit 1; }
 
-result=1
+result=1 status='⌛ No answer, sudo'
 while IFS= read -r line <&3; do
   case $line in
-    *"\"message\":\"$nonce yes\""*) result=0; break ;;
-    *"\"message\":\"$nonce no\""*) break ;;
+    *"\"message\":\"$nonce yes\""*) result=0 status='✅ Approved sudo'; break ;;
+    *"\"message\":\"$nonce no\""*) status='❌ Denied sudo'; break ;;
   esac
 done
 kill "$listener" 2>/dev/null
+# In the background: sudo need not wait for the result push.
+publish "$status $host" 2 '[]' &
 exit "$result"
