@@ -1,0 +1,42 @@
+#!/bin/bash
+# PAM helper: sudo asks your phone (ntfy) to approve the exact command, so no password is typed
+# anywhere an agent could see or fake it. Exit 0 = approved. Deny, timeout or any error falls
+# through to the normal password prompt. Installed root-owned; see README.md.
+set -u
+[ "${PAM_TYPE:-}" = auth ] || exit 1
+# NTFY_URL, HOST_TOKEN (writes `sudo`, reads `sudo-reply`), APPROVER_TOKEN (writes `sudo-reply`).
+. /etc/sudo-approve.conf
+timeout=60
+
+# The parent is sudo itself; %q shows hidden newlines and spaces an argument could carry.
+mapfile -d '' args < "/proc/$PPID/cmdline"
+command=$(printf '%q ' "${args[@]}")
+caller=$(ps -o args= -p "$(ps -o ppid= -p "$PPID")")
+nonce=$(od -An -N16 -tx1 /dev/urandom | tr -d ' \n')
+
+# Listen before asking; `since` also returns a reply that lands before the stream connects.
+exec 3< <(timeout "$timeout" curl -sfN -H "Authorization: Bearer $HOST_TOKEN" \
+  "$NTFY_URL/sudo-reply/json?since=$(date +%s)")
+listener=$!
+
+button() {
+  jq -n --arg label "$1" --arg url "$NTFY_URL/sudo-reply" --arg body "$nonce $2" \
+    --arg auth "Bearer $APPROVER_TOKEN" \
+    '{action: "http", label: $label, url: $url, body: $body, headers: {Authorization: $auth}, clear: true}'
+}
+jq -n --arg title "sudo on $(hostname) by ${PAM_RUSER:-?}" \
+  --arg message "${command:0:1500}"$'\n\nfrom: '"${caller:0:300}" \
+  --argjson yes "$(button Approve yes)" --argjson no "$(button Deny no)" \
+  '{topic: "sudo", title: $title, message: $message, priority: 5, actions: [$yes, $no]}' |
+  curl -sf -m 10 -H "Authorization: Bearer $HOST_TOKEN" -d @- "$NTFY_URL" >/dev/null ||
+  { kill "$listener" 2>/dev/null; exit 1; }
+
+result=1
+while IFS= read -r line <&3; do
+  case $line in
+    *"\"message\":\"$nonce yes\""*) result=0; break ;;
+    *"\"message\":\"$nonce no\""*) break ;;
+  esac
+done
+kill "$listener" 2>/dev/null
+exit "$result"
