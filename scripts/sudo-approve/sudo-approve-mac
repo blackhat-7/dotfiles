@@ -1,0 +1,65 @@
+#!/bin/bash
+# The Mac side of sudo-approve (see README.md): it shows each agent's sudo, on the PC or this
+# Mac, as a Touch ID box with the command, and answers on ntfy like the phone's buttons do.
+# Runs as root from launchd: sudo-approve-mac BOX, where BOX is touchid-prompt.m.
+# Requests come on the topic sudo-mac as "CODE TEXT". Answers go to sudo-reply as "CODE ANSWER":
+#   wait   box shown, and the Mac was used in the last 2 minutes: the phone waits 10 s
+#   phone  box shown but the Mac is idle, or no box: the phone asks now
+#   yes    Touch ID, Apple Watch or the Mac password
+#   no     Cancel
+# A box closes when the phone answers first.
+set -u
+box=$1
+# NTFY_URL, HOST_TOKEN (reads sudo-mac and sudo-reply), APPROVER_TOKEN (writes sudo-reply).
+. /etc/sudo-approve.conf
+# Tokens and codes never go in arguments, which any user can read (see sudo-approve).
+auth() { printf 'Authorization: Bearer %s\n' "$1"; }
+reply() { # $1 code, $2 answer
+  printf '%s %s' "$1" "$2" |
+    curl -sf -m 10 -H @<(auth "$APPROVER_TOKEN") --data-binary @- "$NTFY_URL/sudo-reply" >/dev/null
+}
+
+ask() { # $1 code, $2 text
+  local user idle job
+  user=$(stat -c %u /dev/console)
+  # The login window: nobody to ask here.
+  [ "$user" = 0 ] && { reply "$1" phone; return; }
+  idle=$(ioreg -c IOHIDSystem | awk '/HIDIdleTime/ {print int($NF / 1e9); exit}')
+  if [ "${idle:-999}" -lt 120 ]; then reply "$1" wait; else reply "$1" phone; fi
+  # In the user's session, so the box shows on their screen. 75 s covers sudo-approve's wait.
+  launchctl asuser "$user" "$box" 75 "$2" &
+  job=$!
+  trap 'kill $job 2>/dev/null; exit' TERM # the phone answered
+  wait $job
+  case $? in
+    0) reply "$1" yes ;;
+    1) reply "$1" no ;;
+    *) reply "$1" phone ;; # no box after all, e.g. on a locked screen
+  esac
+}
+
+declare -A seen box # every code seen; code -> its ask job while its box may be open
+while :; do
+  while read -r topic code rest; do
+    if [ "$topic" = sudo-mac ]; then
+      if [ -n "${seen[$code]:-}" ]; then
+        # A second request with a code is forged, maybe to show other text for it: deny.
+        reply "$code" no
+      elif [ -n "$(jobs -rp)" ]; then
+        # One box at a time, so a new box can't take the place of the one you're reading.
+        reply "$code" phone
+      else
+        ask "$code" "$rest" &
+        box[$code]=$!
+      fi
+      seen[$code]=1
+    elif [ -n "${box[$code]:-}" ] && [[ $rest = yes || $rest = no ]]; then
+      kill "${box[$code]}" 2>/dev/null
+      unset "box[$code]"
+    fi
+    # ntfy sends a keepalive every 45 s, so 2 silent minutes mean a dead connection.
+  done < <(curl -sfN --speed-limit 1 --speed-time 120 -H @<(auth "$HOST_TOKEN") \
+    "$NTFY_URL/sudo-mac,sudo-reply/json" |
+    jq --unbuffered -r 'select(.event == "message") | "\(.topic) \(.message)"')
+  sleep 5 # the stream ended (no network, sleep): connect again
+done

@@ -1,9 +1,10 @@
 #!/bin/bash
-# PAM helper: when an AI agent runs sudo, your phone (ntfy) approves the exact command, so no
-# password is typed anywhere an agent could see or fake it. When you run sudo yourself, you just
-# type your password. Runs as root from sudo's PAM stack (see README.md), in two modes:
+# PAM helper: when an AI agent runs sudo, you approve the exact command with Touch ID on your Mac
+# or on your phone (ntfy), so no password is typed anywhere an agent could see or fake it. When
+# you run sudo yourself, you just type your password. Runs as root from sudo's PAM stack (see
+# README.md), in two modes:
 #   sudo-approve check   exit 0 if an agent runs this sudo; anything else means the password
-#   sudo-approve [ARGS]  ask the phone; exit 0 = approved. Deny or no answer in 60 s fails sudo.
+#   sudo-approve [ARGS]  ask the Mac, then the phone; exit 0 = approved. Deny or no answer fails sudo.
 # Sudo is the parent. On Linux, its command line and environment come from /proc. On macOS,
 # pam_sudo_approve.c passes the command line as ARGS and the agent markers in the environment.
 set -u
@@ -25,59 +26,90 @@ fi
 # Only fail() talks to the caller, on stdout. Stray errors on the way to an approval would
 # otherwise land in the command's own output.
 exec 2>/dev/null
-# NTFY_URL, HOST_TOKEN (writes `sudo`, reads `sudo-reply`), APPROVER_TOKEN (writes `sudo-reply`).
+# NTFY_URL, HOST_TOKEN (writes sudo and sudo-mac, reads sudo-reply), APPROVER_TOKEN (writes sudo-reply).
 . /etc/sudo-approve.conf
-timeout=60
+# Any user can read a root process's arguments, but not its environment. So the tokens and the
+# one-time code reach curl and jq through the environment or a pipe, never as arguments.
+NONCE=$(od -An -N16 -tx1 /dev/urandom | tr -d ' \n')
+export NONCE APPROVER_TOKEN
+auth() { printf 'Authorization: Bearer %s\n' "$HOST_TOKEN"; }
+send() { curl -sf -m 10 -H @<(auth) -d @- "$NTFY_URL" >/dev/null; } # a JSON message on stdin
 
 if [ $# -gt 0 ]; then args=("$@"); else mapfile -d '' args < "/proc/$PPID/cmdline"; fi
 # %q shows hidden newlines and spaces an argument could carry.
 command=$(printf '%q ' "${args[@]}")
+command=${command% }
 # Who asked, as process names above sudo, e.g. "bash < claude < Paseo Daemon".
 caller='' pid=$PPID
 for _ in 1 2 3 4; do
   pid=$(ps -o ppid= -p "$pid" | tr -d ' ')
   [ "${pid:-1}" -gt 1 ] || break
   name=$(ps -o comm= -p "$pid")
-  caller+="${caller:+ < }${name##*/}"
+  name=${name##*/}
+  # The agent names its own processes: keep it from writing quotes or a fake command here.
+  caller+="${caller:+ < }${name//[^[:alnum:] ._-]/?}"
 done
-nonce=$(od -An -N16 -tx1 /dev/urandom | tr -d ' \n')
+host="on $(uname -n) by ${PAM_RUSER:-?}"
 
 # Listen before asking; `since` also returns a reply that lands before the stream connects.
-exec 3< <(timeout "$timeout" curl -sfN -H "Authorization: Bearer $HOST_TOKEN" \
-  "$NTFY_URL/sudo-reply/json?since=$(date +%s)")
+# 75 s covers the waits below.
+exec 3< <(timeout 75 curl -sfN -H @<(auth) "$NTFY_URL/sudo-reply/json?since=$(date +%s)")
 listener=$!
-
-button() {
-  jq -n --arg label "$1" --arg url "$NTFY_URL/sudo-reply" --arg body "$nonce $2" \
-    --arg auth "Bearer $APPROVER_TOKEN" \
-    '{action: "http", label: $label, url: $url, body: $body, headers: {Authorization: $auth}, clear: true}'
-}
-publish() { # $1 title, $2 priority, $3 actions (JSON array)
-  jq -n --arg title "$1" --argjson priority "$2" --argjson actions "$3" \
-    --arg message "${command:0:1500}"$'\n\nfrom: '"$caller" \
-    '{topic: "sudo", title: $title, message: $message, priority: $priority, actions: $actions}' |
-    curl -sf -m 10 -H "Authorization: Bearer $HOST_TOKEN" -d @- "$NTFY_URL" >/dev/null
+trap 'kill $listener' EXIT
+# $1 seconds, then the answers to wait for. Prints the first of them that comes for this request.
+answer() {
+  local end=$((SECONDS + $1)) line word
+  shift
+  while [ $SECONDS -lt $end ] && IFS= read -r -t $((end - SECONDS)) line <&3; do
+    case $line in *"\"message\":\"$NONCE "*) ;; *) continue ;; esac
+    word=${line#*\"message\":\""$NONCE" }
+    word=${word%%\"*}
+    case " $* " in *" $word "*) echo "$word" && return ;; esac
+  done
 }
 # Sudo shows this line to the agent, then stops: no password try, so no faillock lockout.
 fail() {
-  kill "$listener"
   echo "sudo-approve: $1. Do not retry; ask the user."
   exit 1
 }
 
-host="on $(uname -n) by ${PAM_RUSER:-?}"
-publish "sudo $host" 5 "[$(button Approve yes), $(button Deny no)]" || fail "could not reach ntfy"
-
-while IFS= read -r line <&3; do
-  case $line in
-    *"\"message\":\"$nonce yes\""*)
-      kill "$listener"
-      # The iPhone app can't replace a push, so this is a second, silent one (low priority).
-      # In the background, off stdout: pam_exec waits until stdout closes.
-      publish "✅ Approved: sudo $host" 2 '[]' >/dev/null &
-      exit 0
-      ;;
-    *"\"message\":\"$nonce no\""*) fail "denied on the user's phone" ;;
+# The Mac first (sudo-approve-mac): a Touch ID box "sudo is trying to run ...". It answers `wait`
+# when you're using the Mac, so the phone waits 10 s for your touch, or `phone` when you're not.
+# No answer in 3 s: the Mac is asleep or off. A command too long for the box goes to the phone,
+# which shows more of it.
+text=${command#* } # without "sudo", which the box already says
+if [ ${#text} -le 300 ]; then
+  jq -n --arg text "run \"$text\" on $(uname -n) (from $caller)" \
+    '{topic: "sudo-mac", message: "\($ENV.NONCE) \($text)"}' | send || fail "could not reach ntfy"
+  mac=$(answer 3 wait phone yes no)
+  [ "$mac" = wait ] && mac=$(answer 10 yes no phone)
+  case $mac in
+    yes) exit 0 ;;
+    no) fail "denied on the user's Mac" ;;
   esac
-done
-fail "no answer on the user's phone in $timeout s"
+fi
+
+button() { # $1 label, $2 answer
+  jq -n --arg label "$1" --arg url "$NTFY_URL/sudo-reply" --arg answer "$2" \
+    '{action: "http", label: $label, url: $url, body: "\($ENV.NONCE) \($answer)",
+      headers: {Authorization: "Bearer \($ENV.APPROVER_TOKEN)"}, clear: true}'
+}
+push() { # $1 title, $2 priority, $3 actions (JSON array)
+  ACTIONS=$3 jq -n --arg title "$1" --argjson priority "$2" \
+    --arg message "${command:0:1500}"$'\n\nfrom: '"$caller" \
+    '{topic: "sudo", title: $title, message: $message, priority: $priority, actions: ($ENV.ACTIONS | fromjson)}' |
+    send
+}
+
+push "sudo $host" 5 "[$(button Approve yes), $(button Deny no)]" || fail "could not reach ntfy"
+# The Mac's box may still be open, so its answer counts too.
+case $(answer 60 yes no) in
+  yes)
+    # The iPhone app can't replace a push, so this is a second, silent one (low priority).
+    # In the background, off stdout: pam_exec waits until stdout closes.
+    push "✅ Approved: sudo $host" 2 '[]' >/dev/null &
+    exit 0
+    ;;
+  no) fail "denied by the user" ;;
+esac
+fail "no answer on the user's Mac or phone"

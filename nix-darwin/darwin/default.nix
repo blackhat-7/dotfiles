@@ -11,6 +11,13 @@ let
     $CC -shared -Wall -Werror -I${pkgs.openpam}/include -o $out/lib/pam/pam_sudo_approve.so \
       ${../../scripts/sudo-approve/pam_sudo_approve.c}
   '';
+  # The Touch ID box of sudo-approve-mac. It is named sudo because the box names the program
+  # asking: "sudo is trying to run ...".
+  touchidBox = pkgs.runCommandCC "sudo-approve-touchid" { } ''
+    mkdir -p $out/libexec
+    $CC -fobjc-arc -Wall -Werror -framework Foundation -framework LocalAuthentication \
+      -o $out/libexec/sudo ${../../scripts/sudo-approve/touchid-prompt.m}
+  '';
 in
 {
   nix.enable = false;
@@ -102,9 +109,9 @@ in
       ProxyCommand ${tsWork} nc %h %p
   '';
 
-  # sudo approval from the phone when an AI agent runs sudo (scripts/sudo-approve, same as Linux).
-  # Root-owned and read-only, with a fixed PATH since it runs as root; ps comes from /bin. The
-  # tokens go in /etc/sudo-approve.conf by hand (README.md).
+  # sudo approval when an AI agent runs sudo (scripts/sudo-approve, same as Linux): a Touch ID box
+  # on this Mac, else the phone. Root-owned and read-only, with a fixed PATH since it runs as
+  # root; ps comes from /bin. The tokens go in /etc/sudo-approve.conf by hand (README.md).
   environment.etc."sudo-approve".source = pkgs.writeShellScript "sudo-approve" ''
     export PATH=${lib.makeBinPath (with pkgs; [ coreutils curl jq ])}:/bin
     ${builtins.readFile ../../scripts/sudo-approve/sudo-approve}
@@ -112,6 +119,17 @@ in
   security.pam.services.sudo_local.text = "auth sufficient ${pamSudoApprove}/lib/pam/pam_sudo_approve.so";
   # Otherwise one approved sudo lets the same shell run more sudo commands for 5 minutes unasked.
   security.sudo.extraConfig = "Defaults timestamp_timeout=0";
+  # Shows every agent's sudo, on the PC or this Mac, as a Touch ID box with the command.
+  launchd.daemons.sudo-approve-mac = {
+    command = "${pkgs.writeShellScript "sudo-approve-mac" ''
+      export PATH=${lib.makeBinPath (with pkgs; [ coreutils curl jq ])}:/usr/sbin:/usr/bin:/bin
+      ${builtins.readFile ../../scripts/sudo-approve/sudo-approve-mac}
+    ''} ${touchidBox}/libexec/sudo";
+    serviceConfig = {
+      KeepAlive = true;
+      StandardErrorPath = "/var/log/sudo-approve-mac.log";
+    };
+  };
 
   users.users."illusion" = {
     home = "/Users/illusion";
