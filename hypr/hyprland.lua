@@ -110,6 +110,7 @@ hl.permission({ binary = "/usr/(bin|local/bin)/grim",                        typ
 hl.permission({ binary = "/usr/(lib|libexec|lib64)/xdg-desktop-portal-hyprland", type = "screencopy", mode = "allow" })
 hl.permission({ binary = "/usr/(lib|libexec|lib64)/xdg-desktop-portal-wlr",  type = "screencopy", mode = "allow" })
 hl.permission({ binary = "/usr/(bin|local/bin)/hyprpm",                      type = "plugin",     mode = "allow" })
+hl.permission({ binary = "/usr/bin/sunshine.*", type = "screencopy", mode = "allow" })
 
 -----------------------
 ---- LOOK AND FEEL ----
